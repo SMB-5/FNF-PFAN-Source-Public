@@ -95,6 +95,16 @@ class Note extends FlxSprite
 
 	public var hitsoundDisabled:Bool = false;
 
+	public static var holdArrowScales:Map<String, Float> = [
+		'Future'	=> 0.565,
+		'Chip'		=> 0.565
+	];
+
+	public static var downScrollHoldEndOffset:Map<String, Float> = [
+		'Future'	=> -12.2,
+		'Chip'		=> 13
+	];
+
 	private function set_multSpeed(value:Float):Float {
 		resizeByRatio(value / multSpeed);
 		multSpeed = value;
@@ -231,6 +241,14 @@ class Note extends FlxSprite
 					prevNote.scale.y *= 1.19;
 					prevNote.scale.y *= (6 / height); //Auto adjust note size
 				}
+				else {
+					var holdScale:Float = 1;
+					if(holdArrowScales.exists(ClientPrefs.noteSkin))
+					{
+						holdScale = holdArrowScales.get(ClientPrefs.noteSkin);
+					}
+					prevNote.scale.y *= holdScale;
+				}
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
@@ -253,6 +271,12 @@ class Note extends FlxSprite
 		if(texture == null) texture = '';
 		if(suffix == null) suffix = '';
 
+        var coolswag:String = '';
+		if(ClientPrefs.noteSkin != 'Default')
+		{
+			coolswag = '-' + ClientPrefs.noteSkin.toLowerCase().replace(' ', '-');
+		}
+
 		var skin:String = texture;
 		if(texture.length < 1) {
 			skin = PlayState.SONG.arrowSkin;
@@ -273,16 +297,16 @@ class Note extends FlxSprite
 		var blahblah:String = arraySkin.join('/');
 		if(PlayState.isPixelStage) {
 			if(isSustainNote) {
-				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'));
+				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS' + coolswag));
 				width = width / 4;
 				height = height / 2;
 				originalHeightForCalcs = height;
-				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS' + coolswag), true, Math.floor(width), Math.floor(height));
 			} else {
-				loadGraphic(Paths.image('pixelUI/' + blahblah));
+				loadGraphic(Paths.image('pixelUI/' + blahblah + coolswag));
 				width = width / 4;
 				height = height / 5;
-				loadGraphic(Paths.image('pixelUI/' + blahblah), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image('pixelUI/' + blahblah + coolswag), true, Math.floor(width), Math.floor(height));
 			}
 			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 			loadPixelNoteAnims();
@@ -301,7 +325,7 @@ class Note extends FlxSprite
 				}*/
 			}
 		} else {
-			frames = Paths.getSparrowAtlas(blahblah);
+			frames = Paths.getSparrowAtlas(blahblah + coolswag);
 			loadNoteAnims();
 			antialiasing = ClientPrefs.globalAntialiasing;
 		}

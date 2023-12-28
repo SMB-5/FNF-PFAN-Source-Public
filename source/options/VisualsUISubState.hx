@@ -34,6 +34,25 @@ class VisualsUISubState extends BaseOptionsMenu
 		title = 'Visuals and UI';
 		rpcTitle = 'Visuals & UI Settings Menu'; //for Discord Rich Presence
 
+        //from mind games lol
+		var option:Option = new Option('Note Skin:',
+			"What should the Notes look like?",
+			'noteSkin',
+			'string',
+			'Default',
+			['Default', 'Future', 'Chip']);
+		//option.showNotes = true;
+		//option.onChange = onChangeNoteSkin;
+		addOption(option);
+
+		var option:Option = new Option('Note Splash Skin:',
+			"What should the Note Splashes look like?",
+			'splashType',
+			'string',
+			'Psych',
+			['Psych', 'Forever', 'Vanilla']);
+		addOption(option);
+
 		var option:Option = new Option('Note Splashes',
 			"If unchecked, hitting \"Sick!\" notes won't show particles.",
 			'noteSplashes',
