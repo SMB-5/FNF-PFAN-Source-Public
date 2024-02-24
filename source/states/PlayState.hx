@@ -571,7 +571,7 @@ class PlayState extends MusicBeatState
 
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
-		comboGroup.cameras = [camHUD];
+		if(ClientPrefs.data.comboDisplay == 'HUD') comboGroup.cameras = [camHUD];
 
 		startingSong = true;
 
@@ -2494,8 +2494,8 @@ class PlayState extends MusicBeatState
 		rating.velocity.y -= FlxG.random.int(140, 175) * playbackRate;
 		rating.velocity.x -= FlxG.random.int(0, 10) * playbackRate;
 		rating.visible = (!ClientPrefs.data.hideHud && showRating);
-		rating.x += ClientPrefs.data.comboOffset[0];
-		rating.y -= ClientPrefs.data.comboOffset[1];
+		if(ClientPrefs.data.comboDisplay == 'HUD') rating.x += ClientPrefs.data.comboOffset[0];
+		if(ClientPrefs.data.comboDisplay == 'HUD') rating.y -= ClientPrefs.data.comboOffset[1];
 		rating.antialiasing = antialias;
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + 'combo' + uiSuffix));
@@ -2503,9 +2503,9 @@ class PlayState extends MusicBeatState
 		comboSpr.x = placement;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 		comboSpr.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
-		comboSpr.visible = (!ClientPrefs.data.hideHud && showCombo);
-		comboSpr.x += ClientPrefs.data.comboOffset[2];
-		comboSpr.y -= ClientPrefs.data.comboOffset[3];
+		comboSpr.visible = (!ClientPrefs.data.hideHud && showCombo && ClientPrefs.data.showComboSpr);
+		if(ClientPrefs.data.comboDisplay == 'HUD') comboSpr.x += ClientPrefs.data.comboOffset[2];
+		if(ClientPrefs.data.comboDisplay == 'HUD') comboSpr.y -= ClientPrefs.data.comboOffset[3];
 		comboSpr.antialiasing = antialias;
 		comboSpr.y += 60;
 		comboSpr.velocity.x += FlxG.random.int(1, 10) * playbackRate;
@@ -2543,8 +2543,11 @@ class PlayState extends MusicBeatState
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + 'num' + Std.int(i) + uiSuffix));
 			numScore.screenCenter();
-			numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
-			numScore.y += 80 - ClientPrefs.data.comboOffset[3];
+			if(ClientPrefs.data.comboDisplay == 'HUD') numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
+			if(ClientPrefs.data.comboDisplay == 'HUD') numScore.y += 80 - ClientPrefs.data.comboOffset[3];
+			//why are you like this
+			if(ClientPrefs.data.comboDisplay == 'World') numScore.x = placement + (43 * daLoop) - 90;
+			if(ClientPrefs.data.comboDisplay == 'World') numScore.y += 80;
 
 			if (!PlayState.isPixelStage) numScore.setGraphicSize(Std.int(numScore.width * 0.5));
 			else numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom));
