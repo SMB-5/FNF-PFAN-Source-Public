@@ -1,2 +1,4 @@
 Future
 Chip
+Circle-Kade
+StepMania
