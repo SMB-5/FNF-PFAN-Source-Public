@@ -11,7 +11,6 @@ import substates.results.*;
 class MasterEditorMenu extends MusicBeatState
 {
 	var options:Array<String> = [
-		'Results',
 		'Chart Editor',
 		'Character Editor',
 		'Week Editor',
@@ -120,8 +119,6 @@ class MasterEditorMenu extends MusicBeatState
 					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
 				case 'Note Splash Debug':
 					MusicBeatState.switchState(new NoteSplashDebugState());
-				case 'Results':
-					openSubState(new P3Results());
 			}
 			FlxG.sound.music.volume = 0;
 			FreeplayState.destroyFreeplayVocals();
