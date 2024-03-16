@@ -1,5 +1,6 @@
 package substates.results;
 
+import flixel.addons.transition.FlxTransitionableState;
 import states.StoryMenuState;
 import states.FreeplayState;
 
@@ -16,28 +17,26 @@ class P3Results extends MusicBeatSubstate
     var status:FlxText;
     var bfText:FlxText;
 
+    var black:FlxSprite;
+    var screen:FlxSprite;
+    var shit:FlxSprite;
+
     override function create()
     {
         camHUD = new FlxCamera();
         FlxG.cameras.add(camHUD, false);
+        FlxTransitionableState.skipNextTransOut = false;
+
         var score = PlayState.instance.songScore;
         var misses = PlayState.instance.songMisses;
         var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
 
         // ASSETS
-        var blue:FlxSprite = new FlxSprite(-2000, 0).makeGraphic(1920, 1080, 0xFF008FFF);
+        var blue:FlxSprite = new FlxSprite(-1280, 0).makeGraphic(1280, 720, 0xFF008FFF);
         blue.scrollFactor.set();
         blue.antialiasing = ClientPrefs.data.antialiasing;
-        blue.angle = -33;
         blue.updateHitbox();
         add(blue);
-
-        var shit:FlxSprite = new FlxSprite(600, -530).loadGraphic(Paths.image(path + 'exptext'));
-        shit.scrollFactor.set();
-        shit.antialiasing = ClientPrefs.data.antialiasing;
-        shit.angle = -33;
-        shit.updateHitbox();
-        add(shit);
 
         var lines:FlxSprite = new FlxSprite(-1280, 270).loadGraphic(Paths.image(path + 'lines'));
         lines.scrollFactor.set();
@@ -49,13 +48,6 @@ class P3Results extends MusicBeatSubstate
         beef.antialiasing = ClientPrefs.data.antialiasing;
         beef.updateHitbox();
         add(beef);
-
-        var darkish:FlxSprite = new FlxSprite(-2000, -500).makeGraphic(1920, 1080, 0xFF001F45);
-        darkish.scrollFactor.set();
-        darkish.antialiasing = ClientPrefs.data.antialiasing;
-        darkish.angle = -33;
-        darkish.updateHitbox();
-        add(darkish);
 
         var scoreTxt:FlxText = new FlxText(375, 235, FlxG.width, '${PlayState.instance.songScore}', 40);
         scoreTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
@@ -93,11 +85,27 @@ class P3Results extends MusicBeatSubstate
         accText.updateHitbox();
         add(accText);
 
-        FlxTween.tween(darkish, {x: -1500}, 0.5, {ease: FlxEase.expoInOut});
-        FlxTween.tween(blue, {x: -200}, 0.55, {ease: FlxEase.expoInOut});
-        FlxTween.tween(shit, {x: -100, y:-130}, 0.55, {ease: FlxEase.expoInOut});
-        FlxTween.tween(lines, {x: 0}, 0.55, {ease: FlxEase.expoInOut});
-        FlxTween.tween(beef, {x: FlxG.width - 500}, 0.65, {ease: FlxEase.elasticInOut});
+        black = new FlxSprite(-1280, 0).makeGraphic(1280, 720, FlxColor.BLACK);
+        black.scrollFactor.set();
+        black.updateHitbox();
+        add(black);
+
+        screen = new FlxSprite(-3500, 0).loadGraphic(Paths.image(path + 'screenWipe'));
+        screen.scrollFactor.set();
+        screen.updateHitbox();
+        add(screen);
+
+        shit = new FlxSprite(-500, 0).loadGraphic(Paths.image(path + 'exptext'));
+        shit.scrollFactor.set();
+        shit.antialiasing = ClientPrefs.data.antialiasing;
+        shit.updateHitbox();
+        add(shit);
+
+        FlxTween.tween(blue, {x: 0}, 0.75, {ease: FlxEase.expoInOut});
+        FlxTween.tween(shit, {x: 0}, 0.75, {ease: FlxEase.expoInOut});
+        FlxTween.tween(lines, {x: 0}, 0.75, {ease: FlxEase.expoInOut});
+        FlxTween.tween(beef, {x: FlxG.width - 500}, 0.75, {ease: FlxEase.elasticInOut});
+        FlxTween.tween(screen, {x: -2800}, 0.8, {ease: FlxEase.expoInOut});
 
         // for offset shit, i'll delete it later
         base = new FlxSprite().loadGraphic(Paths.image(path + 'reference'));
@@ -110,13 +118,14 @@ class P3Results extends MusicBeatSubstate
         shit.cameras = [camHUD];
         lines.cameras = [camHUD];
         beef.cameras = [camHUD];
-        darkish.cameras = [camHUD];
         scoreTxt.cameras = [camHUD];
         scoreText.cameras = [camHUD];
         missTxt.cameras = [camHUD];
         missText.cameras = [camHUD];
         accTxt.cameras = [camHUD];
         accText.cameras = [camHUD];
+        black.cameras = [camHUD];
+        screen.cameras = [camHUD];
 
         super.create();
 
@@ -129,12 +138,18 @@ class P3Results extends MusicBeatSubstate
 
         if (controls.ACCEPT)
         {
-            if (PlayState.isStoryMode)
-				MusicBeatState.switchState(new StoryMenuState());
-			else
-				MusicBeatState.switchState(new FreeplayState());
-
-            FlxG.sound.playMusic(Paths.music('freakyMenu'));
+            FlxTween.tween(black, {x:0}, 0.8, {ease:FlxEase.expoInOut});
+            FlxTween.tween(screen, {x:1290}, 0.8, {ease:FlxEase.expoInOut, onComplete: function(twn:FlxTween){endthis();}});
+            FlxTween.tween(shit, {x:1280}, 0.8, {ease:FlxEase.expoInOut});
         }
+    }
+
+    function endthis(){
+        if (PlayState.isStoryMode)
+            MusicBeatState.switchState(new StoryMenuState());
+        else
+            MusicBeatState.switchState(new FreeplayState());
+
+        FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
 }
