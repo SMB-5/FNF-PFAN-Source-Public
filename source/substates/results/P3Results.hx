@@ -138,8 +138,8 @@ class P3Results extends MusicBeatSubstate
 
         if (controls.ACCEPT)
         {
-            FlxTween.tween(black, {x:0}, 0.8, {ease:FlxEase.expoInOut});
-            FlxTween.tween(screen, {x:1290}, 0.8, {ease:FlxEase.expoInOut, onComplete: function(twn:FlxTween){endthis();}});
+            FlxTween.tween(black, {x:0}, 1.2, {ease:FlxEase.expoInOut});
+            FlxTween.tween(screen, {x:1290}, 1.2, {ease:FlxEase.expoInOut, onComplete: function(twn:FlxTween){endthis();}});
             FlxTween.tween(shit, {x:1280}, 0.8, {ease:FlxEase.expoInOut});
         }
     }
