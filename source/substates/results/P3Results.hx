@@ -145,10 +145,18 @@ class P3Results extends MusicBeatSubstate
     }
 
     function endthis(){
-        if (PlayState.isStoryMode)
-            MusicBeatState.switchState(new StoryMenuState());
+        if (PlayState.isStoryMode) 
+        {
+        LoadingState.loadAndSwitchState(new PlayState());
+        if (PlayState.storyPlaylist.length <= 0)
+        {
+        MusicBeatState.switchState(new StoryMenuState());
+        }
+        }
         else
-            MusicBeatState.switchState(new FreeplayState());
+        {
+        MusicBeatState.switchState(new FreeplayState());
+        }
 
         FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
