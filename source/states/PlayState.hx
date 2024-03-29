@@ -2346,7 +2346,7 @@ class PlayState extends MusicBeatState
 
 				storyPlaylist.remove(storyPlaylist[0]);
 
-				openSubState(new P3Results());
+				openSubState(new P4Results());
 
 				if (storyPlaylist.length <= 0)
 				{
@@ -2389,7 +2389,7 @@ class PlayState extends MusicBeatState
 				Mods.loadTopMod();
 				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
-				openSubState(new P3Results());
+				openSubState(new P4Results());
 				//MusicBeatState.switchState(new FreeplayState());
 				//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
