@@ -111,11 +111,11 @@ class P4Results extends MusicBeatSubstate
 
         super.create();
 
-        FlxTween.tween(yellow, {x:0}, 0.75, {ease:FlxEase.quadInOut});
-        FlxTween.tween(beef, {x:0, y:0}, 0.75, {ease:FlxEase.quadInOut});
-        FlxTween.tween(filter, {x:0}, 0.8, {ease:FlxEase.expoInOut});
-        FlxTween.tween(borders, {x:0}, 1, {ease:FlxEase.expoInOut});
-        FlxTween.tween(items, {x:30}, 0.5, {ease:FlxEase.expoInOut, onComplete:function(twn:FlxTween){
+        FlxTween.tween(yellow, {x:0}, 0.4, {ease:FlxEase.quadInOut});
+        FlxTween.tween(beef, {x:0, y:0}, 0.4, {ease:FlxEase.quadInOut});
+        FlxTween.tween(filter, {x:0}, 0.7, {ease:FlxEase.expoInOut});
+        FlxTween.tween(borders, {x:0}, 0.9, {ease:FlxEase.expoInOut});
+        FlxTween.tween(items, {x:30}, 0.3, {ease:FlxEase.expoInOut, onComplete:function(twn:FlxTween){
             FlxTween.tween(scoreTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
             FlxTween.tween(missTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
             FlxTween.tween(accTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
