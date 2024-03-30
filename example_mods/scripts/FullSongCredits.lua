@@ -22,10 +22,10 @@ local songdata = {
 	['Specialist'] = {
 	'Specialist', -- Song Name [1]
 	'Atsushi Kitajoh', -- Composer [2]
-	'???', -- Coder [3]
+	'SMB', -- Coder [3]
 	'69', --  Length for onscreen [4]
 	'No one', -- Artist [5]
-	'???', -- Charter [6]
+	'dudeDX', -- Charter [6]
 	},
 
 }

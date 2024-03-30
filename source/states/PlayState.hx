@@ -2346,7 +2346,20 @@ class PlayState extends MusicBeatState
 
 				storyPlaylist.remove(storyPlaylist[0]);
 
+		        switch (PlayState.SONG.song)
+		        {
+                case 'Bopeebo':
+				openSubState(new P3Results());
+
+				case 'Fresh':
+				openSubState(new P3Results());
+
+				case 'Dad Battle':
+				openSubState(new P3Results());
+
+				case 'Specialist':
 				openSubState(new P4Results());
+				}
 
 				if (storyPlaylist.length <= 0)
 				{
@@ -2389,7 +2402,21 @@ class PlayState extends MusicBeatState
 				Mods.loadTopMod();
 				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
+		        switch (PlayState.SONG.song)
+		        {
+                case 'Bopeebo':
+				openSubState(new P3Results());
+
+				case 'Fresh':
+				openSubState(new P3Results());
+
+				case 'Dad Battle':
+				openSubState(new P3Results());
+
+				case 'Specialist':
 				openSubState(new P4Results());
+				}
+
 				//MusicBeatState.switchState(new FreeplayState());
 				//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
