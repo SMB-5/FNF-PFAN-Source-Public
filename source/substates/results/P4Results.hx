@@ -141,11 +141,17 @@ class P4Results extends MusicBeatSubstate
 
     function endthis(){
         if (PlayState.isStoryMode) 
-            LoadingState.loadAndSwitchState(new PlayState());
+        {
+        LoadingState.loadAndSwitchState(new PlayState());
         if (PlayState.storyPlaylist.length <= 0)
-            MusicBeatState.switchState(new StoryMenuState());
+        {
+        MusicBeatState.switchState(new StoryMenuState());
+        }
+        }
         else
-            MusicBeatState.switchState(new FreeplayState());
+        {
+        MusicBeatState.switchState(new FreeplayState());
+        }
 
         FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
