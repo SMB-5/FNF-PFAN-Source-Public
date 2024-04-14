@@ -2594,7 +2594,7 @@ class PlayState extends MusicBeatState
 			if (showCombo)
 			comboGroup.add(comboSpr);
 
-			if (combo >= 10 || combo == 0)
+			//if (combo >= 10 || combo == 0)
 			
 			if(showComboNum)
 				comboGroup.add(numScore);

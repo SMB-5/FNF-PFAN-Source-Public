@@ -41,6 +41,7 @@ class CreditsState extends MusicBeatState
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 		    ['The Funkin Thieves'],
 			['SMB', 'SMB', 'Director, Writer and Main Programmer\n"Hey thank you so much for playing, I hope you enjoyed the mod as much as we did making it."', 'https://smb-bio.carrd.co/', 'EC1C26'],
+			['DudeDX', '', 'Charter\n"It\'s not overcharted you\'re just bad."', 'https://twitter.com/dudeDX819', '5B9A4C'],
 			['Ghost Bunny', 'keoikicat', 'Artist and Coder\n"Hii, I didn\'t do much for this mod really asides from 2 results screens but it was still really fun. Thanks for playing."', 'https://linktr.ee/ghostbnuuy', 'e1e1e1'],
 			[''],
 			['Psych Engine Team'],
