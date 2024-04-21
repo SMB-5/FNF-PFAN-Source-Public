@@ -1,21 +1,11 @@
 name: Help me!
-description: If you need help using the engine.
+description: If you need help with the mod.
 labels: [help wanted]
 body:
   - type: textarea
     id: description
     attributes:
       label: "Describe your problem here."
-    validations:
-      required: true
-
-  - type: dropdown
-    id: modding
-    attributes:
-      label: "Are you modding a build from source or with Lua?"
-      options:
-        - Lua
-        - Source
     validations:
       required: true
 

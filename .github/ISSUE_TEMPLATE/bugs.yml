@@ -1,5 +1,5 @@
 name: Bug report
-description: Report bugs with the engine here
+description: Report bugs with the mod here
 labels: [bug]
 body:
   - type: textarea
@@ -16,16 +16,6 @@ body:
       render: bash
     validations:
       required: false
-
-  - type: dropdown
-    id: modding
-    attributes:
-      label: "Are you modding a build from source or with Lua?"
-      options:
-        - Lua
-        - Source
-    validations:
-      required: true
 
   - type: dropdown
     id: btarget
