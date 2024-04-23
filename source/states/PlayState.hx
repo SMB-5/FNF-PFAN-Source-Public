@@ -393,6 +393,7 @@ class PlayState extends MusicBeatState
 			case 'tank': new states.stages.Tank(); //Week 7 - Ugh, Guns, Stress
 
 			case 'Dorm': new states.stages.Dorm();
+			case 'TartarusLobby': new states.stages.TartarusLobby();
 		}
 
 		if(isPixelStage) {
