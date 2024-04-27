@@ -28,6 +28,10 @@ class TartarusLobby extends BaseStage
 		var vig:BGSprite = new BGSprite('persona/stages/tartarus-lobby/6', 0, 0, 0, 0);
         add(vig);
 		vig.cameras = [camHUD];
+
+		var lvig:BGSprite = new BGSprite('persona/stages/tartarus-lobby/7', 0, 0, 0, 0);
+        add(lvig);
+		lvig.cameras = [camHUD];
 	}
 
 }
