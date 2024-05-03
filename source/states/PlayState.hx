@@ -394,6 +394,7 @@ class PlayState extends MusicBeatState
 
 			case 'Dorm': new states.stages.Dorm();
 			case 'TartarusLobby': new states.stages.TartarusLobby();
+			case 'VelvetRoomP5': new states.stages.VelvetRoomP5();
 		}
 
 		if(isPixelStage) {
