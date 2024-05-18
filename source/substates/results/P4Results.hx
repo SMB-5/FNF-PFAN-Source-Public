@@ -3,6 +3,11 @@ package substates.results;
 import flixel.addons.transition.FlxTransitionableState;
 import states.StoryMenuState;
 import states.FreeplayState;
+import states.PlayState;
+import backend.Highscore;
+import backend.Song;
+import backend.Rating;
+import flixel.util.FlxTimer;
 
 class P4Results extends MusicBeatSubstate
 {
@@ -109,6 +114,14 @@ class P4Results extends MusicBeatSubstate
         accTxt.cameras = [camHUD];
         screen.cameras = [camHUD];
 
+        if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
+        {
+        new FlxTimer().start(1, function(tmr:FlxTimer)
+        {
+        FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
+        });
+        }
+
         super.create();
 
         FlxTween.tween(yellow, {x:0}, 0.4, {ease:FlxEase.quadInOut});
@@ -140,6 +153,10 @@ class P4Results extends MusicBeatSubstate
     }
 
     function endthis(){
+        var percent:Float = PlayState.instance.ratingPercent;
+		if(Math.isNaN(percent)) percent = 0;
+		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
+
         if (PlayState.isStoryMode) 
         {
         LoadingState.loadAndSwitchState(new PlayState());

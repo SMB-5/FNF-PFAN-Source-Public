@@ -152,19 +152,6 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
-		var option:Option = new Option('Show Combo Sprite',
-			'If unchecked, hides the Combo sprite when you get a combo higher than 10.',
-			'showComboSpr',
-			'bool');
-		addOption(option);
-
-		var option:Option = new Option('Combo Display:',
-			"Where should the Ratings and Combos be displayed? (NOTE your offsets will only take affect if displayed on the HUD.)",
-			'comboDisplay',
-			'string',
-			['HUD', 'World']);
-		addOption(option);
-
 		super();
 		add(notes);
 	}
