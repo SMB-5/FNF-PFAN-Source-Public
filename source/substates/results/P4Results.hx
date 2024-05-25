@@ -57,6 +57,14 @@ class P4Results extends MusicBeatSubstate
         borders.updateHitbox();
         add(borders);
 
+        var highscore:FlxSprite = new FlxSprite(30, 400).loadGraphic(Paths.image('persona/results/highscore'));
+        highscore.scrollFactor.set();
+        highscore.antialiasing = ClientPrefs.data.antialiasing;
+        highscore.updateHitbox();
+        highscore.setGraphicSize(Std.int(highscore.width * 0.4));
+        add(highscore);
+        highscore.visible = false;
+
         var items:FlxSprite = new FlxSprite(30, 60).loadGraphic(Paths.image(path + 'items'));
         items.scrollFactor.set();
         items.antialiasing = ClientPrefs.data.antialiasing;
@@ -106,6 +114,7 @@ class P4Results extends MusicBeatSubstate
         beef.cameras = [camHUD];
         filter.cameras = [camHUD];
         borders.cameras = [camHUD];
+        highscore.cameras = [camHUD];
         items.cameras = [camHUD];
         text.cameras = [camHUD];
         
@@ -116,8 +125,9 @@ class P4Results extends MusicBeatSubstate
 
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(1, function(tmr:FlxTimer)
+        new FlxTimer().start(1.3, function(tmr:FlxTimer)
         {
+        highscore.visible = true;
         FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
         });
         }

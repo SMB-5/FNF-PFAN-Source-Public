@@ -54,6 +54,14 @@ class P3Results extends MusicBeatSubstate
         beef.updateHitbox();
         add(beef);
 
+        var highscore:FlxSprite = new FlxSprite(300, 0).loadGraphic(Paths.image('persona/results/highscore'));
+        highscore.scrollFactor.set();
+        highscore.antialiasing = ClientPrefs.data.antialiasing;
+        highscore.updateHitbox();
+        highscore.setGraphicSize(Std.int(highscore.width * 0.4));
+        add(highscore);
+        highscore.visible = false;
+
         var scoreTxt:FlxText = new FlxText(375, 235, FlxG.width, '${PlayState.instance.songScore}', 40);
         scoreTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
         scoreTxt.scrollFactor.set();
@@ -123,6 +131,7 @@ class P3Results extends MusicBeatSubstate
         shit.cameras = [camHUD];
         lines.cameras = [camHUD];
         beef.cameras = [camHUD];
+        highscore.cameras = [camHUD];
         scoreTxt.cameras = [camHUD];
         scoreText.cameras = [camHUD];
         missTxt.cameras = [camHUD];
@@ -134,8 +143,9 @@ class P3Results extends MusicBeatSubstate
 
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(1, function(tmr:FlxTimer)
+        new FlxTimer().start(1.3, function(tmr:FlxTimer)
         {
+        highscore.visible = true;
         FlxG.sound.play(Paths.sound('persona/highscore'), 1);
         });
         }
