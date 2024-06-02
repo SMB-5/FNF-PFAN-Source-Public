@@ -167,4 +167,20 @@ class CoolUtil
 				text.borderStyle = NONE;
 		}
 	}
+	public static function exists(path:String):Bool{
+		#if desktop
+		return FileSystem.exists(path);
+        #else
+        return Assets.exists(path);
+		#end
+	}
+
+	//Same as above but for getting text from a file.
+	public static function getText(path:String):String{
+		#if desktop
+		return File.getContent(path);
+        #else
+        return Assets.getText(path);
+		#end
+	}
 }
