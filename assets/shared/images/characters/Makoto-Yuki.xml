@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="Makito.png">
+<SubTexture name="Makito down0000" x="650" y="0" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito down0001" x="1300" y="0" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito left0000" x="0" y="760" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito left0001" x="650" y="760" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito up0000" x="1300" y="760" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito up0001" x="1950" y="0" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito right0000" x="1950" y="760" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito right0001" x="0" y="1520" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito idle0000" x="0" y="0" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito idle0001" x="650" y="1520" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito idle0002" x="1300" y="1520" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito idle0003" x="1950" y="1520" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+<SubTexture name="Makito idle0004" x="2600" y="0" width="650" height="760" frameX="0" frameY="0" frameWidth="650" frameHeight="760" />
+</TextureAtlas>
