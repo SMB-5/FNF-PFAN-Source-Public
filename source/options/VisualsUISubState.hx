@@ -152,6 +152,12 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Beat the Mod',
+			"This is for testing purposes only please remove when release",
+			'modBeaten',
+			'bool');
+		addOption(option);
+
 		super();
 		add(notes);
 	}

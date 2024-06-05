@@ -33,12 +33,26 @@ class FreeplayCategoryState extends MusicBeatState {
         storymode.x = 150;
         add(storymode);
 
+        if(ClientPrefs.data.modBeaten)
+        {
         freeplay = new FlxSprite(50, 0).loadGraphic(Paths.image('persona/menus/freeplay/category/freeplay'));
+        }
+        else
+        {
+        freeplay = new FlxSprite(50, 0).loadGraphic(Paths.image('persona/menus/freeplay/category/locked'));    
+        }
         freeplay.screenCenter(XY);
         freeplay.x = (FlxG.width - freeplay.width) / 2;
         add(freeplay);
 
+        if(ClientPrefs.data.modBeaten)
+        {
         joke = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/menus/freeplay/category/covers'));
+        }
+        else
+        {
+        joke = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/menus/freeplay/category/locked'));    
+        }
         joke.screenCenter(Y);
         joke.x = freeplay.x + freeplay.width + 50;
         add(joke);
@@ -67,21 +81,37 @@ class FreeplayCategoryState extends MusicBeatState {
 
             // Check for Enter key press
             if (FlxG.keys.justPressed.ENTER) {
-                FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
                 // Perform an action based on the selectedItem value
                 switch (selectedItem) {
                     case 1: // Story Mode
+                        FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
                         MusicBeatState.switchState(new FreeplayState());
                         FreeplayState.mode = "story";
                         trace("Story Mode selected");
                     case 2: // Free Play
+                    if(ClientPrefs.data.modBeaten)
+                    {
+                        FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
                         MusicBeatState.switchState(new FreeplayState());
                         FreeplayState.mode = "freeplay";
                         trace("Free Play selected");
+                    }
+                    else
+                    {
+                        FlxG.sound.play(Paths.sound('cancelMenu'));
+                    }
                     case 3: // joke
+                    if(ClientPrefs.data.modBeaten)
+                    {
+                        FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
                         MusicBeatState.switchState(new FreeplayState());
                         FreeplayState.mode = "joke";
                         trace("joke selected");
+                    }
+                    else
+                    {
+                        FlxG.sound.play(Paths.sound('cancelMenu'));
+                    }
                 }
             }
         }
