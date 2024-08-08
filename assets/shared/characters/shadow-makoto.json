@@ -1,0 +1,110 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				87,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [
+				0,
+				0,
+				1
+			],
+			"name": "Makito left"
+		},
+		{
+			"offsets": [
+				104,
+				-1
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [
+				0,
+				0,
+				1
+			],
+			"name": "Makito down"
+		},
+		{
+			"offsets": [
+				105,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [
+				0,
+				0,
+				1
+			],
+			"name": "Makito up"
+		},
+		{
+			"offsets": [
+				88,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [
+				0,
+				0,
+				1
+			],
+			"name": "Makito right"
+		},
+		{
+			"offsets": [
+				88,
+				0
+			],
+			"indices": [
+				0,
+				1,
+				2,
+				2,
+				3,
+				3,
+				4,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"fps": 24,
+			"anim": "idle",
+			"loop": false,
+			"name": "Makito idle"
+		}
+	],
+	"vocals_file": "",
+	"no_antialiasing": false,
+	"image": "characters/Makoto-Yuki",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "makoto",
+	"flip_x": false,
+	"healthbar_colors": [
+		20,
+		75,
+		255
+	],
+	"camera_position": [
+		0,
+		0
+	],
+	"sing_duration": 6.1,
+	"scale": 1,
+	"_editor_isPlayer": false
+}
