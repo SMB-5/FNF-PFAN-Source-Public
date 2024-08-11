@@ -15,6 +15,7 @@ class Alphabet extends FlxSpriteGroup
 	public var letters:Array<AlphaCharacter> = [];
 
 	public var isMenuItem:Bool = false;
+	public var isPersonaItem:Bool = false;
 	public var targetY:Int = 0;
 	public var changeX:Bool = true;
 	public var changeY:Bool = true;
@@ -169,6 +170,14 @@ class Alphabet extends FlxSpriteGroup
 			if(changeY)
 				y = FlxMath.lerp((targetY * 1.3 * distancePerItem.y) + startPosition.y, y, lerpVal);
 		}
+		if (isPersonaItem)
+		{
+			var lerpVal:Float = Math.exp(-elapsed * 9.6);
+			if(changeX)
+				x = FlxMath.lerp((targetY * distancePerItem.x) + startPosition.x, x, lerpVal);
+			if(changeY)
+				y = FlxMath.lerp((targetY * 1.0 * distancePerItem.y) + startPosition.y, y, lerpVal);
+		}
 		super.update(elapsed);
 	}
 
@@ -180,6 +189,13 @@ class Alphabet extends FlxSpriteGroup
 				x = (targetY * distancePerItem.x) + startPosition.x;
 			if(changeY)
 				y = (targetY * 1.3 * distancePerItem.y) + startPosition.y;
+		}
+		if (isPersonaItem)
+		{
+			if(changeX)
+				x = (targetY * distancePerItem.x) + startPosition.x;
+			if(changeY)
+				y = (targetY * 1.0 * distancePerItem.y) + startPosition.y;
 		}
 	}
 
