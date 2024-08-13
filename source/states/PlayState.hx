@@ -1156,9 +1156,6 @@ class PlayState extends MusicBeatState
 		// "\n" here prevents the text from being cut off by beat zooms
 		scoreTxt.text = '${tempScore}\n';
 
-		if (!miss && !cpuControlled)
-			doScoreBop();
-
 		callOnScripts('onUpdateScore', [miss]);
 	}
 
@@ -3001,6 +2998,9 @@ class PlayState extends MusicBeatState
 
 		note.wasGoodHit = true;
 
+		if (!cpuControlled && !note.isSustainNote)
+			doScoreBop();
+
 		if (ClientPrefs.data.hitsoundVolume > 0 && !note.hitsoundDisabled)
 			FlxG.sound.play(Paths.sound(note.hitsound), ClientPrefs.data.hitsoundVolume);
 
@@ -3071,6 +3071,12 @@ class PlayState extends MusicBeatState
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('goodNoteHit', [note]);
 
 		if(!note.isSustainNote) invalidateNote(note);
+
+		if (note.isSustainNote)
+		{
+			songScore += 10;
+			RecalculateRating();
+		}
 	}
 
 	public function invalidateNote(note:Note):Void {
