@@ -169,7 +169,7 @@ class TitleState extends MusicBeatState
 		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
-			MusicBeatState.switchState(new WarningState());
+			MusicBeatState.switchState(new WarningDemoState());
 		} else {
 			if (initialized)
 				startIntro();
@@ -507,13 +507,6 @@ class TitleState extends MusicBeatState
 				}
 			}
 			#end
-		}
-
-		if (initialized && pressedEnter && !skippedIntro && !watching)
-		{
-			startVideo('Title');
-            trace('starting video...');
-			watching = true;
 		}
 
 		if(swagShader != null)
