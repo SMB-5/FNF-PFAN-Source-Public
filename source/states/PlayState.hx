@@ -2380,14 +2380,17 @@ class PlayState extends MusicBeatState
 
 		        switch (PlayState.SONG.song)
 		        {
-                case 'Bopeebo':
+                case 'Full Moon':
 				openSubState(new P3Results());
 
-				case 'Fresh':
+				case 'Tartarus':
 				openSubState(new P3Results());
 
-				case 'Dad Battle':
+				case 'Destruction':
 				openSubState(new P3Results());
+
+				case 'Truth':
+				openSubState(new P4Results());
 
 				case 'Specialist':
 				openSubState(new P4Results());
@@ -2436,14 +2439,17 @@ class PlayState extends MusicBeatState
 
 		        switch (PlayState.SONG.song)
 		        {
-                case 'Bopeebo':
+                case 'Full Moon':
 				openSubState(new P3Results());
 
-				case 'Fresh':
+				case 'Tartarus':
 				openSubState(new P3Results());
 
-				case 'Dad Battle':
+				case 'Destruction':
 				openSubState(new P3Results());
+
+				case 'Truth':
+				openSubState(new P4Results());
 
 				case 'Specialist':
 				openSubState(new P4Results());

@@ -95,10 +95,10 @@ class FreeplayState extends MusicBeatState
 		catText.text = " < Side Stories >";
 		}
 
-		if (mode == "cover")
-		{
-		catText.text = "     < Covers >";
-		}
+		//if (mode == "cover")
+		//{
+		//catText.text = "     < Covers >";
+		//}
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -107,6 +107,7 @@ class FreeplayState extends MusicBeatState
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+		scoreText.y = 100;
 
 		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
 		scoreBG.alpha = 0.6;
@@ -114,7 +115,7 @@ class FreeplayState extends MusicBeatState
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
-		add(diffText);
+		//add(diffText);
 
 		add(scoreText);
 
@@ -178,8 +179,8 @@ class FreeplayState extends MusicBeatState
 			if (mode == "freeplay" && 
 			WeekData.weeksList[i] != "bonus") continue;
 			// Weeks in cover category
-			if (mode == "cover" && 
-				WeekData.weeksList[i] != "covers") continue;
+			//if (mode == "cover" && 
+				//WeekData.weeksList[i] != "covers") continue;
 
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var leSongs:Array<String> = [];
@@ -295,7 +296,7 @@ class FreeplayState extends MusicBeatState
 
 		if (!player.playingMusic)
 		{
-			scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+			scoreText.text = 'HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 			positionHighscore();
 			
 			if(songs.length > 1)
@@ -363,14 +364,14 @@ class FreeplayState extends MusicBeatState
 				regenerateSongs('');
 				catText.text = " < Side Stories >";
 				}
+				//else if (mode == "freeplay")
+				//{
+				//mode = "cover";
+				//trace('loaded covers');
+				//regenerateSongs('');
+				//catText.text = "     < Covers >";
+				//}
 				else if (mode == "freeplay")
-				{
-				mode = "cover";
-				trace('loaded covers');
-				regenerateSongs('');
-				catText.text = "     < Covers >";
-				}
-				else if (mode == "cover")
 				{
 				mode = "story";
 				trace('loaded story songs');
@@ -380,20 +381,20 @@ class FreeplayState extends MusicBeatState
 			}
 			if (FlxG.keys.justPressed.Q)
 			{
-				if (mode == "cover")
+				if (mode == "story")
 				{
 				mode = "freeplay";
 				trace('loaded bonus songs');
 				regenerateSongs('');
 				catText.text = " < Side Stories >";
 				}
-				else if (mode == "story")
-				{
-				mode = "cover";
-				trace('loaded covers');
-				regenerateSongs('');
-				catText.text = "     < Covers >";
-				}
+				//else if (mode == "story")
+				//{
+				//mode = "cover";
+				//trace('loaded covers');
+				//regenerateSongs('');
+				//catText.text = "     < Covers >";
+				//}
 				else if (mode == "freeplay")
 				{
 				mode = "story";
@@ -656,18 +657,22 @@ class FreeplayState extends MusicBeatState
 
 	private function updateportrait()
 	{
-		if ((songs[curSelected].songName.toLowerCase() == 'bopeebo') || (songs[curSelected].songName.toLowerCase() == 'fresh'))
+		if ((songs[curSelected].songName.toLowerCase() == 'tartarus'))
 		{
 			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder'));
 		}
-		if ((songs[curSelected].songName.toLowerCase() == 'dad battle') || (songs[curSelected].songName.toLowerCase() == 'specialist'))
+		if ((songs[curSelected].songName.toLowerCase() == 'truth') || (songs[curSelected].songName.toLowerCase() == 'specialist'))
+		{
+			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder-brother'));
+		}
+		if ((songs[curSelected].songName.toLowerCase() == 'desire'))
 		{
 			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder-brother'));
 		}
 	}
 
 	private function positionHighscore() {
-		scoreText.x = FlxG.width - scoreText.width - 6;
+		scoreText.x = FlxG.width - scoreText.width - 60;
 		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
 		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
 		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));

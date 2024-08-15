@@ -578,31 +578,25 @@ class TitleState extends MusicBeatState
 					//FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					//FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 1:
+				skipIntro(); //remove this later pls
 					FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
 				case 3:
 					FlxTween.tween(ftSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
 				case 5:
-					createCoolText(['Not associated with'], -40);
-				case 7:
-					FlxTween.tween(atlusSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
-				case 9:
-				    deleteCoolText();
-					FlxTween.tween(atlusSpr, {alpha: 0}, 0.001, {ease: FlxEase.circOut});
-				case 10:
 				    createCoolText(['A mod for'], -40);
-				case 12:
+				case 7:
 				    logoSpr.visible = true;
-				case 13:
+				case 8:
 				    deleteCoolText();
 				    logoSpr.visible = false;
-				case 14:
+				case 9:
 					createCoolText([curWacky[0]]);
-				case 16:
+				case 11:
 					addMoreText(curWacky[1]);
-				case 17:
+				case 12:
 					deleteCoolText();
 
-				case 18:
+				case 13:
 			        startVideo('Title');
                     trace('starting video...');
 					watching = true;

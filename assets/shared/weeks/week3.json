@@ -1,8 +1,6 @@
 {
 	"songs": [
-		["Pico", "pico", [148, 22, 83]],
-		["Philly Nice", "pico", [148, 22, 83]],
-		["Blammed", "pico", [148, 22, 83]]
+		["Desire", "pico", [148, 22, 83]]
 	],
 
 	"weekCharacters": [
@@ -15,6 +13,7 @@
 	"storyName": "PICO",
 	"weekBefore": "week2",
 	"weekName": "Week 3",
+	"difficulties": "Normal",
 	"startUnlocked": true,
 
 	"hideStoryMode": false,
