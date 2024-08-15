@@ -84,13 +84,33 @@ class PauseSubState extends MusicBeatSubstate
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
+		var credtext = new FlxText(20, 15 + 32, 0, "", 32);
+        credtext.scrollFactor.set();
+		credtext.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext.updateHitbox();
+		if(CoolUtil.exists(Paths.txt(PlayState.SONG.song.toLowerCase() + "/pauseSONGcredit"))){
+        credtext.text = CoolUtil.getText(Paths.txt(PlayState.SONG.song.toLowerCase() + "/pauseSONGcredit"));
+		}
+		credtext.text += "\n";
+        add(credtext);
+
+		var cred2text = new FlxText(20, 15 + 64, 0, "", 32);
+        cred2text.scrollFactor.set();
+		cred2text.setFormat(Paths.font('vcr.ttf'), 32);
+		cred2text.updateHitbox();
+		if(CoolUtil.exists(Paths.txt(PlayState.SONG.song.toLowerCase() + "/pauseCHARTcredit"))){
+        cred2text.text = CoolUtil.getText(Paths.txt(PlayState.SONG.song.toLowerCase() + "/pauseCHARTcredit"));
+		}
+		cred2text.text += "\n";
+        add(cred2text);
+
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
-		add(levelDifficulty);
+		//add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, "Blueballed: " + PlayState.deathCounter, 32);
+		var blueballedTxt:FlxText = new FlxText(20, 15 + 96, 0, PlayState.deathCounter + " Blueballs" , 32);
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
 		blueballedTxt.updateHitbox();
@@ -104,15 +124,15 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
 
-		var text = new FlxText(20, 15 + 150, 550, "", 22);
-        text.scrollFactor.set();
-		text.setFormat(Paths.font('vcr.ttf'), 22);
-		text.updateHitbox();
+		var desctext = new FlxText(20, 15 + 150, 550, "", 22);
+        desctext.scrollFactor.set();
+		desctext.setFormat(Paths.font('vcr.ttf'), 22);
+		desctext.updateHitbox();
 		if(CoolUtil.exists(Paths.txt(PlayState.SONG.song.toLowerCase() + "/desc"))){
-        text.text = CoolUtil.getText(Paths.txt(PlayState.SONG.song.toLowerCase() + "/desc"));
+        desctext.text = CoolUtil.getText(Paths.txt(PlayState.SONG.song.toLowerCase() + "/desc"));
 		}
-		text.text += "\n";
-        add(text);
+		desctext.text += "\n";
+        add(desctext);
 
 		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
 		chartingText.scrollFactor.set();
@@ -126,18 +146,24 @@ class PauseSubState extends MusicBeatSubstate
 		blueballedTxt.alpha = 0;
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
-		text.alpha = 0;
+		desctext.alpha = 0;
+		credtext.alpha = 0;
+		cred2text.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
-		text.x = FlxG.width - (text.width + 20);
+		desctext.x = FlxG.width - (desctext.width + 20);
+		credtext.x = FlxG.width - (credtext.width + 20);
+		cred2text.x = FlxG.width - (cred2text.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-		FlxTween.tween(text, {alpha: 1, y: text.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.11});
+		FlxTween.tween(credtext, {alpha: 1, y: credtext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		FlxTween.tween(cred2text, {alpha: 1, y: cred2text.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
