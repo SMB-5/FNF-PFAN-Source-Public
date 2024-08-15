@@ -355,7 +355,7 @@ class FreeplayState extends MusicBeatState
 				_updateSongLastDifficulty();
 			}
 
-			if (FlxG.keys.justPressed.E)
+			if (controls.UI_RIGHT_P)
 			{
 				if (mode == "story")
 				{
@@ -379,7 +379,7 @@ class FreeplayState extends MusicBeatState
 				catText.text = "   < Main Story >";
 				}
 			}
-			if (FlxG.keys.justPressed.Q)
+			if (controls.UI_LEFT_P)
 			{
 				if (mode == "story")
 				{

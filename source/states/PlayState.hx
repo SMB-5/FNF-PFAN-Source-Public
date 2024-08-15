@@ -3078,7 +3078,7 @@ class PlayState extends MusicBeatState
 
 		if(!note.isSustainNote) invalidateNote(note);
 
-		if (note.isSustainNote)
+		if (note.isSustainNote && !cpuControlled)
 		{
 			songScore += 10;
 			RecalculateRating();
