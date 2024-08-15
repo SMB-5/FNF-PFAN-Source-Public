@@ -583,7 +583,7 @@ class FreeplayState extends MusicBeatState
 		//if (player.playingMusic)
 			//return;
 
-		_updateSongLastDifficulty();
+		//_updateSongLastDifficulty();
 		if(playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		var lastList:Array<String> = Difficulty.list;
