@@ -43,6 +43,7 @@ class CreditsState extends MusicBeatState
 			['SMB', 'SMB', 'Director, Writer and Main Programmer\n"Hey thank you so much for playing, I hope you enjoyed the mod as much as we did making it."', 'https://smb-bio.carrd.co/', 'EC1C26'],
 			['Clefanight', 'clefa', 'Artist/Animator\n"How the fuck did I even get here."', 'https://cremiesilver.newgrounds.com/', '11e92b'],
 			['DudeDX', '', 'Charter\n"It\'s not overcharted you\'re just bad."', 'https://twitter.com/dudeDX819', '5B9A4C'],
+			['NoahGani1', 'noah', 'Chromatic Maker\n"Say Gex."', 'https://x.com/noah_gani1', '203a53'],
 			[''],
 			['Contributors'],
 			['Ghost Bunny', 'keoikicat', 'Artist and Coder\n"Hii, I didn\'t do much for this mod really asides from 2 results screens but it was still really fun. Thanks for playing."', 'https://linktr.ee/ghostbnuuy', 'e1e1e1'],
