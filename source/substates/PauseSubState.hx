@@ -161,7 +161,7 @@ class PauseSubState extends MusicBeatSubstate
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.11});
+		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
 		FlxTween.tween(credtext, {alpha: 1, y: credtext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(cred2text, {alpha: 1, y: cred2text.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
