@@ -2391,9 +2391,6 @@ class PlayState extends MusicBeatState
 
 				case 'Truth':
 				openSubState(new P4Results());
-
-				case 'Specialist':
-				openSubState(new P4Results());
 				}
 
 				if (storyPlaylist.length <= 0)
@@ -2450,6 +2447,9 @@ class PlayState extends MusicBeatState
 
 				case 'Truth':
 				openSubState(new P4Results());
+
+				case 'Answer':
+				openSubState(new P3Results());
 
 				case 'Specialist':
 				openSubState(new P4Results());
