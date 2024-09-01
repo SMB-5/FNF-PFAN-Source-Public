@@ -78,7 +78,7 @@ jobs:
         run: echo "${{github.run_id}}" > VERSION
       - name: Install SScript from Archive
         run: |
-          wget https://github.com/CobaltBar/SScript-Archive/raw/main/archives/SScript-8,1,6.zip -O SScript.zip
+          curl -L -o SScript.zip https://github.com/CobaltBar/SScript-Archive/raw/main/archives/SScript-8,1,6.zip
           haxelib install --never SScript.zip
       - name: Compile
         run: haxelib run lime build windows --app-version="4.0.0-${{ github.run_id}}"
