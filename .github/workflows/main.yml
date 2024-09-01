@@ -46,9 +46,7 @@ jobs:
           wget https://github.com/CobaltBar/SScript-Archive/raw/main/archives/SScript-8,1,6.zip -O SScript.zip
           haxelib install --never SScript.zip
       - name: Compile
-        run: |
-          haxelib fixrepo
-          haxelib run lime build Project.xml linux --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build Project.xml linux --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
@@ -88,7 +86,7 @@ jobs:
           name: windowsBuild
           path: export/release/windows/bin
   buildMac:
-    runs-on: macos-latest
+    runs-on: macos-13
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
