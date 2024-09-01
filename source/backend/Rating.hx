@@ -31,19 +31,40 @@ class Rating
 		var ratingsData:Array<Rating> = [new Rating('sick')]; //highest rating goes first
 
 		var rating:Rating = new Rating('good');
+		if(ClientPrefs.data.ratingType == 'Psych')
+		{
 		rating.ratingMod = 0.67;
+		}
+		if(ClientPrefs.data.ratingType == 'V Slice')
+		{
+		rating.ratingMod = 1;
+		}
 		rating.score = 200;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
 		var rating:Rating = new Rating('bad');
+		if(ClientPrefs.data.ratingType == 'Psych')
+		{
 		rating.ratingMod = 0.34;
+		}
+		if(ClientPrefs.data.ratingType == 'V Slice')
+		{
+		rating.ratingMod = 0;
+		}
 		rating.score = 100;
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
 		var rating:Rating = new Rating('shit');
+		if(ClientPrefs.data.ratingType == 'Psych')
+		{
 		rating.ratingMod = 0;
+		}
+		if(ClientPrefs.data.ratingType == 'V Slice')
+		{
+		rating.ratingMod = 0;
+		}
 		rating.score = 50;
 		rating.noteSplash = false;
 		ratingsData.push(rating);

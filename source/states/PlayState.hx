@@ -2621,6 +2621,16 @@ class PlayState extends MusicBeatState
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
 
+		if (ClientPrefs.data.ratingType == 'V Slice' && daRating.name == 'bad')
+		{
+		combo = 0;
+		}
+
+		if (ClientPrefs.data.ratingType == 'V Slice' && daRating.name == 'shit')
+		{
+		combo = 0;
+		}
+
 		if(!practiceMode && !cpuControlled) {
 			songScore += score;
 			if(!note.ratingDisabled)

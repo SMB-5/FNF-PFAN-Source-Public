@@ -113,6 +113,13 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Rating Type:',
+			"How do you want the ratings to behave?",
+			'ratingType',
+			'string',
+			['Psych', 'V Slice']);
+		addOption(option);
+
 		super();
 	}
 
