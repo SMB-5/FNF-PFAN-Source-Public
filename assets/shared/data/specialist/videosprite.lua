@@ -1,4 +1,4 @@
-function onSongStart()
+function onCreatePost()
 
 	makeLuaSprite('videoSprite','',-325,-175)
 	addLuaSprite('videoSprite', true)
