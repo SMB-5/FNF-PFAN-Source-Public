@@ -39,6 +39,9 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Socials'],
+			['Discord Server', 'discord', 'Join The Offical Community Discord Server for Persona: Funkin\' All Night', 'https://discord.gg/EFCPpMDA5D', 'ffffff'],
+			[''],
 		    ['The Funkin Thieves'],
 			['SMB', 'SMB', 'Director and Main Programmer\n"Hey thank you so much for playing, I hope you enjoyed the mod as much as we did making it."', 'https://smb-bio.carrd.co/', 'EC1C26'],
 			['Clefanight', 'clefa', 'Artist/Animator and Charter\n"How the fuck did I even get here."', 'https://cremiesilver.newgrounds.com/', '11e92b'],
