@@ -1,2 +1,2 @@
 Truth
-Composer: Bro is that Dog
+Composer: Dog

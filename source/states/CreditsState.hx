@@ -41,8 +41,9 @@ class CreditsState extends MusicBeatState
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 		    ['The Funkin Thieves'],
 			['SMB', 'SMB', 'Director and Main Programmer\n"Hey thank you so much for playing, I hope you enjoyed the mod as much as we did making it."', 'https://smb-bio.carrd.co/', 'EC1C26'],
-			['Clefanight', 'clefa', 'Artist/Animator\n"How the fuck did I even get here."', 'https://cremiesilver.newgrounds.com/', '11e92b'],
-			['Bro is that Dog', 'doggo', 'Musician\n"Hi! I composed a few songs for le epic persona mod, hope you enjoyed listening to them! (also please subscribe to my youtube come on im starving for subs please im begging you ple)"', 'https://www.youtube.com/@you-know-its-dog.', 'f5d79d'],
+			['Clefanight', 'clefa', 'Artist/Animator and Charter\n"How the fuck did I even get here."', 'https://cremiesilver.newgrounds.com/', '11e92b'],
+			['Cobalt', 'cobalt', 'Programmer and made the Mac and Linux Ports\n"I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next."', 'https://cobaltbar.github.io/', '0065FF'],
+			['Dog', 'doggo', 'Musician\n"Hi! I composed a few songs for le epic persona mod, hope you enjoyed listening to them! (also please subscribe to my youtube come on im starving for subs please im begging you ple)"', 'https://www.youtube.com/@you-know-its-dog.', 'f5d79d'],
 			['DudeDX', '', 'Charter\n"It\'s not overcharted you\'re just bad."', 'https://bsky.app/profile/dudedx.bsky.social', '5B9A4C'],
 			['LarryFrosty', 'baldiplier', 'Charter and Assisted with Coding\n"Make sure to keep your pliers bald."', 'https://youtube.com/@larryfrosty?si=HBFHaclYVeS6kn8v', '52a5eb'],
 			['NoahGani1', 'noah', 'Chromatic Maker\n"Say Gex."', 'https://x.com/noah_gani1', '203a53'],
