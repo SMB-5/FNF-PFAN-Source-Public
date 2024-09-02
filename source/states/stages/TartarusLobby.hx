@@ -16,12 +16,15 @@ class TartarusLobby extends BaseStage
 		var fg:BGSprite = new BGSprite('persona/stages/tartarus-lobby/3', -540, -350);
 		add(fg);
 
+        if(!ClientPrefs.data.lowQuality) {
 		var shadows:BGSprite = new BGSprite('persona/stages/tartarus-lobby/4', -540, -350);
 		add(shadows);
+		}
 	}
 
 	override function createPost()
 	{
+		if(!ClientPrefs.data.lowQuality) {
 		var light:BGSprite = new BGSprite('persona/stages/tartarus-lobby/5', -540, -350);
         add(light);
 
@@ -32,6 +35,7 @@ class TartarusLobby extends BaseStage
 		var lvig:BGSprite = new BGSprite('persona/stages/tartarus-lobby/7', 0, 0, 0, 0);
         add(lvig);
 		lvig.cameras = [camHUD];
+		}
 	}
 
 }

@@ -84,7 +84,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 		}
 
-		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v0.1.0a_01", 12);
+		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v0.1.0a_02", 12);
 		pfanVer.scrollFactor.set();
 		pfanVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(pfanVer);
