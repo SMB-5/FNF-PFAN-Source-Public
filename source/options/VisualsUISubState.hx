@@ -71,6 +71,12 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.decimals = 1;
 		addOption(option);
 
+		var option:Option = new Option('Hold Note Splashes',
+			"If unchecked, Splashes won't appear on the notes when holding a sustain.",
+			'holdSplash',
+			'bool');
+		addOption(option);
+
 		var option:Option = new Option('Hide HUD',
 			'If checked, hides most HUD elements.',
 			'hideHud',

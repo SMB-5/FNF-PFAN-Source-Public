@@ -3114,7 +3114,7 @@ class PlayState extends MusicBeatState
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
 
-        if(ClientPrefs.data.opponentStrums)
+        if(ClientPrefs.data.holdSplash)
 		{
 		spawnHoldSplashOnNote(note);
 		}
@@ -3218,7 +3218,10 @@ class PlayState extends MusicBeatState
 		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		vocals.volume = 1;
 
+        if(ClientPrefs.data.holdSplash)
+		{
 		spawnHoldSplashOnNote(note);
+		}
 
 		if (!note.isSustainNote)
 		{
