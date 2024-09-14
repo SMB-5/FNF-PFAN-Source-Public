@@ -3218,6 +3218,13 @@ class PlayState extends MusicBeatState
 		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		vocals.volume = 1;
 
+        var char:Character = boyfriend;
+		if(char != gf && combo == 50 && gf != null && gf.animOffsets.exists('cheer'))
+			{
+				gf.playAnim('cheer');
+				gf.specialAnim = true;
+			}
+
 		if(ClientPrefs.data.holdSplash)
 		{
 		spawnHoldSplashOnNotePlayer(note);
