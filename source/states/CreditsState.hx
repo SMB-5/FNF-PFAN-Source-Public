@@ -52,7 +52,7 @@ class CreditsState extends MusicBeatState
 			['NoahGani1', 'noah', 'Chromatic Maker\n"Say Gex."', 'https://x.com/noah_gani1', '203a53'],
 			[''],
 			['Contributors'],
-			['Ghost Bunny', 'keoikicat', 'Artist and Coder\n"Hii, I didn\'t do much for this mod really asides from 2 results screens but it was still really fun. Thanks for playing."', 'https://linktr.ee/ghostbnuuy', 'e1e1e1'],
+			['Fearmonger Wade', 'keoikicat', 'Artist and Coder\n"Hii, I didn\'t do much for this mod really asides from 2 results screens but it was still really fun. Thanks for playing."', 'https://linktr.ee/ghostbnuuy', 'e1e1e1'],
 			['JuhoSprite', 'juho', 'Artist\n"I don\'t play games."', 'https://twitter.com/JuhoSprite', 'fd0fe3'],
 			[''],
 			['Special Thanks'],
