@@ -1,0 +1,11 @@
+{
+    "card" : {
+        "name" : "Truth",
+        "expandBeat" : 0,
+		"duration": 3
+    },
+    "credits" : {
+        "music" : ["Dog"],
+        "chart" : ["Celfanight, DudeDX"]
+    }
+}

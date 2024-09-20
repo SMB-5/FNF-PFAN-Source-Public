@@ -1,0 +1,11 @@
+{
+    "card" : {
+        "name" : "Specialist",
+        "expandBeat" : 400,
+		"duration": 3
+    },
+    "credits" : {
+        "music" : ["Atsushi Kitajoh"],
+        "chart" : ["DudeDX"]
+    }
+}

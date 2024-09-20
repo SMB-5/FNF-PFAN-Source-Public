@@ -13,6 +13,9 @@ function onCreatePost()
 	addHaxeLibrary('MP4Handler','vlc')
 	addHaxeLibrary('Event','openfl.events')
 	--add needed haxe libraries for video and openfl events
+end
+
+function onSongStart()
 
 	--run the main haxe code
 	runHaxeCode([[
@@ -36,27 +39,27 @@ function onCreatePost()
 		//removes the native update event the video has (disables skipping pressing enter)
 	]])
 
-
-end
-
-function onUpdatePost()
+	function onUpdatePost()
 
 
-	--run the main haxe code
-	runHaxeCode([[
-		var video = getVar('video');
-		//get video object variable
+		--run the main haxe code
+		runHaxeCode([[
+			var video = getVar('video');
+			//get video object variable
+	
+			game.getLuaObject('videoSprite').loadGraphic(video.bitmapData);
+			//set video sprite's graphic as the video's bitmap data
+	
+			video.volume = FlxG.sound.volume + 0.4;
+			//set video volume as the game's volume (plus 0.4 idk psych has that for some reason)
+			
+			if(game.paused)video.pause();
+			//pause video if the game is paused
+	
+		]])
+	
+	end
 
-		game.getLuaObject('videoSprite').loadGraphic(video.bitmapData);
-		//set video sprite's graphic as the video's bitmap data
-
-		video.volume = FlxG.sound.volume + 0.4;
-		//set video volume as the game's volume (plus 0.4 idk psych has that for some reason)
-		
-		if(game.paused)video.pause();
-		//pause video if the game is paused
-
-	]])
 
 end
 

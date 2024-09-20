@@ -33,6 +33,10 @@ import substates.PauseSubState;
 import substates.GameOverSubstate;
 import substates.results.*;
 
+import objects.SongCard;
+import backend.Metadata.MetadataFile;
+import backend.Metadata;
+
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
@@ -191,6 +195,9 @@ class PlayState extends MusicBeatState
 	public var timeBar:Bar;
 	var songPercent:Float = 0;
 
+	public var card:SongCard;
+	public var hasMetadata:Bool;
+
 	public var ratingsData:Array<Rating> = Rating.loadDefault();
 
 	private var generatedMusic:Bool = false;
@@ -271,11 +278,11 @@ class PlayState extends MusicBeatState
 	private var keysArray:Array<String>;
 	public var songName:String;
 
+	public static var metadata:Null<MetadataFile>;
+
 	// Callbacks for stages
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
-
-	private var meta:SongMetaTags;
 
 	override public function create()
 	{
@@ -343,6 +350,9 @@ class PlayState extends MusicBeatState
 		// String for when the game is paused
 		detailsPausedText = "Paused - " + detailsText;
 		#end
+
+		metadata = Metadata.get(songName);
+		setOnScripts('metadata', metadata);
 
 		GameOverSubstate.resetVariables();
 		songName = Paths.formatToSongPath(SONG.song);
@@ -567,12 +577,6 @@ class PlayState extends MusicBeatState
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		moveCameraSection();
 
-		if(CoolUtil.exists(Paths.txt(SONG.song.toLowerCase() + "/meta"))){
-			meta = new SongMetaTags(0, 144, SONG.song.toLowerCase());
-			meta.cameras = [camHUD];
-			add(meta);
-		}
-
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.89 : 0.11), 'healthBar', function() return health, 0, 2);
 		healthBar.screenCenter(X);
 		healthBar.leftToRight = false;
@@ -601,6 +605,17 @@ class PlayState extends MusicBeatState
 		scoreTxt.visible = !ClientPrefs.data.hideHud;
 		updateScore(false);
 		uiGroup.add(scoreTxt);
+
+		hasMetadata = (metadata != null);
+
+		if (hasMetadata) {
+			card = new SongCard(0, 0, metadata);
+			card.screenCenter(Y);
+			card.x = -card.width;
+			add(card);
+			setOnScripts('card', card);
+		}
+		if (hasMetadata) uiGroup.add(card);
 
 		botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -1046,9 +1061,6 @@ class PlayState extends MusicBeatState
 					case 0:
 						FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
 						tick = THREE;
-						if(meta != null){
-						meta.start();
-					    }
 					case 1:
 						countdownReady = createCountdownSprite(introAlts[0], antialias);
 						FlxG.sound.play(Paths.sound('intro2' + introSoundsSuffix), 0.6);
@@ -1277,6 +1289,10 @@ class PlayState extends MusicBeatState
 		songLength = FlxG.sound.music.length;
 		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
+
+		if (hasMetadata) {
+			if (card.data.card.expandBeat == 0) card.display();
+		}
 
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence (with Time Left)
@@ -3392,6 +3408,10 @@ class PlayState extends MusicBeatState
 
 		super.beatHit();
 		lastBeatHit = curBeat;
+
+		if (hasMetadata) {
+			if (card.data.card.expandBeat == curBeat && card.data.card.expandBeat > 0) card.display();
+		}
 
 		setOnScripts('curBeat', curBeat);
 		callOnScripts('onBeatHit');

@@ -1,2 +1,0 @@
-Bopeebo
-Composer: KawaiSprite
