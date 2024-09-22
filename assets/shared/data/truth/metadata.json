@@ -6,6 +6,8 @@
     },
     "credits" : {
         "music" : ["Dog"],
-        "chart" : ["Clefanight, DudeDX"]
+        "chart" : ["Clefanight, DudeDX"],
+        "art" : ["???"],
+        "code" : ["???"]
     }
 }

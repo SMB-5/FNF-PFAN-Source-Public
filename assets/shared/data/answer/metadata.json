@@ -6,6 +6,8 @@
     },
     "credits" : {
         "music" : ["MrEights"],
-        "chart" : ["DudeDX"]
+        "chart" : ["DudeDX"],
+        "art" : ["???"],
+        "code" : ["SMB"]
     }
 }

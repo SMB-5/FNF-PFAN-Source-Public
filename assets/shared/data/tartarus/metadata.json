@@ -6,6 +6,8 @@
     },
     "credits" : {
         "music" : ["???"],
-        "chart" : ["???"]
+        "chart" : ["???"],
+        "art" : ["JuhoSprite"],
+        "code" : ["SMB"]
     }
 }

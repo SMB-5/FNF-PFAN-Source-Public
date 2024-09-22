@@ -101,13 +101,27 @@ class PauseSubState extends MusicBeatSubstate
 		credtext2.text = formString2();
         add(credtext2);
 
+		var credtext3 = new FlxText(20, 15 + 96, 0, "", 32);
+        credtext3.scrollFactor.set();
+		credtext3.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext3.updateHitbox();
+		credtext3.text = formString3();
+        add(credtext3);
+
+		var credtext4 = new FlxText(20, 15 + 128, 0, "", 32);
+        credtext4.scrollFactor.set();
+		credtext4.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext4.updateHitbox();
+		credtext4.text = formString4();
+        add(credtext4);
+
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
 		//add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(20, 15 + 96, 0, PlayState.deathCounter + " Blueballs" , 32);
+		var blueballedTxt:FlxText = new FlxText(20, 15 + 160, 0, PlayState.deathCounter + " Blueballs" , 32);
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
 		blueballedTxt.updateHitbox();
@@ -121,7 +135,7 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
 
-		var desctext = new FlxText(20, 15 + 150, 550, "", 22);
+		var desctext = new FlxText(20, 15 + 204, 550, "", 22);
         desctext.scrollFactor.set();
 		desctext.setFormat(Paths.font('vcr.ttf'), 22);
 		desctext.updateHitbox();
@@ -146,6 +160,8 @@ class PauseSubState extends MusicBeatSubstate
 		desctext.alpha = 0;
 		credtext.alpha = 0;
 		credtext2.alpha = 0;
+		credtext3.alpha = 0;
+		credtext4.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
@@ -153,14 +169,18 @@ class PauseSubState extends MusicBeatSubstate
 		desctext.x = FlxG.width - (desctext.width + 20);
 		credtext.x = FlxG.width - (credtext.width + 20);
 		credtext2.x = FlxG.width - (credtext2.width + 20);
+		credtext3.x = FlxG.width - (credtext3.width + 20);
+		credtext4.x = FlxG.width - (credtext4.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
+		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.3});
+		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.5});
 		FlxTween.tween(credtext, {alpha: 1, y: credtext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(credtext2, {alpha: 1, y: credtext2.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		FlxTween.tween(credtext3, {alpha: 1, y: credtext3.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
+		FlxTween.tween(credtext4, {alpha: 1, y: credtext4.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
@@ -190,6 +210,16 @@ class PauseSubState extends MusicBeatSubstate
     }
 
 	public function formString2():String
+    {
+        return 'Art: ${data.credits.art.join(', ')}';
+    }
+
+	public function formString3():String
+    {
+        return 'Code: ${data.credits.code.join(', ')}';
+    }
+
+	public function formString4():String
     {
         return 'Chart: ${data.credits.chart.join(', ')}';
     }
