@@ -1,67 +1,67 @@
 {
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "idle",
-			"indices": [],
-			"name": "idle"
+			"fps": 24,
+			"name": "idle",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
-				90,
+				25,
 				0
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "left000"
+			"fps": 24,
+			"name": "left0",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-10,
-				-100
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [
+				-121,
+				-110
+			],
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "down000"
+			"fps": 24,
+			"name": "down0",
+			"indices": []
 		},
 		{
-			"offsets": [
-				0,
-				70
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [
+				-48,
+				79
+			],
 			"anim": "singUP",
-			"indices": [],
-			"name": "up000"
+			"fps": 24,
+			"name": "up0",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-110,
-				-10
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [
+				-167,
+				-16
+			],
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "right000"
+			"fps": 24,
+			"name": "right0",
+			"indices": []
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Yu-Narukami",
 	"position": [
-		30,
-		210
+		-40,
+		220
 	],
 	"healthicon": "face",
 	"flip_x": false,
@@ -71,8 +71,8 @@
 		161
 	],
 	"camera_position": [
-		0,
-		0
+		10,
+		50
 	],
 	"sing_duration": 4,
 	"scale": 1,
