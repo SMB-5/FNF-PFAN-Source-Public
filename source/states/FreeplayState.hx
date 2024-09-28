@@ -7,6 +7,9 @@ import backend.Song;
 import objects.HealthIcon;
 import objects.MusicPlayer;
 
+import flixel.addons.display.FlxBackdrop;
+import flixel.addons.display.FlxGridOverlay;
+
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 
@@ -40,6 +43,8 @@ class FreeplayState extends MusicBeatState
 	private var grpIcons:FlxTypedGroup<HealthIcon>;
 
 	var bg:FlxSprite;
+	var songBG:FlxSprite;
+	var bar:FlxSprite;
 	var intendedColor:Int;
 	var colorTween:FlxTween;
 
@@ -73,16 +78,39 @@ class FreeplayState extends MusicBeatState
 		add(bg);
 		bg.screenCenter();
 
+		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+		grid.velocity.set(40, 40);
+		grid.alpha = 0;
+		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
+		add(grid);
+
+		songBG = new FlxSprite().loadGraphic(Paths.image('persona/menus/freeplay/triangle'));
+		songBG.antialiasing = ClientPrefs.data.antialiasing;
+		add(songBG);
+		songBG.screenCenter();
+
 		portrait = new FlxSprite().loadGraphic(Paths.image(''));
 		portrait.antialiasing = ClientPrefs.data.antialiasing;
 		add(portrait);
 		portrait.x = 670;
 		portrait.y = 50;
 
+		grpSongs = new FlxTypedGroup<Alphabet>();
+		add(grpSongs);
+		grpIcons = new FlxTypedGroup<HealthIcon>();
+		add(grpIcons);
+
+		bar = new FlxSprite().loadGraphic(Paths.image('persona/menus/freeplay/bar'));
+		bar.antialiasing = ClientPrefs.data.antialiasing;
+		add(bar);
+		bar.screenCenter();
+
 		catText = new Alphabet(0, 0, '', true);
 		//catText.screenCenter(X);
-		catText.x = 300;
-		//catText.y = 0;
+		catText.x = 0;
+		catText.y = 10;
+		catText.scaleX = 0.8;
+		catText.scaleY = 0.8;
 		add(catText);
 
 		if (mode == "story")
@@ -100,14 +128,9 @@ class FreeplayState extends MusicBeatState
 		//catText.text = "     < Covers >";
 		//}
 
-		grpSongs = new FlxTypedGroup<Alphabet>();
-		add(grpSongs);
-		grpIcons = new FlxTypedGroup<HealthIcon>();
-		add(grpIcons);
-
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
-		scoreText.y = 100;
+		scoreText.y = 20;
 
 		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
 		scoreBG.alpha = 0.6;
