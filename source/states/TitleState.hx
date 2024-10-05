@@ -582,8 +582,10 @@ class TitleState extends MusicBeatState
 					//FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					//FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 1:
-				skipIntro(); //remove this later pls
-					FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
+					startVideo('Title');
+                    trace('starting video...');
+					watching = true;
+					//FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
 				case 3:
 					FlxTween.tween(ftSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
 				case 5:
@@ -599,11 +601,6 @@ class TitleState extends MusicBeatState
 					addMoreText(curWacky[1]);
 				case 12:
 					deleteCoolText();
-
-				case 13:
-			        startVideo('Title');
-                    trace('starting video...');
-					watching = true;
 			}
 		}
 	}
