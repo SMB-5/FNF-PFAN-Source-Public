@@ -139,8 +139,8 @@ class PauseSubState extends MusicBeatSubstate
         desctext.scrollFactor.set();
 		desctext.setFormat(Paths.font('vcr.ttf'), 22);
 		desctext.updateHitbox();
-		if(CoolUtil.exists(Paths.txt(PlayState.SONG.song.toLowerCase() + "/desc"))){
-        desctext.text = CoolUtil.getText(Paths.txt(PlayState.SONG.song.toLowerCase() + "/desc"));
+		if(CoolUtil.exists(Paths.txt(PlayState.instance.songName + "/desc"))){
+        desctext.text = CoolUtil.getText(Paths.txt(PlayState.instance.songName + "/desc"));
 		}
 		desctext.text += "\n";
         add(desctext);
