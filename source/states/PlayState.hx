@@ -506,12 +506,12 @@ class PlayState extends MusicBeatState
 		}
 		stagesFunc(function(stage:BaseStage) stage.createPost());
 
-		comboGroup = new FlxSpriteGroup();
-		add(comboGroup);
-		noteGroup = new FlxTypedGroup<FlxBasic>();
-		add(noteGroup);
 		uiGroup = new FlxSpriteGroup();
+		comboGroup = new FlxSpriteGroup();
+		noteGroup = new FlxTypedGroup<FlxBasic>();
+		add(comboGroup);
 		add(uiGroup);
+		add(noteGroup);
 
 		Conductor.songPosition = -5000 / Conductor.songPosition;
 		var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
@@ -617,14 +617,14 @@ class PlayState extends MusicBeatState
 		}
 		if (hasMetadata) uiGroup.add(card);
 
-		botplayTxt = new FlxText(400, timeBar.y + 55, FlxG.width - 800, "BOTPLAY", 32);
+		botplayTxt = new FlxText(400, healthBar.y - 90, FlxG.width - 800, "BOTPLAY", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
 		botplayTxt.borderSize = 1.25;
 		botplayTxt.visible = cpuControlled;
 		uiGroup.add(botplayTxt);
 		if(ClientPrefs.data.downScroll)
-			botplayTxt.y = timeBar.y - 78;
+			botplayTxt.y = healthBar.y + 70;
 
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
