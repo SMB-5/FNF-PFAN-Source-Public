@@ -28,6 +28,7 @@ import states.StoryMenuState;
 import states.FreeplayState;
 import states.editors.ChartingState;
 import states.editors.CharacterEditorState;
+import states.stages.objects.ABotSpeaker;
 
 import substates.PauseSubState;
 import substates.GameOverSubstate;
@@ -284,6 +285,8 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
+	var abot:ABotSpeaker;
+
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
@@ -421,6 +424,13 @@ class PlayState extends MusicBeatState
 
 		if(isPixelStage) {
 			introSoundsSuffix = '-pixel';
+		}
+
+        if (SONG.gfVersion == 'nene')
+		{
+		abot = new ABotSpeaker(gfGroup.x -40, gfGroup.y + 530);
+		updateABotEye(true);
+		add(abot);
 		}
 
 		dadGhost = new FlxSprite();
@@ -867,6 +877,20 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
+	function updateABotEye(finishInstantly:Bool = false)
+	{
+		if (SONG.gfVersion == 'nene')
+		{
+
+		if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true)
+			abot.lookRight();
+		else
+			abot.lookLeft();
+
+		if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
+		}
+	}
+
 	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
@@ -1300,6 +1324,11 @@ class PlayState extends MusicBeatState
 		#end
 		setOnScripts('songLength', songLength);
 		callOnScripts('onSongStart');
+
+		if (SONG.gfVersion == 'nene')
+		{
+		abot.snd = FlxG.sound.music;
+		}
 	}
 
 	var debugNum:Int = 0;
@@ -3436,6 +3465,7 @@ class PlayState extends MusicBeatState
 
 	override function sectionHit()
 	{
+		updateABotEye();
 		if (SONG.notes[curSection] != null)
 		{
 			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
