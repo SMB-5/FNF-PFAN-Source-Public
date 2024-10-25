@@ -16,11 +16,13 @@ class VelvetRoomP5 extends BaseStage
 
 	override function createPost()
 	{
+		if(!ClientPrefs.data.lowQuality) {
 		var overlay:BGSprite = new BGSprite('persona/stages/velvet-room-p5/Velvet_Room_Overlay', -500, -300);
         add(overlay);
 
 		var light:BGSprite = new BGSprite('persona/stages/velvet-room-p5/Velvet_Room_Overlay_2', -500, -300);
         add(light);
+		}
 	}
 
 }
