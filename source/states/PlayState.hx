@@ -65,6 +65,15 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
+enum NeneState
+{
+	STATE_DEFAULT;
+	STATE_PRE_RAISE;
+	STATE_RAISE;
+	STATE_READY;
+	STATE_LOWER;
+}
+
 /**
  * This is where all the Gameplay stuff happens and is managed
  *
@@ -101,6 +110,11 @@ class PlayState extends MusicBeatState
 		['S - Sick', 1], //From 95% to 99%
 		['P - Perfect', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
+
+	final MIN_BLINK_DELAY:Int = 3;
+	final MAX_BLINK_DELAY:Int = 7;
+	final VULTURE_THRESHOLD:Float = 0.5;
+	var blinkCountdown:Int = 3;
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
@@ -431,6 +445,24 @@ class PlayState extends MusicBeatState
 		abot = new ABotSpeaker(gfGroup.x -40, gfGroup.y + 530);
 		updateABotEye(true);
 		add(abot);
+		}
+
+		if(gf != null && SONG.gfVersion == 'nene')
+		{
+			gf.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
+			{
+				switch(currentNeneState)
+				{
+					case STATE_PRE_RAISE:
+						if (name == 'danceLeft' && frameNumber >= 14)
+						{
+							animationFinished = true;
+							transitionState();
+						}
+					default:
+						// Ignore.
+				}
+			}
 		}
 
 		dadGhost = new FlxSprite();
@@ -1328,6 +1360,23 @@ class PlayState extends MusicBeatState
 		if (SONG.gfVersion == 'nene')
 		{
 		abot.snd = FlxG.sound.music;
+		gf.animation.finishCallback = onNeneAnimationFinished;
+		}
+	}
+
+	function onNeneAnimationFinished(name:String)
+	{
+		if(!startedCountdown) return;
+		switch(currentNeneState)
+		{
+			case STATE_RAISE, STATE_LOWER:
+				if (name == 'raiseKnife' || name == 'lowerKnife')
+				{
+					animationFinished = true;
+					transitionState();
+				}
+			default:
+				// Ignore.
 		}
 	}
 
@@ -1718,6 +1767,9 @@ class PlayState extends MusicBeatState
 	var freezeCamera:Bool = false;
 	var allowDebugKeys:Bool = true;
 
+	var currentNeneState:NeneState = STATE_DEFAULT;
+	var animationFinished:Bool = false;
+
 	override public function update(elapsed:Float)
 	{
 		if(!inCutscene && !paused && !freezeCamera) {
@@ -1738,6 +1790,10 @@ class PlayState extends MusicBeatState
 
 		setOnScripts('curDecStep', curDecStep);
 		setOnScripts('curDecBeat', curDecBeat);
+
+		if(gf == null || !startedCountdown) return;
+		animationFinished = gf.isAnimationFinished();
+		transitionState();
 
 		if(botplayTxt != null && botplayTxt.visible) {
 			botplaySine += 180 * elapsed;
@@ -1902,6 +1958,55 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
 		callOnScripts('onUpdatePost', [elapsed]);
+	}
+
+	function transitionState()
+	{
+		if (SONG.gfVersion == 'nene')
+		{
+		switch (currentNeneState)
+		{
+			case STATE_DEFAULT:
+				if (health <= VULTURE_THRESHOLD)
+				{
+					currentNeneState = STATE_PRE_RAISE;
+					gf.skipDance = true;
+				}
+			case STATE_PRE_RAISE:
+				if (health > VULTURE_THRESHOLD)
+				{
+					currentNeneState = STATE_DEFAULT;
+					gf.skipDance = false;
+				}
+				else if (animationFinished)
+				{
+					currentNeneState = STATE_RAISE;
+					gf.playAnim('raiseKnife');
+					gf.skipDance = true;
+					gf.danced = true;
+					animationFinished = false;
+				}
+			case STATE_RAISE:
+				if (animationFinished)
+				{
+					currentNeneState = STATE_READY;
+					animationFinished = false;
+				}
+			case STATE_READY:
+				if (health > VULTURE_THRESHOLD)
+				{
+					currentNeneState = STATE_LOWER;
+					gf.playAnim('lowerKnife');
+				}
+			case STATE_LOWER:
+				if (animationFinished)
+				{
+					currentNeneState = STATE_DEFAULT;
+					animationFinished = false;
+					gf.skipDance = false;
+				}
+		}
+		}
 	}
 
 	// Health icon updaters
@@ -3270,6 +3375,12 @@ class PlayState extends MusicBeatState
 				gf.specialAnim = true;
 			}
 
+		if(char != gf && combo == 200 && gf != null && gf.animOffsets.exists('swag'))
+			{
+				gf.playAnim('swag');
+				gf.specialAnim = true;
+			}
+
 		if(ClientPrefs.data.holdSplash)
 		{
 		spawnHoldSplashOnNotePlayer(note);
@@ -3434,6 +3545,18 @@ class PlayState extends MusicBeatState
 		iconP2.updateHitbox();
 
 		characterBopper(curBeat);
+
+		switch(currentNeneState) {
+			case STATE_READY:
+				if (blinkCountdown == 0)
+				{
+					gf.playAnim('idleKnife', false);
+					blinkCountdown = FlxG.random.int(MIN_BLINK_DELAY, MAX_BLINK_DELAY);
+				}
+				else blinkCountdown--;
+			default:
+				// In other states, don't interrupt the existing animation.
+		}
 
 		super.beatHit();
 		lastBeatHit = curBeat;
