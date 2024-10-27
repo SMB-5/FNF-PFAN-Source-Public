@@ -442,7 +442,7 @@ class PlayState extends MusicBeatState
 
         if (SONG.gfVersion == 'nene')
 		{
-		abot = new ABotSpeaker(gfGroup.x -40, gfGroup.y + 530);
+		abot = new ABotSpeaker(gfGroup.x +30, gfGroup.y + 320);
 		updateABotEye(true);
 		add(abot);
 		}

@@ -76,7 +76,7 @@
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Nene",
-	"position": [0, 200],
+	"position": [70, -10],
 	"healthicon": "face",
 	"flip_x": false,
 	"healthbar_colors": [161, 161, 161],
