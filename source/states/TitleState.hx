@@ -581,6 +581,7 @@ class TitleState extends MusicBeatState
 					startVideo('Title');
                     trace('starting video...');
 					watching = true;
+					//skipIntro();
 					//FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
 				case 3:
 					FlxTween.tween(ftSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
