@@ -966,7 +966,7 @@ class PlayState extends MusicBeatState
 					if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos)
 					{
 						moveCameraSection();
-						FlxG.camera.snapToTarget();
+						//FlxG.camera.snapToTarget();
 					}
 					videoCutscene = null;
 					canPause = false;
@@ -1688,6 +1688,7 @@ class PlayState extends MusicBeatState
 				vocals.pause();
 				opponentVocals.pause();
 			}
+			videoCutscene?.videoSprite?.pause();
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = false);
 		}
@@ -1706,6 +1707,7 @@ class PlayState extends MusicBeatState
 			{
 				resyncVocals();
 			}
+			videoCutscene?.videoSprite?.resume();
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = true);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
 
