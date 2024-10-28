@@ -36,6 +36,10 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		if(!FlxG.sound.music.playing) {
+		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+		}
+
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
@@ -133,22 +137,22 @@ class MainMenuState extends MusicBeatState
 			if (controls.UI_DOWN_P)
 				changeItem(1);
 
-			if (controls.BACK)
-			{
-				selectedSomethin = true;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new TitleState());
-			}
+			//if (controls.BACK)
+			//{
+				//selectedSomethin = true;
+				//FlxG.sound.play(Paths.sound('cancelMenu'));
+				//MusicBeatState.switchState(new TitleState());
+			//}
 
 			if (controls.ACCEPT)
 			{
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-				if (optionShit[curSelected] == 'donate')
+				if (optionShit[curSelected] == 'story_mode')
 				{
-					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
+					FlxG.sound.play(Paths.sound('cancelMenu'));
 				}
 				else
 				{
+					FlxG.sound.play(Paths.sound('confirmMenu'));
 					selectedSomethin = true;
 
 					if (ClientPrefs.data.flashing)
@@ -158,8 +162,8 @@ class MainMenuState extends MusicBeatState
 					{
 						switch (optionShit[curSelected])
 						{
-							case 'story_mode':
-								MusicBeatState.switchState(new StoryMenuState());
+							//case 'story_mode':
+								//MusicBeatState.switchState(new StoryMenuState());
 							case 'freeplay':
 								MusicBeatState.switchState(new FreeplayState());
 

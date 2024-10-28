@@ -53,6 +53,10 @@ class TitleState extends MusicBeatState
 	var atlusSpr:FlxSprite;
 	var logoSpr:FlxSprite;
 	var ngSpr:FlxSprite;
+
+	var atlusTxt:FlxText;
+	var intro1Txt:FlxText;
+	var intro2Txt:FlxText;
 	
 	var titleTextColors:Array<FlxColor> = [0xFF33FFFF, 0xFF3333CC];
 	var titleTextAlphas:Array<Float> = [1, .64];
@@ -194,9 +198,9 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			if(FlxG.sound.music == null) {
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-			}
+			//if(FlxG.sound.music == null) {
+				FlxG.sound.playMusic(Paths.music('freakyMenuS'), 0);
+			//}
 		}
 
 		Conductor.bpm = 58;
@@ -323,13 +327,31 @@ class TitleState extends MusicBeatState
 		ftSpr.screenCenter(X);
 		ftSpr.antialiasing = ClientPrefs.data.antialiasing;
 
-		atlusSpr = new FlxSprite(300, FlxG.height * 0.47).loadGraphic(Paths.image('Atlus_Logo'));
+		atlusSpr = new FlxSprite(280, FlxG.height * 0.4).loadGraphic(Paths.image('Atlus_Logo'));
 		add(atlusSpr);
 		atlusSpr.alpha = 0;
 		atlusSpr.setGraphicSize(Std.int(atlusSpr.width * 2.5));
 		atlusSpr.updateHitbox();
 		//atlusSpr.screenCenter(X);
 		atlusSpr.antialiasing = ClientPrefs.data.antialiasing;
+
+		atlusTxt = new FlxText(0, 250, FlxG.width, 'Not Associated With', 60);
+        atlusTxt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
+        add(atlusTxt);
+		atlusTxt.alpha = 0;
+		atlusTxt.screenCenter(X);
+
+		intro1Txt = new FlxText(0, 250, FlxG.width, curWacky[0], 60);
+        intro1Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
+        add(intro1Txt);
+		intro1Txt.alpha = 0;
+		intro1Txt.screenCenter(X);
+
+		intro2Txt = new FlxText(0, 350, FlxG.width, curWacky[1], 60);
+        intro2Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
+        add(intro2Txt);
+		intro2Txt.alpha = 0;
+		intro2Txt.screenCenter(X);
 
 		logoSpr = new FlxSprite(383, FlxG.height * 0.4).loadGraphic(Paths.image('titlelogo'));
 		add(logoSpr);
@@ -440,11 +462,12 @@ class TitleState extends MusicBeatState
 				
 				if(titleText != null) titleText.animation.play('press');
 
+				FlxG.sound.music.stop();
+
 				FlxG.camera.flash(ClientPrefs.data.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 1);
 				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 				transitioning = true;
-				// FlxG.sound.music.stop();
 
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
@@ -509,6 +532,11 @@ class TitleState extends MusicBeatState
 			#end
 		}
 
+		if (initialized && pressedEnter && !skippedIntro && !watching)
+		{
+			skipIntro();
+		}
+
 		if(swagShader != null)
 		{
 			if(controls.UI_LEFT) swagShader.hue -= elapsed * 0.1;
@@ -570,6 +598,8 @@ class TitleState extends MusicBeatState
 		}
 
 		if(!closedState) {
+			if (!skippedIntro)
+			{
 			sickBeats++;
 			switch (sickBeats)
 			{
@@ -578,26 +608,28 @@ class TitleState extends MusicBeatState
 					//FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					//FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 1:
-					startVideo('Title');
-                    trace('starting video...');
-					watching = true;
 					//skipIntro();
-					//FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
+					FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
 				case 3:
 					FlxTween.tween(ftSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
 				case 5:
-				    createCoolText(['A mod for'], -40);
+                    FlxTween.tween(atlusTxt, {alpha: 1}, 1, {ease: FlxEase.circOut});
+					FlxTween.tween(atlusSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
 				case 7:
-				    logoSpr.visible = true;
-				case 8:
-				    deleteCoolText();
-				    logoSpr.visible = false;
+				    FlxTween.tween(atlusTxt, {alpha: 0}, 1, {ease: FlxEase.circOut});
+					FlxTween.tween(atlusSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
 				case 9:
-					createCoolText([curWacky[0]]);
+					FlxTween.tween(intro1Txt, {alpha: 1}, 1, {ease: FlxEase.circOut});
 				case 11:
-					addMoreText(curWacky[1]);
-				case 12:
-					deleteCoolText();
+					FlxTween.tween(intro2Txt, {alpha: 1}, 1, {ease: FlxEase.circOut});
+				case 13:
+				    FlxTween.tween(intro1Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
+					FlxTween.tween(intro2Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
+				case 15: 
+					watching = true;
+					startVideo('Title');
+                    trace('starting video...');
+			}
 			}
 		}
 	}
@@ -632,8 +664,8 @@ class TitleState extends MusicBeatState
 						skippedIntro = true;
 						playJingle = false;
 
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-						FlxG.sound.music.fadeIn(4, 0, 0.7);
+						//FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						//FlxG.sound.music.fadeIn(4, 0, 0.7);
 						return;
 				}
 
@@ -655,8 +687,8 @@ class TitleState extends MusicBeatState
 					Conductor.bpm = titleJSON.bpm;
 					FlxG.camera.flash(FlxColor.WHITE, 3);
 					sound.onComplete = function() {
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-						FlxG.sound.music.fadeIn(4, 0, 0.7);
+						//FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						//FlxG.sound.music.fadeIn(4, 0, 0.7);
 						transitioning = false;
 					};
 				}
@@ -667,9 +699,12 @@ class TitleState extends MusicBeatState
 				remove(ngSpr);
 				remove(ftSpr);
 				remove(atlusSpr);
+				remove(atlusTxt);
+				remove(intro1Txt);
+				remove(intro2Txt);
 				remove(logoSpr);
 				remove(credGroup);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+				FlxG.sound.playMusic(Paths.music('freakyMenuS'), 0);
 				FlxG.camera.flash(FlxColor.WHITE, 4);
                 Conductor.bpm = titleJSON.bpm;
 				var easteregg:String = FlxG.save.data.psychDevsEasterEgg;
@@ -713,6 +748,7 @@ class TitleState extends MusicBeatState
 				function onVideoEnd()
 				{
 					videoCutscene = null;
+					watching = false;
 					skipIntro();
 				}
 				videoCutscene.finishCallback = onVideoEnd;
