@@ -7,6 +7,7 @@ import states.PlayState;
 import backend.Highscore;
 import backend.Song;
 import backend.Rating;
+import backend.Metadata;
 import flixel.util.FlxTimer;
 
 class P4Results extends MusicBeatSubstate
@@ -25,6 +26,8 @@ class P4Results extends MusicBeatSubstate
     var black:FlxSprite;
     var screen:FlxSprite;
     var shit:FlxSprite;
+
+    var data:MetadataFile;
 
     override function create()
     {
@@ -78,9 +81,17 @@ class P4Results extends MusicBeatSubstate
         add(text);
 
         // actual text
+        data = PlayState.metadata;
         var score = PlayState.instance.songScore;
         var misses = PlayState.instance.songMisses;
         var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+
+        var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + formString(), 46);
+        songTxt.setFormat(Paths.font("p4resultsfont.otf"), 36, FlxColor.BLACK);
+        songTxt.scrollFactor.set();
+        songTxt.updateHitbox();
+        songTxt.alpha = 1;
+        add(songTxt);
 
         var scoreTxt:FlxText = new FlxText(120, 120, FlxG.width, '${PlayState.instance.songScore} PTS', 40);
         scoreTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
@@ -121,6 +132,7 @@ class P4Results extends MusicBeatSubstate
         scoreTxt.cameras = [camHUD];
         missTxt.cameras = [camHUD];
         accTxt.cameras = [camHUD];
+        songTxt.cameras = [camHUD];
         screen.cameras = [camHUD];
 
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
@@ -145,10 +157,12 @@ class P4Results extends MusicBeatSubstate
         }});
         FlxTween.tween(text, {y:629}, 0.5, {ease:FlxEase.expoInOut});
 
-        FlxG.sound.playMusic(Paths.music('persona/victory/p4Start'));
-        FlxG.sound.music.onComplete = function(){
-            FlxG.sound.playMusic(Paths.music('persona/victory/p4Loop'));
-        }
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
+    }
+
+    public function formString():String
+    {
+        return '${data.credits.music.join(', ')}';
     }
 
     override function update(elapsed:Float)

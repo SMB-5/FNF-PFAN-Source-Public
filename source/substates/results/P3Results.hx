@@ -152,7 +152,7 @@ class P3Results extends MusicBeatSubstate
 
         super.create();
 
-        FlxG.sound.playMusic(Paths.music('persona/victory/p3Loop'));
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P3/After The Battle'));
     }
 
     override function update(elapsed:Float)
