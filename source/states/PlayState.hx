@@ -953,7 +953,7 @@ class PlayState extends MusicBeatState
 
 		if (foundFile)
 		{
-			videoCutscene = new VideoSprite(fileName, forMidSong, canSkip, loop);
+			videoCutscene = new VideoSprite(fileName, forMidSong, canSkip, loop, false);
 
 			// Finish callback
 			if (!forMidSong)
