@@ -427,6 +427,7 @@ class PlayState extends MusicBeatState
 			case 'Dorm': new states.stages.Dorm();
 			case 'TartarusLobby': new states.stages.TartarusLobby();
 			case 'VelvetRoomP5': new states.stages.VelvetRoomP5();
+			case 'Specialist': new states.stages.Specialist();
 		}
 
 		if(isPixelStage) {
@@ -938,8 +939,8 @@ class PlayState extends MusicBeatState
 	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = true, loop:Bool = false, playOnLoad:Bool = true)
 	{
 		#if VIDEOS_ALLOWED
-		inCutscene = true;
-		canPause = false;
+		inCutscene = !forMidSong;
+		canPause = forMidSong;
 
 		var foundFile:Bool = false;
 		var fileName:String = Paths.video(name);
@@ -966,7 +967,7 @@ class PlayState extends MusicBeatState
 						//FlxG.camera.snapToTarget();
 					}
 					videoCutscene = null;
-					canPause = false;
+					canPause = true;
 					inCutscene = false;
 					startAndEnd();
 				}
@@ -976,7 +977,7 @@ class PlayState extends MusicBeatState
 			add(videoCutscene);
 
 			if (playOnLoad)
-				videoCutscene.videoSprite.play();
+				videoCutscene.play();
 			return videoCutscene;
 		}
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
@@ -1346,6 +1347,8 @@ class PlayState extends MusicBeatState
 			vocals.pause();
 			opponentVocals.pause();
 		}
+
+		stagesFunc(function(stage:BaseStage) stage.songStart());
 
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;

@@ -1,24 +1,15 @@
 package states.stages;
 
-import states.stages.objects.*;
-import objects.Character;
-import hxcodec.VideoHandler;
-import hxcodec.VideoSprite;
-import states.PlayState;
-
 class Specialist extends BaseStage
 {
 	override function create()
 	{
-		skipCountdown = true;
+		game.startVideo('Persona 4 - Specialist', true, false, false, false); // Precache first
+		game.videoCutscene?.camera = game.camHUD;
+	}
 
-		var vid:VideoSprite = new VideoSprite();
-		vid.play(Paths.video("Persona 4 - Specialist"));
-		vid.cameras = [camOther];
-		add(vid);
-		vid.finishCallback = function()
-		{
-			vid.destroy();
-		}
+	override function songStart()
+	{
+		game.videoCutscene?.play(); // Now play
 	}
 }

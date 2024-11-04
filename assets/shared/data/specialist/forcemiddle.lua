@@ -11,7 +11,6 @@ function onCreatePost()
 end
 
 function onCountdownStarted()
-
 	for i = 0, 3 do 
         setPropertyFromGroup("strumLineNotes", i, "x", -1000)
     end
