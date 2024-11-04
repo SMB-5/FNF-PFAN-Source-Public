@@ -1716,15 +1716,23 @@ class PlayState extends MusicBeatState
 
 	override public function onFocus():Void
 	{
-		if (health > 0 && !paused) resetRPC(Conductor.songPosition > 0.0);
+		if (!paused)
+		{
+			if (health > 0) resetRPC(Conductor.songPosition > 0.0);
+			videoCutscene?.resume();
+		}
 		super.onFocus();
 	}
 
 	override public function onFocusLost():Void
 	{
-		#if DISCORD_ALLOWED
-		if (health > 0 && !paused && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song, iconP2.getCharacter());
-		#end
+		if (!paused)
+		{
+			#if DISCORD_ALLOWED
+			if (health > 0 && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song, iconP2.getCharacter());
+			#end
+			videoCutscene?.pause();
+		}
 
 		super.onFocusLost();
 	}
