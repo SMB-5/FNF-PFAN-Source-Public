@@ -25,7 +25,7 @@ class TartarusLobby extends BaseStage
 	override function createPost()
 	{
 		if(!ClientPrefs.data.lowQuality) {
-			var light:BGSprite = new BGSprite('persona/stages/tartarus-lobby/5', -540, -350)
+			var light:BGSprite = new BGSprite('persona/stages/tartarus-lobby/5', -540, -350);
 			add(light);
 
 			var vig:BGSprite = new BGSprite('persona/stages/tartarus-lobby/6', 0, 0, 0, 0);
