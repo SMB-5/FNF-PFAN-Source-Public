@@ -5,7 +5,7 @@ class Specialist extends BaseStage
 	override function create()
 	{
 		game.startVideo('Persona 4 - Specialist', true, false, false, false); // Precache first
-		game.videoCutscene?.camera = game.camHUD;
+		game.videoCutscene.camera = game.camHUD;
 	}
 
 	override function songStart()
