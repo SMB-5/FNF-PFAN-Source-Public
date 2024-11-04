@@ -82,8 +82,6 @@ class P4Results extends MusicBeatSubstate
 
         // actual text
         data = PlayState.metadata;
-        var score = PlayState.instance.songScore;
-        var misses = PlayState.instance.songMisses;
         var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
 
         var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + formString(), 46);
@@ -137,11 +135,11 @@ class P4Results extends MusicBeatSubstate
 
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(1.3, function(tmr:FlxTimer)
-        {
-        highscore.visible = true;
-        FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
-        });
+   	     new FlxTimer().start(1.3, function(tmr:FlxTimer)
+ 	       {
+	 	       highscore.visible = true;
+		        FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
+	        });
         }
 
         super.create();
@@ -150,7 +148,8 @@ class P4Results extends MusicBeatSubstate
         FlxTween.tween(beef, {x:0, y:0}, 0.4, {ease:FlxEase.quadInOut});
         FlxTween.tween(filter, {x:0}, 0.7, {ease:FlxEase.expoInOut});
         FlxTween.tween(borders, {x:0}, 0.9, {ease:FlxEase.expoInOut});
-        FlxTween.tween(items, {x:30}, 0.3, {ease:FlxEase.expoInOut, onComplete:function(twn:FlxTween){
+        FlxTween.tween(items, {x:30}, 0.3, {ease:FlxEase.expoInOut, onComplete: function(twn:FlxTween)
+        {
             FlxTween.tween(scoreTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
             FlxTween.tween(missTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
             FlxTween.tween(accTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
@@ -176,22 +175,26 @@ class P4Results extends MusicBeatSubstate
         }
     }
 
-    function endthis(){
+    function endthis()
+    {
         var percent:Float = PlayState.instance.ratingPercent;
-		if(Math.isNaN(percent)) percent = 0;
+		if (Math.isNaN(percent)) percent = 0;
 		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
 
         if (PlayState.isStoryMode) 
         {
-        LoadingState.loadAndSwitchState(new PlayState());
-        if (PlayState.storyPlaylist.length <= 0)
-        {
-        MusicBeatState.switchState(new StoryMenuState());
-        }
+        	if (PlayState.storyPlaylist.length <= 0)
+	        {
+	   	     MusicBeatState.switchState(new StoryMenuState());
+	        }
+			else
+	        {
+ 	  	     LoadingState.loadAndSwitchState(new PlayState());
+	        }
         }
         else
         {
-        MusicBeatState.switchState(new FreeplayState());
+ 	       MusicBeatState.switchState(new FreeplayState());
         }
 
         FlxG.sound.playMusic(Paths.music('freakyMenu'));

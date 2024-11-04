@@ -3,8 +3,8 @@ function onCreatePost()
         setPropertyFromGroup("strumLineNotes", i, "x", -1000)
     end
 
-    for i = 4, 7 do 
-        if not middlescroll then
+    if not middlescroll then
+        for i = 4, 7 do 
             setPropertyFromGroup("strumLineNotes", i, "x", screenWidth/2 + ((i % 4) * 112) - 230)
         end
     end
@@ -16,8 +16,8 @@ function onCountdownStarted()
         setPropertyFromGroup("strumLineNotes", i, "x", -1000)
     end
 
-    for i = 4, 7 do 
-        if not middlescroll then
+    if not middlescroll then
+        for i = 4, 7 do 
             setPropertyFromGroup("strumLineNotes", i, "x", screenWidth/2 + ((i % 4) * 112) - 230)
         end
     end

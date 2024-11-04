@@ -143,11 +143,11 @@ class P3Results extends MusicBeatSubstate
 
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(1.3, function(tmr:FlxTimer)
-        {
-        highscore.visible = true;
-        FlxG.sound.play(Paths.sound('persona/highscore'), 1);
-        });
+  	      new FlxTimer().start(1.3, function(tmr:FlxTimer)
+	        {
+  		      highscore.visible = true;
+ 		       FlxG.sound.play(Paths.sound('persona/highscore'), 1);
+	        });
         }
 
         super.create();
@@ -167,22 +167,26 @@ class P3Results extends MusicBeatSubstate
         }
     }
 
-    function endthis(){
+    function endthis()
+    {
         var percent:Float = PlayState.instance.ratingPercent;
-		if(Math.isNaN(percent)) percent = 0;
+		if (Math.isNaN(percent)) percent = 0;
 		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
         
         if (PlayState.isStoryMode) 
         {
-        LoadingState.loadAndSwitchState(new PlayState());
-        if (PlayState.storyPlaylist.length <= 0)
-        {
-        MusicBeatState.switchState(new StoryMenuState());
-        }
+        	if (PlayState.storyPlaylist.length <= 0)
+	        {
+	   	     MusicBeatState.switchState(new StoryMenuState());
+	        }
+			else
+	        {
+ 	  	     LoadingState.loadAndSwitchState(new PlayState());
+	        }
         }
         else
         {
-        MusicBeatState.switchState(new FreeplayState());
+ 	       MusicBeatState.switchState(new FreeplayState());
         }
 
         FlxG.sound.playMusic(Paths.music('freakyMenu'));

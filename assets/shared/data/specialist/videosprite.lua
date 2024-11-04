@@ -5,5 +5,5 @@ function onSongStart()
 	setObjectCamera('videoCutscene', 'hud')
 	setObjectOrder('videoCutscene', 0)
 	setProperty('canPause', true)
-	
+
 end
