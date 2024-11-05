@@ -7,6 +7,7 @@ import states.PlayState;
 import backend.Highscore;
 import backend.Song;
 import backend.Rating;
+import backend.Metadata;
 import flixel.util.FlxTimer;
 
 class P3Results extends MusicBeatSubstate
@@ -26,12 +27,15 @@ class P3Results extends MusicBeatSubstate
     var screen:FlxSprite;
     var shit:FlxSprite;
 
+    var data:MetadataFile;
+
     override function create()
     {
         camHUD = new FlxCamera();
         FlxG.cameras.add(camHUD, false);
         FlxTransitionableState.skipNextTransOut = false;
 
+        data = PlayState.metadata;
         var score = PlayState.instance.songScore;
         var misses = PlayState.instance.songMisses;
         var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
@@ -61,6 +65,13 @@ class P3Results extends MusicBeatSubstate
         highscore.setGraphicSize(Std.int(highscore.width * 0.4));
         add(highscore);
         highscore.visible = false;
+
+        var songTxt:FlxText = new FlxText(10, 680, FlxG.width, PlayState.SONG.song + ' By ' + formString(), 46);
+        songTxt.setFormat(Paths.font("akira.otf"), 36, FlxColor.BLACK);
+        songTxt.scrollFactor.set();
+        songTxt.updateHitbox();
+        songTxt.alpha = 1;
+        add(songTxt);
 
         var scoreTxt:FlxText = new FlxText(375, 235, FlxG.width, '${PlayState.instance.songScore}', 40);
         scoreTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
@@ -140,6 +151,7 @@ class P3Results extends MusicBeatSubstate
         accText.cameras = [camHUD];
         black.cameras = [camHUD];
         screen.cameras = [camHUD];
+        songTxt.cameras = [camHUD];
 
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
@@ -153,6 +165,11 @@ class P3Results extends MusicBeatSubstate
         super.create();
 
         FlxG.sound.playMusic(Paths.music('persona/songs from the games/P3/After The Battle'));
+    }
+
+    public function formString():String
+    {
+        return '${data.credits.music.join(', ')}';
     }
 
     override function update(elapsed:Float)
