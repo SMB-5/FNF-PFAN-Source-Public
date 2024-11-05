@@ -1,13 +1,10 @@
 package backend;
 
 import haxe.Json;
-import haxe.format.JsonParser;
 import lime.utils.Assets;
-import backend.Song;
 
 #if sys
 import sys.io.File;
-import sys.FileSystem;
 #end
 
 typedef MetadataFile = {
@@ -24,37 +21,25 @@ typedef MetadataCard = {
 }
 
 typedef MetadataCredits = {
-    var music:Null<Array<String>>;
-    var chart:Null<Array<String>>;
-    var art:Null<Array<String>>;
-    var code:Null<Array<String>>;
-    var va:Null<Array<String>>;
+    var music:Null<String>;
+    var chart:Null<String>;
+    var art:Null<String>;
+    var code:Null<String>;
+    var va:Null<String>;
 }
 
-class Metadata 
+class Metadata
 {
     public static function get(song:String):MetadataFile
     {
         try {
-            var rawJson = null;
+            var path:String = Paths.formatToSongPath(PlayState.SONG.song) + '/metadata';
 
-            var formattedSong:String = Paths.formatToSongPath(PlayState.SONG.song);
-            var path:String = formattedSong + '/metadata';
-
-            #if MODS_ALLOWED
-            var moddyFile:String = Paths.modsJson(path);
-            if(FileSystem.exists(moddyFile)) {
-                rawJson = File.getContent(moddyFile).trim();
-            }
+            #if sys
+            var rawJson = File.getContent(Paths.json(path)).trim();
+            #else
+            var rawJson = Assets.getText(Paths.json(path)).trim();
             #end
-
-            if(rawJson == null) {
-                #if sys
-                rawJson = File.getContent(Paths.json(path)).trim();
-                #else
-                rawJson = Assets.getText(Paths.json(path)).trim();
-                #end	
-            }
 
             while (!rawJson.endsWith("}"))
             {
@@ -64,7 +49,6 @@ class Metadata
 
             return cast Json.parse(rawJson);
         }
-
         catch(e) {
             return null;
         }

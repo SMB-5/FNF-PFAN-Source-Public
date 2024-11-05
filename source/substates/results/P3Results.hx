@@ -12,8 +12,6 @@ import flixel.util.FlxTimer;
 
 class P3Results extends MusicBeatSubstate
 {
-    public var camHUD:FlxCamera;
-
     var base:FlxSprite;
     var path:String = "persona/results/p3/";
 
@@ -31,13 +29,9 @@ class P3Results extends MusicBeatSubstate
 
     override function create()
     {
-        camHUD = new FlxCamera();
-        FlxG.cameras.add(camHUD, false);
         FlxTransitionableState.skipNextTransOut = false;
 
         data = PlayState.metadata;
-        var score = PlayState.instance.songScore;
-        var misses = PlayState.instance.songMisses;
         var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
 
         // ASSETS
@@ -61,53 +55,52 @@ class P3Results extends MusicBeatSubstate
         var highscore:FlxSprite = new FlxSprite(300, 0).loadGraphic(Paths.image('persona/results/highscore'));
         highscore.scrollFactor.set();
         highscore.antialiasing = ClientPrefs.data.antialiasing;
-        highscore.updateHitbox();
         highscore.setGraphicSize(Std.int(highscore.width * 0.4));
+        highscore.updateHitbox();
         add(highscore);
         highscore.visible = false;
 
-        var songTxt:FlxText = new FlxText(10, 680, FlxG.width, PlayState.SONG.song + ' By ' + formString(), 46);
+        var songTxt:FlxText = new FlxText(10, 680, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 46);
         songTxt.setFormat(Paths.font("akira.otf"), 36, FlxColor.BLACK);
         songTxt.scrollFactor.set();
         songTxt.updateHitbox();
-        songTxt.alpha = 1;
         add(songTxt);
 
-        var scoreTxt:FlxText = new FlxText(375, 235, FlxG.width, '${PlayState.instance.songScore}', 40);
-        scoreTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
+        var scoreAmount:FlxText = new FlxText(375, 235, FlxG.width, '${PlayState.instance.songScore}', 40);
+        scoreAmount.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
+        scoreAmount.scrollFactor.set();
+        scoreAmount.updateHitbox();
+        add(scoreAmount);
+
+        var scoreTxt:FlxText = new FlxText(600, 235, FlxG.width, "Score", 40);
+        scoreTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.BLACK);
         scoreTxt.scrollFactor.set();
         scoreTxt.updateHitbox();
         add(scoreTxt);
 
-        var scoreText:FlxText = new FlxText(600, 235, FlxG.width, "Score", 40);
-        scoreText.setFormat(Paths.font("akira.otf"), 40, FlxColor.BLACK);
-        scoreText.scrollFactor.set();
-        scoreText.updateHitbox();
-        add(scoreText);
+        var missAmount:FlxText = new FlxText(475, 318, FlxG.width, '${PlayState.instance.songMisses}', 40);
+        missAmount.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
+        missAmount.scrollFactor.set();
+        missAmount.updateHitbox();
+        add(missAmount);
 
-        var missTxt:FlxText = new FlxText(475, 318, FlxG.width, '${PlayState.instance.songMisses}', 40);
-        missTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
+        var missTxt:FlxText = new FlxText(575, 318, FlxG.width, "Misses", 40);
+        missTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.BLACK);
         missTxt.scrollFactor.set();
         missTxt.updateHitbox();
         add(missTxt);
 
-        var missText:FlxText = new FlxText(575, 318, FlxG.width, "Misses", 40);
-        missText.setFormat(Paths.font("akira.otf"), 40, FlxColor.BLACK);
-        missText.scrollFactor.set();
-        missText.updateHitbox();
-        add(missText);
+        var accPercent:FlxText = new FlxText(250, 401, FlxG.width, '${percent}%', 40);
+        accPercent.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
+        accPercent.scrollFactor.set();
+        accPercent.updateHitbox();
+        add(accPercent);
 
-        var accTxt:FlxText = new FlxText(250, 401, FlxG.width, '${percent}%', 40);
-        accTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
+        var accTxt:FlxText = new FlxText(475, 401, FlxG.width, "Accuracy", 40);
+        accTxt.setFormat(Paths.font("akira.otf"), 40, FlxColor.BLACK);
         accTxt.scrollFactor.set();
         accTxt.updateHitbox();
         add(accTxt);
-
-        var accText:FlxText = new FlxText(475, 401, FlxG.width, "Accuracy", 40);
-        accText.setFormat(Paths.font("akira.otf"), 40, FlxColor.BLACK);
-        accText.scrollFactor.set();
-        accText.updateHitbox();
-        add(accText);
 
         black = new FlxSprite(-1280, 0).makeGraphic(1280, 720, FlxColor.BLACK);
         black.scrollFactor.set();
@@ -138,21 +131,6 @@ class P3Results extends MusicBeatSubstate
         base.alpha = 0.4;
         //add(base);
 
-        blue.cameras = [camHUD];
-        shit.cameras = [camHUD];
-        lines.cameras = [camHUD];
-        beef.cameras = [camHUD];
-        highscore.cameras = [camHUD];
-        scoreTxt.cameras = [camHUD];
-        scoreText.cameras = [camHUD];
-        missTxt.cameras = [camHUD];
-        missText.cameras = [camHUD];
-        accTxt.cameras = [camHUD];
-        accText.cameras = [camHUD];
-        black.cameras = [camHUD];
-        screen.cameras = [camHUD];
-        songTxt.cameras = [camHUD];
-
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
   	      new FlxTimer().start(1.3, function(tmr:FlxTimer)
@@ -162,14 +140,10 @@ class P3Results extends MusicBeatSubstate
 	        });
         }
 
-        super.create();
-
         FlxG.sound.playMusic(Paths.music('persona/songs from the games/P3/After The Battle'));
-    }
 
-    public function formString():String
-    {
-        return '${data.credits.music.join(', ')}';
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+        super.create();
     }
 
     override function update(elapsed:Float)
@@ -178,13 +152,13 @@ class P3Results extends MusicBeatSubstate
 
         if (controls.ACCEPT)
         {
-            FlxTween.tween(black, {x:0}, 1.2, {ease:FlxEase.expoInOut});
-            FlxTween.tween(screen, {x:1290}, 1.2, {ease:FlxEase.expoInOut, onComplete: function(twn:FlxTween){endthis();}});
-            FlxTween.tween(shit, {x:1280}, 0.8, {ease:FlxEase.expoInOut});
+            FlxTween.tween(black, {x: 0}, 1.2, {ease: FlxEase.expoInOut});
+            FlxTween.tween(screen, {x: 1290}, 1.2, {ease: FlxEase.expoInOut, onComplete: (twn)->endResults()});
+            FlxTween.tween(shit, {x: 1280}, 0.8, {ease: FlxEase.expoInOut});
         }
     }
 
-    function endthis()
+    function endResults()
     {
         var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;

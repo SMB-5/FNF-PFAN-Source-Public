@@ -12,8 +12,6 @@ import flixel.util.FlxTimer;
 
 class P4Results extends MusicBeatSubstate
 {
-    public var camHUD:FlxCamera;
-
     var base:FlxSprite;
     var path:String = "persona/results/p4/";
 
@@ -31,8 +29,6 @@ class P4Results extends MusicBeatSubstate
 
     override function create()
     {
-        camHUD = new FlxCamera();
-        FlxG.cameras.add(camHUD, false);
         FlxTransitionableState.skipNextTransOut = false;
 
         // ASSETS
@@ -50,7 +46,7 @@ class P4Results extends MusicBeatSubstate
         var filter:FlxSprite = new FlxSprite(700).loadGraphic(Paths.image(path + 'darkercolor'));
         filter.scrollFactor.set();
         filter.antialiasing = ClientPrefs.data.antialiasing;
-        filter.blend = "multiply";
+        filter.blend = openfl.display.BlendMode.MULTIPLY;
         filter.updateHitbox();
         add(filter);
 
@@ -84,7 +80,7 @@ class P4Results extends MusicBeatSubstate
         data = PlayState.metadata;
         var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
 
-        var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + formString(), 46);
+        var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 46);
         songTxt.setFormat(Paths.font("p4resultsfont.otf"), 36, FlxColor.BLACK);
         songTxt.scrollFactor.set();
         songTxt.updateHitbox();
@@ -119,20 +115,6 @@ class P4Results extends MusicBeatSubstate
         screen.antialiasing = ClientPrefs.data.antialiasing;
         add(screen);
 
-        yellow.cameras = [camHUD];
-        beef.cameras = [camHUD];
-        filter.cameras = [camHUD];
-        borders.cameras = [camHUD];
-        highscore.cameras = [camHUD];
-        items.cameras = [camHUD];
-        text.cameras = [camHUD];
-        
-        scoreTxt.cameras = [camHUD];
-        missTxt.cameras = [camHUD];
-        accTxt.cameras = [camHUD];
-        songTxt.cameras = [camHUD];
-        screen.cameras = [camHUD];
-
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
    	     new FlxTimer().start(1.3, function(tmr:FlxTimer)
@@ -142,26 +124,22 @@ class P4Results extends MusicBeatSubstate
 	        });
         }
 
-        super.create();
-
-        FlxTween.tween(yellow, {x:0}, 0.4, {ease:FlxEase.quadInOut});
-        FlxTween.tween(beef, {x:0, y:0}, 0.4, {ease:FlxEase.quadInOut});
-        FlxTween.tween(filter, {x:0}, 0.7, {ease:FlxEase.expoInOut});
-        FlxTween.tween(borders, {x:0}, 0.9, {ease:FlxEase.expoInOut});
-        FlxTween.tween(items, {x:30}, 0.3, {ease:FlxEase.expoInOut, onComplete: function(twn:FlxTween)
+        FlxTween.tween(yellow, {x: 0}, 0.4, {ease: FlxEase.quadInOut});
+        FlxTween.tween(beef, {x: 0, y: 0}, 0.4, {ease: FlxEase.quadInOut});
+        FlxTween.tween(filter, {x: 0}, 0.7, {ease: FlxEase.expoInOut});
+        FlxTween.tween(borders, {x: 0}, 0.9, {ease: FlxEase.expoInOut});
+        FlxTween.tween(items, {x: 30}, 0.3, {ease: FlxEase.expoInOut, onComplete: function(twn:FlxTween)
         {
-            FlxTween.tween(scoreTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
-            FlxTween.tween(missTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
-            FlxTween.tween(accTxt, {x:150, alpha:1}, 0.6, {ease:FlxEase.expoInOut});
+            FlxTween.tween(scoreTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
+            FlxTween.tween(missTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
+            FlxTween.tween(accTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
         }});
-        FlxTween.tween(text, {y:629}, 0.5, {ease:FlxEase.expoInOut});
+        FlxTween.tween(text, {y: 629}, 0.5, {ease: FlxEase.expoInOut});
 
         FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
-    }
 
-    public function formString():String
-    {
-        return '${data.credits.music.join(', ')}';
+        cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+        super.create();
     }
 
     override function update(elapsed:Float)
@@ -170,12 +148,11 @@ class P4Results extends MusicBeatSubstate
 
         if (controls.ACCEPT)
         {
-            FlxTween.tween(screen, {x:0}, 1.1, {ease:FlxEase.expoInOut, 
-                onComplete:function(twn){endthis();}});
+            FlxTween.tween(screen, {x: 0}, 1.1, {ease: FlxEase.expoInOut, onComplete: (twn)->endResults()});
         }
     }
 
-    function endthis()
+    function endResults()
     {
         var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;

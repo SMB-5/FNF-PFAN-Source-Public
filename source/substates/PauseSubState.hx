@@ -91,28 +91,28 @@ class PauseSubState extends MusicBeatSubstate
         credtext.scrollFactor.set();
 		credtext.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext.updateHitbox();
-		credtext.text = formString();
+		credtext.text = 'Song: ${data.credits.music}';
         add(credtext);
 
 		var credtext2 = new FlxText(20, 15 + 64, 0, "", 32);
         credtext2.scrollFactor.set();
 		credtext2.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext2.updateHitbox();
-		credtext2.text = formString2();
+		credtext2.text = 'Art: ${data.credits.art}';
         add(credtext2);
 
 		var credtext3 = new FlxText(20, 15 + 96, 0, "", 32);
         credtext3.scrollFactor.set();
 		credtext3.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext3.updateHitbox();
-		credtext3.text = formString3();
+		credtext3.text = 'Code: ${data.credits.code}';
         add(credtext3);
 
 		var credtext4 = new FlxText(20, 15 + 128, 0, "", 32);
         credtext4.scrollFactor.set();
 		credtext4.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext4.updateHitbox();
-		credtext4.text = formString4();
+		credtext4.text = 'Chart: ${data.credits.chart}';
         add(credtext4);
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
@@ -139,8 +139,8 @@ class PauseSubState extends MusicBeatSubstate
         desctext.scrollFactor.set();
 		desctext.setFormat(Paths.font('vcr.ttf'), 22);
 		desctext.updateHitbox();
-		if(CoolUtil.exists(Paths.txt(PlayState.instance.songName + "/desc"))){
-        desctext.text = CoolUtil.getText(Paths.txt(PlayState.instance.songName + "/desc"));
+		if (CoolUtil.exists(Paths.txt(PlayState.instance.songName + "/desc"))) {
+			desctext.text = CoolUtil.getText(Paths.txt(PlayState.instance.songName + "/desc"));
 		}
 		desctext.text += "\n";
         add(desctext);
@@ -203,26 +203,6 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.create();
 	}
-
-	public function formString():String
-    {
-        return 'Song: ${data.credits.music.join(', ')}';
-    }
-
-	public function formString2():String
-    {
-        return 'Art: ${data.credits.art.join(', ')}';
-    }
-
-	public function formString3():String
-    {
-        return 'Code: ${data.credits.code.join(', ')}';
-    }
-
-	public function formString4():String
-    {
-        return 'Chart: ${data.credits.chart.join(', ')}';
-    }
 	
 	function getPauseSong()
 	{

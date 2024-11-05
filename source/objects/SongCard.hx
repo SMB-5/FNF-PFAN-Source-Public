@@ -32,7 +32,7 @@ class SongCard extends FlxSpriteGroup
 
         text = new FlxText(x + padding, y + padding).setFormat(Paths.font('vcr.ttf'), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         text.antialiasing = ClientPrefs.data.antialiasing;
-        text.text = formString();
+        text.text = toString();
         
         bg = new FlxSprite().makeGraphic(Std.int(text.width + (padding * 2)), Std.int(text.height + (padding * 2)), FlxColor.BLACK);
         bg.alpha = 0.8;
@@ -41,9 +41,9 @@ class SongCard extends FlxSpriteGroup
         add(text);
     }
 
-    public function formString():String
+    override function toString():String
     {
-        return '${data.card.name}\n\nSong: ${data.credits.music.join(', ')}\nChart: ${data.credits.chart.join(', ')}';
+        return '${data.card.name}\n\nSong: ${data.credits.music}\nChart: ${data.credits.chart}';
     }
 
     public function display() {

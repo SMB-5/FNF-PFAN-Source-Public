@@ -5,9 +5,9 @@
 		"duration": 3
     },
     "credits" : {
-        "music" : ["MrEights"],
-        "chart" : ["DudeDX"],
-        "art" : ["???"],
-        "code" : ["SMB"]
+        "music" : "MrEights",
+        "chart" : "DudeDX",
+        "art" : "???",
+        "code" : "SMB"
     }
 }
