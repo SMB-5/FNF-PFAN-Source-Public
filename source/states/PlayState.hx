@@ -87,10 +87,6 @@ enum NeneState
 **/
 class PlayState extends MusicBeatState
 {
-	var noteRows:Array<Array<Array<Note>>> = [[],[]];
-	private var singAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
-
-	public static var instance:PlayState;
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
@@ -254,6 +250,9 @@ class PlayState extends MusicBeatState
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
 
+	var noteRows:Array<Array<Array<Note>>> = [[],[]];
+	private var singAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+
 	public var inCutscene:Bool = false;
 	public var skipCountdown:Bool = false;
 	var songLength:Float = 0;
@@ -275,6 +274,7 @@ class PlayState extends MusicBeatState
 	var boyfriendIdled:Bool = false;
 
 	// Lua shit
+	public static var instance:PlayState;
 	#if LUA_ALLOWED public var luaArray:Array<FunkinLua> = []; #end
 
 	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
@@ -346,7 +346,6 @@ class PlayState extends MusicBeatState
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
-
 
 		#if DISCORD_ALLOWED
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
@@ -441,30 +440,12 @@ class PlayState extends MusicBeatState
 			add(abot);
 		}
 
-		if(gf != null && SONG.gfVersion == 'nene')
-		{
-			gf.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
-			{
-				switch(currentNeneState)
-				{
-					case STATE_PRE_RAISE:
-						if (name == 'danceLeft' && frameNumber >= 14)
-						{
-							animationFinished = true;
-							transitionState();
-						}
-					default:
-						// Ignore.
-				}
-			}
-		}
-
 		dadGhost = new FlxSprite();
 		bfGhost = new FlxSprite();
 		add(gfGroup);
-		add(bfGhost);
 		add(dadGhost);
 		add(dadGroup);
+		add(bfGhost);
 		add(boyfriendGroup);
 
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
@@ -507,6 +488,21 @@ class PlayState extends MusicBeatState
 			gf.scrollFactor.set(0.95, 0.95);
 			gfGroup.add(gf);
 			startCharacterScripts(gf.curCharacter);
+			if(gf.curCharacter == 'nene')
+			{
+				gf.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
+				{
+					switch(currentNeneState)
+					{
+						case STATE_PRE_RAISE:
+							if (name == 'danceLeft' && frameNumber >= 14)
+							{
+								animationFinished = true;
+								transitionState();
+							}
+					}
+				}
+			}
 		}
 
 		dad = new Character(0, 0, SONG.player2);
@@ -904,15 +900,14 @@ class PlayState extends MusicBeatState
 
 	function updateABotEye(finishInstantly:Bool = false)
 	{
-		if (SONG.gfVersion == 'nene')
+		if(SONG.gfVersion == 'nene')
 		{
+			if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true)
+				abot.lookRight();
+			else
+				abot.lookLeft();
 
-		if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true)
-			abot.lookRight();
-		else
-			abot.lookLeft();
-
-		if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
+			if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
 		}
 	}
 
@@ -950,7 +945,7 @@ class PlayState extends MusicBeatState
 		#else
 		if (OpenFlAssets.exists(fileName))
 		#end
-		foundFile = true;
+			foundFile = true;
 
 		if (foundFile)
 		{
@@ -1481,8 +1476,8 @@ class PlayState extends MusicBeatState
 
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.row = Conductor.secsToRow(daStrumTime);
-				if(noteRows[gottaHitNote?0:1][swagNote.row]==null)
-					noteRows[gottaHitNote?0:1][swagNote.row]=[];
+				if(noteRows[gottaHitNote ? 0 : 1][swagNote.row] == null)
+					noteRows[gottaHitNote ? 0 : 1][swagNote.row] = [];
 				noteRows[gottaHitNote ? 0 : 1][swagNote.row].push(swagNote);
 
 				swagNote.mustPress = gottaHitNote;
@@ -1788,7 +1783,6 @@ class PlayState extends MusicBeatState
 
 	var currentNeneState:NeneState = STATE_DEFAULT;
 	var animationFinished:Bool = false;
-
 	override public function update(elapsed:Float)
 	{
 		if(!inCutscene && !paused && !freezeCamera) {
@@ -1810,11 +1804,14 @@ class PlayState extends MusicBeatState
 		setOnScripts('curDecStep', curDecStep);
 		setOnScripts('curDecBeat', curDecBeat);
 
-		if(gf == null || !startedCountdown) return;
-		animationFinished = gf.isAnimationFinished();
-		transitionState();
+		if(gf != null && startedCountdown)
+		{
+			animationFinished = gf.isAnimationFinished();
+			transitionState();
+		}
 
-		if(botplayTxt != null && botplayTxt.visible) {
+		if(botplayTxt != null && botplayTxt.visible)
+		{
 			botplaySine += 180 * elapsed;
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
@@ -1981,7 +1978,7 @@ class PlayState extends MusicBeatState
 
 	function transitionState()
 	{
-		if (SONG.gfVersion == 'nene')
+		if (gf != null && gf.curCharacter == 'nene')
 		{
 			switch (currentNeneState)
 			{
@@ -2543,17 +2540,21 @@ class PlayState extends MusicBeatState
 		var ret:Dynamic = callOnScripts('onEndSong', null, true);
 		if(ret != LuaUtils.Function_Stop && !transitioning)
 		{
-			#if !switch
-			//var percent:Float = ratingPercent;
-			//if(Math.isNaN(percent)) percent = 0;
-			//Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
-			#end
 			playbackRate = 1;
 
 			if (chartingMode)
 			{
 				openChartEditor();
 				return false;
+			}
+
+			switch(PlayState.SONG.song)
+			{
+				// a suggestion but you could probably make P3 the default and check specific songs for P4 instead of checking every single song
+				case 'Full Moon' | 'Tartarus' | 'Destruction' | 'Answer':
+					openSubState(new P3Results());
+				case 'Truth' | 'Specialist':
+					openSubState(new P4Results());
 			}
 
 			if (isStoryMode)
@@ -2563,23 +2564,11 @@ class PlayState extends MusicBeatState
 
 				storyPlaylist.remove(storyPlaylist[0]);
 
-				switch (PlayState.SONG.song)
-				{
-					case 'Full Moon' | 'Tartarus' | 'Destruction':
-						openSubState(new P3Results());
-					case 'Truth':
-						openSubState(new P4Results());
-				}
-
 				if (storyPlaylist.length <= 0)
 				{
 					Mods.loadTopMod();
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
-					//MusicBeatState.switchState(new StoryMenuState());
-
-					// if ()
 					if(!ClientPrefs.getGameplaySetting('practice') && !ClientPrefs.getGameplaySetting('botplay')) {
 						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
 						Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
@@ -2602,8 +2591,6 @@ class PlayState extends MusicBeatState
 
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
 					FlxG.sound.music.stop();
-
-					//LoadingState.loadAndSwitchState(new PlayState());
 				}
 			}
 			else
@@ -2611,17 +2598,6 @@ class PlayState extends MusicBeatState
 				trace('WENT BACK TO FREEPLAY??');
 				Mods.loadTopMod();
 				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-
-				switch (PlayState.SONG.song)
-				{
-					case 'Full Moon' | 'Tartarus' | 'Destruction' | 'Answer':
-						openSubState(new P3Results());
-					case 'Truth' | 'Specialist':
-						openSubState(new P4Results());
-				}
-
-				//MusicBeatState.switchState(new FreeplayState());
-				//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
 			}
 			transitioning = true;
@@ -3295,10 +3271,10 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
+		var char:Character = boyfriend;
 		if(!note.noAnimation) {
 			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))];
 
-			var char:Character = boyfriend;
 			var animCheck:String = 'hey';
 			if(note.gfNote)
 			{
@@ -3352,17 +3328,18 @@ class PlayState extends MusicBeatState
 		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		vocals.volume = 1;
 
-        var char:Character = boyfriend;
-		if(char != gf && combo == 50 && gf != null && gf.animOffsets.exists('cheer'))
+		if(char != gf && gf != null)
 		{
-			gf.playAnim('cheer');
-			gf.specialAnim = true;
-		}
-
-		if(char != gf && combo == 200 && gf != null && gf.animOffsets.exists('swag'))
-		{
-			gf.playAnim('swag');
-			gf.specialAnim = true;
+			if (combo == 50 && gf.animOffsets.exists('cheer'))
+			{
+				gf.playAnim('cheer');
+				gf.specialAnim = true;
+			}
+			else if (combo == 200 && gf.animOffsets.exists('swag'))
+			{
+				gf.playAnim('swag');
+				gf.specialAnim = true;
+			}
 		}
 
 		if(ClientPrefs.data.holdSplash)
@@ -3384,11 +3361,10 @@ class PlayState extends MusicBeatState
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('goodNoteHit', [note]);
 
 		if(!note.isSustainNote) invalidateNote(note);
-
-		if (note.isSustainNote && !cpuControlled)
+		else if(!cpuControlled)
 		{
 			songScore += 10;
-			RecalculateRating();
+			updateScore();
 		}
 	}
 

@@ -12,20 +12,21 @@ import flixel.util.FlxTimer;
 
 class P3Results extends MusicBeatSubstate
 {
+    var data:MetadataFile;
+
     var base:FlxSprite;
     var path:String = "persona/results/p3/";
-
-    var result:FlxText;
-    var missesTxt:FlxText;
-    var accTxt:FlxText;
-    var status:FlxText;
-    var bfText:FlxText;
 
     var black:FlxSprite;
     var screen:FlxSprite;
     var shit:FlxSprite;
 
-    var data:MetadataFile;
+    // currently unused
+    var result:FlxText;
+    var missesTxt:FlxText;
+    var accTxt:FlxText;
+    var status:FlxText;
+    var bfText:FlxText;
 
     override function create()
     {

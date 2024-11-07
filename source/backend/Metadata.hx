@@ -41,12 +41,6 @@ class Metadata
             var rawJson = Assets.getText(Paths.json(path)).trim();
             #end
 
-            while (!rawJson.endsWith("}"))
-            {
-                rawJson = rawJson.substr(0, rawJson.length - 1);
-                // LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
-            }
-
             return cast Json.parse(rawJson);
         }
         catch(e) {
