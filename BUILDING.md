@@ -10,7 +10,7 @@
 - `git`
 - (Windows-only) Microsoft Visual Studio Community
 - (Linux-only) VLC
-- Haxe (4.2.5 or greater)
+- Haxe (4.3 or greater)
 
 ---
 
