@@ -500,6 +500,8 @@ class PlayState extends MusicBeatState
 								animationFinished = true;
 								transitionState();
 							}
+						default:
+							// nothing
 					}
 				}
 			}
