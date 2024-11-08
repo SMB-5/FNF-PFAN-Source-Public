@@ -10,6 +10,7 @@ import options.OptionsState;
 class MainMenuState extends MusicBeatState
 {
 	public static var psychEngineVersion:String = '0.7.3'; // This is also used for Discord RPC
+	public static var personaVersion:String = '0.1.0a_04';
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -88,7 +89,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 		}
 
-		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v0.1.0a_04", 12);
+		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v" + personaVersion, 12);
 		pfanVer.scrollFactor.set();
 		pfanVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(pfanVer);
