@@ -7,7 +7,7 @@ A "Full Ass" Mod based on the Persona Series by [Atlus](https://atlus.com/), bui
 
 You must have [Haxe 4.3+](https://haxe.org/download/)
 
-Once Haxe is installed, open up a command prompt window and run the following commands to install HaxeFlixel. To do this you will need to do `haxelib install [libary] [version]`. For example if you are installing lime you will put `haxelib install lime 8.1.3`.
+Once Haxe is installed, open up a command prompt window and run the following commands to install HaxeFlixel. To do this you will need to do `haxelib install [library] [version]`. For example if you are installing lime you will put `haxelib install lime 8.1.3`.
 The versions to install are listed below (if anything is missing I will add it here):
 ```
 openfl 9.3.4
