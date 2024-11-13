@@ -240,8 +240,6 @@ class PlayState extends MusicBeatState
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
-	var formattedScore:String;
-
 	public static var campaignScore:Int = 0;
 	public static var campaignMisses:Int = 0;
 	public static var seenCutscene:Bool = false;
@@ -1059,63 +1057,6 @@ class PlayState extends MusicBeatState
 		Paths.sound('introGo' + introSoundsSuffix);
 	}
 
-	public static function formatCompactNumber(number:Float):String
-	{
-		var suffixes1:Array<String> = ['ni', 'mi', 'bi', 'tri', 'quadri', 'quinti', 'sexti', 'septi', 'octi', 'noni'];
-		var tenSuffixes:Array<String> = ['', 'deci', 'viginti', 'triginti', 'quadraginti', 'quinquaginti', 'sexaginti', 'septuaginti', 'octoginti', 'nonaginti', 'centi'];
-		var decSuffixes:Array<String> = ['', 'un', 'duo', 'tre', 'quattuor', 'quin', 'sex', 'septe', 'octo', 'nove'];
-		var centiSuffixes:Array<String> = ['centi', 'ducenti', 'trecenti', 'quadringenti', 'quingenti', 'sescenti', 'septingenti', 'octingenti', 'nongenti'];
-
-		var magnitude:Int = 0;
-		var num:Float = number;
-		var tenIndex:Int = 0;
-
-		while (num >= 1000.0)
-		{
-			num /= 1000.0;
-
-			if (magnitude == suffixes1.length - 1) {
-				tenIndex++;
-			}
-
-			magnitude++;
-
-			if (magnitude == 21) {
-				tenIndex++;
-				magnitude = 11;
-			}
-		}
-
-		// Determine which set of suffixes to use
-		var suffixSet:Array<String> = (magnitude <= suffixes1.length) ? suffixes1 : ((magnitude <= suffixes1.length + decSuffixes.length) ? decSuffixes : centiSuffixes);
-
-		// Use the appropriate suffix based on magnitude
-		var suffix:String = (magnitude <= suffixes1.length) ? suffixSet[magnitude - 1] : suffixSet[magnitude - 1 - suffixes1.length];
-		var tenSuffix:String = (tenIndex <= 10) ? tenSuffixes[tenIndex] : centiSuffixes[tenIndex - 11];
-
-		// Use the floor value for the compact representation
-		var compactValue:Float = Math.floor(num * 100) / 100;
-
-		if (compactValue <= 0.001) {
-			return "0"; // Return 0 if compactValue = null
-		} else {
-			var illionRepresentation:String = "";
-
-			if (magnitude > 0) {
-				illionRepresentation += suffix + tenSuffix;
-			}
-
-				if (magnitude > 1) illionRepresentation += "llion";
-
-			return compactValue + (magnitude == 0 ? "" : " ") + (magnitude == 1 ? 'thousand' : illionRepresentation);
-		}
-	}
-
-	public static function formatNumber(number:Float, ?decimals:Bool = false):String //simplified number formatting
-	{
-		return (number < 10e11 ? FlxStringUtil.formatMoney(number, false) : formatCompactNumber(number));
-	}
-
 	public function startCountdown()
 	{
 		if(startedCountdown) {
@@ -1302,8 +1243,7 @@ class PlayState extends MusicBeatState
 			str += ' (${percent}%)';
 		}
 
-        formattedScore = formatNumber(songScore);
-		var tempScore:String = 'Score: ' + formattedScore
+		var tempScore:String = 'Score: ${songScore}'
 		+ (!instakillOnMiss ? ' | Misses: ${songMisses}' : "")
 		+ ' | Rating: ${str}';
 		// "tempScore" variable is used to prevent another memory leak, just in case
