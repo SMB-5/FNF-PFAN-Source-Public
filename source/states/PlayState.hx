@@ -640,16 +640,6 @@ class PlayState extends MusicBeatState
 		updateScore(false);
 		uiGroup.add(scoreTxt);
 
-		hasMetadata = (metadata != null);
-
-		if (hasMetadata) {
-			card = new SongCard(0, 0, metadata);
-			card.screenCenter(Y);
-			card.x = -card.width;
-			uiGroup.add(card);
-			setOnScripts('card', card);
-		}
-
 		botplayTxt = new FlxText(400, healthBar.y - 90, FlxG.width - 800, "BOTPLAY", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
@@ -662,6 +652,17 @@ class PlayState extends MusicBeatState
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
+
+		hasMetadata = (metadata != null);
+
+		if (hasMetadata) {
+			card = new SongCard(0, 0, metadata);
+			card.screenCenter(Y);
+			card.x = -card.width;
+			add(card);
+			card.cameras = [camHUD];
+			setOnScripts('card', card);
+		}
 
 		startingSong = true;
 
@@ -3131,7 +3132,7 @@ class PlayState extends MusicBeatState
 		combo = 0;
 
 		health -= subtract * healthLoss;
-		if(!practiceMode) songScore -= 10;
+		if(!practiceMode) songScore -= 100;
 		if(!endingSong) songMisses++;
 		if (lastCombo > 10) comboBreaks++;
 		totalPlayed++;
