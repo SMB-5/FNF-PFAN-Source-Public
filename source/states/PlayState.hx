@@ -3131,7 +3131,7 @@ class PlayState extends MusicBeatState
 		combo = 0;
 
 		health -= subtract * healthLoss;
-		if(!practiceMode) songScore -= 10;
+		if(!practiceMode) songScore -= 100;
 		if(!endingSong) songMisses++;
 		if (lastCombo > 10) comboBreaks++;
 		totalPlayed++;
