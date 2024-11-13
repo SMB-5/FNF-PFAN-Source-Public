@@ -2740,6 +2740,7 @@ class PlayState extends MusicBeatState
 		if (daRating.name == 'bad' || daRating.name == 'shit')
 		{
 			combo = 0;
+			makeGhostNote(note);
 		}
 
 		if(!practiceMode && !cpuControlled) {
@@ -3349,12 +3350,20 @@ class PlayState extends MusicBeatState
 			spawnHoldSplashOnNotePlayer(note);
 		}
 
-		if (!note.isSustainNote)
+		if(!note.isSustainNote)
 		{
 			combo++;
 			if(combo > 9999) combo = 9999;
 			popUpScore(note);
 		}
+		else if(!practiceMode && !cpuControlled && note.parent != null)
+		{
+			var stepCal = (Conductor.stepCrochet / 100) * 1.2;
+			var value:Int = Math.floor(FlxG.random.int(5 * stepCal, 15 * stepCal) * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 0.8));
+			songScore += value;
+			updateScore();
+		}
+
 		var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 		if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
 		if (gainHealth) health += note.hitHealth * healthGain;
@@ -3363,14 +3372,6 @@ class PlayState extends MusicBeatState
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('goodNoteHit', [note]);
 
 		if(!note.isSustainNote) invalidateNote(note);
-		else if(!cpuControlled)
-		{
-			songScore += 10;
-			updateScore();
-		}
-		if (note.rating == 'bad' || note.rating == 'shit') {
-			makeGhostNote(note);
-		}
 	}
 
 	public function invalidateNote(note:Note):Void {
