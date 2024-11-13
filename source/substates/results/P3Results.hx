@@ -53,7 +53,7 @@ class P3Results extends MusicBeatSubstate
         beef.updateHitbox();
         add(beef);
 
-        var highscore:FlxSprite = new FlxSprite(300, 0).loadGraphic(Paths.image('persona/results/highscore'));
+        var highscore:FlxSprite = new FlxSprite(500, 100).loadGraphic(Paths.image('persona/results/highscore'));
         highscore.scrollFactor.set();
         highscore.antialiasing = ClientPrefs.data.antialiasing;
         highscore.setGraphicSize(Std.int(highscore.width * 0.4));
