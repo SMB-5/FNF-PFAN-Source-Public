@@ -3359,7 +3359,7 @@ class PlayState extends MusicBeatState
 		else if(!practiceMode && !cpuControlled && note.parent != null)
 		{
 			var stepCal = (Conductor.stepCrochet / 100) * 1.2;
-			var value:Int = Math.floor(FlxG.random.int(5 * stepCal, 15 * stepCal) * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 0.8));
+			var value:Int = Math.floor(FlxG.random.int(Math.floor(5 * stepCal), Math.floor(15 * stepCal)) * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 0.8));
 			songScore += value;
 			updateScore();
 		}
