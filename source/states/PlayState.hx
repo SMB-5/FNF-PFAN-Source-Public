@@ -1243,7 +1243,7 @@ class PlayState extends MusicBeatState
 			str += ' (${percent}%)';
 		}
 
-		var tempScore:String = 'Score: ${songScore}'
+		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(songScore, false)}'
 		+ (!instakillOnMiss ? ' | Misses: ${songMisses}' : "")
 		+ ' | Rating: ${str}';
 		// "tempScore" variable is used to prevent another memory leak, just in case
