@@ -4,7 +4,6 @@ import states.stages.objects.*;
 
 class VelvetRoomP5 extends BaseStage
 {
-
 	override function create()
 	{
 		var room:BGSprite = new BGSprite('persona/stages/velvet-room-p5/Room', -600, -300);
@@ -24,5 +23,4 @@ class VelvetRoomP5 extends BaseStage
 			add(light);
 		}
 	}
-
 }

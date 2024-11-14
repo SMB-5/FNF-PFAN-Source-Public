@@ -4,7 +4,6 @@ import states.stages.objects.*;
 
 class TartarusLobby extends BaseStage
 {
-
 	override function create()
 	{
 		var buildings:BGSprite = new BGSprite('persona/stages/tartarus-lobby/1', -740, -350, 0.4, 0.4);
@@ -37,5 +36,4 @@ class TartarusLobby extends BaseStage
 			lvig.cameras = [camHUD];
 		}
 	}
-
 }
