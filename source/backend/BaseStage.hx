@@ -19,7 +19,7 @@ enum Countdown
 
 class BaseStage extends FlxBasic
 {
-	private var game(default, set):MusicBeatState = PlayState.instance;
+	private var game(default, set):Dynamic = PlayState.instance;
 	public var onPlayState:Bool = false;
 
 	// some variables for convenience
