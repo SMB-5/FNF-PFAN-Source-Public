@@ -3339,10 +3339,7 @@ class PlayState extends MusicBeatState
 		}
 		else if(!practiceMode && !cpuControlled && note.parent != null)
 		{
-			// Dont use Conductor.stepCrochet because sustains dont change in length if the bpm changes
-			var stepCal = ((Conductor.calculateCrochet(SONG.bpm) / 4) / 100) * 1.2;
-			// i have no idea what im doing here lmfao
-			var value:Int = Math.floor(FlxG.random.int(Math.floor(5 * stepCal), Math.floor(15 * stepCal)) * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 1));
+			var value:Int = Math.floor(10 * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 1));
 			songScore += value;
 			updateScore();
 		}
