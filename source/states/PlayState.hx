@@ -47,6 +47,7 @@ import objects.VideoSprite;
 
 import objects.Note.EventNote;
 import objects.*;
+import states.stages.*;
 import states.stages.objects.*;
 
 #if LUA_ALLOWED
@@ -414,10 +415,10 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'Dorm': new states.stages.Dorm();
-			case 'TartarusLobby': new states.stages.TartarusLobby(); 
-			case 'VelvetRoomP5': new states.stages.VelvetRoomP5();
-			case 'Specialist': new states.stages.Specialist();
+			case 'Dorm': new Dorm();
+			case 'TartarusLobby': new TartarusLobby(); 
+			case 'VelvetRoomP5': new VelvetRoomP5();
+			case 'Specialist': new Specialist();
 
 			// base game
 			case 'stage': new StageWeek1();
