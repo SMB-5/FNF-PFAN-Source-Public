@@ -14,13 +14,14 @@ import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 
 import flixel.math.FlxMath;
+import flixel.util.FlxTimer;
 
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
-	private static var curSelected:Int = 0;
+	private static var curSelected:Int = 1;
 	var lerpSelected:Float = 0;
 	var curDifficulty:Int = -1;
 	private static var lastDifficultyName:String = Difficulty.getDefault();
@@ -33,6 +34,8 @@ class FreeplayState extends MusicBeatState
 	var lerpRating:Float = 0;
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
+
+	var picked_random = false;
 
 	public static var mode:String = "story";
 
@@ -188,6 +191,7 @@ class FreeplayState extends MusicBeatState
 
 	function regenerateSongs(?start:String = '') {
 		songs = [];
+		songs.push(new SongMetadata("Random", 0, "Face", 255));
 		for (i in 0...WeekData.weeksList.length) {
 			if(weekIsLocked(WeekData.weeksList[i])) continue;
 
@@ -461,8 +465,17 @@ class FreeplayState extends MusicBeatState
 			persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
 		}
-		else if(FlxG.keys.justPressed.SPACE)
+		else if(FlxG.keys.justPressed.SPACE && songs[curSelected].songName.toLowerCase() != 'random')
 		{
+			if (songs[curSelected].songName.toLowerCase() == 'random')
+			{
+            changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+			picked_random = true;
+			new FlxTimer().start(1, function(tmr) {
+			LoadingState.loadAndSwitchState(new PlayState());
+			});
+			}
+
 			if(instPlaying != curSelected && !player.playingMusic)
 			{
 				destroyFreeplayVocals();
@@ -504,6 +517,14 @@ class FreeplayState extends MusicBeatState
 		}
 		else if (controls.ACCEPT && !player.playingMusic)
 		{
+			if ((songs[curSelected].songName.toLowerCase() == 'random'))
+		    {
+            changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+			picked_random = true;
+			new FlxTimer().start(1, function(tmr) {
+			LoadingState.loadAndSwitchState(new PlayState());
+			});
+			}
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
@@ -545,7 +566,10 @@ class FreeplayState extends MusicBeatState
 				super.update(elapsed);
 				return;
 			}
+			if (picked_random == false)
+			{
 			LoadingState.loadAndSwitchState(new PlayState());
+			}	
 
 			FlxG.sound.music.volume = 0;
 					
