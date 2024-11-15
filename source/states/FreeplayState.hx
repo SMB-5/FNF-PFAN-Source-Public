@@ -35,6 +35,8 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
 
+	var picked_random = false;
+
 	public static var mode:String = "story";
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
@@ -463,8 +465,17 @@ class FreeplayState extends MusicBeatState
 			persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
 		}
-		else if(FlxG.keys.justPressed.SPACE)
+		else if(FlxG.keys.justPressed.SPACE && songs[curSelected].songName.toLowerCase() != 'random')
 		{
+			if (songs[curSelected].songName.toLowerCase() == 'random')
+			{
+            changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+			picked_random = true;
+			new FlxTimer().start(1, function(tmr) {
+			LoadingState.loadAndSwitchState(new PlayState());
+			});
+			}
+
 			if(instPlaying != curSelected && !player.playingMusic)
 			{
 				destroyFreeplayVocals();
@@ -509,6 +520,10 @@ class FreeplayState extends MusicBeatState
 			if ((songs[curSelected].songName.toLowerCase() == 'random'))
 		    {
             changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+			picked_random = true;
+			new FlxTimer().start(1, function(tmr) {
+			LoadingState.loadAndSwitchState(new PlayState());
+			});
 			}
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
@@ -551,7 +566,10 @@ class FreeplayState extends MusicBeatState
 				super.update(elapsed);
 				return;
 			}
+			if (picked_random == false)
+			{
 			LoadingState.loadAndSwitchState(new PlayState());
+			}	
 
 			FlxG.sound.music.volume = 0;
 					
