@@ -36,6 +36,7 @@ class FreeplayState extends MusicBeatState
 	var intendedRating:Float = 0;
 
 	var picked_random = false;
+	var playing_random = false;
 
 	public static var mode:String = "story";
 
@@ -643,6 +644,33 @@ class FreeplayState extends MusicBeatState
 
 		if (songs[curSelected] == null) return;
 		Mods.currentModDirectory = songs[curSelected].folder;
+
+		if ((songs[curSelected].songName.toLowerCase() == 'random'))
+		{
+			if (playing_random == false)
+		    {
+		    FlxG.sound.music.stop();
+		    }
+			if(!FlxG.sound.music.playing) {
+			FlxG.sound.music.stop();
+			destroyFreeplayVocals();
+			playing_random = true;
+			FlxG.sound.playMusic(Paths.music('random'), 1);
+			}
+		}
+		else if ((songs[curSelected].songName.toLowerCase() != 'random'))
+		{
+			if (playing_random == true)
+		    {
+		    FlxG.sound.music.stop();
+		    }
+			if(!FlxG.sound.music.playing) {
+			FlxG.sound.music.stop();
+			destroyFreeplayVocals();
+			playing_random = false;
+			FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
+			}
+		}
 			
 		var newColor:Int = songs[curSelected].color;
 		if(newColor != intendedColor) {
