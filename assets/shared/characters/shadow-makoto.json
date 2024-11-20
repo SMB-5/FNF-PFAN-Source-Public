@@ -93,12 +93,12 @@
 		0,
 		0
 	],
-	"healthicon": "makoto",
+	"healthicon": "makoto-yuki",
 	"flip_x": false,
 	"healthbar_colors": [
-		20,
-		75,
-		255
+		19,
+		73,
+		195
 	],
 	"camera_position": [
 		0,
