@@ -313,21 +313,6 @@ class Character extends FlxSprite
 		super.update(elapsed);
 	}
 
-	public function playGhostAnim(animToPlay:String)
-	{
-		if(ghost == null) return;
-
-		ghost.animation.play(animToPlay, true);
-		ghost.offset.set(animOffsets.get(animToPlay)[0], animOffsets.get(animToPlay)[1]);
-		ghost.alpha = 0.8;
-
-		if(ghostTween != null)
-			ghostTween.cancel();
-
-		ghost.color = FlxColor.fromRGB(healthColorArray[0] + 50, healthColorArray[1] + 50, healthColorArray[2] + 50);
-		ghostTween = FlxTween.tween(ghost, {alpha: 0}, 0.75, {onComplete: (twn)->ghostTween = null});
-	}
-
 	inline public function isAnimationNull():Bool
 		return #if flxanimate !isAnimateAtlas ? #end (animation.curAnim == null) #if flxanimate : (atlas.anim.curInstance == null || atlas.anim.curSymbol == null) #end;
 
@@ -422,6 +407,22 @@ class Character extends FlxSprite
 			if (AnimName == 'singUP' || AnimName == 'singDOWN')
 				danced = !danced;
 		}
+	}
+
+	public function playGhostAnim(animName:String)
+	{
+		if(ghost == null) return;
+
+		if(ghostTween != null)
+			ghostTween.cancel();
+
+		ghost.animation.play(animName, true);
+		ghost.alpha = 0.8;
+		if(animOffsets.exists(animName))
+			ghost.offset.set(animOffsets.get(animName)[0], animOffsets.get(animName)[1]);
+
+		ghost.color = FlxColor.fromRGB(healthColorArray[0] + 50, healthColorArray[1] + 50, healthColorArray[2] + 50);
+		ghostTween = FlxTween.tween(ghost, {alpha: 0}, 0.75, {onComplete: (twn)->ghostTween = null});
 	}
 
 	function loadMappedAnims():Void
