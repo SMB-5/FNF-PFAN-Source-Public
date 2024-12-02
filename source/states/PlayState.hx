@@ -167,11 +167,6 @@ class PlayState extends MusicBeatState
 	public var vocals:FlxSound;
 	public var opponentVocals:FlxSound;
 
-	public var dadGhostTween:FlxTween;
-	public var bfGhostTween:FlxTween;
-	public var dadGhost:FlxSprite;
-	public var bfGhost:FlxSprite;
-
 	public var dad:Character = null;
 	public var gf:Character = null;
 	public var boyfriend:Character = null;
@@ -443,12 +438,8 @@ class PlayState extends MusicBeatState
 			add(abot);
 		}
 
-		dadGhost = new FlxSprite();
-		bfGhost = new FlxSprite();
 		add(gfGroup);
-		add(dadGhost);
 		add(dadGroup);
-		add(bfGhost);
 		add(boyfriendGroup);
 
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
@@ -519,15 +510,6 @@ class PlayState extends MusicBeatState
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
 		startCharacterScripts(boyfriend.curCharacter);
-
-		dadGhost.visible = false;
-		dadGhost.antialiasing = true;
-		dadGhost.scale.copyFrom(dad.scale);
-		dadGhost.updateHitbox();
-		bfGhost.visible = false;
-		bfGhost.antialiasing = true;
-		bfGhost.scale.copyFrom(boyfriend.scale);
-		bfGhost.updateHitbox();
 
 		var camPos:FlxPoint = FlxPoint.get(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if(gf != null)
@@ -1240,7 +1222,7 @@ class PlayState extends MusicBeatState
 			return;
 
 		var str:String = ratingName;
-		if(totalPlayed != 0)
+		if (totalPlayed != 0)
 		{
 			var percent:Float = CoolUtil.floorDecimal(ratingPercent * 100, 2);
 			str += ' (${percent}%)';
@@ -1252,6 +1234,9 @@ class PlayState extends MusicBeatState
 		// "tempScore" variable is used to prevent another memory leak, just in case
 		// "\n" here prevents the text from being cut off by beat zooms
 		scoreTxt.text = '${tempScore}\n';
+
+		if (!miss && !cpuControlled)
+			doScoreBop();
 
 		callOnScripts('onUpdateScore', [miss]);
 	}
@@ -2650,62 +2635,6 @@ class PlayState extends MusicBeatState
 			Paths.image(uiPrefix + 'num' + i + uiSuffix);
 	}
 
-	function doGhostAnim(char:String, animToPlay:String)
-	{
-		var ghost:FlxSprite = dadGhost;
-		var player:Character = dad;
-		if(char.toLowerCase().trim() == 'bf')
-		{
-			ghost = bfGhost;
-			player = boyfriend;
-		}
-
-		ghost.frames = player.frames;
-		ghost.animation.copyFrom(player.animation);
-		ghost.x = player.x;
-		ghost.y = player.y;
-		ghost.animation.play(animToPlay, true);
-		ghost.offset.set(player.animOffsets.get(animToPlay)[0], player.animOffsets.get(animToPlay)[1]);
-		ghost.flipX = player.flipX;
-		ghost.flipY = player.flipY;
-		ghost.blend = HARDLIGHT;
-		ghost.alpha = 0.8;
-		ghost.visible = true;
-
-		//if (FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms) //prevent it from zooming in too much
-		//{
-			//FlxG.camera.zoom += 0.015;
-			//camHUD.zoom += 0.03;
-		//}
-
-		switch (char.toLowerCase().trim())
-		{
-			case 'bf':
-				if (bfGhostTween != null)
-					bfGhostTween.cancel();
-				ghost.color = FlxColor.fromRGB(boyfriend.healthColorArray[0] + 50, boyfriend.healthColorArray[1] + 50, boyfriend.healthColorArray[2] + 50);
-				bfGhostTween = FlxTween.tween(bfGhost, {alpha: 0}, 0.75, {
-					ease: FlxEase.linear,
-					onComplete: function(twn:FlxTween)
-					{
-						bfGhostTween = null;
-					}
-				});
-
-			case 'dad':
-				if (dadGhostTween != null)
-					dadGhostTween.cancel();
-				ghost.color = FlxColor.fromRGB(dad.healthColorArray[0] + 50, dad.healthColorArray[1] + 50, dad.healthColorArray[2] + 50);
-				dadGhostTween = FlxTween.tween(dadGhost, {alpha: 0}, 0.75, {
-					ease: FlxEase.linear,
-					onComplete: function(twn:FlxTween)
-					{
-						dadGhostTween = null;
-					}
-				});
-		}
-	}
-
 	private function popUpScore(note:Note = null):Void
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.data.ratingOffset);
@@ -3180,7 +3109,6 @@ class PlayState extends MusicBeatState
 
 			if (char != null)
 			{
-				char.playAnim(animToPlay, true);
 				char.holdTimer = 0;
 				if (!note.isSustainNote && noteRows[note.mustPress ? 0 : 1][note.row].length > 1)
 				{
@@ -3191,25 +3119,13 @@ class PlayState extends MusicBeatState
 					if (char.mostRecentRow != note.row)
 					{
 						char.playAnim(realAnim, true);
-					}
-
-					if (char.mostRecentRow != note.row)
-					{
-						doGhostAnim('char', animToPlay + altAnim);
-						dadGhost.color = FlxColor.fromRGB(dad.healthColorArray[0] + 50, dad.healthColorArray[1] + 50, dad.healthColorArray[2] + 50);
-						dadGhostTween = FlxTween.tween(dadGhost, {alpha: 0}, 0.75, {
-							ease: FlxEase.linear,
-							onComplete: function(twn:FlxTween)
-							{
-								dadGhostTween = null;
-							}
-						});
+						char.playGhostAnim(animToPlay);
 					}
 					char.mostRecentRow = note.row;
 				}
 				else
 				{
-					char.playAnim(animToPlay + note.animSuffix, true);
+					char.playAnim(animToPlay, true);
 				}
 			}
 		}
@@ -3263,7 +3179,7 @@ class PlayState extends MusicBeatState
 
 		var char:Character = boyfriend;
 		if(!note.noAnimation) {
-			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))];
+			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
 
 			var animCheck:String = 'hey';
 			if(note.gfNote)
@@ -3274,7 +3190,6 @@ class PlayState extends MusicBeatState
 
 			if(char != null)
 			{
-				char.playAnim(animToPlay + note.animSuffix, true);
 				char.holdTimer = 0;
 				if (!note.isSustainNote && noteRows[note.mustPress ? 0 : 1][note.row].length > 1)
 				{
@@ -3282,17 +3197,16 @@ class PlayState extends MusicBeatState
 					var chord = noteRows[note.mustPress ? 0 : 1][note.row];
 					var animNote = chord[0];
 					var realAnim = singAnimations[Std.int(Math.abs(animNote.noteData))];
-					if (boyfriend.mostRecentRow != note.row)
+					if (char.mostRecentRow != note.row)
 					{
-						boyfriend.playAnim(realAnim, true);
+						char.playAnim(realAnim, true);
+						char.playGhostAnim(animToPlay);
 					}
-
-					boyfriend.mostRecentRow = note.row;
-					doGhostAnim('bf', animToPlay);
+					char.mostRecentRow = note.row;
 				}
 				else
 				{
-					boyfriend.playAnim(animToPlay + note.animSuffix, true);
+					char.playAnim(animToPlay, true);
 				}
 
 				if(note.noteType == 'Hey!') {
@@ -3335,13 +3249,12 @@ class PlayState extends MusicBeatState
 			combo++;
 			if(combo > 9999) combo = 9999;
 			popUpScore(note);
-			if(!cpuControlled) doScoreBop();
 		}
 		else if(!practiceMode && !cpuControlled && note.parent != null)
 		{
 			var value:Int = Math.floor(10 * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 1));
 			songScore += value;
-			updateScore();
+			updateScore(true);
 		}
 
 		var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note

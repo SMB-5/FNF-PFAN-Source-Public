@@ -117,14 +117,12 @@ class FreeplayState extends MusicBeatState
 		catText.scaleY = 0.8;
 		add(catText);
 
-		if (mode == "story")
+		switch(mode)
 		{
-		catText.text = "   < Main Story >";
-		}
-
-		if (mode == "freeplay")
-		{
-		catText.text = " < Side Stories >";
+			case 'story':
+				catText.text = "   < Main Story >";
+			case 'freeplay':
+				catText.text = " < Side Stories >";
 		}
 
 		//if (mode == "cover")
@@ -145,7 +143,6 @@ class FreeplayState extends MusicBeatState
 		//add(diffText);
 
 		add(scoreText);
-
 
 		missingTextBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		missingTextBG.alpha = 0.6;
@@ -185,18 +182,18 @@ class FreeplayState extends MusicBeatState
 		add(player);
 		
 		changeSelection();
-		updateportrait();
+		updatePortrait();
 		//updateTexts();
 		super.create();
 	}
 
 	function regenerateSongs(?start:String = '') {
-		songs = [];
-		songs.push(new SongMetadata("Random", 0, "Face", 255));
+		songs = [new SongMetadata("Random", 0, "Face", 255)];
 		for (i in 0...WeekData.weeksList.length) {
 			if(weekIsLocked(WeekData.weeksList[i])) continue;
 
-			// weeks in story mode category 
+			// weeks in story mode category
+			// wtf
 			if (mode == "story" && 
 				WeekData.weeksList[i] != "week1" && 
 				WeekData.weeksList[i] != "week2" && 
@@ -204,11 +201,9 @@ class FreeplayState extends MusicBeatState
 				WeekData.weeksList[i] != "week4" &&
 				WeekData.weeksList[i] != "week5") continue;
 			// Weeks in freeplay category
-			if (mode == "freeplay" && 
-			WeekData.weeksList[i] != "bonus") continue;
+			if (mode == "freeplay" && WeekData.weeksList[i] != "bonus") continue;
 			// Weeks in cover category
-			//if (mode == "cover" && 
-				//WeekData.weeksList[i] != "covers") continue;
+			//if (mode == "cover" && WeekData.weeksList[i] != "covers") continue;
 
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var leSongs:Array<String> = [];
@@ -227,11 +222,13 @@ class FreeplayState extends MusicBeatState
 				{
 					colors = [146, 113, 253];
 				}
-				if (start != null && start.length > 0) {
+				if (start != null && start.length > 0)
+				{
 					var songName = song[0].toLowerCase();
 					var s = start.toLowerCase();
-					if (StringTools.startsWith(songName, s)) addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
-				} else addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2])); //??????????
+					if (songName.startsWith(s)) addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
+				}
+				else addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2])); //??????????
 			}
 		}
 		regenList();
@@ -289,7 +286,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		changeSelection();
-		updateportrait();
+		updatePortrait();
 		changeDiff();
 	}
 
@@ -344,13 +341,13 @@ class FreeplayState extends MusicBeatState
 				if (controls.UI_UP_P)
 				{
 					changeSelection(-shiftMult);
-					updateportrait();
+					updatePortrait();
 					holdTime = 0;
 				}
 				if (controls.UI_DOWN_P)
 				{
 					changeSelection(shiftMult);
-					updateportrait();
+					updatePortrait();
 					holdTime = 0;
 				}
 
@@ -368,7 +365,7 @@ class FreeplayState extends MusicBeatState
 				{
 					FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
 					changeSelection(-shiftMult * FlxG.mouse.wheel, false);
-					updateportrait();
+					updatePortrait();
 				}
 			}
 
@@ -387,48 +384,48 @@ class FreeplayState extends MusicBeatState
 			{
 				if (mode == "story")
 				{
-				mode = "freeplay";
-				trace('loaded bonus songs');
-				regenerateSongs('');
-				catText.text = " < Side Stories >";
+					mode = "freeplay";
+					trace('loaded bonus songs');
+					regenerateSongs('');
+					catText.text = " < Side Stories >";
 				}
 				//else if (mode == "freeplay")
 				//{
-				//mode = "cover";
-				//trace('loaded covers');
-				//regenerateSongs('');
-				//catText.text = "     < Covers >";
+					//mode = "cover";
+					//trace('loaded covers');
+					//regenerateSongs('');
+					//catText.text = "     < Covers >";
 				//}
 				else if (mode == "freeplay")
 				{
-				mode = "story";
-				trace('loaded story songs');
-				regenerateSongs('');
-				catText.text = "   < Main Story >";
+					mode = "story";
+					trace('loaded story songs');
+					regenerateSongs('');
+					catText.text = "   < Main Story >";
 				}
 			}
 			if (controls.UI_LEFT_P)
 			{
 				if (mode == "story")
 				{
-				mode = "freeplay";
-				trace('loaded bonus songs');
-				regenerateSongs('');
-				catText.text = " < Side Stories >";
+					mode = "freeplay";
+					trace('loaded bonus songs');
+					regenerateSongs('');
+					catText.text = " < Side Stories >";
 				}
 				//else if (mode == "story")
 				//{
-				//mode = "cover";
-				//trace('loaded covers');
-				//regenerateSongs('');
-				//catText.text = "     < Covers >";
+					//mode = "cover";
+					//trace('loaded covers');
+					//regenerateSongs('');
+					//catText.text = "     < Covers >";
 				//}
 				else if (mode == "freeplay")
 				{
-				mode = "story";
-				trace('loaded story songs');
-				regenerateSongs('');
-				catText.text = "   < Main Story >";
+					mode = "story";
+					trace('loaded story songs');
+					regenerateSongs('');
+					catText.text = "   < Main Story >";
 				}
 			}
 		}
@@ -470,11 +467,11 @@ class FreeplayState extends MusicBeatState
 		{
 			if (songs[curSelected].songName.toLowerCase() == 'random')
 			{
-            changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
-			picked_random = true;
-			new FlxTimer().start(1, function(tmr) {
-			LoadingState.loadAndSwitchState(new PlayState());
-			});
+				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+				picked_random = true;
+				new FlxTimer().start(1, function(tmr) {
+					LoadingState.loadAndSwitchState(new PlayState());
+				});
 			}
 
 			if(instPlaying != curSelected && !player.playingMusic)
@@ -520,11 +517,11 @@ class FreeplayState extends MusicBeatState
 		{
 			if ((songs[curSelected].songName.toLowerCase() == 'random'))
 		    {
-            changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
-			picked_random = true;
-			new FlxTimer().start(1, function(tmr) {
-			LoadingState.loadAndSwitchState(new PlayState());
-			});
+				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+				picked_random = true;
+				new FlxTimer().start(1, function(tmr) {
+					LoadingState.loadAndSwitchState(new PlayState());
+				});
 			}
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
@@ -567,10 +564,8 @@ class FreeplayState extends MusicBeatState
 				super.update(elapsed);
 				return;
 			}
-			if (picked_random == false)
-			{
-			LoadingState.loadAndSwitchState(new PlayState());
-			}	
+			if (!picked_random)
+				LoadingState.loadAndSwitchState(new PlayState());
 
 			FlxG.sound.music.volume = 0;
 					
@@ -645,30 +640,30 @@ class FreeplayState extends MusicBeatState
 		if (songs[curSelected] == null) return;
 		Mods.currentModDirectory = songs[curSelected].folder;
 
-		if ((songs[curSelected].songName.toLowerCase() == 'random'))
+		if (songs[curSelected].songName.toLowerCase() == 'random')
 		{
-			if (playing_random == false)
-		    {
-		    FlxG.sound.music.stop();
-		    }
-			if(!FlxG.sound.music.playing) {
-			FlxG.sound.music.stop();
-			destroyFreeplayVocals();
-			playing_random = true;
-			FlxG.sound.playMusic(Paths.music('random'), 1);
+			if (!playing_random)
+				FlxG.sound.music.stop();
+
+			if (!FlxG.sound.music.playing)
+			{
+				FlxG.sound.music.stop();
+				destroyFreeplayVocals();
+				playing_random = true;
+				FlxG.sound.playMusic(Paths.music('random'), 1);
 			}
 		}
-		else if ((songs[curSelected].songName.toLowerCase() != 'random'))
+		else if (songs[curSelected].songName.toLowerCase() != 'random')
 		{
-			if (playing_random == true)
-		    {
-		    FlxG.sound.music.stop();
-		    }
-			if(!FlxG.sound.music.playing) {
-			FlxG.sound.music.stop();
-			destroyFreeplayVocals();
-			playing_random = false;
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
+			if (playing_random)
+				FlxG.sound.music.stop();
+
+			if (!FlxG.sound.music.playing)
+			{
+				FlxG.sound.music.stop();
+				destroyFreeplayVocals();
+				playing_random = false;
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 			}
 		}
 			
@@ -730,17 +725,17 @@ class FreeplayState extends MusicBeatState
 		songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
 	}
 
-	private function updateportrait()
+	private function updatePortrait()
 	{
-		if ((songs[curSelected].songName.toLowerCase() == 'tartarus'))
+		if (songs[curSelected].songName.toLowerCase() == 'tartarus')
 		{
 			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder'));
 		}
-		if ((songs[curSelected].songName.toLowerCase() == 'truth') || (songs[curSelected].songName.toLowerCase() == 'specialist'))
+		else if (songs[curSelected].songName.toLowerCase() == 'truth' || songs[curSelected].songName.toLowerCase() == 'specialist')
 		{
 			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder-brother'));
 		}
-		if ((songs[curSelected].songName.toLowerCase() == 'desire'))
+		else if (songs[curSelected].songName.toLowerCase() == 'desire')
 		{
 			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder-brother'));
 		}
