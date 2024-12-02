@@ -543,9 +543,13 @@ class Character extends FlxSprite
 		}
 	}
 
+	public function destroyAtlas() {
+		#if flxanimate atlas = FlxDestroyUtil.destroy(atlas); #end
+	}
+
 	public override function destroy()
 	{
-		#if flxanimate atlas = FlxDestroyUtil.destroy(atlas); #end
+		destroyAtlas();
 		ghost = FlxDestroyUtil.destroy(ghost);
 		super.destroy();
 	}
