@@ -123,7 +123,7 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
-	"image": "characters/Pico_FNF_assetss",
+	"image": "characters/Pico_FNF_assetss, characters/picoAnims/Pico_Intro, characters/picoAnims/Pico_Shooting",
 	"position": [0, 300],
 	"healthicon": "pico",
 	"flip_x": true,

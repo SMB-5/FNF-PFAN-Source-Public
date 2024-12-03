@@ -2,6 +2,7 @@ package states.editors;
 
 import flixel.FlxObject;
 import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
 
 import flixel.animation.FlxAnimation;
 //import flixel.system.debug.interaction.tools.Pointer.GraphicCursorCross;
@@ -522,13 +523,33 @@ class CharacterEditorState extends MusicBeatState
 		});
 
 		var addUpdateButton:FlxButton = new FlxButton(70, animationIndicesInputText.y + 60, "Add/Update", function() {
+			var indicesText:String = animationIndicesInputText.text.trim();
 			var indices:Array<Int> = [];
-			var indicesStr:Array<String> = animationIndicesInputText.text.trim().split(',');
-			if(indicesStr.length > 1) {
-				for (i in 0...indicesStr.length) {
-					var index:Int = Std.parseInt(indicesStr[i]);
-					if(indicesStr[i] != null && indicesStr[i] != '' && !Math.isNaN(index) && index > -1) {
-						indices.push(index);
+			if(indicesText.length > 0)
+			{
+				var indicesStr:Array<String> = animationIndicesInputText.text.trim().split(',');
+				if(indicesStr.length > 0)
+				{
+					for (ind in indicesStr)
+					{
+						if(ind.contains('-'))
+						{
+							var splitIndices:Array<String> = ind.split('-');
+							var indexStart:Int = Std.parseInt(splitIndices[0]);
+							if(Math.isNaN(indexStart) || indexStart < 0) indexStart = 0;
+	
+							var indexEnd:Int = Std.parseInt(splitIndices[1]);
+							if(Math.isNaN(indexEnd) || indexEnd < indexStart) indexEnd = indexStart;
+	
+							for (index in indexStart...indexEnd+1)
+								indices.push(index);
+						}
+						else
+						{
+							var index:Int = Std.parseInt(ind);
+							if(!Math.isNaN(index) && index > -1)
+								indices.push(index);
+						}
 					}
 				}
 			}
@@ -806,9 +827,25 @@ class CharacterEditorState extends MusicBeatState
 			}
 			character.isAnimateAtlas = true;
 		}
-		else if(Paths.fileExists('images/' + character.imageFile + '.txt', TEXT)) character.frames = Paths.getPackerAtlas(character.imageFile);
-		else if(Paths.fileExists('images/' + character.imageFile + '.json', TEXT)) character.frames = Paths.getAsepriteAtlas(character.imageFile);
-		else character.frames = Paths.getSparrowAtlas(character.imageFile);
+		else
+		{
+			var split:Array<String> = character.imageFile.split(',');
+			var charFrames:FlxAtlasFrames = Paths.getAtlas(split[0].trim());
+			
+			if(split.length > 1)
+			{
+				var original:FlxAtlasFrames = charFrames;
+				charFrames = new FlxAtlasFrames(charFrames.parent);
+				charFrames.addAtlas(original, true);
+				for (i in 1...split.length)
+				{
+					var extraFrames:FlxAtlasFrames = Paths.getAtlas(split[i].trim());
+					if(extraFrames != null)
+						charFrames.addAtlas(extraFrames, true);
+				}
+			}
+			character.frames = charFrames;
+		}
 
 		for (anim in anims) {
 			var animAnim:String = '' + anim.anim;

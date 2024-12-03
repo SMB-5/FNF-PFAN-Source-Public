@@ -2,6 +2,8 @@ package objects;
 
 import backend.animation.PsychAnimationController;
 
+import flixel.graphics.frames.FlxAtlasFrames;
+
 import flixel.tweens.FlxEase;	
 import flixel.util.FlxSort;
 import flixel.util.FlxDestroyUtil;
@@ -157,7 +159,21 @@ class Character extends FlxSprite
 
 		if(!isAnimateAtlas)
 		{
-			frames = Paths.getAtlas(json.image);
+			var split:Array<String> = json.image.split(',');
+			var charFrames:FlxAtlasFrames = Paths.getAtlas(split[0].trim());
+			if(split.length > 1)
+			{
+				var original:FlxAtlasFrames = charFrames;
+				charFrames = new FlxAtlasFrames(charFrames.parent);
+				charFrames.addAtlas(original, true);
+				for (i in 1...split.length)
+				{
+					var extraFrames:FlxAtlasFrames = Paths.getAtlas(split[i].trim());
+					if(extraFrames != null)
+						charFrames.addAtlas(extraFrames, true);
+				}
+			}
+			frames = charFrames;
 			ghost = new FlxSprite(x, y);
 			ghost.frames = frames;
 			ghost.antialiasing = true;
@@ -250,7 +266,7 @@ class Character extends FlxSprite
 		#if flxanimate if(isAnimateAtlas) atlas.update(elapsed); #end
 		ghost?.update(elapsed);
 
-		if(debugMode || (!isAnimateAtlas && animation.curAnim == null) #if flxanimate || (isAnimateAtlas && (atlas.anim.curInstance == null || atlas.anim.curSymbol == null)) #end)
+		if(debugMode || (!isAnimateAtlas && animation.curAnim == null) || (isAnimateAtlas && (atlas.anim.curInstance == null || atlas.anim.curSymbol == null)))
 		{
 			super.update(elapsed);
 			return;
@@ -314,14 +330,14 @@ class Character extends FlxSprite
 	}
 
 	inline public function isAnimationNull():Bool
-		return #if flxanimate !isAnimateAtlas ? #end (animation.curAnim == null) #if flxanimate : (atlas.anim.curInstance == null || atlas.anim.curSymbol == null) #end;
+	{
+		return !isAnimateAtlas ? (animation.curAnim == null) : (atlas.anim.curInstance == null || atlas.anim.curSymbol == null);
+	}
 
+    var _lastPlayedAnimation:String;
 	inline public function getAnimationName():String
 	{
-		var name:String = '';
-		#if flxanimate @:privateAccess #end
-		if(!isAnimationNull()) name = #if flxanimate !isAnimateAtlas ? #end animation.curAnim.name #if flxanimate : atlas.anim.lastPlayedAnim #end;
-		return (name != null) ? name : '';
+        return _lastPlayedAnimation;
 	}
 
 	public function isAnimationFinished():Bool
@@ -388,6 +404,7 @@ class Character extends FlxSprite
 		specialAnim = false;
 		if(!isAnimateAtlas) animation.play(AnimName, Force, Reversed, Frame);
 		#if flxanimate else atlas.anim.play(AnimName, Force, Reversed, Frame); #end
+		_lastPlayedAnimation = AnimName;
 
 		if (animOffsets.exists(AnimName))
 		{
@@ -481,7 +498,8 @@ class Character extends FlxSprite
 
 	// Atlas support
 	// special thanks ne_eo for the references, you're the goat!!
-	public var isAnimateAtlas:Bool = false;
+	@:allow(states.editors.CharacterEditorState)
+	public var isAnimateAtlas(default, null):Bool = false;
 	#if flxanimate
 	public var atlas:FlxAnimate;
 	#end
