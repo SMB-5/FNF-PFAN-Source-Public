@@ -163,6 +163,7 @@ class P4Results extends MusicBeatSubstate
         {
         	if (PlayState.storyPlaylist.length <= 0)
 	        {
+             FlxG.sound.playMusic(Paths.music('freakyMenu'));
 	   	     MusicBeatState.switchState(new StoryMenuState());
 	        }
 			else
@@ -173,8 +174,7 @@ class P4Results extends MusicBeatSubstate
         else
         {
  	       MusicBeatState.switchState(new FreeplayState());
+           FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
         }
-
-        FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
 }
