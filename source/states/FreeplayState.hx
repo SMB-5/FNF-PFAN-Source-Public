@@ -36,7 +36,6 @@ class FreeplayState extends MusicBeatState
 	var intendedRating:Float = 0;
 
 	var picked_random = false;
-	var playing_random = false;
 
 	public static var mode:String = "story";
 
@@ -63,6 +62,8 @@ class FreeplayState extends MusicBeatState
 
 	var player:MusicPlayer;
 
+	public static var intro:Bool = false;
+
 	override function create()
 	{
 		//Paths.clearStoredMemory();
@@ -76,6 +77,13 @@ class FreeplayState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+        if(intro == true)
+		{
+		FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
+		}
+
+		intro = false;
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
@@ -338,13 +346,13 @@ class FreeplayState extends MusicBeatState
 					changeSelection();
 					holdTime = 0;	
 				}
-				if (controls.UI_UP_P)
+				if (controls.UI_UP_P && picked_random == false)
 				{
 					changeSelection(-shiftMult);
 					updatePortrait();
 					holdTime = 0;
 				}
-				if (controls.UI_DOWN_P)
+				if (controls.UI_DOWN_P && picked_random == false)
 				{
 					changeSelection(shiftMult);
 					updatePortrait();
@@ -369,18 +377,18 @@ class FreeplayState extends MusicBeatState
 				}
 			}
 
-			if (controls.UI_LEFT_P)
+			if (controls.UI_LEFT_P && picked_random == false)
 			{
 				changeDiff(-1);
 				_updateSongLastDifficulty();
 			}
-			else if (controls.UI_RIGHT_P)
+			else if (controls.UI_RIGHT_P && picked_random == false)
 			{
 				changeDiff(1);
 				_updateSongLastDifficulty();
 			}
 
-			if (controls.UI_RIGHT_P)
+			if (controls.UI_RIGHT_P && picked_random == false)
 			{
 				if (mode == "story")
 				{
@@ -404,7 +412,7 @@ class FreeplayState extends MusicBeatState
 					catText.text = "   < Main Story >";
 				}
 			}
-			if (controls.UI_LEFT_P)
+			if (controls.UI_LEFT_P && picked_random == false)
 			{
 				if (mode == "story")
 				{
@@ -444,7 +452,7 @@ class FreeplayState extends MusicBeatState
 				player.playingMusic = false;
 				player.switchPlayMusic();
 
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+				FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'), 0);
 				FlxTween.tween(FlxG.sound.music, {volume: 1}, 1);
 			}
 			else 
@@ -453,6 +461,7 @@ class FreeplayState extends MusicBeatState
 				if(colorTween != null) {
 					colorTween.cancel();
 				}
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState());
 			}
@@ -639,33 +648,6 @@ class FreeplayState extends MusicBeatState
 
 		if (songs[curSelected] == null) return;
 		Mods.currentModDirectory = songs[curSelected].folder;
-
-		if (songs[curSelected].songName.toLowerCase() == 'random')
-		{
-			if (!playing_random)
-				FlxG.sound.music.stop();
-
-			if (!FlxG.sound.music.playing)
-			{
-				FlxG.sound.music.stop();
-				destroyFreeplayVocals();
-				playing_random = true;
-				FlxG.sound.playMusic(Paths.music('random'), 1);
-			}
-		}
-		else if (songs[curSelected].songName.toLowerCase() != 'random')
-		{
-			if (playing_random)
-				FlxG.sound.music.stop();
-
-			if (!FlxG.sound.music.playing)
-			{
-				FlxG.sound.music.stop();
-				destroyFreeplayVocals();
-				playing_random = false;
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
-			}
-		}
 			
 		var newColor:Int = songs[curSelected].color;
 		if(newColor != intendedColor) {

@@ -140,6 +140,8 @@ class TitleState extends MusicBeatState
 			StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 		}
 
+		FreeplayState.intro = true;
+
 		FlxG.mouse.visible = false;
 		#if FREEPLAY
 		MusicBeatState.switchState(new FreeplayState());
@@ -566,35 +568,27 @@ class TitleState extends MusicBeatState
 		#else
 		if (OpenFlAssets.exists(fileName))
 		#end
-		foundFile = true;
+			foundFile = true;
 
 		if (foundFile)
 		{
-			videoCutscene = new VideoSprite(fileName, forMidSong, canSkip, loop);
+			videoCutscene = new VideoSprite(fileName, forMidSong, canSkip, loop, false);
 
 			// Finish callback
-				function onVideoEnd()
+			function onVideoEnd()
 				{
 					videoCutscene = null;
-					watching = false;
-					skipIntro();
+					startIntro();
 				}
 				videoCutscene.finishCallback = onVideoEnd;
 				videoCutscene.onSkip = onVideoEnd;
 			add(videoCutscene);
 
 			if (playOnLoad)
-				videoCutscene.videoSprite.play();
+				videoCutscene.play();
 			return videoCutscene;
 		}
-		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-		//else addTextToDebug("Video not found: " + fileName, FlxColor.RED);
-		#else
-		else FlxG.log.error("Video not found: " + fileName);
-		#end
-		#else
-		FlxG.log.warn('Platform not supported!');
-		skipIntro();
+		startIntro();
 		#end
 		return null;
 	}

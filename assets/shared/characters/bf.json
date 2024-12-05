@@ -112,6 +112,17 @@
 		},
 		{
 			"offsets": [
+				-20,
+				28
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "cheer",
+			"indices": [],
+			"name": "Cheer"
+		},
+		{
+			"offsets": [
 				14,
 				18
 			],
@@ -167,7 +178,7 @@
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/BOYFRIEND",
+	"image": "characters/BOYFRIEND, characters/BFCheer",
 	"position": [
 		0,
 		350
