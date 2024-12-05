@@ -1,56 +1,54 @@
 package objects;
 
-class SustainSplash extends FlxSprite {
+class SustainSplash extends FlxSprite
+{
+	public static var startCrochet:Float = 0.0;
+	public static var frameRate:Int = 0;
 
-  public static var startCrochet:Float;
-  public static var frameRate:Int;
+	public function new()
+	{
+		super();
+		frames = Paths.getSparrowAtlas('noteSplashes/holdSplashes/holdSplash');
+		animation.addByPrefix('hold', 'hold', 24, true);
+		animation.addByPrefix('end', 'end', 24, false);
+		animation.play('hold', true);
+		animation.curAnim.frameRate = frameRate;
+		animation.curAnim.looped = true;
+	}
 
-  public function new():Void {
-    super();
-    frames = Paths.getSparrowAtlas('noteSplashes/holdSplashes/holdSplash');
-    animation.addByPrefix('hold', 'hold', 24, true);
-    animation.addByPrefix('end', 'end', 24, false);
-    animation.play('hold', true, false, 0);
-    animation.curAnim.frameRate = frameRate;
-    animation.curAnim.looped = true;
-  }
+	public function setupSusSplash(strum:StrumNote, daNote:Note, ?playbackRate:Float = 1)
+	{
+		var realNote:Note = !daNote.isSustainNote ? daNote : daNote.parent;
+		var lengthToGet:Int = realNote.tail.length;
+		var timeToGet:Float = realNote.strumTime;
+		var timeThingy:Float = (startCrochet * lengthToGet + (timeToGet - Conductor.songPosition + ClientPrefs.data.ratingOffset)) / playbackRate * .001;
 
-  public function setupSusSplash(strum:StrumNote, daNote:Note, ?playbackRate:Float = 1):Void {
+		var tailEnd:Note = realNote.tail[realNote.tail.length - 1];
 
-    final lengthToGet:Int = !daNote.isSustainNote ? daNote.tail.length : daNote.parent.tail.length;
-    final timeToGet:Float = !daNote.isSustainNote ? daNote.strumTime : daNote.parent.strumTime;
-    final timeThingy:Float = (startCrochet * lengthToGet + (timeToGet - Conductor.songPosition + ClientPrefs.data.ratingOffset)) / playbackRate * .001;
+		clipRect = new flixel.math.FlxRect(0, !PlayState.isPixelStage ? 0 : -210, frameWidth, frameHeight);
 
-    var tailEnd:Note = !daNote.isSustainNote ? daNote.tail[daNote.tail.length - 1] : daNote.parent.tail[daNote.parent.tail.length - 1];
+		if (daNote.shader != null) {
+			shader = new objects.NoteSplash.PixelSplashShaderRef().shader;
+			shader.data.r.value = daNote.shader.data.r.value;
+			shader.data.g.value = daNote.shader.data.g.value;
+			shader.data.b.value = daNote.shader.data.b.value;
+			shader.data.mult.value = daNote.shader.data.mult.value;
+		}
 
-    clipRect = new flixel.math.FlxRect(0, !PlayState.isPixelStage ? 0 : -210, frameWidth, frameHeight);
+		setPosition(strum.x, strum.y);
+		offset.set(PlayState.isPixelStage ? 112.5 : 106.25, 100);
 
-    if (daNote.shader != null) {
-      shader = new objects.NoteSplash.PixelSplashShaderRef().shader;
-      shader.data.r.value = daNote.shader.data.r.value;
-      shader.data.g.value = daNote.shader.data.g.value;
-      shader.data.b.value = daNote.shader.data.b.value;
-      shader.data.mult.value = daNote.shader.data.mult.value;
-    }
-
-    setPosition(strum.x, strum.y);
-    offset.set(PlayState.isPixelStage ? 112.5 : 106.25, 100);
-
-    new FlxTimer().start(timeThingy, (idk:FlxTimer) -> {
-      if (tailEnd.mustPress && !(daNote.isSustainNote ? daNote.parent.noteSplashData.disabled : daNote.noteSplashData.disabled) && ClientPrefs.data.splashAlpha != 0) {
-        alpha = ClientPrefs.data.splashAlpha;
-        animation.play('end', true, false, 0);
-        animation.curAnim.looped = false;
-        animation.curAnim.frameRate = 24;
-        clipRect = null;
-        animation.finishCallback = (idkEither:Dynamic) -> {
-          visible = false;
-        }
-        return;
-      }
-      visible = false;
-    });
-
-  }
-
+		new FlxTimer().start(timeThingy, (_) -> {
+			if (tailEnd.mustPress && !realNote.noteSplashData.disabled && ClientPrefs.data.splashAlpha != 0) {
+				alpha = ClientPrefs.data.splashAlpha;
+				animation.play('end', true);
+				animation.curAnim.looped = false;
+				animation.curAnim.frameRate = 24;
+				clipRect = null;
+				animation.finishCallback = (_) ->visible = false;
+				return;
+			}
+			visible = false;
+		});
+	}
 }

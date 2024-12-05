@@ -12,169 +12,168 @@ import flixel.util.FlxTimer;
 
 class P4Results extends MusicBeatSubstate
 {
-    var data:MetadataFile;
+	var data:MetadataFile;
+	var path:String = "persona/results/p4/";
 
-    var path:String = "persona/results/p4/";
+	var screen:FlxSprite;
 
-    var screen:FlxSprite;
+	// currently unused
+	var base:FlxSprite;
+	var result:FlxText;
+	var missesTxt:FlxText;
+	var accTxt:FlxText;
+	var status:FlxText;
+	var bfText:FlxText;
+	var black:FlxSprite;
+	var shit:FlxSprite;
 
-    // currently unused
-    var base:FlxSprite;
-    var result:FlxText;
-    var missesTxt:FlxText;
-    var accTxt:FlxText;
-    var status:FlxText;
-    var bfText:FlxText;
-    var black:FlxSprite;
-    var shit:FlxSprite;
+	override function create()
+	{
+		FlxTransitionableState.skipNextTransOut = false;
+		data = PlayState.metadata;
 
-    override function create()
-    {
-        FlxTransitionableState.skipNextTransOut = false;
+		// ASSETS
+		var yellow:FlxSprite = new FlxSprite(-1280).makeGraphic(1280, 720, 0xFFFFEB2C);
+		yellow.scrollFactor.set();
+		yellow.updateHitbox();
+		add(yellow);
 
-        // ASSETS
-        var yellow:FlxSprite = new FlxSprite(-1280).makeGraphic(1280, 720, 0xFFFFEB2C);
-        yellow.scrollFactor.set();
-        yellow.updateHitbox();
-        add(yellow);
+		var beef:FlxSprite = new FlxSprite(500, 500).loadGraphic(Paths.image(path + 'bf'));
+		beef.scrollFactor.set();
+		beef.antialiasing = ClientPrefs.data.antialiasing;
+		beef.updateHitbox();
+		add(beef);
 
-        var beef:FlxSprite = new FlxSprite(500, 500).loadGraphic(Paths.image(path + 'bf'));
-        beef.scrollFactor.set();
-        beef.antialiasing = ClientPrefs.data.antialiasing;
-        beef.updateHitbox();
-        add(beef);
+		var filter:FlxSprite = new FlxSprite(700).loadGraphic(Paths.image(path + 'darkercolor'));
+		filter.scrollFactor.set();
+		filter.antialiasing = ClientPrefs.data.antialiasing;
+		filter.blend = openfl.display.BlendMode.MULTIPLY;
+		filter.updateHitbox();
+		add(filter);
 
-        var filter:FlxSprite = new FlxSprite(700).loadGraphic(Paths.image(path + 'darkercolor'));
-        filter.scrollFactor.set();
-        filter.antialiasing = ClientPrefs.data.antialiasing;
-        filter.blend = openfl.display.BlendMode.MULTIPLY;
-        filter.updateHitbox();
-        add(filter);
+		var borders:FlxSprite = new FlxSprite(900).loadGraphic(Paths.image(path + 'borders'));
+		borders.scrollFactor.set();
+		borders.antialiasing = ClientPrefs.data.antialiasing;
+		borders.updateHitbox();
+		add(borders);
 
-        var borders:FlxSprite = new FlxSprite(900).loadGraphic(Paths.image(path + 'borders'));
-        borders.scrollFactor.set();
-        borders.antialiasing = ClientPrefs.data.antialiasing;
-        borders.updateHitbox();
-        add(borders);
+		var highscore:FlxSprite = new FlxSprite(30, 400).loadGraphic(Paths.image('persona/results/highscore'));
+		highscore.scrollFactor.set();
+		highscore.antialiasing = ClientPrefs.data.antialiasing;
+		highscore.updateHitbox();
+		highscore.setGraphicSize(Std.int(highscore.width * 0.4));
+		add(highscore);
+		highscore.visible = false;
 
-        var highscore:FlxSprite = new FlxSprite(30, 400).loadGraphic(Paths.image('persona/results/highscore'));
-        highscore.scrollFactor.set();
-        highscore.antialiasing = ClientPrefs.data.antialiasing;
-        highscore.updateHitbox();
-        highscore.setGraphicSize(Std.int(highscore.width * 0.4));
-        add(highscore);
-        highscore.visible = false;
+		var items:FlxSprite = new FlxSprite(30, 60).loadGraphic(Paths.image(path + 'items'));
+		items.scrollFactor.set();
+		items.antialiasing = ClientPrefs.data.antialiasing;
+		items.updateHitbox();
+		add(items);
 
-        var items:FlxSprite = new FlxSprite(30, 60).loadGraphic(Paths.image(path + 'items'));
-        items.scrollFactor.set();
-        items.antialiasing = ClientPrefs.data.antialiasing;
-        items.updateHitbox();
-        add(items);
+		var text:FlxSprite = new FlxSprite(269, 800).loadGraphic(Paths.image(path + 'text'));
+		text.scrollFactor.set();
+		text.antialiasing = ClientPrefs.data.antialiasing;
+		text.updateHitbox();
+		add(text);
 
-        var text:FlxSprite = new FlxSprite(269, 800).loadGraphic(Paths.image(path + 'text'));
-        text.scrollFactor.set();
-        text.antialiasing = ClientPrefs.data.antialiasing;
-        text.updateHitbox();
-        add(text);
+		// actual text
+		var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
 
-        // actual text
-        data = PlayState.metadata;
-        var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+		var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 46);
+		songTxt.setFormat(Paths.font("p4resultsfont.otf"), 36, FlxColor.BLACK);
+		songTxt.scrollFactor.set();
+		songTxt.updateHitbox();
+		songTxt.alpha = 1;
+		add(songTxt);
 
-        var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 46);
-        songTxt.setFormat(Paths.font("p4resultsfont.otf"), 36, FlxColor.BLACK);
-        songTxt.scrollFactor.set();
-        songTxt.updateHitbox();
-        songTxt.alpha = 1;
-        add(songTxt);
+		var scoreTxt:FlxText = new FlxText(120, 120, FlxG.width, '${PlayState.instance.songScore} PTS', 40);
+		scoreTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
+		scoreTxt.scrollFactor.set();
+		scoreTxt.updateHitbox();
+		scoreTxt.alpha = 0.3;
+		add(scoreTxt);
 
-        var scoreTxt:FlxText = new FlxText(120, 120, FlxG.width, '${PlayState.instance.songScore} PTS', 40);
-        scoreTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
-        scoreTxt.scrollFactor.set();
-        scoreTxt.updateHitbox();
-        scoreTxt.alpha = 0.3;
-        add(scoreTxt);
+		var missTxt:FlxText = new FlxText(120, 250, FlxG.width, '${PlayState.instance.songMisses}', 40);
+		missTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
+		missTxt.scrollFactor.set();
+		missTxt.updateHitbox();
+		missTxt.alpha = 0.3;
+		add(missTxt);
 
-        var missTxt:FlxText = new FlxText(120, 250, FlxG.width, '${PlayState.instance.songMisses}', 40);
-        missTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
-        missTxt.scrollFactor.set();
-        missTxt.updateHitbox();
-        missTxt.alpha = 0.3;
-        add(missTxt);
+		var accTxt:FlxText = new FlxText(120, 380, FlxG.width, '${percent}%', 40);
+		accTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
+		accTxt.scrollFactor.set();
+		accTxt.updateHitbox();
+		accTxt.alpha = 0.3;
+		add(accTxt);
 
-        var accTxt:FlxText = new FlxText(120, 380, FlxG.width, '${percent}%', 40);
-        accTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
-        accTxt.scrollFactor.set();
-        accTxt.updateHitbox();
-        accTxt.alpha = 0.3;
-        add(accTxt);
+		// swoosh
+		screen = new FlxSprite(-2360).loadGraphic(Paths.image(path + 'screenWipe'));
+		screen.scrollFactor.set();
+		screen.updateHitbox();
+		screen.antialiasing = ClientPrefs.data.antialiasing;
+		add(screen);
 
-        // swoosh
-        screen = new FlxSprite(-2360).loadGraphic(Paths.image(path + 'screenWipe'));
-        screen.scrollFactor.set();
-        screen.updateHitbox();
-        screen.antialiasing = ClientPrefs.data.antialiasing;
-        add(screen);
+		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
+		{
+			new FlxTimer().start(1.3, function(tmr:FlxTimer)
+			{
+				highscore.visible = true;
+				FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
+			});
+		}
 
-        if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
-        {
-   	     new FlxTimer().start(1.3, function(tmr:FlxTimer)
- 	       {
-	 	       highscore.visible = true;
-		        FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
-	        });
-        }
+		FlxTween.tween(yellow, {x: 0}, 0.4, {ease: FlxEase.quadInOut});
+		FlxTween.tween(beef, {x: 0, y: 0}, 0.4, {ease: FlxEase.quadInOut});
+		FlxTween.tween(filter, {x: 0}, 0.7, {ease: FlxEase.expoInOut});
+		FlxTween.tween(borders, {x: 0}, 0.9, {ease: FlxEase.expoInOut});
+		FlxTween.tween(items, {x: 30}, 0.3, {ease: FlxEase.expoInOut, onComplete: function(twn:FlxTween)
+		{
+			FlxTween.tween(scoreTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
+			FlxTween.tween(missTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
+			FlxTween.tween(accTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
+		}});
+		FlxTween.tween(text, {y: 629}, 0.5, {ease: FlxEase.expoInOut});
 
-        FlxTween.tween(yellow, {x: 0}, 0.4, {ease: FlxEase.quadInOut});
-        FlxTween.tween(beef, {x: 0, y: 0}, 0.4, {ease: FlxEase.quadInOut});
-        FlxTween.tween(filter, {x: 0}, 0.7, {ease: FlxEase.expoInOut});
-        FlxTween.tween(borders, {x: 0}, 0.9, {ease: FlxEase.expoInOut});
-        FlxTween.tween(items, {x: 30}, 0.3, {ease: FlxEase.expoInOut, onComplete: function(twn:FlxTween)
-        {
-            FlxTween.tween(scoreTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
-            FlxTween.tween(missTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
-            FlxTween.tween(accTxt, {x: 150, alpha: 1}, 0.6, {ease: FlxEase.expoInOut});
-        }});
-        FlxTween.tween(text, {y: 629}, 0.5, {ease: FlxEase.expoInOut});
+		FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
 
-        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		super.create();
+	}
 
-        cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-        super.create();
-    }
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
 
-    override function update(elapsed:Float)
-    {
-        super.update(elapsed);
+		if (controls.ACCEPT)
+		{
+			FlxTween.tween(screen, {x: 0}, 1.1, {ease: FlxEase.expoInOut, onComplete: (twn)->endResults()});
+		}
+	}
 
-        if (controls.ACCEPT)
-        {
-            FlxTween.tween(screen, {x: 0}, 1.1, {ease: FlxEase.expoInOut, onComplete: (twn)->endResults()});
-        }
-    }
-
-    function endResults()
-    {
-        var percent:Float = PlayState.instance.ratingPercent;
+	public function endResults()
+	{
+		var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;
 		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
 
-        if (PlayState.isStoryMode) 
-        {
-        	if (PlayState.storyPlaylist.length <= 0)
-	        {
-             FlxG.sound.playMusic(Paths.music('freakyMenu'));
-	   	     MusicBeatState.switchState(new StoryMenuState());
-	        }
+		if (PlayState.isStoryMode) 
+		{
+			if (PlayState.storyPlaylist.length <= 0)
+			{
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				MusicBeatState.switchState(new StoryMenuState());
+			}
 			else
-	        {
- 	  	     LoadingState.loadAndSwitchState(new PlayState());
-	        }
-        }
-        else
-        {
- 	       MusicBeatState.switchState(new FreeplayState());
-           FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
-        }
-    }
+			{
+				LoadingState.loadAndSwitchState(new PlayState());
+			}
+		}
+		else
+		{
+			MusicBeatState.switchState(new FreeplayState());
+			FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
+		}
+	}
 }

@@ -1,4 +1,4 @@
-package;
+package backend;
 
 import haxe.io.Path;
 import lime.utils.Bytes;

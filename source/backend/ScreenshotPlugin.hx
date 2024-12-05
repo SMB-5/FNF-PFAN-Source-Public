@@ -1,4 +1,4 @@
-package;
+package backend;
 
 import flixel.FlxBasic;
 import flixel.FlxCamera;
@@ -20,8 +20,8 @@ import openfl.geom.Rectangle;
 import openfl.utils.ByteArray;
 import openfl.events.MouseEvent;
 
-import DateUtil;
-import FileUtil;
+import backend.DateUtil;
+import backend.FileUtil;
 
 typedef ScreenshotPluginParams =
 {

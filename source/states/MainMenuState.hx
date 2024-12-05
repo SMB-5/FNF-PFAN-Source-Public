@@ -38,7 +38,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		if(!FlxG.sound.music.playing) {
-		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 		}
 
 		transIn = FlxTransitionableState.defaultTransIn;
@@ -166,10 +166,9 @@ class MainMenuState extends MusicBeatState
 							//case 'story_mode':
 								//MusicBeatState.switchState(new StoryMenuState());
 							case 'freeplay':
-							    if(FreeplayState.intro == false)
-		                        {
-		                        FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
-		                        }
+								if(!FreeplayState.intro) {
+									FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
+								}
 								MusicBeatState.switchState(new FreeplayState());
 
 							#if MODS_ALLOWED

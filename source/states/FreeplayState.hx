@@ -78,9 +78,8 @@ class FreeplayState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-        if(intro == true)
-		{
-		FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
+		if(intro) {
+			FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
 		}
 
 		intro = false;
@@ -346,13 +345,13 @@ class FreeplayState extends MusicBeatState
 					changeSelection();
 					holdTime = 0;	
 				}
-				if (controls.UI_UP_P && picked_random == false)
+				if (controls.UI_UP_P && !picked_random)
 				{
 					changeSelection(-shiftMult);
 					updatePortrait();
 					holdTime = 0;
 				}
-				if (controls.UI_DOWN_P && picked_random == false)
+				if (controls.UI_DOWN_P && !picked_random)
 				{
 					changeSelection(shiftMult);
 					updatePortrait();
@@ -377,25 +376,24 @@ class FreeplayState extends MusicBeatState
 				}
 			}
 
-			if (controls.UI_LEFT_P && picked_random == false)
+			if ((controls.UI_LEFT_P || controls.UI_RIGHT_P) && !picked_random)
 			{
-				changeDiff(-1);
+				changeDiff(controls.UI_LEFT_P ? -1 : 1);
 				_updateSongLastDifficulty();
-			}
-			else if (controls.UI_RIGHT_P && picked_random == false)
-			{
-				changeDiff(1);
-				_updateSongLastDifficulty();
-			}
 
-			if (controls.UI_RIGHT_P && picked_random == false)
-			{
 				if (mode == "story")
 				{
 					mode = "freeplay";
 					trace('loaded bonus songs');
 					regenerateSongs('');
 					catText.text = " < Side Stories >";
+				}
+				else if (mode == "freeplay")
+				{
+					mode = "story";
+					trace('loaded story songs');
+					regenerateSongs('');
+					catText.text = "   < Main Story >";
 				}
 				//else if (mode == "freeplay")
 				//{
@@ -404,40 +402,8 @@ class FreeplayState extends MusicBeatState
 					//regenerateSongs('');
 					//catText.text = "     < Covers >";
 				//}
-				else if (mode == "freeplay")
-				{
-					mode = "story";
-					trace('loaded story songs');
-					regenerateSongs('');
-					catText.text = "   < Main Story >";
-				}
-			}
-			if (controls.UI_LEFT_P && picked_random == false)
-			{
-				if (mode == "story")
-				{
-					mode = "freeplay";
-					trace('loaded bonus songs');
-					regenerateSongs('');
-					catText.text = " < Side Stories >";
-				}
-				//else if (mode == "story")
-				//{
-					//mode = "cover";
-					//trace('loaded covers');
-					//regenerateSongs('');
-					//catText.text = "     < Covers >";
-				//}
-				else if (mode == "freeplay")
-				{
-					mode = "story";
-					trace('loaded story songs');
-					regenerateSongs('');
-					catText.text = "   < Main Story >";
-				}
 			}
 		}
-
 		else if (controls.UI_UP_P || controls.UI_DOWN_P) changeDiff();
 
 		if (controls.BACK)
