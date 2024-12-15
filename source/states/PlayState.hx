@@ -602,7 +602,7 @@ class PlayState extends MusicBeatState
 
 		healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.89 : 0.11), 'healthBar', function() return health, 0, 2);
 		healthBar.screenCenter(X);
-		healthBar.leftToRight = false;
+		healthBar.leftToRight = opponentMode;
 		healthBar.scrollFactor.set();
 		healthBar.visible = !ClientPrefs.data.hideHud;
 		healthBar.alpha = ClientPrefs.data.healthBarAlpha;
@@ -2066,8 +2066,16 @@ class PlayState extends MusicBeatState
 		var newPercent:Null<Float> = FlxMath.remapToRange(FlxMath.bound(healthBar.valueFunction(), healthBar.bounds.min, healthBar.bounds.max), healthBar.bounds.min, healthBar.bounds.max, 0, 100);
 		healthBar.percent = (newPercent != null ? newPercent : 0);
 
-		iconP1.animation.curAnim.curFrame = healthBar.percent < 20 ? 1 : healthBar.percent > 80 ? 2 : 0; // if health is 20%, set to 1. else if health is 80%, set to 2. else set to 0
-		iconP2.animation.curAnim.curFrame = healthBar.percent > 80 ? 1 : healthBar.percent < 20 ? 2 : 0;
+		if (!opponentMode)
+		{
+			iconP1.animation.curAnim.curFrame = healthBar.percent < 20 ? 1 : healthBar.percent > 80 ? 2 : 0; // if health is 20%, set to 1. else if health is 80%, set to 2. else set to 0
+			iconP2.animation.curAnim.curFrame = healthBar.percent > 80 ? 1 : healthBar.percent < 20 ? 2 : 0;
+		}
+		else
+		{
+			iconP1.animation.curAnim.curFrame = healthBar.percent > 80 ? 1 : healthBar.percent < 20 ? 2 : 0;
+			iconP2.animation.curAnim.curFrame = healthBar.percent < 20 ? 1 : healthBar.percent > 80 ? 2 : 0;
+		}
 
 		return health;
 	}
