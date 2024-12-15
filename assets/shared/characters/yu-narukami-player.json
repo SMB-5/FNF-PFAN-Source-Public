@@ -107,12 +107,12 @@
 		40,
 		220
 	],
-	"healthicon": "face",
+	"healthicon": "yu-narukami-tv",
 	"flip_x": false,
 	"healthbar_colors": [
-		161,
-		161,
-		161
+		255,
+		234,
+		56
 	],
 	"camera_position": [
 		10,

@@ -1,2 +1,10 @@
 bf
 gf
+dad
+pico
+pico-playable
+nene
+makoto-yuki
+yu-narukami
+yu-narukami-player
+shadow-makoto
