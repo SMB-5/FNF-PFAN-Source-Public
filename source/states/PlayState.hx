@@ -218,6 +218,8 @@ class PlayState extends MusicBeatState
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
 
+	public static var opponentMode:Bool = false;
+
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
 
@@ -321,6 +323,8 @@ class PlayState extends MusicBeatState
 		practiceMode = ClientPrefs.getGameplaySetting('practice');
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
+
+		opponentMode = ClientPrefs.getGameplaySetting('opponentMode', false);
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = initPsychCamera();
@@ -1453,7 +1457,11 @@ class PlayState extends MusicBeatState
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
 				var gottaHitNote:Bool = section.mustHitSection;
 
-				if (songNotes[1] > 3)
+				if (songNotes[1] > 3 && !opponentMode)
+				{
+					gottaHitNote = !section.mustHitSection;
+				}
+				else if (songNotes[1] <= 3 && opponentMode)
 				{
 					gottaHitNote = !section.mustHitSection;
 				}
@@ -1644,7 +1652,14 @@ class PlayState extends MusicBeatState
 				babyArrow.alpha = targetAlpha;
 
 			if (player == 1)
+			{
+			if (!opponentMode  || (opponentMode && ClientPrefs.data.middleScroll))
 				playerStrums.add(babyArrow);
+			else
+				{
+					opponentStrums.add(babyArrow);
+				}
+			}
 			else
 			{
 				if(ClientPrefs.data.middleScroll)
@@ -1654,7 +1669,10 @@ class PlayState extends MusicBeatState
 						babyArrow.x += FlxG.width / 2 + 25;
 					}
 				}
+				if (!opponentMode || opponentMode && ClientPrefs.data.middleScroll)
 				opponentStrums.add(babyArrow);
+				else
+					playerStrums.add(babyArrow);
 			}
 
 			strumLineNotes.add(babyArrow);
@@ -3178,6 +3196,8 @@ class PlayState extends MusicBeatState
 		}
 
 		var char:Character = boyfriend;
+		if (opponentMode)
+			char = dad;
 		if(!note.noAnimation) {
 			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
 
