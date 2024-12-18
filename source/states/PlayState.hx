@@ -3217,7 +3217,7 @@ class PlayState extends MusicBeatState
 			if (gainHealth) health += note.hitHealth * healthGain;
 		}
 
-        if((ClientPrefs.data.opponentStrums || opponentMode) && ClientPrefs.data.holdSplash)
+		if ((ClientPrefs.data.opponentStrums || opponentMode) && ClientPrefs.data.holdSplash)
 			spawnHoldSplashOnNote(note);
 		
 		var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
