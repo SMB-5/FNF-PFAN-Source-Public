@@ -3147,8 +3147,8 @@ class PlayState extends MusicBeatState
 
 		note.wasGoodHit = true;
 
-		if (opponentMode && note.hitsoundVolume > 0 && !note.hitsoundDisabled)
-			FlxG.sound.play(Paths.sound(note.hitsound), note.hitsoundVolume);
+		if (opponentMode && ClientPrefs.data.hitsoundVolume > 0 && !note.hitsoundDisabled)
+			FlxG.sound.play(Paths.sound(note.hitsound), ClientPrefs.data.hitsoundVolume);
 
 		if (songName != 'tutorial')
 			camZooming = true;
