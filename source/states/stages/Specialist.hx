@@ -10,6 +10,14 @@ class Specialist extends BaseStage
 
 	override function countdownStart()
 	{
+		for (i => daStrum in PlayState.instance.strumLineNotes) {
+			if (i < 4) {
+				daStrum.x = 9999;
+			}
+			else {
+				daStrum.x = 412 + (112 * (i - 4));
+			}
+		}
 		dadGroup.visible = false;
 		boyfriendGroup.visible = false;
 		gfGroup.visible = false;
