@@ -9,7 +9,7 @@ class CreditsState extends MusicBeatState
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var iconArray:Array<AttachedSprite> = [];
 	private var creditsStuff:Array<Array<String>> = [];
-	private var baldipliers:Array<String> = [['baldiplier', 'bald'], ['daldiplier', 'dark'], ['golden-baldiplier', 'golden']];
+	private var baldipliers:Array<Array<String>> = [['baldiplier', 'bald'], ['daldiplier', 'dark'], ['golden-baldiplier', 'golden']];
 
 	var bg:FlxSprite;
 	var descText:FlxText;
