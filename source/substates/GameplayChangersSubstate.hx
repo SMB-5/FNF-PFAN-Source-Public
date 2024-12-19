@@ -3,6 +3,8 @@ package substates;
 import objects.AttachedText;
 import objects.CheckboxThingie;
 
+import states.FreeplayState;
+
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
 	private var curOption:GameplayOption = null;
@@ -12,6 +14,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
+
+	private var disallowedBG:FlxSprite;
+	private var disallowedText:FlxText;
 
 	function getOptions()
 	{
@@ -107,7 +112,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			optionText.targetY = i;
 			grpOptions.add(optionText);
 
-			if(optionsArray[i].type == 'bool') {
+			if (optionsArray[i].type == 'bool') {
 				optionText.x += 90;
 				optionText.startPosition.x += 90;
 				optionText.snapToPosition();
@@ -117,6 +122,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				checkbox.offsetY = -52;
 				checkbox.ID = i;
 				checkboxGroup.add(checkbox);
+				if (FreeplayState.instance.songs[FreeplayState.curSelected].songName.toLowerCase() == 'specialist' && optionsArray[i].name == 'Play as Opponent')
+				{
+					optionsArray[i].setValue(false);
+					optionText.color = 0xFF878787;
+					checkbox.color = 0xFF878787;
+				}
 			} else {
 				optionText.snapToPosition();
 				var valueText:AttachedText = new AttachedText(Std.string(optionsArray[i].getValue()), optionText.width + 40, 0, true, 0.8);
@@ -128,6 +139,18 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			}
 			updateTextFrom(optionsArray[i]);
 		}
+
+		disallowedBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		disallowedBG.alpha = 0.6;
+		disallowedBG.visible = false;
+		add(disallowedBG);
+		
+		disallowedText = new FlxText(50, 0, FlxG.width - 100, 'This option cannot be enabled on Specialist', 32);
+		disallowedText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		disallowedText.scrollFactor.set();
+		disallowedText.screenCenter();
+		disallowedText.visible = false;
+		add(disallowedText);
 
 		changeSelection();
 		reloadCheckboxes();
@@ -145,6 +168,11 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if (controls.UI_DOWN_P)
 		{
 			changeSelection(1);
+		}
+		if (controls.UI_UP_P || controls.UI_DOWN_P || controls.RESET)
+		{
+			disallowedBG.visible = false;
+			disallowedText.visible = false;
 		}
 
 		if (controls.BACK) {
@@ -165,9 +193,18 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			{
 				if(controls.ACCEPT)
 				{
-					FlxG.sound.play(Paths.sound('scrollMenu'));
-					curOption.setValue((curOption.getValue() == true) ? false : true);
-					curOption.change();
+					if (FreeplayState.instance.songs[FreeplayState.curSelected].songName.toLowerCase() == 'specialist' && curOption.name == 'Play as Opponent')
+					{
+						FlxG.sound.play(Paths.sound('cancelMenu'));
+						disallowedBG.visible = true;
+						disallowedText.visible = true;
+					}
+					else
+					{
+						FlxG.sound.play(Paths.sound('scrollMenu'));
+						curOption.setValue((curOption.getValue() == true) ? false : true);
+						curOption.change();
+					}
 					reloadCheckboxes();
 				}
 			} else {

@@ -16,6 +16,7 @@ import substates.ResetScoreSubState;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 
+@:allow(substates.GameplayChangersSubstate)
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
@@ -64,11 +65,14 @@ class FreeplayState extends MusicBeatState
 
 	public static var intro:Bool = false;
 
+	public static var instance:FreeplayState;
 	override function create()
 	{
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
-		
+
+		instance = this;
+
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
@@ -498,6 +502,11 @@ class FreeplayState extends MusicBeatState
 					LoadingState.loadAndSwitchState(new PlayState());
 				});
 			}
+			else if (songs[curSelected].songName.toLowerCase() == 'specialist')
+			{
+				ClientPrefs.data.gameplaySettings.set('opponentmode', false);
+				ClientPrefs.saveSettings();
+			}
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
@@ -699,6 +708,7 @@ class FreeplayState extends MusicBeatState
 
 	override function destroy():Void
 	{
+		instance = null;
 		super.destroy();
 
 		FlxG.autoPause = ClientPrefs.data.autoPause;
