@@ -5,8 +5,11 @@ import objects.CheckboxThingie;
 
 import states.FreeplayState;
 
+@:access(states.FreeplayState)
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
+	private var instance:FreeplayState;
+
 	private var curOption:GameplayOption = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Dynamic> = [];
@@ -18,8 +21,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	private var disallowedBG:FlxSprite;
 	private var disallowedText:FlxText;
 
-	function getOptions()
+	public static function getOptions():Array<Dynamic>
 	{
+		var optionsArray:Array<Dynamic> = [];
 		var goption:GameplayOption = new GameplayOption('Scroll Type', 'scrolltype', 'string', 'multiplicative', ["multiplicative", "constant"]);
 		optionsArray.push(goption);
 
@@ -70,7 +74,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		optionsArray.push(new GameplayOption('Instakill on Miss', 'instakill', 'bool', false));
 		optionsArray.push(new GameplayOption('Practice Mode', 'practice', 'bool', false));
 		optionsArray.push(new GameplayOption('Botplay', 'botplay', 'bool', false));
-		optionsArray.push(new GameplayOption('Play As Opponent', 'opponentmode', 'bool', false));
+		optionsArray.push(new GameplayOption('Play As Opponent', 'opponentmode', 'bool', false, null, ['specialist', 'smashin', 'awakening', 'shadow', 'face-yourself', 'acceptance']));
+		return optionsArray;
 	}
 
 	public function getOptionByName(name:String)
@@ -84,10 +89,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		return null;
 	}
 
-	public function new()
+	public function new(instance:FreeplayState = null)
 	{
 		super();
-		
+
+		this.instance = instance;
+
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		add(bg);
@@ -102,7 +109,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
 		add(checkboxGroup);
 		
-		getOptions();
+		optionsArray = getOptions();
 
 		for (i in 0...optionsArray.length)
 		{
@@ -111,6 +118,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			optionText.setScale(0.8);
 			optionText.targetY = i;
 			grpOptions.add(optionText);
+			if (instance != null && optionsArray[i].disallowedSongs.contains(Paths.formatToSongPath(instance.songs[FreeplayState.curSelected].songName)))
+			{
+				optionsArray[i].setValue(optionsArray[i].defaultValue);
+				optionsArray[i].disallowed = true;
+				optionText.color = 0xFF878787;
+			}
 
 			if (optionsArray[i].type == 'bool') {
 				optionText.x += 90;
@@ -122,12 +135,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				checkbox.offsetY = -52;
 				checkbox.ID = i;
 				checkboxGroup.add(checkbox);
-				if (FreeplayState.instance.songs[FreeplayState.curSelected].songName.toLowerCase() == 'specialist' && optionsArray[i].name == 'Play as Opponent')
-				{
-					optionsArray[i].setValue(false);
-					optionText.color = 0xFF878787;
+				if (instance != null && optionsArray[i].disallowed)
 					checkbox.color = 0xFF878787;
-				}
 			} else {
 				optionText.snapToPosition();
 				var valueText:AttachedText = new AttachedText(Std.string(optionsArray[i].getValue()), optionText.width + 40, 0, true, 0.8);
@@ -145,10 +154,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		disallowedBG.visible = false;
 		add(disallowedBG);
 		
-		disallowedText = new FlxText(50, 0, FlxG.width - 100, 'This option cannot be enabled on Specialist', 32);
+		disallowedText = new FlxText(0, 0, FlxG.width - 100, '', 32);
 		disallowedText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		disallowedText.scrollFactor.set();
-		disallowedText.screenCenter();
 		disallowedText.visible = false;
 		add(disallowedText);
 
@@ -169,7 +177,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		{
 			changeSelection(1);
 		}
-		if (controls.UI_UP_P || controls.UI_DOWN_P || controls.RESET)
+		if (controls.UI_LEFT_P || controls.UI_RIGHT_P || controls.UI_UP_P || controls.UI_DOWN_P || controls.RESET)
 		{
 			disallowedBG.visible = false;
 			disallowedText.visible = false;
@@ -193,10 +201,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			{
 				if(controls.ACCEPT)
 				{
-					if (FreeplayState.instance.songs[FreeplayState.curSelected].songName.toLowerCase() == 'specialist' && curOption.name == 'Play as Opponent')
+					if (instance != null && curOption.disallowed)
 					{
 						FlxG.sound.play(Paths.sound('cancelMenu'));
 						disallowedBG.visible = true;
+						disallowedText.text = 'This option cannot be enabled on ' + instance.songs[FreeplayState.curSelected].songName;
+						disallowedText.screenCenter();
 						disallowedText.visible = true;
 					}
 					else
@@ -211,7 +221,15 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				if(controls.UI_LEFT || controls.UI_RIGHT) {
 					var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P);
 					if(holdTime > 0.5 || pressed) {
-						if(pressed) {
+						if (instance != null && pressed && curOption.disallowed)
+						{
+							FlxG.sound.play(Paths.sound('cancelMenu'));
+							disallowedBG.visible = true;
+							disallowedText.text = 'This option cannot be changed on ' + instance.songs[FreeplayState.curSelected].songName;
+							disallowedText.screenCenter();
+							disallowedText.visible = true;
+						}
+						else if(pressed) {
 							var add:Dynamic = null;
 							if(curOption.type != 'string') {
 								add = controls.UI_LEFT ? -curOption.changeValue : curOption.changeValue;
@@ -411,16 +429,19 @@ class GameplayOption
 	public var maxValue:Dynamic = null; //Only used in int/float/percent type
 	public var decimals:Int = 1; //Only used in float/percent type
 
+	public var disallowedSongs:Array<String> = null; //Songs not allowed to change the value and will use the default value
+	public var disallowed:Bool = false;
 	public var displayFormat:String = '%v'; //How String/Float/Percent/Int values are shown, %v = Current value, %d = Default value
 	public var name:String = 'Unknown';
 
-	public function new(name:String, variable:String, type:String = 'bool', defaultValue:Dynamic = 'null variable value', ?options:Array<String> = null)
+	public function new(name:String, variable:String, type:String = 'bool', defaultValue:Dynamic = 'null variable value', ?options:Array<String> = null, ?disallowedSongs:Array<String> = null)
 	{
 		this.name = name;
 		this.variable = variable;
 		this.type = type;
 		this.defaultValue = defaultValue;
 		this.options = options;
+		this.disallowedSongs = disallowedSongs ?? [];
 
 		if(defaultValue == 'null variable value')
 		{
@@ -495,6 +516,8 @@ class GameplayOption
 	{
 		if(child != null) {
 			child.text = newValue;
+			if (disallowed)
+				child.color = 0xFF878787;
 		}
 		return null;
 	}

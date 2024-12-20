@@ -16,7 +16,6 @@ import substates.ResetScoreSubState;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 
-@:allow(substates.GameplayChangersSubstate)
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
@@ -46,6 +45,8 @@ class FreeplayState extends MusicBeatState
 	//private var iconArray:Array<HealthIcon> = [];
 	private var grpIcons:FlxTypedGroup<HealthIcon>;
 
+	var disallowedModifiers:Map<GameplayOption, Array<String>> = [];
+
 	var bg:FlxSprite;
 	var songBG:FlxSprite;
 	var bar:FlxSprite;
@@ -65,13 +66,10 @@ class FreeplayState extends MusicBeatState
 
 	public static var intro:Bool = false;
 
-	public static var instance:FreeplayState;
 	override function create()
 	{
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
-
-		instance = this;
 
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
@@ -191,6 +189,12 @@ class FreeplayState extends MusicBeatState
 		
 		player = new MusicPlayer(this);
 		add(player);
+
+		for (option in GameplayChangersSubstate.getOptions())
+		{
+			if (option.disallowedSongs.length > 0)
+				disallowedModifiers.set(option, option.disallowedSongs);
+		}
 		
 		changeSelection();
 		updatePortrait();
@@ -440,19 +444,10 @@ class FreeplayState extends MusicBeatState
 		if(FlxG.keys.justPressed.CONTROL && !player.playingMusic)
 		{
 			persistentUpdate = false;
-			openSubState(new GameplayChangersSubstate());
+			openSubState(new GameplayChangersSubstate(this));
 		}
 		else if(FlxG.keys.justPressed.SPACE && songs[curSelected].songName.toLowerCase() != 'random')
 		{
-			if (songs[curSelected].songName.toLowerCase() == 'random')
-			{
-				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
-				picked_random = true;
-				new FlxTimer().start(1, function(tmr) {
-					LoadingState.loadAndSwitchState(new PlayState());
-				});
-			}
-
 			if(instPlaying != curSelected && !player.playingMusic)
 			{
 				destroyFreeplayVocals();
@@ -494,6 +489,7 @@ class FreeplayState extends MusicBeatState
 		}
 		else if (controls.ACCEPT && !player.playingMusic)
 		{
+			
 			if ((songs[curSelected].songName.toLowerCase() == 'random'))
 		    {
 				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
@@ -502,24 +498,22 @@ class FreeplayState extends MusicBeatState
 					LoadingState.loadAndSwitchState(new PlayState());
 				});
 			}
-			else if (songs[curSelected].songName.toLowerCase() == 'specialist')
-			{
-				ClientPrefs.data.gameplaySettings.set('opponentmode', false);
-				ClientPrefs.saveSettings();
-			}
+
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-			/*#if MODS_ALLOWED
-			if(!FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
-			#else
-			if(!OpenFlAssets.exists(Paths.json(songLowercase + '/' + poop))) {
-			#end
-				poop = songLowercase;
-				curDifficulty = 1;
-				trace('Couldnt find file');
-			}*/
 			trace(poop);
+
+			var shouldSave:Bool = false;
+			for (option => songArray in disallowedModifiers)
+			{
+				if (songArray.contains(songLowercase) && option.getValue() != option.defaultValue)
+				{
+					option.setValue(option.defaultValue);
+					shouldSave = true;
+				}
+			}
+			if (shouldSave) ClientPrefs.saveSettings();
 
 			try
 			{
@@ -708,7 +702,6 @@ class FreeplayState extends MusicBeatState
 
 	override function destroy():Void
 	{
-		instance = null;
 		super.destroy();
 
 		FlxG.autoPause = ClientPrefs.data.autoPause;
