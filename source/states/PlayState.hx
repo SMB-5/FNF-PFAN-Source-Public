@@ -1800,7 +1800,8 @@ class PlayState extends MusicBeatState
 		if(!inCutscene && !paused && !freezeCamera) {
 			FlxG.camera.followLerp = 2.4 * cameraSpeed * playbackRate;
 			var char:Character = !opponentMode ? boyfriend : dad;
-			if(!startingSong && !endingSong && char.getAnimationName().startsWith('idle')) {
+			var idleAnim = (char.getAnimationName().startsWith('idle') || char.getAnimationName().startsWith('danceLeft') || char.getAnimationName().startsWith('danceRight'));
+			if(!startingSong && !endingSong && idleAnim) {
 				boyfriendIdleTime += elapsed;
 				if(boyfriendIdleTime >= 0.15) { // Kind of a mercy thing for making the achievement easier to get as it's apparently frustrating to some playerss
 					boyfriendIdled = true;

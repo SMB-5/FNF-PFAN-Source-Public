@@ -113,6 +113,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		for (i in 0...optionsArray.length)
 		{
+			if (instance == null && optionsArray[i].name == 'Play as Opponent')
+			{
+				// Opponent mode is not available on story mode
+				optionsArray[i].setValue(false);
+				continue;
+			}
 			var optionText:Alphabet = new Alphabet(200, 360, optionsArray[i].name, true);
 			optionText.isMenuItem = true;
 			optionText.setScale(0.8);
