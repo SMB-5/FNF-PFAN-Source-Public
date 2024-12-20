@@ -443,6 +443,9 @@ class GameplayOption
 		this.options = options;
 		this.disallowedSongs = disallowedSongs ?? [];
 
+		for (i in 0...this.disallowedSongs.length)
+			this.disallowedSongs[i] = Paths.formatToSongPath(this.disallowedSongs[i]);
+
 		if(defaultValue == 'null variable value')
 		{
 			switch(type)
