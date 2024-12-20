@@ -185,6 +185,11 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		if (controls.BACK) {
 			close();
+			if (instance != null && FreeplayState.opponentMode != ClientPrefs.getGameplaySetting('opponentmode'))
+			{
+				FreeplayState.opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
+				instance.changeDiff();
+			}
 			ClientPrefs.saveSettings();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}

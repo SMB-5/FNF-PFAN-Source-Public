@@ -123,7 +123,7 @@ class P3Results extends MusicBeatSubstate
 		FlxTween.tween(beef, {x: FlxG.width - 500}, 0.75, {ease: FlxEase.elasticInOut});
 		FlxTween.tween(screen, {x: -2800}, 0.8, {ease: FlxEase.expoInOut});
 
-		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
+		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty, PlayState.opponentMode)) 
 		{
 			new FlxTimer().start(1.3, function(tmr:FlxTimer)
 			{
@@ -154,7 +154,7 @@ class P3Results extends MusicBeatSubstate
 	{
 		var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;
-		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
+		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
 		
 		if (PlayState.isStoryMode) 
 		{

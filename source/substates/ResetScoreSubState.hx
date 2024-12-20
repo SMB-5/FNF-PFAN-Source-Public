@@ -6,6 +6,8 @@ import backend.Highscore;
 import flixel.FlxSubState;
 import objects.HealthIcon;
 
+import states.FreeplayState;
+
 class ResetScoreSubState extends MusicBeatSubstate
 {
 	var bg:FlxSprite;
@@ -59,6 +61,13 @@ class ResetScoreSubState extends MusicBeatSubstate
 			icon.setPosition(text.x - icon.width + (10 * tooLong), text.y - 30);
 			icon.alpha = 0;
 			add(icon);
+			if (FreeplayState.opponentMode) {
+				var text:Alphabet = new Alphabet(0, text.y + 110, '(OPPONENT)', true);
+				text.screenCenter(X);
+				alphabetArray.push(text);
+				text.alpha = 0;
+				add(text);
+			}
 		}
 
 		yesText = new Alphabet(0, text.y + 150, 'Yes', true);
@@ -69,6 +78,10 @@ class ResetScoreSubState extends MusicBeatSubstate
 		noText.screenCenter(X);
 		noText.x += 200;
 		add(noText);
+		if (week == -1 && FreeplayState.opponentMode) {
+			yesText.y += 100;
+			noText.y += 100;
+		}
 		updateOptions();
 	}
 
@@ -94,7 +107,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 		} else if(controls.ACCEPT) {
 			if(onYes) {
 				if(week == -1) {
-					Highscore.resetSong(song, difficulty);
+					Highscore.resetSong(song, difficulty, FreeplayState.opponentMode);
 				} else {
 					Highscore.resetWeek(WeekData.weeksList[week], difficulty);
 				}

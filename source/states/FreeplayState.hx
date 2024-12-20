@@ -45,6 +45,8 @@ class FreeplayState extends MusicBeatState
 	//private var iconArray:Array<HealthIcon> = [];
 	private var grpIcons:FlxTypedGroup<HealthIcon>;
 
+	public static var opponentMode:Bool = false;
+
 	var disallowedModifiers:Map<GameplayOption, Array<String>> = [];
 
 	var bg:FlxSprite;
@@ -74,6 +76,8 @@ class FreeplayState extends MusicBeatState
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
+
+		opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
 
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
@@ -489,8 +493,7 @@ class FreeplayState extends MusicBeatState
 		}
 		else if (controls.ACCEPT && !player.playingMusic)
 		{
-			
-			if ((songs[curSelected].songName.toLowerCase() == 'random'))
+			if (songs[curSelected].songName.toLowerCase() == 'random')
 		    {
 				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
 				picked_random = true;
@@ -571,7 +574,7 @@ class FreeplayState extends MusicBeatState
 		vocals = null;
 	}
 
-	function changeDiff(change:Int = 0)
+	public function changeDiff(change:Int = 0)
 	{
 		//if (player.playingMusic)
 			//return;
@@ -584,8 +587,8 @@ class FreeplayState extends MusicBeatState
 			curDifficulty = 0;
 
 		#if !switch
-		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
-		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
+		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty, opponentMode);
+		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty, opponentMode);
 		#end
 
 		lastDifficultyName = Difficulty.getString(curDifficulty);
@@ -593,6 +596,8 @@ class FreeplayState extends MusicBeatState
 			diffText.text = '< ' + lastDifficultyName.toUpperCase() + ' >';
 		else
 			diffText.text = lastDifficultyName.toUpperCase();
+
+		if (opponentMode) diffText.text += ' (OPPONENT)';
 
 		positionHighscore();
 		missingText.visible = false;

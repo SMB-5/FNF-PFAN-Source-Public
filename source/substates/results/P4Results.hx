@@ -115,7 +115,7 @@ class P4Results extends MusicBeatSubstate
 		screen.antialiasing = ClientPrefs.data.antialiasing;
 		add(screen);
 
-		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
+		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty, PlayState.opponentMode)) 
 		{
 			new FlxTimer().start(1.3, function(tmr:FlxTimer)
 			{
@@ -156,7 +156,7 @@ class P4Results extends MusicBeatSubstate
 	{
 		var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;
-		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
+		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
 
 		if (PlayState.isStoryMode) 
 		{
