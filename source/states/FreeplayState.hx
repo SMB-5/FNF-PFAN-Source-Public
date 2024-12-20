@@ -47,7 +47,7 @@ class FreeplayState extends MusicBeatState
 
 	public static var opponentMode:Bool = false;
 
-	var disallowedModifiers:Map<GameplayOption, Array<String>> = [];
+	var disallowedModifiers:Map<String, GameplayOption> = [];
 
 	var bg:FlxSprite;
 	var songBG:FlxSprite;
@@ -76,8 +76,6 @@ class FreeplayState extends MusicBeatState
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
-
-		opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
 
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
@@ -197,9 +195,13 @@ class FreeplayState extends MusicBeatState
 		for (option in GameplayChangersSubstate.getOptions())
 		{
 			if (option.disallowedSongs.length > 0)
-				disallowedModifiers.set(option, option.disallowedSongs);
+			{
+				disallowedModifiers.set(option.variable, option);
+				if (option.variable.toLowerCase() == 'opponentmode' && !option.disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+					opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
+			}
 		}
-		
+
 		changeSelection();
 		updatePortrait();
 		//updateTexts();
@@ -508,9 +510,9 @@ class FreeplayState extends MusicBeatState
 			trace(poop);
 
 			var shouldSave:Bool = false;
-			for (option => songArray in disallowedModifiers)
+			for (option in disallowedModifiers)
 			{
-				if (songArray.contains(songLowercase) && option.getValue() != option.defaultValue)
+				if (option.disallowedSongs.contains(songLowercase) && option.getValue() != option.defaultValue)
 				{
 					option.setValue(option.defaultValue);
 					shouldSave = true;
@@ -606,10 +608,6 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0, playSound:Bool = true)
 	{
-		//if (player.playingMusic)
-			//return;
-
-		//_updateSongLastDifficulty();
 		if(playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		var lastList:Array<String> = Difficulty.list;
@@ -636,22 +634,10 @@ class FreeplayState extends MusicBeatState
 			});
 		}
 
-		// selector.y = (70 * curSelected) + 30;
-
-		//var bullShit:Int = 0;
-
-		//for (i in 0...iconArray.length)
-		//{
-			//iconArray[i].alpha = 0.6;
-		//}
-
-		//iconArray[curSelected].alpha = 1;
-
 		for (i in grpIcons.members) i.alpha = (i.ID == curSelected ? 1 : 0.6);
 
 		for (item in grpSongs.members)
 		{
-			//bullShit++;
 			item.targetY = item.ID - curSelected;
 			item.alpha = 0.6;
             if (item.targetY == 0) item.alpha = 1;
@@ -670,6 +656,9 @@ class FreeplayState extends MusicBeatState
 			curDifficulty = Math.round(Math.max(0, Difficulty.defaultList.indexOf(Difficulty.getDefault())));
 		else
 			curDifficulty = 0;
+
+		if (disallowedModifiers.exists('opponentmode'))
+			opponentMode = disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName));
 
 		changeDiff();
 		_updateSongLastDifficulty();
