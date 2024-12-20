@@ -117,6 +117,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			{
 				// Opponent mode is not available on story mode
 				optionsArray[i].setValue(false);
+				optionsArray.remove(optionsArray[i]);
 				continue;
 			}
 			var optionText:Alphabet = new Alphabet(200, 360, optionsArray[i].name, true);
