@@ -46,6 +46,7 @@ class FreeplayState extends MusicBeatState
 	private var grpIcons:FlxTypedGroup<HealthIcon>;
 
 	public static var opponentMode:Bool = false;
+	public static var onDisallowedSong:Bool = false;
 
 	var disallowedModifiers:Map<String, GameplayOption> = [];
 
@@ -197,8 +198,12 @@ class FreeplayState extends MusicBeatState
 			if (option.disallowedSongs.length > 0)
 			{
 				disallowedModifiers.set(option.variable, option);
-				if (option.variable.toLowerCase() == 'opponentmode' && !option.disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+				if (option.variable.toLowerCase() == 'opponentmode')
+				{
 					opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
+					if (opponentMode && option.disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+						opponentMode = false;
+				}
 			}
 		}
 
@@ -344,11 +349,11 @@ class FreeplayState extends MusicBeatState
 		{
 			if(opponentMode)
 			{
-			scoreText.text = 'OPPONENT HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+				scoreText.text = 'OPPONENT HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 			}
 			else
 			{
-			scoreText.text = 'HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+				scoreText.text = 'HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 			}
 			positionHighscore();
 			
@@ -606,8 +611,6 @@ class FreeplayState extends MusicBeatState
 		else
 			diffText.text = lastDifficultyName.toUpperCase();
 
-		if (opponentMode) diffText.text += ' (OPPONENT)';
-
 		positionHighscore();
 		missingText.visible = false;
 		missingTextBG.visible = false;
@@ -664,8 +667,16 @@ class FreeplayState extends MusicBeatState
 		else
 			curDifficulty = 0;
 
-		if (disallowedModifiers.exists('opponentmode'))
-			opponentMode = !disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName));
+		if (opponentMode && disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+		{
+			opponentMode = false;
+			onDisallowedSong = true;
+		}
+		else if (onDisallowedSong && !disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+		{
+			opponentMode = true;
+			onDisallowedSong = false;
+		}
 
 		changeDiff();
 		_updateSongLastDifficulty();
