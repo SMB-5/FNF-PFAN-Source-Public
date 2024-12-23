@@ -657,8 +657,8 @@ class FreeplayState extends MusicBeatState
 		else
 			curDifficulty = 0;
 
-		//if (disallowedModifiers.exists('opponentmode'))
-			//opponentMode = disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName));
+		if (disallowedModifiers.exists('opponentmode'))
+			opponentMode = !disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName));
 
 		changeDiff();
 		_updateSongLastDifficulty();
