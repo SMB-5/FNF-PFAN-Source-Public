@@ -94,7 +94,7 @@ class Highscore
 		var scores:Map<String, Int> = !opponent ? songScores : songScoresOpponent;
 		var daSong:String = formatSong(song, diff);
 		if (!scores.exists(daSong))
-			setScore(daSong, 0);
+			setScore(daSong, 0, opponent);
 
 		return scores.get(daSong);
 	}
@@ -104,7 +104,7 @@ class Highscore
 		var rating:Map<String, Float> = !opponent ? songRating : songRatingOpponent;
 		var daSong:String = formatSong(song, diff);
 		if (!rating.exists(daSong))
-			setRating(daSong, 0);
+			setRating(daSong, 0, opponent);
 
 		return rating.get(daSong);
 	}
