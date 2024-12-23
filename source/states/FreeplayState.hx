@@ -342,7 +342,14 @@ class FreeplayState extends MusicBeatState
 
 		if (!player.playingMusic)
 		{
+			if(opponentMode)
+			{
+			scoreText.text = 'OPPONENT HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+			}
+			else
+			{
 			scoreText.text = 'HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
+			}
 			positionHighscore();
 			
 			if(songs.length > 1)
@@ -687,7 +694,7 @@ class FreeplayState extends MusicBeatState
 	}
 
 	private function positionHighscore() {
-		scoreText.x = FlxG.width - scoreText.width - 60;
+		scoreText.x = FlxG.width - scoreText.width - 10;
 		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
 		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
 		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
