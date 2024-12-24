@@ -39,16 +39,7 @@ class SustainSplash extends FlxSprite
 		offset.set(PlayState.isPixelStage ? 112.5 : 106.25, 100);
 
 		new FlxTimer().start(timeThingy, (_) -> {
-			if (tailEnd.mustPress && !PlayState.opponentMode && !realNote.noteSplashData.disabled && ClientPrefs.data.splashAlpha != 0) {
-				alpha = ClientPrefs.data.splashAlpha;
-				animation.play('end', true);
-				animation.curAnim.looped = false;
-				animation.curAnim.frameRate = 24;
-				clipRect = null;
-				animation.finishCallback = (_) ->visible = false;
-				return;
-			}
-			else if (!tailEnd.mustPress && PlayState.opponentMode && !realNote.noteSplashData.disabled && ClientPrefs.data.splashAlpha != 0) {
+			if (tailEnd.mustPress != PlayState.opponentMode && !realNote.noteSplashData.disabled && ClientPrefs.data.splashAlpha != 0) {
 				alpha = ClientPrefs.data.splashAlpha;
 				animation.play('end', true);
 				animation.curAnim.looped = false;
