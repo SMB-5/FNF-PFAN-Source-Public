@@ -664,14 +664,14 @@ class FreeplayState extends MusicBeatState
 		else
 			curDifficulty = 0;
 
-		if (gameplayModifiers.exists('opponentmode') && gameplayModifiers.get('opponentmode') != null)
+		if (gameplayModifiers.get('opponentmode') != null)
 		{
-			if (opponentMode && gameplayModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+			if (opponentMode && gameplayModifiers.get('opponentmode').disallowedSongs?.contains(Paths.formatToSongPath(songs[curSelected].songName)))
 			{
 				opponentMode = false;
 				onDisallowedSong = true;
 			}
-			else if (onDisallowedSong && !gameplayModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+			else if (onDisallowedSong && !gameplayModifiers.get('opponentmode').disallowedSongs?.contains(Paths.formatToSongPath(songs[curSelected].songName)))
 			{
 				opponentMode = true;
 				onDisallowedSong = false;
