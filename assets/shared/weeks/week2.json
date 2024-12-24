@@ -1,16 +1,16 @@
 {
 	"songs": [
-		["Truth", "spooky", [34, 51, 68]]
+		["Truth", "yu-narukami-tv", [34, 51, 68]]
 	],
 
 	"weekCharacters": [
-		"spooky",
-		"bf",
-		"gf"
+		"",
+		"",
+		""
 	],
 	"weekBackground": "halloween",
 
-	"storyName": "Spooky Month",
+	"storyName": "TV Mystery",
 	"weekBefore": "week1",
 	"weekName": "Week 2",
 	"difficulties": "Normal",

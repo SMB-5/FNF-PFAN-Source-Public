@@ -4,13 +4,13 @@
 	],
 
 	"weekCharacters": [
-		"pico",
-		"bf",
-		"gf"
+		"",
+		"",
+		""
 	],
 	"weekBackground": "philly",
 
-	"storyName": "PICO",
+	"storyName": "Phantom",
 	"weekBefore": "week2",
 	"weekName": "Week 3",
 	"difficulties": "Normal",
