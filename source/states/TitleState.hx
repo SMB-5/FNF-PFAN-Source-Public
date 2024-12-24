@@ -291,12 +291,44 @@ class TitleState extends MusicBeatState
 		atlusTxt.alpha = 0;
 		atlusTxt.screenCenter(X);
 
+		var leDate = Date.now();
+		
+		if (leDate.getMonth() == 3 && leDate.getDate() == 30)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Birthday", 60);
+		if (leDate.getMonth() == 6 && leDate.getDate() == 6)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
+		if (leDate.getMonth() == 8 && leDate.getDate() == 20)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
+		if (leDate.getMonth() == 9 && leDate.getDate() == 5)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
+		if (leDate.getMonth() == 9 && leDate.getDate() == 31)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
+		if (leDate.getMonth() == 11 && leDate.getDate() == 25)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Merry", 60);
+		if (leDate.getMonth() == 0 && leDate.getDate() == 1)
+		intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
+		else
 		intro1Txt = new FlxText(0, 250, FlxG.width, curWacky[0], 60);
         intro1Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
         add(intro1Txt);
 		intro1Txt.alpha = 0;
 		intro1Txt.screenCenter(X);
 
+        if (leDate.getMonth() == 3 && leDate.getDate() == 30)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "Tom Fulp", 60);
+		if (leDate.getMonth() == 6 && leDate.getDate() == 6)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "Newgrounds", 60);
+        if (leDate.getMonth() == 8 && leDate.getDate() == 20)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "Persona", 60);
+		if (leDate.getMonth() == 9 && leDate.getDate() == 5)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "Friday Night Funkin", 60);
+        if (leDate.getMonth() == 9 && leDate.getDate() == 31)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "Halloween", 60);
+        if (leDate.getMonth() == 11 && leDate.getDate() == 25)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "Christmas", 60);
+		if (leDate.getMonth() == 0 && leDate.getDate() == 1)
+		intro2Txt = new FlxText(0, 350, FlxG.width, "New Year", 60);
+		else
 		intro2Txt = new FlxText(0, 350, FlxG.width, curWacky[1], 60);
         intro2Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
         add(intro2Txt);
