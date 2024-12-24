@@ -48,7 +48,7 @@ class FreeplayState extends MusicBeatState
 	public static var opponentMode:Bool = false;
 	public static var onDisallowedSong:Bool = false;
 
-	var disallowedModifiers:Map<String, GameplayOption> = [];
+	var gameplayModifiers:Map<String, GameplayOption> = [];
 
 	var bg:FlxSprite;
 	var songBG:FlxSprite;
@@ -195,15 +195,12 @@ class FreeplayState extends MusicBeatState
 
 		for (option in GameplayChangersSubstate.getOptions())
 		{
-			if (option.disallowedSongs.length > 0)
+			gameplayModifiers.set(option.variable, option);
+			if (option.variable.toLowerCase() == 'opponentmode')
 			{
-				disallowedModifiers.set(option.variable, option);
-				if (option.variable.toLowerCase() == 'opponentmode')
-				{
-					opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
-					if (opponentMode && option.disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
-						opponentMode = false;
-				}
+				opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
+				if (opponentMode && option.disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+					opponentMode = false;
 			}
 		}
 
@@ -522,7 +519,7 @@ class FreeplayState extends MusicBeatState
 			trace(poop);
 
 			var shouldSave:Bool = false;
-			for (option in disallowedModifiers)
+			for (option in gameplayModifiers)
 			{
 				if (option.disallowedSongs.contains(songLowercase) && option.getValue() != option.defaultValue)
 				{
@@ -667,15 +664,18 @@ class FreeplayState extends MusicBeatState
 		else
 			curDifficulty = 0;
 
-		if (opponentMode && disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+		if (gameplayModifiers.exists('opponentmode')
 		{
-			opponentMode = false;
-			onDisallowedSong = true;
-		}
-		else if (onDisallowedSong && !disallowedModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
-		{
-			opponentMode = true;
-			onDisallowedSong = false;
+			if (opponentMode && gameplayModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+			{
+				opponentMode = false;
+				onDisallowedSong = true;
+			}
+			else if (onDisallowedSong && !gameplayModifiers.get('opponentmode').disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
+			{
+				opponentMode = true;
+				onDisallowedSong = false;
+			}
 		}
 
 		changeDiff();
