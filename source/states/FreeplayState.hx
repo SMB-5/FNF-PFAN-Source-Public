@@ -122,7 +122,7 @@ class FreeplayState extends MusicBeatState
 		bar.screenCenter();
 
 		catText = new Alphabet(0, 0, '', true);
-		//catText.screenCenter(X);
+		catText.screenCenter(X);
 		catText.x = 0;
 		catText.y = 10;
 		catText.scaleX = 0.8;
@@ -132,9 +132,9 @@ class FreeplayState extends MusicBeatState
 		switch(mode)
 		{
 			case 'story':
-				catText.text = "   < Main Story >";
+				catText.text = "< Main Story >";
 			case 'freeplay':
-				catText.text = " < Side Stories >";
+				catText.text = "< Side Stories >";
 		}
 
 		//if (mode == "cover")
@@ -412,14 +412,14 @@ class FreeplayState extends MusicBeatState
 					mode = "freeplay";
 					trace('loaded bonus songs');
 					regenerateSongs('');
-					catText.text = " < Side Stories >";
+					catText.text = "< Side Stories >";
 				}
 				else if (mode == "freeplay")
 				{
 					mode = "story";
 					trace('loaded story songs');
 					regenerateSongs('');
-					catText.text = "   < Main Story >";
+					catText.text = "< Main Story >";
 				}
 				//else if (mode == "freeplay")
 				//{

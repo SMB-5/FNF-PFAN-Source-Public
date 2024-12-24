@@ -3,7 +3,7 @@
 	"difficulties": "Normal",
 	"hideFreeplay": false,
 	"weekBackground": "stage",
-	"weekBefore": "tutorial",
+	"weekBefore": "week5",
 	"freeplayColor": [
 		146,
 		113,
@@ -14,7 +14,7 @@
 	"songs": [
 		[
 			"Answer",
-			"dad",
+			"makoto-yuki",
 			[
 				235,
 				225,
@@ -23,7 +23,7 @@
 		],
 		[
 			"Specialist",
-			"dad",
+			"yu-narukami",
 			[
 				235,
 				225,
@@ -32,7 +32,7 @@
 		],
 		[
 			"Foggy Night",
-			"dad",
+			"yu-narukami-tv",
 			[
 				235,
 				225,

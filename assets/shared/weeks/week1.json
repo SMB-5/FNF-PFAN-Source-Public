@@ -1,16 +1,16 @@
 {
 	"songs": [
-		["Tartarus", "dad", [146, 113, 253]]
+		["Tartarus", "makoto-yuki", [146, 113, 253]]
 	],
 
 	"weekCharacters": [
-		"dad",
-		"bf",
-		"gf"
+		"",
+		"",
+		""
 	],
 	"weekBackground": "stage",
 
-	"storyName": "Daddy Dearest",
+	"storyName": "Full Moon Trouble",
 	"weekBefore": "tutorial",
 	"weekName": "Week 1",
 	"difficulties": "Normal",
