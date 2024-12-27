@@ -3134,7 +3134,7 @@ class PlayState extends MusicBeatState
 				gf.specialAnim = true;
 			}
 		}
-		if (!opponentMode) vocals.volume = 0;
+		if (!opponentMode || opponentVocals.length <= 0) vocals.volume = 0;
 		else opponentVocals.volume = 0;
 	}
 
