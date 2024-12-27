@@ -182,6 +182,14 @@ class Character extends FlxSprite
 			[0xFF4DA8F7, 0xFFFFFFFF, 0xFF1A50CA]
 		],
 		"shadow-makoto" => "makoto-yuki",
+
+		"yu-narukami" => [
+			[0xFFFFDB5E, 0xFFFFFFFF, 0xFFFF9637],
+			[0xFFC9CBD6, 0xFFFFFFFF, 0xFFA8A2B9],
+			[0xFFD8E8EB, 0xFFFFFFFF, 0xFFC9CBD6],
+			[0xFFFFDB5E, 0xFFFFFFFF, 0xFFFF9637]
+		],
+		"yu-narukami-player" => "yu-narukami",
 	];
 
 	public function fixArrowRGB()
