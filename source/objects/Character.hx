@@ -2,6 +2,8 @@ package objects;
 
 import backend.animation.PsychAnimationController;
 
+import flixel.util.typeLimit.OneOfThree;
+
 import flixel.graphics.frames.FlxAtlasFrames;
 
 import flixel.tweens.FlxEase;	
@@ -88,6 +90,13 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var editorIsPlayer:Null<Bool> = null;
 
+	public var arrowRGB:Array<Array<FlxColor>> = [
+		[0xFFC24B99, 0xFFFFFFFF, 0xFF3C1F56],
+		[0xFF00FFFF, 0xFFFFFFFF, 0xFF1542B7],
+		[0xFF12FA05, 0xFFFFFFFF, 0xFF0A4447],
+		[0xFFF9393F, 0xFFFFFFFF, 0xFF651038]
+	];
+
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -96,6 +105,7 @@ class Character extends FlxSprite
 
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
+		fixArrowRGB();
 		this.isPlayer = isPlayer;
 		autoDance = !isPlayer;
 		switch (curCharacter)
@@ -144,6 +154,50 @@ class Character extends FlxSprite
 				loadMappedAnims();
 				playAnim("shoot1");
 		}
+	}
+
+		/**
+	 * HOW TO NOTE COLOR v1.2 101 by the Super Funkin' Galaxy Team
+	 * 
+	 * multiple note color chars are done like this
+	 * "charname" => [
+	 * 	[left note main color, left note highlight color, left note outline color],
+	 * 	[down note main color, down note highlight color, down note outline color],
+	 * 	[up note main color, up note highlight color, up note outline color],
+	 * 	[right note main color, right note highlight color, right note outline color]
+	 * ],
+	 * 
+	 * singular note color chars are done like this
+	 * "charname" => [note main color, note highlight color, note outline color],
+	 * 
+	 * now for example "char-pixel" has the same note color as "char" you can just do
+	 * "char-pixel" => "char"
+	 * it just does a redirection to the og chars color
+	 */
+	static var arrowColors:Map<String, OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>>> = [
+		"makoto-yuki" => [
+			[0xFFDA2523, 0xFFFFFFFF, 0xFF851639],
+			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
+			[0xFF3CF5FC, 0xFFFFFFFF, 0xFF1A50CA],
+			[0xFF4DA8F7, 0xFFFFFFFF, 0xFF1A50CA]
+		],
+		"shadow-makoto" => "makoto-yuki",
+	];
+
+	public function fixArrowRGB()
+		arrowRGB = getArrowRGB();
+
+	public function getArrowRGB(?char:String):Array<Array<FlxColor>> {
+		if (char == null) char = curCharacter;
+		var toReturn:OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>> = arrowColors.exists(char) ? arrowColors.get(char) : ClientPrefs.data.arrowRGB;
+		if (toReturn is String)
+			toReturn = arrowColors.exists(toReturn) ? arrowColors.get(toReturn) : ClientPrefs.data.arrowRGB;
+		
+		var getLengthFromAny:Array<Any>->Int = (shit:Array<Any>) -> {return shit.length;}; //fixes
+		if (getLengthFromAny(toReturn) == 3)
+			toReturn = [toReturn, toReturn, toReturn, toReturn];
+
+		return toReturn;
 	}
 
 	public function loadCharacterFile(json:Dynamic)

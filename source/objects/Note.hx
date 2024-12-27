@@ -298,6 +298,12 @@ class Note extends FlxSprite
 		x += offsetX;
 	}
 
+	public function updateRgb(palette:Array<FlxColor>) {
+		rgbShader.r = palette[0];
+		rgbShader.g = palette[1];
+		rgbShader.b = palette[2];
+	}
+
 	public static function initializeGlobalRGBShader(noteData:Int)
 	{
 		if(globalRgbShaders[noteData] == null)

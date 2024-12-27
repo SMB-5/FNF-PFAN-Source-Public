@@ -515,6 +515,9 @@ class PlayState extends MusicBeatState
 		boyfriendGroup.add(boyfriend);
 		startCharacterScripts(boyfriend.curCharacter);
 
+		boyfriend.fixArrowRGB();
+		dad.fixArrowRGB();
+
 		var camPos:FlxPoint = FlxPoint.get(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if(gf != null)
 		{
@@ -1217,6 +1220,22 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	public function setAllNotesRGBAfterTime(arrRgb:Array<Array<FlxColor>>, time:Float, mustPress:Null<Bool>)
+	{
+		if (mustPress == null)
+			return;
+		var theFunc = function(daNote:Note)
+		{
+			if (daNote.strumTime >= time && daNote.mustPress == mustPress)
+			{
+				daNote.updateRgb(arrRgb[daNote.noteData]);
+			}
+		};
+		for (note in unspawnNotes)
+			theFunc(note);
+		notes.forEach(theFunc);
+	}
+
 	// fun fact: Dynamic Functions can be overriden by just doing this
 	// `updateScore = function(miss:Bool = false) { ... }
 	// its like if it was a variable but its just a function!
@@ -1482,6 +1501,18 @@ class PlayState extends MusicBeatState
 
 				swagNote.scrollFactor.set();
 
+				var fixNoteColorShit = function(dunceNote:Note)
+				{
+					if (!["Hurt Note"].contains(dunceNote.noteType))
+					{
+						// unreadable i know but it works
+						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? boyfriend : dad) : (!opponentMode ? boyfriend : dad))
+							.arrowRGB[dunceNote.noteData]);
+					}
+				}
+				
+				fixNoteColorShit(swagNote);
+
 				unspawnNotes.push(swagNote);
 
 				final susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
@@ -1500,6 +1531,7 @@ class PlayState extends MusicBeatState
 						sustainNote.parent = swagNote;
 						unspawnNotes.push(sustainNote);
 						swagNote.tail.push(sustainNote);
+						fixNoteColorShit(sustainNote);
 
 						sustainNote.correctionOffset = swagNote.height / 2;
 						if(!PlayState.isPixelStage)
@@ -1571,19 +1603,23 @@ class PlayState extends MusicBeatState
 	function eventPushedUnique(event:EventNote) {
 		switch(event.event) {
 			case "Change Character":
+			    var newCharacter:String = event.value2;
 				var charType:Int = 0;
+				var newColor = dad.getArrowRGB(newCharacter);
 				switch(event.value1.toLowerCase()) {
 					case 'gf' | 'girlfriend' | '1':
 						charType = 2;
+						setAllNotesRGBAfterTime(newColor, event.strumTime, false);
 					case 'dad' | 'opponent' | '0':
 						charType = 1;
+						setAllNotesRGBAfterTime(newColor, event.strumTime, false);
 					default:
+					    setAllNotesRGBAfterTime(newColor, event.strumTime, true);
 						var val1:Int = Std.parseInt(event.value1);
 						if(Math.isNaN(val1)) val1 = 0;
 						charType = val1;
 				}
 
-				var newCharacter:String = event.value2;
 				addCharacterToList(newCharacter, charType);
 
 			case 'Play Sound':
@@ -1658,8 +1694,10 @@ class PlayState extends MusicBeatState
 
 			if (player == 1)
 			{
+				babyArrow.defaultRGB = boyfriend.arrowRGB;
 				if (opponentMode && ClientPrefs.data.middleScroll)
 				{
+					babyArrow.defaultRGB = dad.arrowRGB;
 					babyArrow.x -= 330;
 					if (i > 1) { //Up and Right
 						babyArrow.x += FlxG.width / 2 + 25;
@@ -1669,6 +1707,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
+				babyArrow.defaultRGB = dad.arrowRGB;
 				if (ClientPrefs.data.middleScroll)
 				{
 					babyArrow.x += (!opponentMode ? 310 : 640);
@@ -2357,6 +2396,7 @@ class PlayState extends MusicBeatState
 							boyfriend.alpha = 0.00001;
 							boyfriend = boyfriendMap.get(value2);
 							boyfriend.alpha = lastAlpha;
+							boyfriend.fixArrowRGB();
 							iconP1.changeIcon(boyfriend.healthIcon);
 						}
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
@@ -2370,6 +2410,7 @@ class PlayState extends MusicBeatState
 							var wasGf:Bool = dad.curCharacter.startsWith('gf-') || dad.curCharacter == 'gf';
 							var lastAlpha:Float = dad.alpha;
 							dad.alpha = 0.00001;
+							dad.fixArrowRGB();
 							dad = dadMap.get(value2);
 							if(!dad.curCharacter.startsWith('gf-') && dad.curCharacter != 'gf') {
 								if(wasGf && gf != null) {
@@ -3303,6 +3344,7 @@ class PlayState extends MusicBeatState
 		if(!cpuControlled && !opponentMode)
 		{
 			var spr = playerStrums.members[note.noteData];
+			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 			if(spr != null) spr.playAnim('confirm', true);
 		}
 		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
@@ -3784,6 +3826,7 @@ class PlayState extends MusicBeatState
 		if(spr != null) {
 			spr.playAnim('confirm', true);
 			spr.resetAnim = time;
+			//spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}
 	}
 

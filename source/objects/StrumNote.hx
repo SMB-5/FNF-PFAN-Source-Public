@@ -24,6 +24,8 @@ class StrumNote extends FlxSprite
 		return value;
 	}
 
+	public var defaultRGB:Array<Array<FlxColor>> = ClientPrefs.data.arrowRGB;
+
 	public var useRGBShader:Bool = true;
 	public function new(x:Float, y:Float, leData:Int, player:Int) {
 		animation = new PsychAnimationController(this);
@@ -158,12 +160,22 @@ class StrumNote extends FlxSprite
 		super.update(elapsed);
 	}
 
+	public function updateRgb(palette:Array<flixel.util.FlxColor>) {
+		rgbShader.r = palette[0];
+		rgbShader.g = palette[1];
+		rgbShader.b = palette[2];
+	}
+
 	public function playAnim(anim:String, ?force:Bool = false) {
 		animation.play(anim, force);
 		if(animation.curAnim != null)
 		{
 			centerOffsets();
 			centerOrigin();
+		}
+		var animName = (animation.curAnim != null ? animation.curAnim.name : "");
+		if (animName == "static") {
+			updateRgb(defaultRGB[noteData]);
 		}
 		if(useRGBShader) rgbShader.enabled = (animation.curAnim != null && animation.curAnim.name != 'static');
 	}
