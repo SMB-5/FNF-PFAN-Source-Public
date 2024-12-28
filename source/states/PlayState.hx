@@ -1506,7 +1506,7 @@ class PlayState extends MusicBeatState
 					if (!["Hurt Note"].contains(dunceNote.noteType))
 					{
 						// unreadable i know but it works
-						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? boyfriend : dad) : (!opponentMode ? boyfriend : dad))
+						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? dad : dad) : (!opponentMode ? boyfriend : boyfriend))
 							.arrowRGB[dunceNote.noteData]);
 					}
 				}
