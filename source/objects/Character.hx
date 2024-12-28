@@ -176,18 +176,18 @@ class Character extends FlxSprite
 	 */
 	static var arrowColors:Map<String, OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>>> = [
 		"makoto-yuki" => [
-			[0xFFDA2523, 0xFFFFFFFF, 0xFF851639],
 			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
-			[0xFF3CF5FC, 0xFFFFFFFF, 0xFF1A50CA],
-			[0xFF4DA8F7, 0xFFFFFFFF, 0xFF1A50CA]
+			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
+			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
+			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
 		],
 		"shadow-makoto" => "makoto-yuki",
 
 		"yu-narukami" => [
-			[0xFFFFDB5E, 0xFFFFFFFF, 0xFFFF9637],
-			[0xFFC9CBD6, 0xFFFFFFFF, 0xFFA8A2B9],
-			[0xFFD8E8EB, 0xFFFFFFFF, 0xFFC9CBD6],
-			[0xFFFFDB5E, 0xFFFFFFFF, 0xFFFF9637]
+			[0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F],
+            [0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F],
+			[0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F],
+			[0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F]
 		],
 		"yu-narukami-player" => "yu-narukami",
 	];
