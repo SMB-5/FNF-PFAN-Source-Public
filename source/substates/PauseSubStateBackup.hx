@@ -18,8 +18,7 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var optionShit:Array<String> = ['Resume', 'Restart', 'Config', 'Exit'];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart', 'Config', 'Exit'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Options', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -30,9 +29,6 @@ class PauseSubState extends MusicBeatSubstate
 	var skipTimeTracker:Alphabet;
 	var curTime:Float = Math.max(0, Conductor.songPosition);
 
-	var menuItemslol:FlxTypedGroup<FlxSprite>;
-	var buttonsBG:FlxSprite;
-
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
 
@@ -40,8 +36,22 @@ class PauseSubState extends MusicBeatSubstate
 
 	override function create()
 	{
-		//if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
+		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
+		if(PlayState.chartingMode)
+		{
+			menuItemsOG.insert(2, 'Leave Charting Mode');
+			
+			var num:Int = 0;
+			if(!PlayState.instance.startingSong)
+			{
+				num = 1;
+				menuItemsOG.insert(3, 'Skip Time');
+			}
+			menuItemsOG.insert(3 + num, 'End Song');
+			menuItemsOG.insert(4 + num, 'Toggle Practice Mode');
+			menuItemsOG.insert(5 + num, 'Toggle Botplay');
+		}
 		menuItems = menuItemsOG;
 
 		for (i in 0...Difficulty.list.length) {
@@ -173,31 +183,7 @@ class PauseSubState extends MusicBeatSubstate
 		FlxTween.tween(credtext4, {alpha: 1, y: credtext4.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
-		//add(grpMenuShit);
-
-		buttonsBG = new FlxSprite(-20, -45).loadGraphic(Paths.image('persona/menus/pause/Spacefiller'));
-		add(buttonsBG);
-		buttonsBG.setGraphicSize(Std.int(buttonsBG.width * 0.7));
-		buttonsBG.updateHitbox();
-		buttonsBG.antialiasing = ClientPrefs.data.antialiasing;
-
-		menuItemslol = new FlxTypedGroup<FlxSprite>();
-		add(menuItemslol);
-
-		for (i in 0...optionShit.length)
-		{
-			var offset:Float = (88 - (Math.max(optionShit.length, 4) - 4) * 80);
-			var menuItemlol:FlxSprite = new FlxSprite(-20, -45);
-			menuItemlol.frames = Paths.getSparrowAtlas('persona/menus/pause/pause_' + menuItems[i]);
-			menuItemlol.animation.addByPrefix('idle', 'unselected', 24);
-			menuItemlol.animation.addByPrefix('selected', 'selected', 24);
-			menuItemlol.animation.play('idle');
-			menuItemlol.ID = i;
-			menuItemlol.setGraphicSize(Std.int(menuItemlol.width * 0.7));
-			menuItemslol.add(menuItemlol);
-			menuItemlol.antialiasing = ClientPrefs.data.antialiasing;
-			menuItemlol.updateHitbox();
-		}
+		add(grpMenuShit);
 
 		missingTextBG = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		missingTextBG.scale.set(FlxG.width, FlxG.height);
@@ -333,7 +319,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.practiceMode = !PlayState.instance.practiceMode;
 					PlayState.changedDifficulty = true;
 					practiceText.visible = PlayState.instance.practiceMode;
-				case "Restart":
+				case "Restart Song":
 					restartSong();
 				case "Leave Charting Mode":
 					restartSong();
@@ -364,7 +350,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
 					PlayState.instance.botplayTxt.alpha = 1;
 					PlayState.instance.botplaySine = 0;
-				case 'Config':
+				case 'Options':
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
 					MusicBeatState.switchState(new OptionsState());
@@ -375,7 +361,7 @@ class PauseSubState extends MusicBeatSubstate
 						FlxG.sound.music.time = pauseMusic.time;
 					}
 					OptionsState.onPlayState = true;
-				case "Exit":
+				case "Exit to menu":
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
@@ -445,20 +431,26 @@ class PauseSubState extends MusicBeatSubstate
 
 		var bullShit:Int = 0;
 
-		menuItemslol.forEach(function(spr:FlxSprite)
+		for (item in grpMenuShit.members)
 		{
-			spr.animation.play('idle');
-			//spr.alpha = 0.9;
-			//spr.color = 0xFF878282;
+			item.targetY = bullShit - curSelected;
+			bullShit++;
 
-			if (spr.ID == curSelected)
+			item.alpha = 0.6;
+			// item.setGraphicSize(Std.int(item.width * 0.8));
+
+			if (item.targetY == 0)
 			{
-				spr.animation.play('selected');
-				//spr.alpha = 1;
-				//spr.color = 0xFFFFFFFF;
-			}
-		});
+				item.alpha = 1;
+				// item.setGraphicSize(Std.int(item.width));
 
+				if(item == skipTimeTracker)
+				{
+					curTime = Math.max(0, Conductor.songPosition);
+					updateSkipTimeText();
+				}
+			}
+		}
 		missingText.visible = false;
 		missingTextBG.visible = false;
 	}
