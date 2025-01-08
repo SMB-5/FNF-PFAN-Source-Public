@@ -89,10 +89,10 @@ class FreeplayState extends MusicBeatState
 
 		intro = false;
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg:FlxSprite = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
+		bg.setGraphicSize(Std.int(bg.width * 0.9));
 		add(bg);
-		bg.screenCenter();
 
 		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
 		grid.velocity.set(40, 40);
@@ -172,8 +172,8 @@ class FreeplayState extends MusicBeatState
 		WeekData.setDirectoryFromWeek();
 
 		if(curSelected >= songs.length) curSelected = 0;
-		bg.color = songs[curSelected].color;
-		intendedColor = bg.color;
+		//bg.color = songs[curSelected].color;
+		//intendedColor = bg.color;
 		lerpSelected = curSelected;
 
 		curDifficulty = Math.round(Math.max(0, Difficulty.defaultList.indexOf(lastDifficultyName)));
@@ -627,19 +627,6 @@ class FreeplayState extends MusicBeatState
 
 		if (songs[curSelected] == null) return;
 		Mods.currentModDirectory = songs[curSelected].folder;
-			
-		var newColor:Int = songs[curSelected].color;
-		if(newColor != intendedColor) {
-			if(colorTween != null) {
-				colorTween.cancel();
-			}
-			intendedColor = newColor;
-			colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {
-				onComplete: function(twn:FlxTween) {
-					colorTween = null;
-				}
-			});
-		}
 
 		for (i in grpIcons.members) i.alpha = (i.ID == curSelected ? 1 : 0.6);
 
@@ -690,7 +677,11 @@ class FreeplayState extends MusicBeatState
 
 	private function updatePortrait()
 	{
-		if (songs[curSelected].songName.toLowerCase() == 'tartarus')
+		if (songs[curSelected].songName.toLowerCase() == 'random')
+		{
+			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/blank'));
+		}
+		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
 			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder'));
 		}

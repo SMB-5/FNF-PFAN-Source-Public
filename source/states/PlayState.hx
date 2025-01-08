@@ -440,6 +440,12 @@ class PlayState extends MusicBeatState
 			add(abot);
 		}
 
+		if (SONG.player1 == 'pico-playable')
+		{
+		GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pico';
+		GameOverSubstate.characterName = 'pico-dead';
+		}
+
 		add(gfGroup);
 		add(dadGroup);
 		add(boyfriendGroup);

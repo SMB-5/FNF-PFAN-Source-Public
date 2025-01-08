@@ -141,7 +141,8 @@ class Character extends FlxSprite
 				}
 		}
 
-		if(animOffsets.exists('singLEFTmiss') || animOffsets.exists('singDOWNmiss') || animOffsets.exists('singUPmiss') || animOffsets.exists('singRIGHTmiss')) hasMissAnimations = true;
+		skipDance = false;
+		hasMissAnimations = hasAnimation('singLEFTmiss') || hasAnimation('singDOWNmiss') || hasAnimation('singUPmiss') || hasAnimation('singRIGHTmiss');
 		recalculateDanceIdle();
 		dance();
 
@@ -387,7 +388,7 @@ class Character extends FlxSprite
 		}
 
 		var name:String = getAnimationName();
-		if(isAnimationFinished() && animOffsets.exists('$name-loop'))
+		if(isAnimationFinished() && hasAnimation('$name-loop'))
 			playAnim('$name-loop');
 
 		super.update(elapsed);
@@ -416,6 +417,11 @@ class Character extends FlxSprite
 
 		if(!isAnimateAtlas) animation.curAnim.finish();
 		#if flxanimate else atlas.anim.curFrame = atlas.anim.length - 1; #end
+	}
+
+	public function hasAnimation(anim:String):Bool
+	{
+		return animOffsets.exists(anim);
 	}
 
 	public var animPaused(get, set):Bool;
@@ -457,7 +463,7 @@ class Character extends FlxSprite
 				else
 					playAnim('danceLeft' + idleSuffix);
 			}
-			else if(animOffsets.exists('idle' + idleSuffix)) {
+			else if(hasAnimation('idle' + idleSuffix)) {
 					playAnim('idle' + idleSuffix);
 			}
 		}
@@ -470,7 +476,7 @@ class Character extends FlxSprite
 		#if flxanimate else atlas.anim.play(AnimName, Force, Reversed, Frame); #end
 		_lastPlayedAnimation = AnimName;
 
-		if (animOffsets.exists(AnimName))
+		if (hasAnimation(AnimName))
 		{
 			var daOffset = animOffsets.get(AnimName);
 			offset.set(daOffset[0], daOffset[1]);
@@ -531,7 +537,7 @@ class Character extends FlxSprite
 	private var settingCharacterUp:Bool = true;
 	public function recalculateDanceIdle() {
 		var lastDanceIdle:Bool = danceIdle;
-		danceIdle = (animOffsets.exists('danceLeft' + idleSuffix) && animOffsets.exists('danceRight' + idleSuffix));
+		danceIdle = (hasAnimation('danceLeft' + idleSuffix) && hasAnimation('danceRight' + idleSuffix));
 
 		if(settingCharacterUp)
 		{
