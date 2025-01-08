@@ -76,6 +76,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(boyfriend.getGraphicMidpoint().x + boyfriend.cameraPosition[0], boyfriend.getGraphicMidpoint().y + boyfriend.cameraPosition[1]);
 		FlxG.camera.focusOn(new FlxPoint(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2)));
+		FlxG.camera.follow(camFollow, LOCKON, 0.6);
 		add(camFollow);
 		
 		PlayState.instance.setOnScripts('inGameOver', true);
@@ -175,42 +176,27 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
 			PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
 		}
-		
-		if (boyfriend.animation.curAnim != null)
-		{
-			if (boyfriend.animation.curAnim.name == 'firstDeath' && boyfriend.animation.curAnim.finished && startedDeath)
-				boyfriend.playAnim('deathLoop');
-
-			if(boyfriend.animation.curAnim.name == 'firstDeath')
+		else if (justPlayedLoop)
 			{
-				if(boyfriend.animation.curAnim.curFrame >= 12 && !moveCamera)
+				switch(PlayState.SONG.stage)
 				{
-					FlxG.camera.follow(camFollow, LOCKON, 0.6);
-					moveCamera = true;
-				}
-
-				if (boyfriend.animation.curAnim.finished && !playingDeathSound)
-				{
-					startedDeath = true;
-					if (PlayState.SONG.stage == 'tank')
-					{
-						playingDeathSound = true;
+					case 'tank':
 						coolStartDeath(0.2);
 						
 						var exclude:Array<Int> = [];
 						//if(!ClientPrefs.cursing) exclude = [1, 3, 8, 13, 17, 21];
-
+	
 						FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + FlxG.random.int(1, 25, exclude)), 1, false, null, true, function() {
 							if(!isEnding)
 							{
 								FlxG.sound.music.fadeIn(0.2, 1, 4);
 							}
 						});
-					}
-					else coolStartDeath();
+
+					default:
+						coolStartDeath();
 				}
 			}
-		}
 		
 		if (FlxG.sound.music.playing)
 		{
