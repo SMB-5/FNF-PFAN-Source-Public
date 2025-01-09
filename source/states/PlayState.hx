@@ -214,6 +214,7 @@ class PlayState extends MusicBeatState
 	public var healthLoss:Float = 1;
 
 	public var guitarHeroSustains:Bool = false;
+	public var merciless:Bool = false;
 	public var instakillOnMiss:Bool = false;
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
@@ -318,6 +319,7 @@ class PlayState extends MusicBeatState
 		// Gameplay settings
 		healthGain = ClientPrefs.getGameplaySetting('healthgain');
 		healthLoss = ClientPrefs.getGameplaySetting('healthloss');
+		merciless = ClientPrefs.getGameplaySetting('merciless');
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill');
 		practiceMode = ClientPrefs.getGameplaySetting('practice');
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
@@ -2234,6 +2236,49 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 
+	function doMerciDeathCheck() {
+		if (combo == 0)
+		{
+			trace('no mercy for you');
+			vocals.volume = 0;
+			opponentVocals.volume = 0;
+			var ret:Dynamic = callOnScripts('onGameOver', null, true);
+			if(ret != LuaUtils.Function_Stop) {
+				FlxG.animationTimeScale = 1;
+				if (!opponentMode) boyfriend.stunned = true;
+				else dad.stunned = true;
+				deathCounter++;
+
+				paused = true;
+
+				vocals.stop();
+				opponentVocals.stop();
+				FlxG.sound.music.stop();
+
+				persistentUpdate = false;
+				persistentDraw = false;
+				FlxTimer.globalManager.clear();
+				FlxTween.globalManager.clear();
+				#if LUA_ALLOWED
+				modchartTimers.clear();
+				modchartTweens.clear();
+				#end
+
+				openSubState(new GameOverSubstate());
+
+				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+
+				#if DISCORD_ALLOWED
+				// Game Over doesn't get his its variable because it's only used here
+				if(autoUpdateRPC) DiscordClient.changePresence("Game Over - " + detailsText, SONG.song, iconP2.getCharacter());
+				#end
+				isDead = true;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function checkEventNote() {
 		while(eventNotes.length > 0) {
 			var leStrumTime:Float = eventNotes[0].strumTime;
@@ -2753,6 +2798,10 @@ class PlayState extends MusicBeatState
 		{
 			combo = 0;
 			makeGhostNote(note);
+			if (merciless)
+		    {
+		    doMerciDeathCheck();
+		    }
 		}
 
 		if(!practiceMode && !cpuControlled) {
@@ -3154,6 +3203,10 @@ class PlayState extends MusicBeatState
 
 		var lastCombo:Int = combo;
 		combo = 0;
+		if (merciless)
+		{
+		doMerciDeathCheck();
+		}
 
 		health -= subtract * healthLoss;
 		if(!practiceMode) songScore -= 100;

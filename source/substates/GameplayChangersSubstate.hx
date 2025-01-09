@@ -20,6 +20,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 	private var disallowedBG:FlxSprite;
 	private var disallowedText:FlxText;
+	private var glText:FlxText;
 
 	public static function getOptions():Array<Dynamic>
 	{
@@ -71,6 +72,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
+		optionsArray.push(new GameplayOption('Merciless', 'merciless', 'bool', false));
 		optionsArray.push(new GameplayOption('Instakill on Miss', 'instakill', 'bool', false));
 		optionsArray.push(new GameplayOption('Practice Mode', 'practice', 'bool', false));
 		optionsArray.push(new GameplayOption('Botplay', 'botplay', 'bool', false));
@@ -167,6 +169,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		disallowedText.visible = false;
 		add(disallowedText);
 
+		glText = new FlxText(0, 270, FlxG.width - 100, '', 32);
+		glText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		glText.scrollFactor.set();
+		glText.visible = false;
+		add(glText);
+
 		changeSelection();
 		reloadCheckboxes();
 	}
@@ -188,6 +196,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		{
 			disallowedBG.visible = false;
 			disallowedText.visible = false;
+			glText.visible = false;
 		}
 
 		if (controls.BACK) {
@@ -223,6 +232,16 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					}
 					else
 					{
+						if (curOption.name == "Merciless" && ClientPrefs.getGameplaySetting('merciless') == false)
+						{
+						glText.text= 'You will need to beat the song without breaking your combo. Good Luck! You\'re gonna need it!';
+						glText.screenCenter(X);
+						glText.visible = true;
+						}
+						if (curOption.name == "Merciless" && ClientPrefs.getGameplaySetting('merciless') == true)
+						{
+						glText.visible = false;
+						}
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 						curOption.setValue((curOption.getValue() == true) ? false : true);
 						curOption.change();

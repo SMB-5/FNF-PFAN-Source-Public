@@ -62,6 +62,7 @@ import states.TitleState;
 		'songspeed' => 1.0,
 		'healthgain' => 1.0,
 		'healthloss' => 1.0,
+		'merciless' => false,
 		'instakill' => false,
 		'practice' => false,
 		'botplay' => false,
