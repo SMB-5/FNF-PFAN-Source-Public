@@ -37,6 +37,7 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItemslol:FlxTypedGroup<FlxSprite>;
 	var buttonsBG:FlxSprite;
 	var descBG:FlxSprite;
+	var infoBG:FlxSprite;
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
@@ -81,37 +82,43 @@ class PauseSubState extends MusicBeatSubstate
 		descBG.updateHitbox();
 		descBG.antialiasing = ClientPrefs.data.antialiasing;
 
-		var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState.SONG.song, 32);
+		infoBG = new FlxSprite(-180, 0).loadGraphic(Paths.image('persona/menus/pause/info'));
+		add(infoBG);
+		infoBG.setGraphicSize(Std.int(infoBG.width * 0.8));
+		infoBG.updateHitbox();
+		infoBG.antialiasing = ClientPrefs.data.antialiasing;
+
+		var levelInfo:FlxText = new FlxText(20, 0, 0, PlayState.SONG.song, 28);
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+		levelInfo.setFormat(Paths.font('ANDYB.TTF'), 28, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
         data = PlayState.metadata;
-		credtext = new FlxText(20, 15 + 32, 0, "", 32);
+		credtext = new FlxText(20, 27, 0, "", 24);
         credtext.scrollFactor.set();
-		credtext.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext.updateHitbox();
 		credtext.text = 'Song: ${data.credits.music}';
         add(credtext);
 
-		credtext2 = new FlxText(20, 20 + 32, 0, "", 32);
+		credtext2 = new FlxText(20, 32, 0, "", 24);
         credtext2.scrollFactor.set();
-		credtext2.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext2.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext2.updateHitbox();
 		credtext2.text = 'Art: ${data.credits.art}';
         add(credtext2);
 
-		credtext3 = new FlxText(20, 20 + 32, 0, "", 32);
+		credtext3 = new FlxText(20, 32, 0, "", 24);
         credtext3.scrollFactor.set();
-		credtext3.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext3.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext3.updateHitbox();
 		credtext3.text = 'Code: ${data.credits.code}';
         add(credtext3);
 
-		credtext4 = new FlxText(20, 20 + 32, 0, "", 32);
+		credtext4 = new FlxText(20, 32, 0, "", 24);
         credtext4.scrollFactor.set();
-		credtext4.setFormat(Paths.font('vcr.ttf'), 32);
+		credtext4.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext4.updateHitbox();
 		credtext4.text = 'Chart: ${data.credits.chart}';
         add(credtext4);
@@ -122,9 +129,9 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		//add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, PlayState.deathCounter + " Blueballs" , 32);
+		var blueballedTxt:FlxText = new FlxText(1100, 200, 0, PlayState.deathCounter + " Blue Balls" , 28);
 		blueballedTxt.scrollFactor.set();
-		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
+		blueballedTxt.setFormat(Paths.font('ANDYB.TTF'), 28, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		blueballedTxt.updateHitbox();
 		add(blueballedTxt);
 
@@ -134,7 +141,7 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.x = FlxG.width - (practiceText.width + 20);
 		practiceText.updateHitbox();
 		practiceText.visible = PlayState.instance.practiceMode;
-		add(practiceText);
+		//add(practiceText);
 
 		var desctext = new FlxText(760, 560, 500, "", 20);
         desctext.scrollFactor.set();
@@ -153,7 +160,7 @@ class PauseSubState extends MusicBeatSubstate
 		chartingText.y = FlxG.height - (chartingText.height + 20);
 		chartingText.updateHitbox();
 		chartingText.visible = PlayState.chartingMode;
-		add(chartingText);
+		//add(chartingText);
 
 		blueballedTxt.alpha = 0;
 		levelDifficulty.alpha = 0;
@@ -164,19 +171,17 @@ class PauseSubState extends MusicBeatSubstate
 		credtext3.alpha = 0;
 		credtext4.alpha = 0;
 
-		levelInfo.x = FlxG.width - (levelInfo.width + 20);
+		levelInfo.x = FlxG.width - (levelInfo.width + 80);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
-		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
-		//desctext.x = FlxG.width - (desctext.width + 20);
-		credtext.x = FlxG.width - (credtext.width + 20);
-		credtext2.x = FlxG.width - (credtext2.width + 20);
-		credtext3.x = FlxG.width - (credtext3.width + 20);
-		credtext4.x = FlxG.width - (credtext4.width + 20);
+		credtext.x = FlxG.width - (credtext.width + 80);
+		credtext2.x = FlxG.width - (credtext2.width + 80);
+		credtext3.x = FlxG.width - (credtext3.width + 80);
+		credtext4.x = FlxG.width - (credtext4.width + 80);
 
 		startArtTimer();
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+		FlxTween.tween(levelInfo, {alpha: 1, y: levelInfo.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
