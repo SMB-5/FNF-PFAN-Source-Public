@@ -25,6 +25,10 @@ class PauseSubState extends MusicBeatSubstate
 
 	var pauseMusic:FlxSound;
 	var data:MetadataFile;
+	var credtext:FlxText;
+	var credtext2:FlxText;
+	var credtext3:FlxText;
+	var credtext4:FlxText;
 	var practiceText:FlxText;
 	var skipTimeText:FlxText;
 	var skipTimeTracker:Alphabet;
@@ -84,28 +88,28 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelInfo);
 
         data = PlayState.metadata;
-		var credtext = new FlxText(20, 15 + 32, 0, "", 32);
+		credtext = new FlxText(20, 15 + 32, 0, "", 32);
         credtext.scrollFactor.set();
 		credtext.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext.updateHitbox();
 		credtext.text = 'Song: ${data.credits.music}';
         add(credtext);
 
-		var credtext2 = new FlxText(20, 15 + 64, 0, "", 32);
+		credtext2 = new FlxText(20, 20 + 32, 0, "", 32);
         credtext2.scrollFactor.set();
 		credtext2.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext2.updateHitbox();
 		credtext2.text = 'Art: ${data.credits.art}';
         add(credtext2);
 
-		var credtext3 = new FlxText(20, 15 + 96, 0, "", 32);
+		credtext3 = new FlxText(20, 20 + 32, 0, "", 32);
         credtext3.scrollFactor.set();
 		credtext3.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext3.updateHitbox();
 		credtext3.text = 'Code: ${data.credits.code}';
         add(credtext3);
 
-		var credtext4 = new FlxText(20, 15 + 128, 0, "", 32);
+		credtext4 = new FlxText(20, 20 + 32, 0, "", 32);
         credtext4.scrollFactor.set();
 		credtext4.setFormat(Paths.font('vcr.ttf'), 32);
 		credtext4.updateHitbox();
@@ -118,7 +122,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		//add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(20, 15 + 160, 0, PlayState.deathCounter + " Blueballs" , 32);
+		var blueballedTxt:FlxText = new FlxText(20, 15 + 64, 0, PlayState.deathCounter + " Blueballs" , 32);
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
 		blueballedTxt.updateHitbox();
@@ -169,15 +173,14 @@ class PauseSubState extends MusicBeatSubstate
 		credtext3.x = FlxG.width - (credtext3.width + 20);
 		credtext4.x = FlxG.width - (credtext4.width + 20);
 
+		startArtTimer();
+
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.3});
-		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.5});
+		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
 		FlxTween.tween(credtext, {alpha: 1, y: credtext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(credtext2, {alpha: 1, y: credtext2.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-		FlxTween.tween(credtext3, {alpha: 1, y: credtext3.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(credtext4, {alpha: 1, y: credtext4.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 1.1});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		//add(grpMenuShit);
@@ -223,6 +226,50 @@ class PauseSubState extends MusicBeatSubstate
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
 		super.create();
+	}
+
+	function startArtTimer():Void
+	{
+	FlxTween.tween(credtext, {alpha: 0}, 1, {ease: FlxEase.quartOut, startDelay: 8,
+	onComplete: function(twn:FlxTween)
+	{
+	FlxTween.tween(credtext2, {alpha: 1}, 1.5, {ease: FlxEase.quartOut, startDelay: 0.1});
+	startCodeTimer();
+	}
+	});
+	}
+
+	function startCodeTimer():Void
+	{
+	FlxTween.tween(credtext2, {alpha: 0}, 1, {ease: FlxEase.quartOut, startDelay: 8,
+	onComplete: function(twn:FlxTween)
+	{
+	FlxTween.tween(credtext3, {alpha: 1}, 1.5, {ease: FlxEase.quartOut, startDelay: 0.1});
+	startChartTimer();
+	}
+	});
+	}
+
+	function startChartTimer():Void
+	{
+	FlxTween.tween(credtext3, {alpha: 0}, 1, {ease: FlxEase.quartOut, startDelay: 8,
+	onComplete: function(twn:FlxTween)
+	{
+	FlxTween.tween(credtext4, {alpha: 1}, 1.5, {ease: FlxEase.quartOut, startDelay: 0.1});
+	startMusicTimer();
+	}
+	});
+	}
+
+	function startMusicTimer():Void
+	{
+	FlxTween.tween(credtext4, {alpha: 0}, 1, {ease: FlxEase.quartOut, startDelay: 8,
+	onComplete: function(twn:FlxTween)
+	{
+	FlxTween.tween(credtext, {alpha: 1}, 1.5, {ease: FlxEase.quartOut, startDelay: 0.1});
+	startArtTimer();
+	}
+	});
 	}
 	
 	function getPauseSong()
