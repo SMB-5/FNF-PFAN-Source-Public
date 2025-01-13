@@ -32,6 +32,7 @@ class PauseSubState extends MusicBeatSubstate
 
 	var menuItemslol:FlxTypedGroup<FlxSprite>;
 	var buttonsBG:FlxSprite;
+	var descBG:FlxSprite;
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
@@ -69,6 +70,12 @@ class PauseSubState extends MusicBeatSubstate
 		bg.alpha = 0;
 		bg.scrollFactor.set();
 		add(bg);
+
+		descBG = new FlxSprite(190, 40).loadGraphic(Paths.image('persona/menus/pause/description'));
+		add(descBG);
+		descBG.setGraphicSize(Std.int(descBG.width * 0.6));
+		descBG.updateHitbox();
+		descBG.antialiasing = ClientPrefs.data.antialiasing;
 
 		var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState.SONG.song, 32);
 		levelInfo.scrollFactor.set();
@@ -125,9 +132,9 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
 
-		var desctext = new FlxText(20, 15 + 204, 550, "", 22);
+		var desctext = new FlxText(760, 560, 500, "", 20);
         desctext.scrollFactor.set();
-		desctext.setFormat(Paths.font('vcr.ttf'), 22);
+		desctext.setFormat(Paths.font('ANDYB.TTF'), 20, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		desctext.updateHitbox();
 		if (CoolUtil.exists(Paths.txt(PlayState.instance.songName + "/desc"))) {
 			desctext.text = CoolUtil.getText(Paths.txt(PlayState.instance.songName + "/desc"));
@@ -156,7 +163,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
-		desctext.x = FlxG.width - (desctext.width + 20);
+		//desctext.x = FlxG.width - (desctext.width + 20);
 		credtext.x = FlxG.width - (credtext.width + 20);
 		credtext2.x = FlxG.width - (credtext2.width + 20);
 		credtext3.x = FlxG.width - (credtext3.width + 20);
