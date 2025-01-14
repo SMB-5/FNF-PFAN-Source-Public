@@ -36,6 +36,7 @@ class PauseSubState extends MusicBeatSubstate
 
 	var menuItemslol:FlxTypedGroup<FlxSprite>;
 	var buttonsBG:FlxSprite;
+	var back:FlxSprite;
 	var descBG:FlxSprite;
 	var infoBG:FlxSprite;
 
@@ -61,7 +62,7 @@ class PauseSubState extends MusicBeatSubstate
 		try
 		{
 			var pauseSong:String = getPauseSong();
-			if(pauseSong != null) pauseMusic.loadEmbedded(Paths.music(pauseSong), true, true);
+			if(pauseSong != null) pauseMusic.loadEmbedded(Paths.music('persona/songs from the games/P5/Beneath-the-Mask-instrumental'), true, true);
 		}
 		catch(e:Dynamic) {}
 		pauseMusic.volume = 0;
@@ -129,7 +130,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		//add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(1100, 200, 0, PlayState.deathCounter + " Blue Balls" , 28);
+		var blueballedTxt:FlxText = new FlxText(1090, 160, 0, PlayState.deathCounter + " Blue Balls" , 28);
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('ANDYB.TTF'), 28, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		blueballedTxt.updateHitbox();
@@ -191,6 +192,12 @@ class PauseSubState extends MusicBeatSubstate
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		//add(grpMenuShit);
 
+		back = new FlxSprite(-20, -45).loadGraphic(Paths.image('persona/menus/pause/back'));
+		add(back);
+		back.setGraphicSize(Std.int(back.width * 0.7));
+		back.updateHitbox();
+		back.antialiasing = ClientPrefs.data.antialiasing;
+
 		buttonsBG = new FlxSprite(-20, -45).loadGraphic(Paths.image('persona/menus/pause/Spacefiller'));
 		add(buttonsBG);
 		buttonsBG.setGraphicSize(Std.int(buttonsBG.width * 0.7));
@@ -237,7 +244,7 @@ class PauseSubState extends MusicBeatSubstate
 	function getPauseSong()
 	{
 		var formattedSongName:String = (songName != null ? Paths.formatToSongPath(songName) : '');
-		var formattedPauseMusic:String = Paths.formatToSongPath(ClientPrefs.data.pauseMusic);
+		var formattedPauseMusic:String = Paths.formatToSongPath('persona/songs from the games/P5/Beneath-the-Mask-instrumental');
 		if(formattedSongName == 'none' || (formattedSongName != 'none' && formattedPauseMusic == 'none')) return null;
 
 		return (formattedSongName != '') ? formattedSongName : formattedPauseMusic;
@@ -386,7 +393,7 @@ class PauseSubState extends MusicBeatSubstate
 					MusicBeatState.switchState(new OptionsState());
 					if(ClientPrefs.data.pauseMusic != 'None')
 					{
-						FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)), pauseMusic.volume);
+						FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Beneath-the-Mask-instrumental'));
 						FlxTween.tween(FlxG.sound.music, {volume: 1}, 0.8);
 						FlxG.sound.music.time = pauseMusic.time;
 					}
