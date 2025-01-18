@@ -12,6 +12,7 @@ import states.FreeplayState;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	public var boyfriend:Character;
+	public var fakeboyfriend:Character;
 	var camFollow:FlxObject;
 	var moveCamera:Bool = false;
 	var playingDeathSound:Bool = false;
@@ -66,12 +67,37 @@ class GameOverSubstate extends MusicBeatSubstate
 		boyfriend.x += boyfriend.positionArray[0] - char.positionArray[0];
 		boyfriend.y += boyfriend.positionArray[1] - char.positionArray[1];
 		add(boyfriend);
+		boyfriend.alpha = 1;
 
-		FlxG.sound.play(Paths.sound(deathSoundName));
+		fakeboyfriend = new Character(char.getScreenPosition().x, char.getScreenPosition().y, 'bf-fakeout', !PlayState.opponentMode);
+		fakeboyfriend.x += fakeboyfriend.positionArray[0] - char.positionArray[0];
+		fakeboyfriend.y += fakeboyfriend.positionArray[1] - char.positionArray[1];
+		add(fakeboyfriend);
+		fakeboyfriend.alpha = 0;
+
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;
 
+		if(characterName == 'bf-dead' && FlxG.random.bool((1 / 4096) * 100))
+		{
+		  trace('its a fakeout!');
+		  boyfriend.alpha = 0;
+		  fakeboyfriend.alpha = 1;
+		  fakeboyfriend.playAnim('fakeoutDeath');
+		  FlxG.sound.play(Paths.sound('fakeout_death'));
+          new FlxTimer().start(6.2, function(tmr) { //this was the only way it would work
+		      trace('fakeout should be over');
+		      fakeboyfriend.alpha = 0;
+		      boyfriend.alpha = 1;
+		      FlxG.sound.play(Paths.sound(deathSoundName));
+		      boyfriend.playAnim('firstDeath');
+		  });
+		}
+		else
+		{
+		FlxG.sound.play(Paths.sound(deathSoundName));
 		boyfriend.playAnim('firstDeath');
+		}
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(boyfriend.getGraphicMidpoint().x + boyfriend.cameraPosition[0], boyfriend.getGraphicMidpoint().y + boyfriend.cameraPosition[1]);
