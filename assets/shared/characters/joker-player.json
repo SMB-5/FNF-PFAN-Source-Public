@@ -2,8 +2,8 @@
 	"animations": [
 		{
 			"offsets": [
-				-4,
-				31
+				0,
+				0
 			],
 			"loop": false,
 			"fps": 24,
@@ -13,112 +13,112 @@
 		},
 		{
 			"offsets": [
-				-18,
-				31
+				-120,
+				0
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
 			"indices": [],
-			"name": "left0"
+			"name": "left"
 		},
 		{
 			"offsets": [
-				78,
-				-79
+				-55,
+				-30
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN",
 			"indices": [],
-			"name": "down0"
+			"name": "down"
 		},
 		{
 			"offsets": [
-				-7,
-				119
+				23,
+				39
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singUP",
 			"indices": [],
-			"name": "up0"
+			"name": "up"
 		},
 		{
 			"offsets": [
-				123,
-				14
+				-1,
+				-10
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
 			"indices": [],
-			"name": "right0"
+			"name": "right"
 		},
 		{
-			"offsets": [
-				-16,
-				151
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [
+				-119,
+				59
+			],
 			"anim": "singRIGHTmiss",
-			"indices": [],
-			"name": "left note miss0"
+			"fps": 24,
+			"name": "note left miss",
+			"indices": []
 		},
 		{
-			"offsets": [
-				79,
-				47
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [
+				-50,
+				56
+			],
 			"anim": "singDOWNmiss",
-			"indices": [],
-			"name": "down note miss0"
-		},
-		{
-			"offsets": [
-				-9,
-				254
-			],
-			"loop": false,
 			"fps": 24,
-			"anim": "singUPmiss",
-			"indices": [],
-			"name": "up note miss0"
+			"name": "note down miss",
+			"indices": []
 		},
 		{
 			"loop": false,
 			"offsets": [
-				123,
-				98
+				19,
+				85
+			],
+			"anim": "singUPmiss",
+			"fps": 24,
+			"name": "note up miss",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-1,
+				71
 			],
 			"anim": "singLEFTmiss",
 			"fps": 24,
-			"name": "right note miss0",
+			"name": "note right miss",
 			"indices": []
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
-	"image": "characters/Yu-Narukami",
+	"image": "characters/Joker",
 	"position": [
-		20,
-		220
+		-30,
+		100
 	],
-	"healthicon": "yu-narukami-tv",
+	"healthicon": "face",
 	"flip_x": false,
 	"healthbar_colors": [
-		255,
-		234,
-		56
+		161,
+		161,
+		161
 	],
 	"camera_position": [
-		10,
-		50
+		0,
+		0
 	],
 	"sing_duration": 4,
-	"scale": 1.1,
+	"scale": 1,
 	"_editor_isPlayer": true
 }

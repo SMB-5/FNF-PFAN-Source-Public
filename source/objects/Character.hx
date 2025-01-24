@@ -185,12 +185,20 @@ class Character extends FlxSprite
 		"shadow-makoto" => "makoto-yuki",
 
 		"yu-narukami" => [
-			[0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F],
-            [0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F],
-			[0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F],
-			[0xFFFFEA38, 0xFFFFFFFF, 0xFF7F743F]
+			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
+			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
+			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
+			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00]
 		],
 		"yu-narukami-player" => "yu-narukami",
+
+		"joker" => [
+			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A],
+			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A],
+			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A],
+			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A]
+		],
+		"joker-player" => "joker",
 	];
 
 	public function fixArrowRGB()

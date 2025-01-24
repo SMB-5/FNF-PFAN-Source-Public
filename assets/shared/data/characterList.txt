@@ -7,4 +7,6 @@ nene
 makoto-yuki
 yu-narukami
 yu-narukami-player
+joker
+joker-player
 shadow-makoto
