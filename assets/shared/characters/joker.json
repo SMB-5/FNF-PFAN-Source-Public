@@ -107,12 +107,12 @@
 		-10,
 		100
 	],
-	"healthicon": "face",
+	"healthicon": "joker",
 	"flip_x": false,
 	"healthbar_colors": [
-		161,
-		161,
-		161
+		234,
+		0,
+		31
 	],
 	"camera_position": [
 		0,
