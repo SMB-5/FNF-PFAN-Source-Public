@@ -653,6 +653,15 @@ class PlayState extends MusicBeatState
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
+		if (SONG.player2 == 'shadow-makoto')
+		{
+		var swap = new shaders.ColorSwap();
+        swap.saturation = -1;
+		iconP2.shader = swap.shader;
+        iconP2.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
+        healthBar.leftBar.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
+		}
+
 		if (hasMetadata) {
 			card = new SongCard(0, 0, metadata);
 			card.screenCenter(Y);
@@ -3283,6 +3292,12 @@ class PlayState extends MusicBeatState
 					{
 						char.playAnim(realAnim, true);
 						char.playGhostAnim(animToPlay);
+						if (SONG.player2 == 'shadow-makoto')
+		                {
+		                var swap = new shaders.ColorSwap();
+                        swap.saturation = -1;
+		                char.ghost.shader = swap.shader;
+		                }
 					}
 					char.mostRecentRow = note.row;
 				}
@@ -3294,7 +3309,7 @@ class PlayState extends MusicBeatState
 			var spr = opponentStrums.members[note.noteData];
 			if(spr != null) spr.playAnim('confirm', true);
 		}
-		else strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
+		else strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		if (opponentVocals.length <= 0) vocals.volume = 1;
 		else opponentVocals.volume = 1;
 		note.hitByOpponent = true;
@@ -3406,7 +3421,7 @@ class PlayState extends MusicBeatState
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 			if(spr != null) spr.playAnim('confirm', true);
 		}
-		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
+		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		vocals.volume = 1;
 
 		if(!opponentMode && char != gf && gf != null)
@@ -3874,7 +3889,7 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	function strumPlayAnim(isDad:Bool, id:Int, time:Float) {
+	function strumPlayAnim(isDad:Bool, id:Int, time:Float, note:Note) {
 		var spr:StrumNote = null;
 		if(isDad) {
 			spr = opponentStrums.members[id];
@@ -3885,7 +3900,7 @@ class PlayState extends MusicBeatState
 		if(spr != null) {
 			spr.playAnim('confirm', true);
 			spr.resetAnim = time;
-			//spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
+			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}
 	}
 

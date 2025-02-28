@@ -96,9 +96,9 @@
 	"healthicon": "makoto-yuki",
 	"flip_x": false,
 	"healthbar_colors": [
-		19,
-		73,
-		195
+		130,
+		130,
+		130
 	],
 	"camera_position": [
 		88,

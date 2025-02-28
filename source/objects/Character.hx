@@ -149,7 +149,10 @@ class Character extends FlxSprite
 		switch(curCharacter)
 		{
 			case 'shadow-makoto':
-				color = 0xFF1F1F1F;
+                var swap = new shaders.ColorSwap();
+                swap.saturation = -1;
+                shader = swap.shader;
+                setColorTransform(1, 1, 1, alpha, -125, -125, -125, 0);
 			case 'pico-speaker':
 				skipDance = true;
 				loadMappedAnims();
@@ -180,9 +183,15 @@ class Character extends FlxSprite
 			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
 			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
 			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
-			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
+			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1]
 		],
-		"shadow-makoto" => "makoto-yuki",
+		
+		"shadow-makoto" => [
+			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
+			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
+			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
+			[0xFF606060, 0xFFFFFFFF, 0xFF303030]
+		],
 
 		"yu-narukami" => [
 			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
