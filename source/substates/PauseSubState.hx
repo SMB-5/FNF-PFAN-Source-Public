@@ -70,6 +70,8 @@ class PauseSubState extends MusicBeatSubstate
 
 		FlxG.sound.list.add(pauseMusic);
 
+		data = PlayState.metadata;
+
 		var bg:FlxSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		bg.scale.set(FlxG.width, FlxG.height);
 		bg.updateHitbox();
@@ -89,35 +91,27 @@ class PauseSubState extends MusicBeatSubstate
 		infoBG.updateHitbox();
 		infoBG.antialiasing = ClientPrefs.data.antialiasing;
 
-		var levelInfo:FlxText = new FlxText(20, 0, 0, PlayState.SONG.song, 28);
+		var levelInfo:FlxText = new FlxText(20, 0, 0, PlayState.SONG.song + ' - ' + data.credits.music, 24);
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font('ANDYB.TTF'), 28, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		levelInfo.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
-        data = PlayState.metadata;
-		credtext = new FlxText(20, 27, 0, "", 24);
-        credtext.scrollFactor.set();
-		credtext.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		credtext.updateHitbox();
-		credtext.text = 'Song: ${data.credits.music}';
-        add(credtext);
-
-		credtext2 = new FlxText(20, 59, 0, "", 24);
+		credtext2 = new FlxText(20, 40, 0, "", 24);
         credtext2.scrollFactor.set();
 		credtext2.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext2.updateHitbox();
 		credtext2.text = 'Art: ${data.credits.art}';
         add(credtext2);
 
-		credtext3 = new FlxText(20, 91, 0, "", 24);
+		credtext3 = new FlxText(20, 72, 0, "", 24);
         credtext3.scrollFactor.set();
 		credtext3.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext3.updateHitbox();
 		credtext3.text = 'Code: ${data.credits.code}';
         add(credtext3);
 
-		credtext4 = new FlxText(20, 123, 0, "", 24);
+		credtext4 = new FlxText(20, 104, 0, "", 24);
         credtext4.scrollFactor.set();
 		credtext4.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext4.updateHitbox();
@@ -130,7 +124,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		//add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(1090, 160, 0, PlayState.deathCounter + " Blue Balls" , 28);
+		var blueballedTxt:FlxText = new FlxText(1130, 136, 0, PlayState.deathCounter + " Blue Balls" , 28);
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('ANDYB.TTF'), 28, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		blueballedTxt.updateHitbox();
@@ -167,24 +161,21 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 		desctext.alpha = 0;
-		credtext.alpha = 0;
 		credtext2.alpha = 0;
 		credtext3.alpha = 0;
 		credtext4.alpha = 0;
 
-		levelInfo.x = FlxG.width - (levelInfo.width + 80);
+		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
-		credtext.x = FlxG.width - (credtext.width + 60);
-		credtext2.x = FlxG.width - (credtext2.width + 50);
-		credtext3.x = FlxG.width - (credtext3.width + 40);
-		credtext4.x = FlxG.width - (credtext4.width + 40);
+		credtext2.x = FlxG.width - (credtext2.width + 20);
+		credtext3.x = FlxG.width - (credtext3.width + 20);
+		credtext4.x = FlxG.width - (credtext4.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: levelInfo.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(credtext, {alpha: 1, y: credtext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(credtext2, {alpha: 1, y: credtext2.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(credtext3, {alpha: 1, y: credtext3.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(credtext4, {alpha: 1, y: credtext4.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
