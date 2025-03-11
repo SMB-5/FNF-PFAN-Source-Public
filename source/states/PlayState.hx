@@ -3304,12 +3304,22 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (!cpuControlled && opponentMode)
+		if (!cpuControlled && opponentMode && note.isSustainNote)
 		{
 			var spr = opponentStrums.members[note.noteData];
-			if(spr != null) spr.playAnim('confirm', true);
+ 			if(note.animation.curAnim.name.endsWith('end')) {
+ 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+ 			} else spr.resetAnim = 0;
+ 		} 
+		if (note.isSustainNote) {
+ 			var spr = opponentStrums.members[note.noteData];
+ 			if(note.animation.curAnim.name.endsWith('end')) {
+ 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+ 			} else spr.resetAnim = 0;
 		}
-		else strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
+		else {
+			strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
+		}
 		if (opponentVocals.length <= 0) vocals.volume = 1;
 		else opponentVocals.volume = 1;
 		note.hitByOpponent = true;
@@ -3419,9 +3429,17 @@ class PlayState extends MusicBeatState
 		{
 			var spr = playerStrums.members[note.noteData];
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
-			if(spr != null) spr.playAnim('confirm', true);
+		if (spr != null && spr.animation.name != 'confirm') spr.playAnim('confirm', true);
+ 		} else {
+ 			if (note.isSustainNote) {
+ 				var spr = playerStrums.members[note.noteData];
+ 				if(note.animation.curAnim.name.endsWith('end')) {
+ 					spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+ 				} else spr.resetAnim = 0;
+ 			} else {
+ 				strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
+ 			}
 		}
-		else strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		vocals.volume = 1;
 
 		if(!opponentMode && char != gf && gf != null)
