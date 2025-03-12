@@ -290,6 +290,8 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
+	var smoothHealth:Float = 1;
+
 	var abot:ABotSpeaker;
 
 	override public function create()
@@ -734,6 +736,8 @@ class PlayState extends MusicBeatState
 
 		cacheCountdown();
 		cachePopUpScore();
+
+		healthBar.valueFunction = function() return smoothHealth;
 
 		super.create();
 		Paths.clearUnusedMemory();
@@ -1851,6 +1855,7 @@ class PlayState extends MusicBeatState
 
 	var currentNeneState:NeneState = STATE_DEFAULT;
 	var animationFinished:Bool = false;
+	var holdBonus:Float = 250;
 	override public function update(elapsed:Float)
 	{
 		if(!inCutscene && !paused && !freezeCamera) {
@@ -2006,7 +2011,20 @@ class PlayState extends MusicBeatState
 							else if (daNote.canBeHit && !daNote.hitByOpponent && !daNote.ignoreNote)
 								opponentNoteHit(daNote);
 
-							if(daNote.isSustainNote && strum.sustainReduce) daNote.clipToStrumNote(strum);
+							if(daNote.isSustainNote) 
+ 							{
+ 								if(strum.sustainReduce) daNote.clipToStrumNote(strum);
+ 
+ 								//V-Slice sustain scoring shit
+ 								if(!opponentMode && daNote.wasGoodHit && daNote.mustPress && !cpuControlled && !practiceMode) {
+ 									songScore += Std.int(holdBonus * elapsed);
+ 									updateScore();
+ 								}
+								else if(opponentMode && daNote.hitByOpponent && daNote.canBeHit && !cpuControlled && !practiceMode) {
+ 									songScore += Std.int(holdBonus * elapsed);
+ 									updateScore();
+ 								}
+ 							}
 
 							// Kill extremely late notes and cause misses
 							if (Conductor.songPosition - daNote.strumTime > noteKillOffset)
@@ -2049,6 +2067,9 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
 		callOnScripts('onUpdatePost', [elapsed]);
+
+		var mult:Float = FlxMath.lerp(smoothHealth, health, ((health / smoothHealth) * (elapsed * 8)) * playbackRate);
+    	smoothHealth = mult;
 	}
 
 	function transitionState()
@@ -3332,12 +3353,6 @@ class PlayState extends MusicBeatState
 				if(combo > 9999) combo = 9999;
 				popUpScore(note);
 			}
-			else if (!practiceMode && !cpuControlled && note.parent != null)
-			{
-				var value:Int = Math.floor(10 * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 1));
-				songScore += value;
-				updateScore(true);
-			}
 			var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 			if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
 			if (gainHealth) health += note.hitHealth * healthGain;
@@ -3466,12 +3481,6 @@ class PlayState extends MusicBeatState
 				combo++;
 				if (combo > 9999) combo = 9999;
 				popUpScore(note);
-			}
-			else if (!practiceMode && !cpuControlled && note.parent != null)
-			{
-				var value:Int = Math.floor(10 * FlxMath.bound(note.parent.tail.length, 1, 4) * 1.15 * (note.parent.ratingMod + 1));
-				songScore += value;
-				updateScore(true);
 			}
 			var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 			if (guitarHeroSustains && note.isSustainNote) gainHealth = false;

@@ -60,6 +60,7 @@ class CreditsState extends MusicBeatState
 			['Special Thanks'],
 			['DanthUltima', '', 'Made the Aigis Chromatic', 'https://gamebanana.com/members/2049728', 'ffffff'],
 			['Mikolka9144',	'mikolka', 'Ported some V Slice stuff to Psych Engine', 'https://gamebanana.com/members/3329541', '2ebcfa'],
+			['Moonlight_Catalyst', 'moonlight_catalyst', 'Ported some V Slice stuff to Psych Engine', 'https://www.youtube.com/channel/UCmvsORFe7ZldiG4budmzELA', '9764B7'],
 			['Pumpsuki','', 'Hold Note Splashes Code', 'https://www.youtube.com/channel/UCGX_SXBkNjJqjh43KVVvdzg', 'ffffff'],
 			[''],
 			["Psych Engine Team"],
