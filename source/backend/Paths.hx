@@ -252,6 +252,20 @@ class Paths
 		return null;
 	}
 
+	public static function imageString(key:String, parentFolder:String = 'shared'):String
+	{
+		return getPath('images/$key.png', IMAGE, parentFolder);
+	}
+
+	public static function soundString(key:String, parentFolder:String = 'shared'):String
+	{
+		#if !html5
+		return getPath('sounds/$key.ogg', SOUND, parentFolder);
+		#else
+		return getPath('sounds/$key.mp3', SOUND, parentFolder);
+		#end
+	}
+
 	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = true)
 	{
 		if(bitmap == null)
