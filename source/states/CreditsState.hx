@@ -47,7 +47,7 @@ class CreditsState extends MusicBeatState
 		    ['The Funkin Thieves'],
 			['SMB', 'SMB', 'Director and Main Programmer\n"Hey thank you so much for playing, I hope you enjoyed the mod as much as we did making it."', 'https://smb-bio.carrd.co/', 'EC1C26'],
 			['Clefanight', 'clefa', 'Artist/Animator and Charter\n"How the fuck did I even get here."', 'https://cremiesilver.newgrounds.com/', '11e92b'],
-			['NotMagniill', 'bobbo', "Artist and Programmer\nI'm a devil muehehehe... also SMB no offense your code sucks". 'https://twitter.com/magniill', '640911'],
+			['NotMagniill', 'bobbo', "Artist and Programmer\nI'm a devil muehehehe... also SMB no offense your code sucks", 'https://twitter.com/magniill', '640911'],
 			['Cobalt', 'cobalt', 'Programmer and made the Mac and Linux Ports\n"I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next."', 'https://cobaltbar.github.io/', '0065FF'],
 			['Dog', 'doggo', 'Musician\n"Hi! I composed a few songs for le epic persona mod, hope you enjoyed listening to them! (also please subscribe to my youtube come on im starving for subs please im begging you ple)"', 'https://www.youtube.com/@you-know-its-dog.', 'f5d79d'],
 			['DudeDX', '', 'Charter\n"It\'s not overcharted you\'re just bad."', 'https://bsky.app/profile/dudedx.bsky.social', '5B9A4C'],

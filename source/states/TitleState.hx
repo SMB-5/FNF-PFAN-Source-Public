@@ -303,7 +303,7 @@ class TitleState extends MusicBeatState
 		var leMonth = leDate.getMonth();
 		var leDay = leDate.getDate();
 		
-		switch [month, day]
+		switch [leMonth, leDay]
 		{
 			case [3, 30]:
 				intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Birthday", 60);
@@ -322,7 +322,7 @@ class TitleState extends MusicBeatState
 		intro1Txt.alpha = 0;
 		intro1Txt.screenCenter(X);
 
-		switch [month, day] {
+		switch [leMonth, leDay] {
 			case [3, 30]:
 				intro2Txt = new FlxText(0, 350, FlxG.width, "Tom Fulp (Don't forget NotMagniill)", 60);
 			case [6, 6]:
