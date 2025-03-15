@@ -324,7 +324,7 @@ class TitleState extends MusicBeatState
 
 		switch [leMonth, leDay] {
 			case [3, 30]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Tom Fulp (Don't forget NotMagniill)", 60);
+				intro2Txt = new FlxText(0, 350, FlxG.width, "Tom Fulp", 60);
 			case [6, 6]:
 				intro2Txt = new FlxText(0, 350, FlxG.width, "Newgrounds", 60);
 			case [8, 20]:
