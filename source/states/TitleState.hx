@@ -302,47 +302,35 @@ class TitleState extends MusicBeatState
 		var leDate = Date.now();
 		var leMonth = leDate.getMonth();
 		var leDay = leDate.getDate();
-		
+
 		switch [leMonth, leDay]
 		{
-			case [3, 30]:
-				intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Birthday", 60);
-			case [6, 6], [8, 20], [9, 5]:
-				intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
-			case [9, 31], [0, 1]:
-				intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
-			case [11, 25]:
-				intro1Txt = new FlxText(0, 250, FlxG.width, "Merry", 60);
-			default:
-				intro1Txt = new FlxText(0, 250, FlxG.width, curWacky[0], 60);
+			case [3, 30]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Birthday", 60);
+			case [6, 6] || [8, 20] || [9, 5]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
+			case [9, 31] || [0, 1]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
+			case [11, 25]: intro1Txt = new FlxText(0, 250, FlxG.width, "Merry", 60);
+			default: intro1Txt = new FlxText(0, 250, FlxG.width, curWacky[0], 60);
 		}
 
-        intro1Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
-        add(intro1Txt);
+		intro1Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, FlxTextAlign.CENTER, FlxColor.WHITE);
+		add(intro1Txt);
 		intro1Txt.alpha = 0;
 		intro1Txt.screenCenter(X);
 
-		switch [leMonth, leDay] {
-			case [3, 30]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Tom Fulp", 60);
-			case [6, 6]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Newgrounds", 60);
-			case [8, 20]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Persona", 60);
-			case [9, 5]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Friday Night Funkin", 60);
-			case [9, 31]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Halloween", 60);
-			case [11, 25]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "Christmas", 60);
-			case [0, 1]:
-				intro2Txt = new FlxText(0, 350, FlxG.width, "New Year", 60);
-			default:
-				intro2Txt = new FlxText(0, 350, FlxG.width, curWacky[1], 60);
+		switch [leMonth, leDay]
+		{
+			case [3, 30]: intro2Txt = new FlxText(0, 350, FlxG.width, "Tom Fulp", 60);
+			case [6, 6]: intro2Txt = new FlxText(0, 350, FlxG.width, "Newgrounds", 60);
+			case [8, 20]: intro2Txt = new FlxText(0, 350, FlxG.width, "Persona", 60);
+			case [9, 5]: intro2Txt = new FlxText(0, 350, FlxG.width, "Friday Night Funkin", 60);
+			case [9, 31]: intro2Txt = new FlxText(0, 350, FlxG.width, "Halloween", 60);
+			case [11, 25]: intro2Txt = new FlxText(0, 350, FlxG.width, "Christmas", 60);
+			case [0, 1]: intro2Txt = new FlxText(0, 350, FlxG.width, "New Year", 60);
+			default: intro2Txt = new FlxText(0, 350, FlxG.width, curWacky[1], 60);
 		}
 
-        intro2Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
-        add(intro2Txt);
+		intro2Txt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, FlxTextAlign.CENTER, FlxColor.WHITE);
+		add(intro2Txt);
 		intro2Txt.alpha = 0;
 		intro2Txt.screenCenter(X);
 
