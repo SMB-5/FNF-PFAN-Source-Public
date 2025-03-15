@@ -3,12 +3,12 @@
     {
       "name": "lime",
       "type": "haxelib",
-      "version": "8.1.2"
+      "version": "8.1.3"
     },
     {
       "name": "openfl",
       "type": "haxelib",
-      "version": "9.2.2"
+      "version": "9.3.4"
     },
     {
       "name": "flixel",
@@ -36,9 +36,9 @@
       "version": "4.3.2"
     },
     {
-      "name": "hxCodec",
+      "name": "hxvlc",
       "type": "haxelib",
-      "version": "2.5.1"
+      "version": "1.9.2"
     },
     {
       "name": "hxcpp-debug-server",
@@ -70,6 +70,20 @@
       "dir": null,
       "ref": "master",
       "url": "https://github.com/superpowers04/linc_luajit"
+    }
+    {
+      "name": "funkin.vis",
+      "type": "git",
+      "dir": null,
+      "ref": "22b1ce089dd924f15cdc4632397ef3504d464e90",
+      "url": "https://github.com/FunkinCrew/funkVis"
+    }
+    {
+      "name": "grig.audio",
+      "type": "git",
+      "dir": null,
+      "ref": "cbf91e2180fd2e374924fe74844086aab7891666",
+      "url": "https://gitlab.com/haxe-grig/grig.audio"
     }
   ]
 }
