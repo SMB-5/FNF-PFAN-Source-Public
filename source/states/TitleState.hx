@@ -306,8 +306,8 @@ class TitleState extends MusicBeatState
 		switch [leMonth, leDay]
 		{
 			case [3, 30]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Birthday", 60);
-			case [6, 6] || [8, 20] || [9, 5]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
-			case [9, 31] || [0, 1]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
+			case [6, 6] | [8, 20] | [9, 5]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
+			case [9, 31] | [0, 1]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
 			case [11, 25]: intro1Txt = new FlxText(0, 250, FlxG.width, "Merry", 60);
 			default: intro1Txt = new FlxText(0, 250, FlxG.width, curWacky[0], 60);
 		}
