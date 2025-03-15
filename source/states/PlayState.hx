@@ -1755,7 +1755,7 @@ class PlayState extends MusicBeatState
 				vocals.pause();
 				opponentVocals.pause();
 			}
-			videoCutscene?.pause();
+			#if VIDEOS_ALLOWED videoCutscene?.pause(); #end
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = false);
 		}
@@ -1774,7 +1774,7 @@ class PlayState extends MusicBeatState
 			{
 				resyncVocals();
 			}
-			videoCutscene?.resume();
+			#if VIDEOS_ALLOWED videoCutscene?.resume(); #end
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = true);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
 
@@ -1789,7 +1789,7 @@ class PlayState extends MusicBeatState
 		if (!paused)
 		{
 			if (health > 0) resetRPC(Conductor.songPosition > 0.0);
-			videoCutscene?.resume();
+			#if VIDEOS_ALLOWED videoCutscene?.resume(); #end
 		}
 		super.onFocus();
 	}
@@ -1801,7 +1801,7 @@ class PlayState extends MusicBeatState
 			#if DISCORD_ALLOWED
 			if (health > 0 && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song, iconP2.getCharacter());
 			#end
-			videoCutscene?.pause();
+			#if VIDEOS_ALLOWED videoCutscene?.pause(); #end
 		}
 
 		super.onFocusLost();
