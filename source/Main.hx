@@ -16,6 +16,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.display.StageScaleMode;
 import lime.app.Application;
+import backend.PersonaSoundTray;
 import states.TitleState;
 
 #if linux
@@ -110,7 +111,7 @@ class Main extends Sprite
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 		var game:FlxGame = new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen);
 		@:privateAccess
-		game._customSoundTray = PEMDSoundTray;
+		game._customSoundTray = PersonaSoundTray;
 		addChild(game);
 
 		#if !mobile
