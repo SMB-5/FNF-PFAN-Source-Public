@@ -62,7 +62,7 @@ class PauseSubState extends MusicBeatSubstate
 		try
 		{
 			var pauseSong:String = getPauseSong();
-			if(pauseSong != null) pauseMusic.loadEmbedded(Paths.music('persona/songs from the games/P5/Beneath-the-Mask-instrumental'), true, true);
+			if(pauseSong != null) pauseMusic.loadEmbedded(Paths.music('persona/songs from the games/P5/Have a Short Rest'), true, true);
 		}
 		catch(e:Dynamic) {}
 		pauseMusic.volume = 0;
@@ -235,7 +235,7 @@ class PauseSubState extends MusicBeatSubstate
 	function getPauseSong()
 	{
 		var formattedSongName:String = (songName != null ? Paths.formatToSongPath(songName) : '');
-		var formattedPauseMusic:String = Paths.formatToSongPath('persona/songs from the games/P5/Beneath-the-Mask-instrumental');
+		var formattedPauseMusic:String = Paths.formatToSongPath('persona/songs from the games/P5/Have a Short Rest');
 		if(formattedSongName == 'none' || (formattedSongName != 'none' && formattedPauseMusic == 'none')) return null;
 
 		return (formattedSongName != '') ? formattedSongName : formattedPauseMusic;
@@ -384,7 +384,7 @@ class PauseSubState extends MusicBeatSubstate
 					MusicBeatState.switchState(new OptionsState());
 					if(ClientPrefs.data.pauseMusic != 'None')
 					{
-						FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Beneath-the-Mask-instrumental'));
+						FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Have a Short Rest'));
 						FlxTween.tween(FlxG.sound.music, {volume: 1}, 0.8);
 						FlxG.sound.music.time = pauseMusic.time;
 					}

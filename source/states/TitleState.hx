@@ -140,7 +140,7 @@ class TitleState extends MusicBeatState
 			StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 		}
 
-		FreeplayState.intro = true;
+		FreeplayState.intro = false;
 
 		FlxG.mouse.visible = false;
 		#if FREEPLAY

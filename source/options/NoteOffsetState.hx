@@ -409,7 +409,7 @@ class NoteOffsetState extends MusicBeatState
 			if(OptionsState.onPlayState)
 			{
 				if(ClientPrefs.data.pauseMusic != 'None')
-					FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)));
+					FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Have a Short Rest'));
 				else
 					FlxG.sound.music.volume = 0;
 			}
