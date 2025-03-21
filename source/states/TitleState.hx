@@ -182,7 +182,7 @@ class TitleState extends MusicBeatState
 			//}
 		}
 
-		Conductor.bpm = 58;
+		Conductor.bpm = 76;
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
