@@ -3170,12 +3170,32 @@ class PlayState extends MusicBeatState
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('noteMiss', [daNote]);
 	}
 
-	function noteMissPress(direction:Int = 1):Void //You pressed a key when there was no notes to press for this key
+	function noteMissPress(direction:Int = 1, note:Note = null):Void //You pressed a key when there was no notes to press for this key
 	{
 		if(ClientPrefs.data.ghostTapping) return; //fuck it
 
-		noteMissCommon(direction);
+		//noteMissCommon(direction);
+		var subtract:Float = 0.05;
+		if(note != null) subtract = note.missHealth;
+		health -= subtract * healthLoss;
+		if(!practiceMode) songScore -= 100;
+		RecalculateRating(true);
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+
+		// play character anims
+		var char:Character = !opponentMode ? boyfriend : dad;
+		if((note != null && note.gfNote) || (SONG.notes[curSection] != null && SONG.notes[curSection].gfSection)) char = gf;
+
+		if(char != null && (note == null || !note.noMissAnimation) && char.hasMissAnimations)
+		{
+			var suffix:String = '';
+			if(note != null) suffix = note.animSuffix;
+
+			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, direction)))] + 'miss' + suffix;
+			if (!char.animOffsets.exists(animToPlay)) animToPlay = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, direction)))] + 'miss';
+			char.playAnim(animToPlay, true);
+		}
+
 		callOnScripts('noteMissPress', [direction]);
 	}
 
