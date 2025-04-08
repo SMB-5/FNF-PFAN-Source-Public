@@ -1,0 +1,13 @@
+{
+    "card" : {
+        "name" : "Test",
+        "expandBeat" : 0,
+		"duration": 3
+    },
+    "credits" : {
+        "music" : "Kawai Sprite, MtH",
+        "chart" : "MtH",
+        "art" : "Phantom Arcade, Moawling",
+        "code" : "NinjaMuffin99"
+    }
+}

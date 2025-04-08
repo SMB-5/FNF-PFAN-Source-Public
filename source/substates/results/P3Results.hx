@@ -4,6 +4,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import states.StoryMenuState;
 import states.FreeplayState;
 import states.PlayState;
+import states.editors.ResultsTestState;
 import backend.Highscore;
 import backend.Song;
 import backend.Rating;
@@ -19,19 +20,12 @@ class P3Results extends MusicBeatSubstate
 	var screen:FlxSprite;
 	var shit:FlxSprite;
 
-	// currently unused
-	var result:FlxText;
-	var missesTxt:FlxText;
-	var accTxt:FlxText;
-	var status:FlxText;
-	var bfText:FlxText;
-
 	override function create()
 	{
 		FlxTransitionableState.skipNextTransOut = false;
 
 		data = PlayState.metadata;
-		var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+		var percent:Float = CoolUtil.floorDecimal(99.99 * 100, 2);
 
 		// ASSETS
 		var blue:FlxSprite = new FlxSprite(-1280, 0).makeGraphic(1280, 720, 0xFF008FFF);
@@ -59,13 +53,13 @@ class P3Results extends MusicBeatSubstate
 		add(highscore);
 		highscore.visible = false;
 
-		var songTxt:FlxText = new FlxText(10, 680, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 46);
+        var songTxt:FlxText = new FlxText(10, 680, FlxG.width, 'Some Stupid Song By AMusician', 46);
 		songTxt.setFormat(Paths.font("akira.otf"), 36, FlxColor.BLACK);
 		songTxt.scrollFactor.set();
 		songTxt.updateHitbox();
 		add(songTxt);
 
-		var scoreAmount:FlxText = new FlxText(375, 235, FlxG.width, '${PlayState.instance.songScore}', 40);
+        var scoreAmount:FlxText = new FlxText(375, 235, FlxG.width, '1234567', 40);
 		scoreAmount.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
 		scoreAmount.scrollFactor.set();
 		scoreAmount.updateHitbox();
@@ -77,7 +71,7 @@ class P3Results extends MusicBeatSubstate
 		scoreTxt.updateHitbox();
 		add(scoreTxt);
 
-		var missAmount:FlxText = new FlxText(475, 318, FlxG.width, '${PlayState.instance.songMisses}', 40);
+        var missAmount:FlxText = new FlxText(475, 318, FlxG.width, '999', 40);
 		missAmount.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
 		missAmount.scrollFactor.set();
 		missAmount.updateHitbox();
@@ -89,7 +83,7 @@ class P3Results extends MusicBeatSubstate
 		missTxt.updateHitbox();
 		add(missTxt);
 
-		var accPercent:FlxText = new FlxText(250, 401, FlxG.width, '${percent}%', 40);
+        var accPercent:FlxText = new FlxText(250, 401, FlxG.width, '99.99%', 40);
 		accPercent.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
 		accPercent.scrollFactor.set();
 		accPercent.updateHitbox();
@@ -123,7 +117,28 @@ class P3Results extends MusicBeatSubstate
 		FlxTween.tween(beef, {x: FlxG.width - 500}, 0.75, {ease: FlxEase.elasticInOut});
 		FlxTween.tween(screen, {x: -2800}, 0.8, {ease: FlxEase.expoInOut});
 
+		if(!ResultsTestState.debug)
+		{
+		trace('not debug');
+		percent = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+		songTxt.text = PlayState.SONG.song + ' By ' + data.credits.music;
+		scoreAmount.text = '${PlayState.instance.songScore}';
+		missAmount.text = '${PlayState.instance.songMisses}';
+		accPercent.text = '${percent}%';
+		}
+
+		if (!ResultsTestState.debug)
+		{
 		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty, PlayState.opponentMode)) 
+		{
+			new FlxTimer().start(1.3, function(tmr:FlxTimer)
+			{
+				highscore.visible = true;
+				FlxG.sound.play(Paths.sound('persona/highscore'), 1);
+			});
+		}
+		}
+		else
 		{
 			new FlxTimer().start(1.3, function(tmr:FlxTimer)
 			{
@@ -152,9 +167,13 @@ class P3Results extends MusicBeatSubstate
 
 	function endResults()
 	{
+		var percent:Float = 99.99;
+		if (!ResultsTestState.debug)
+		{
 		var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;
 		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
+		}
 		
 		if (PlayState.isStoryMode) 
 		{
@@ -167,6 +186,11 @@ class P3Results extends MusicBeatSubstate
 			{
 				LoadingState.loadAndSwitchState(new PlayState());
 			}
+		}
+		else if (ResultsTestState.debug)
+		{
+			FlxG.sound.music.volume = 0;
+			close();
 		}
 		else
 		{

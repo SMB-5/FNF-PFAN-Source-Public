@@ -2050,6 +2050,17 @@ class PlayState extends MusicBeatState
 			checkEventNote();
 		}
 
+        if (chartingMode)
+		{
+		    if (FlxG.keys.justPressed.SIX)
+		    {
+			    cpuControlled = !PlayState.instance.cpuControlled;
+			    botplayTxt.visible = PlayState.instance.cpuControlled;
+			    botplayTxt.alpha = 1;
+			    botplaySine = 0;
+		    }
+		}
+
 		#if debug
 		if(!endingSong && !startingSong) {
 			if (FlxG.keys.justPressed.ONE) {

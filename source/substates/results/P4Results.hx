@@ -4,6 +4,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import states.StoryMenuState;
 import states.FreeplayState;
 import states.PlayState;
+import states.editors.ResultsTestState;
 import backend.Highscore;
 import backend.Song;
 import backend.Rating;
@@ -16,16 +17,6 @@ class P4Results extends MusicBeatSubstate
 	var path:String = "persona/results/p4/";
 
 	var screen:FlxSprite;
-
-	// currently unused
-	var base:FlxSprite;
-	var result:FlxText;
-	var missesTxt:FlxText;
-	var accTxt:FlxText;
-	var status:FlxText;
-	var bfText:FlxText;
-	var black:FlxSprite;
-	var shit:FlxSprite;
 
 	override function create()
 	{
@@ -78,30 +69,30 @@ class P4Results extends MusicBeatSubstate
 		add(text);
 
 		// actual text
-		var percent:Float = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+		var percent:Float = CoolUtil.floorDecimal(99.99 * 100, 2);
 
-		var songTxt:FlxText = new FlxText(10, 0, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 46);
+		var songTxt:FlxText = new FlxText(10, 0, FlxG.width, 'Some Stupid Song By AMusician', 46);
 		songTxt.setFormat(Paths.font("p4resultsfont.otf"), 36, FlxColor.BLACK);
 		songTxt.scrollFactor.set();
 		songTxt.updateHitbox();
 		songTxt.alpha = 1;
 		add(songTxt);
 
-		var scoreTxt:FlxText = new FlxText(120, 120, FlxG.width, '${PlayState.instance.songScore} PTS', 40);
+		var scoreTxt:FlxText = new FlxText(120, 120, FlxG.width, '1234567 PTS', 40);
 		scoreTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.updateHitbox();
 		scoreTxt.alpha = 0.3;
 		add(scoreTxt);
 
-		var missTxt:FlxText = new FlxText(120, 250, FlxG.width, '${PlayState.instance.songMisses}', 40);
+		var missTxt:FlxText = new FlxText(120, 250, FlxG.width, '999', 40);
 		missTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
 		missTxt.scrollFactor.set();
 		missTxt.updateHitbox();
 		missTxt.alpha = 0.3;
 		add(missTxt);
 
-		var accTxt:FlxText = new FlxText(120, 380, FlxG.width, '${percent}%', 40);
+		var accTxt:FlxText = new FlxText(120, 380, FlxG.width, '99.99%', 40);
 		accTxt.setFormat(Paths.font("p4resultsfont.otf"), 48, 0xFFE37B00);
 		accTxt.scrollFactor.set();
 		accTxt.updateHitbox();
@@ -115,7 +106,28 @@ class P4Results extends MusicBeatSubstate
 		screen.antialiasing = ClientPrefs.data.antialiasing;
 		add(screen);
 
+		if(!ResultsTestState.debug)
+		{
+		trace('not debug');
+		percent = CoolUtil.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+		songTxt.text = PlayState.SONG.song + ' By ' + data.credits.music;
+		scoreTxt.text = '${PlayState.instance.songScore} PTS';
+		missTxt.text = '${PlayState.instance.songMisses}';
+		accTxt.text = '${percent}%';
+		}
+
+		if (!ResultsTestState.debug)
+		{
 		if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty, PlayState.opponentMode)) 
+		{
+			new FlxTimer().start(1.3, function(tmr:FlxTimer)
+			{
+				highscore.visible = true;
+				FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
+			});
+		}
+		}
+		else
 		{
 			new FlxTimer().start(1.3, function(tmr:FlxTimer)
 			{
@@ -154,9 +166,13 @@ class P4Results extends MusicBeatSubstate
 
 	public function endResults()
 	{
+		var percent:Float = 99.99;
+		if (!ResultsTestState.debug)
+		{
 		var percent:Float = PlayState.instance.ratingPercent;
 		if (Math.isNaN(percent)) percent = 0;
 		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
+		}
 
 		if (PlayState.isStoryMode) 
 		{
@@ -169,6 +185,11 @@ class P4Results extends MusicBeatSubstate
 			{
 				LoadingState.loadAndSwitchState(new PlayState());
 			}
+		}
+		else if (ResultsTestState.debug)
+		{
+			FlxG.sound.music.volume = 0;
+			close();
 		}
 		else
 		{
