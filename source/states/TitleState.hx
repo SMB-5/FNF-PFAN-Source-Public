@@ -22,6 +22,7 @@ import states.StoryMenuState;
 import states.OutdatedState;
 import states.MainMenuState;
 import states.PlayState;
+import states.editors.ResultsTestState;
 
 import objects.VideoSprite;
 
@@ -83,6 +84,8 @@ class TitleState extends MusicBeatState
 		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
+
+		ResultsTestState.debug = false;
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 

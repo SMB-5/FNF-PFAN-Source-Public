@@ -54,12 +54,12 @@ class P3Results extends MusicBeatSubstate
 		highscore.visible = false;
 
         var songTxt:FlxText = new FlxText(10, 680, FlxG.width, 'Some Stupid Song By AMusician', 46);
-		songTxt.setFormat(Paths.font("akira.otf"), 36, FlxColor.BLACK);
+		songTxt.setFormat(Paths.font("akira.otf"), 24, FlxColor.BLACK);
 		songTxt.scrollFactor.set();
 		songTxt.updateHitbox();
 		add(songTxt);
 
-        var scoreAmount:FlxText = new FlxText(375, 235, FlxG.width, '1234567', 40);
+        var scoreAmount:FlxText = new FlxText(350, 235, FlxG.width, '1234567', 40);
 		scoreAmount.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
 		scoreAmount.scrollFactor.set();
 		scoreAmount.updateHitbox();
@@ -71,7 +71,7 @@ class P3Results extends MusicBeatSubstate
 		scoreTxt.updateHitbox();
 		add(scoreTxt);
 
-        var missAmount:FlxText = new FlxText(475, 318, FlxG.width, '999', 40);
+        var missAmount:FlxText = new FlxText(450, 318, FlxG.width, '999', 40);
 		missAmount.setFormat(Paths.font("akira.otf"), 40, FlxColor.WHITE);
 		missAmount.scrollFactor.set();
 		missAmount.updateHitbox();
