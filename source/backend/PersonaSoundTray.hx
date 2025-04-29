@@ -128,7 +128,8 @@ class PersonaSoundTray extends FlxSoundTray
             if (globalVolume == 10) 
             {
                 sound = volumeMaxSound;
-                FlxG.camera.shake(0.005, 0.35);
+                // might make this an option later idk
+                //FlxG.camera.shake(0.005, 0.35);
             }
     
             if (sound != null) FlxG.sound.load(sound).play();

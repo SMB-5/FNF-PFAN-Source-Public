@@ -52,6 +52,7 @@ class ABotSpeaker extends FlxSpriteGroup
 			vizSprites.push(viz);
 			viz.updateHitbox();
 			viz.centerOffsets();
+			viz.visible = false;
 			add(viz);
 		}
 
@@ -89,17 +90,21 @@ class ABotSpeaker extends FlxSpriteGroup
 		levelMax = 0;
 		for (i in 0...Std.int(Math.min(vizSprites.length, levels.length)))
 		{
-			var animFrame:Int = Math.round(levels[i].value * 5);
+			var animFrame:Int = Math.round(levels[i].value * 6);
+			// decrement our animFrame, so we can get a value from 0-5 for animation frames
+			animFrame -= 1;
+			// don't display if we're at 0 volume from the level
+			vizSprites[i].visible = animFrame > 0;
 			animFrame = Std.int(Math.abs(FlxMath.bound(animFrame, 0, 5) - 5)); // shitty dumbass flip, cuz dave got da shit backwards lol!
 		
 			vizSprites[i].animation.curAnim.curFrame = animFrame;
-			levelMax = Std.int(Math.max(levelMax, 5 - animFrame));
+			levelMax = Std.int(Math.max(levelMax, 6 - animFrame));
 		}
 
-		if(levelMax >= 4)
+		if(levelMax >= 5)
 		{
 			//trace(levelMax);
-			if(oldLevelMax <= levelMax && (levelMax >= 5 || speaker.anim.curFrame >= 3))
+			if(oldLevelMax <= levelMax && (levelMax >= 6 || speaker.anim.curFrame >= 4))
 				beatHit();
 		}
 	}
@@ -113,6 +118,11 @@ class ABotSpeaker extends FlxSpriteGroup
 	{
 		@:privateAccess
 		analyzer = new SpectralAnalyzer(snd._channel.__audioSource, 7, 0.1, 40);
+		analyzer.minDb = -65;
+		analyzer.maxDb = -25;
+		analyzer.maxFreq = 22000;
+		// we use a very low minFreq since some songs use low low subbass like a boss
+		analyzer.minFreq = 10;
 	
 		#if desktop
 		// On desktop it uses FFT stuff that isn't as optimized as the direct browser stuff we use on HTML5

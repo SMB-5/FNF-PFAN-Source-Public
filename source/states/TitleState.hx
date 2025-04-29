@@ -22,6 +22,7 @@ import states.StoryMenuState;
 import states.OutdatedState;
 import states.MainMenuState;
 import states.PlayState;
+import states.editors.ResultsTestState;
 
 import objects.VideoSprite;
 
@@ -84,6 +85,8 @@ class TitleState extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
 
+		ResultsTestState.debug = false;
+
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		super.create();
@@ -140,7 +143,7 @@ class TitleState extends MusicBeatState
 			StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 		}
 
-		FreeplayState.intro = true;
+		FreeplayState.intro = false;
 
 		FlxG.mouse.visible = false;
 		#if FREEPLAY
@@ -182,7 +185,7 @@ class TitleState extends MusicBeatState
 			//}
 		}
 
-		Conductor.bpm = 58;
+		Conductor.bpm = 76;
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
