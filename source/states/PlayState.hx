@@ -2833,6 +2833,9 @@ class PlayState extends MusicBeatState
 		note.rating = daRating.name;
 		score = daRating.score;
 
+		var char:Character = !opponentMode ? boyfriend : dad;
+		var lastCombo:Int = combo;
+
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
 
@@ -2840,6 +2843,11 @@ class PlayState extends MusicBeatState
 		{
 			combo = 0;
 			makeGhostNote(note);
+			if(char != gf && lastCombo > 5 && gf != null && gf.animOffsets.exists('sad'))
+			{
+				gf.playAnim('sad');
+				gf.specialAnim = true;
+			}
 			if (merciless)
 		    {
 		    doMerciDeathCheck();
@@ -3491,12 +3499,12 @@ class PlayState extends MusicBeatState
 
 		if(!opponentMode && char != gf && gf != null)
 		{
-			if (combo == 50 && gf.animOffsets.exists('cheer'))
+			if (combo == 49 && gf.animOffsets.exists('cheer'))
 			{
 				gf.playAnim('cheer');
 				gf.specialAnim = true;
 			}
-			else if (combo == 200 && gf.animOffsets.exists('swag'))
+			else if (combo == 199 && gf.animOffsets.exists('swag'))
 			{
 				gf.playAnim('swag');
 				gf.specialAnim = true;
