@@ -1,6 +1,7 @@
 package objects;
 
 import backend.Metadata;
+import backend.WeekData;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -8,6 +9,9 @@ class SongCard extends FlxSpriteGroup
 {
 	var text:FlxText;
 	var bg:FlxSprite;
+	var bg2:FlxSprite;
+	var text2:FlxText;
+	var logo:FlxSprite;
 	var padding:Float = 10;
 	public var data:MetadataFile;
 
@@ -23,20 +27,41 @@ class SongCard extends FlxSpriteGroup
 		//var size:Null<Int> = data.card.fontSize;
 		//if (size == null) size = 24;
 
-		text = new FlxText(x + padding, y + padding).setFormat(Paths.font('vcr.ttf'), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text = new FlxText(x + padding, y + padding).setFormat(Paths.font('Fontsona4Golden.ttf'), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.antialiasing = ClientPrefs.data.antialiasing;
 		text.text = toString();
+		text.y = 300;
 
-		bg = new FlxSprite().makeGraphic(Std.int(text.width + (padding * 2)), Std.int(text.height + (padding * 2)), FlxColor.BLACK);
-		bg.alpha = 0.8;
+		bg = new FlxSprite().makeGraphic(Std.int(text.width + (200)), Std.int(text.height + (padding * 2)), FlxColor.fromRGB(PlayState.instance.dad.healthColorArray[0], PlayState.instance.dad.healthColorArray[1], PlayState.instance.dad.healthColorArray[2]));
+		bg.alpha = 1;
+		bg.y = text.y - 10;
 
+		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('newgrounds_logo'));
+		logo.antialiasing = ClientPrefs.data.antialiasing;
+		logo.alpha = 1;
+		logo.scale.set(0.2, 0.2);
+		logo.x = text.width - 50;
+		logo.y = text.y - 140;
+
+		text2 = new FlxText(x + padding, y + padding).setFormat(Paths.font('Fontsona4Golden.ttf'), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text2.antialiasing = ClientPrefs.data.antialiasing;
+		text2.text = WeekData.getCurrentWeek().weekName;
+		text2.y = 390;
+
+		bg2 = new FlxSprite().makeGraphic(Std.int(text.width + (100)), Std.int(text.height - 30), FlxColor.BLACK);
+		bg2.alpha = 1;
+		bg2.y = text2.y - 10;
+
+		add(bg2);
 		add(bg);
+		add(logo);
 		add(text);
+		add(text2);
 	}
 
 	override function toString():String
 	{
-		return '${data.card.name}\n\nSong: ${data.credits.music}\nChart: ${data.credits.chart}';
+		return '${data.card.name}\n\nBy: ${data.credits.music}';
 	}
 
 	public function display()
