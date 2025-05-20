@@ -3497,7 +3497,7 @@ class PlayState extends MusicBeatState
 		}
 		vocals.volume = 1;
 
-		if(!opponentMode && char != gf && gf != null)
+		if(!opponentMode && char != gf && gf != null && !note.isSustainNote)
 		{
 			if (combo == 49 && gf.animOffsets.exists('cheer'))
 			{
