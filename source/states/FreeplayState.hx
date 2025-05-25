@@ -135,6 +135,8 @@ class FreeplayState extends MusicBeatState
 				catText.text = "< Main Story >";
 			case 'freeplay':
 				catText.text = "< Side Stories >";
+			case 'all':
+				catText.text = "< All >";
 		}
 
 		//if (mode == "cover")
@@ -227,6 +229,14 @@ class FreeplayState extends MusicBeatState
 			if (mode == "freeplay" && WeekData.weeksList[i] != "bonus") continue;
 			// Weeks in cover category
 			//if (mode == "cover" && WeekData.weeksList[i] != "covers") continue;
+			// All of the weeks (yes it has to be specified)
+			if (mode == "all" && 
+				WeekData.weeksList[i] != "week1" && 
+				WeekData.weeksList[i] != "week2" && 
+				WeekData.weeksList[i] != "week3" &&
+				WeekData.weeksList[i] != "week4" &&
+				WeekData.weeksList[i] != "week5" && 
+				WeekData.weeksList[i] != "bonus") continue;
 
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var leSongs:Array<String> = [];
@@ -399,9 +409,9 @@ class FreeplayState extends MusicBeatState
 				}
 			}
 
-			if ((controls.UI_LEFT_P || controls.UI_RIGHT_P) && !picked_random)
+			if ((controls.UI_RIGHT_P) && !picked_random)
 			{
-				changeDiff(controls.UI_LEFT_P ? -1 : 1);
+				changeDiff(controls.UI_RIGHT_P ? -1 : 1);
 				_updateSongLastDifficulty();
 
 				if (mode == "story")
@@ -413,10 +423,10 @@ class FreeplayState extends MusicBeatState
 				}
 				else if (mode == "freeplay")
 				{
-					mode = "story";
-					trace('loaded story songs');
+					mode = "all";
+					trace('loaded every single song');
 					regenerateSongs('');
-					catText.text = "< Main Story >";
+					catText.text = "< All >";
 				}
 				//else if (mode == "freeplay")
 				//{
@@ -425,6 +435,48 @@ class FreeplayState extends MusicBeatState
 					//regenerateSongs('');
 					//catText.text = "     < Covers >";
 				//}
+				else if (mode == "all")
+				{
+					mode = "story";
+					trace('loaded story songs');
+					regenerateSongs('');
+					catText.text = "< Main Story >";
+				}
+			}
+			// Literally the opposite as above
+			if ((controls.UI_LEFT_P) && !picked_random)
+			{
+				changeDiff(controls.UI_LEFT_P ? -1 : 1);
+				_updateSongLastDifficulty();
+
+				if (mode == "story")
+				{
+					mode = "all";
+					trace('loaded every single song');
+					regenerateSongs('');
+					catText.text = "< All >";
+				}
+				else if (mode == "all")
+				{
+					mode = "freeplay";
+					trace('loaded bonus songs');
+					regenerateSongs('');
+					catText.text = "< Side Stories >";
+				}
+				//else if (mode == "freeplay")
+				//{
+					//mode = "cover";
+					//trace('loaded covers');
+					//regenerateSongs('');
+					//catText.text = "     < Covers >";
+				//}
+				else if (mode == "freeplay")
+				{
+					mode = "story";
+					trace('loaded story songs');
+					regenerateSongs('');
+					catText.text = "< Main Story >";
+				}
 			}
 		}
 		else if (controls.UI_UP_P || controls.UI_DOWN_P) changeDiff();
