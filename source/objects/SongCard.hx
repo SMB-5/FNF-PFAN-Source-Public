@@ -31,6 +31,7 @@ class SongCard extends FlxSpriteGroup
 		text.antialiasing = ClientPrefs.data.antialiasing;
 		text.text = toString();
 		text.y = 300;
+		if(ClientPrefs.data.downScroll) text.y = 50;
 
 		bg = new FlxSprite().makeGraphic(Std.int(text.width + (200)), Std.int(text.height + (padding * 2)), FlxColor.fromRGB(PlayState.instance.dad.healthColorArray[0], PlayState.instance.dad.healthColorArray[1], PlayState.instance.dad.healthColorArray[2]));
 		bg.alpha = 1;
@@ -47,6 +48,7 @@ class SongCard extends FlxSpriteGroup
 		text2.antialiasing = ClientPrefs.data.antialiasing;
 		text2.text = WeekData.getCurrentWeek().weekName;
 		text2.y = 390;
+		if(ClientPrefs.data.downScroll) text2.y = 10;
 
 		bg2 = new FlxSprite().makeGraphic(Std.int(text.width + (100)), Std.int(text.height - 30), FlxColor.BLACK);
 		bg2.alpha = 1;
