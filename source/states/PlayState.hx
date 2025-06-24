@@ -33,6 +33,7 @@ import states.stages.objects.ABotSpeaker;
 import substates.PauseSubState;
 import substates.GameOverSubstate;
 import substates.results.*;
+import substates.ResultsSubstate;
 
 import objects.SongCard;
 import backend.Metadata.MetadataFile;
@@ -238,10 +239,21 @@ class PlayState extends MusicBeatState
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
+	public var sicks:Int = 0;
+	public var goods:Int = 0;
+	public var bads:Int = 0;
+	public var shits:Int = 0;
+
 	public static var campaignScore:Int = 0;
 	public static var campaignMisses:Int = 0;
+	public static var campaignPercent:Float = 0;
+	public static var campaignSicks:Int = 0;
+	public static var campaignGoods:Int = 0;
+	public static var campaignBads:Int = 0;
+	public static var campaignShits:Int = 0;
 	public static var seenCutscene:Bool = false;
 	public static var deathCounter:Int = 0;
+	public static var songsPlayed:Int = 0;
 
 	public var defaultCamZoom:Float = 1.05;
 
@@ -2693,6 +2705,7 @@ class PlayState extends MusicBeatState
 
 		deathCounter = 0;
 		seenCutscene = false;
+		songsPlayed += 1;
 
 		#if ACHIEVEMENTS_ALLOWED
 		var weekNoMiss:String = WeekData.getWeekFileName() + '_nomiss';
@@ -2710,19 +2723,17 @@ class PlayState extends MusicBeatState
 				return false;
 			}
 
-			switch(PlayState.SONG.song)
-			{
-				// a suggestion but you could probably make P3 the default and check specific songs for P4 instead of checking every single song
-				case 'Full Moon' | 'Tartarus' | 'Destruction' | 'Answer':
-					openSubState(new P3Results());
-				case 'Truth' | 'Specialist':
-					openSubState(new P4Results());
-			}
-
 			if (isStoryMode)
 			{
 				campaignScore += songScore;
 				campaignMisses += songMisses;
+				var percent = (campaignPercent + (ratingPercent * 100)) / songsPlayed;
+                if (Math.isNaN(percent)) percent = 0;
+                campaignPercent = CoolUtil.floorDecimal(campaignPercent + (ratingPercent * 100), 2);
+				campaignSicks += sicks;
+				campaignGoods += goods;
+				campaignBads += bads;
+				campaignShits += shits;
 
 				storyPlaylist.remove(storyPlaylist[0]);
 
@@ -2730,6 +2741,8 @@ class PlayState extends MusicBeatState
 				{
 					Mods.loadTopMod();
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
+
+					openSubState(new ResultsSubstate());
 
 					if(!ClientPrefs.getGameplaySetting('practice') && !ClientPrefs.getGameplaySetting('botplay')) {
 						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
@@ -2760,6 +2773,7 @@ class PlayState extends MusicBeatState
 				trace('WENT BACK TO FREEPLAY??');
 				Mods.loadTopMod();
 				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
+				openSubState(new ResultsSubstate());
 				changedDifficulty = false;
 			}
 			transitioning = true;

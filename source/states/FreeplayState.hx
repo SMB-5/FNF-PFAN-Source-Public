@@ -727,23 +727,24 @@ class FreeplayState extends MusicBeatState
 		songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
 	}
 
+	//probably gonna change how this works in the future
 	private function updatePortrait()
 	{
 		if (songs[curSelected].songName.toLowerCase() == 'random')
 		{
-			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/blank'));
+			portrait.loadGraphic(Paths.image('persona/portraits/blank'));
 		}
 		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
-			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder'));
+			portrait.loadGraphic(Paths.image('persona/portraits/placeholder'));
 		}
 		else if (songs[curSelected].songName.toLowerCase() == 'truth' || songs[curSelected].songName.toLowerCase() == 'specialist')
 		{
-			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder-brother'));
+			portrait.loadGraphic(Paths.image('persona/portraits/placeholder-brother'));
 		}
 		else if (songs[curSelected].songName.toLowerCase() == 'desire')
 		{
-			portrait.loadGraphic(Paths.image('persona/menus/freeplay/portraits/placeholder-brother'));
+			portrait.loadGraphic(Paths.image('persona/portraits/placeholder-brother'));
 		}
 	}
 
