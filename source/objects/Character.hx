@@ -155,7 +155,7 @@ class Character extends FlxSprite
 				setColorTransform(1, 1, 1, alpha, -125, -125, -125, 0);
 				if (ghost != null) {
 					ghost.shader = swap.shader;
-					ghost.setColorTransform(1, 1, 1, alpha, -125, -125, -125, 0);
+					ghost.setColorTransform(1, 1, 1, 0, -125, -125, -125, 0);
 				}
 			case 'pico-speaker':
 				skipDance = true;
