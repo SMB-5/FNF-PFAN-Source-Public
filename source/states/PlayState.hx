@@ -668,13 +668,12 @@ class PlayState extends MusicBeatState
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
-		if (SONG.player2 == 'shadow-makoto')
-		{
-		var swap = new shaders.ColorSwap();
-        swap.saturation = -1;
-		iconP2.shader = swap.shader;
-        iconP2.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
-        healthBar.leftBar.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
+		if (dad.curCharacter == 'shadow-makoto') {
+			var swap = new shaders.ColorSwap();
+			swap.saturation = -1;
+			iconP2.shader = swap.shader;
+			iconP2.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
+			healthBar.leftBar.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
 		}
 
 		if (hasMetadata) {
@@ -3367,12 +3366,6 @@ class PlayState extends MusicBeatState
 					{
 						char.playAnim(realAnim, true);
 						char.playGhostAnim(animToPlay);
-						if (SONG.player2 == 'shadow-makoto')
-		                {
-		                var swap = new shaders.ColorSwap();
-                        swap.saturation = -1;
-		                char.ghost.shader = swap.shader;
-		                }
 					}
 					char.mostRecentRow = note.row;
 				}

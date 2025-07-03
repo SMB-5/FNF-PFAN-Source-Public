@@ -149,10 +149,14 @@ class Character extends FlxSprite
 		switch(curCharacter)
 		{
 			case 'shadow-makoto':
-                var swap = new shaders.ColorSwap();
-                swap.saturation = -1;
-                shader = swap.shader;
-                setColorTransform(1, 1, 1, alpha, -125, -125, -125, 0);
+				var swap = new shaders.ColorSwap();
+				swap.saturation = -1;
+				shader = swap.shader;
+				setColorTransform(1, 1, 1, alpha, -125, -125, -125, 0);
+				if (ghost != null) {
+					ghost.shader = swap.shader;
+					ghost.setColorTransform(1, 1, 1, alpha, -125, -125, -125, 0);
+				}
 			case 'pico-speaker':
 				skipDance = true;
 				loadMappedAnims();
