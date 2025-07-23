@@ -54,7 +54,7 @@ class CreditsState extends MusicBeatState
 			['Clefanight', 'clefa', 'Artist, Animator and Charter\n"How the fuck did I even get here."', 'https://cremiesilver.newgrounds.com/', '11e92b'],
 			['Cobalt', 'cobalt', 'Programmer\n"I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next."', 'https://cobaltbar.github.io/', '0065FF'],
 			['Dog', 'doggo', 'Musician\n"Hi! I composed a few songs for le epic persona mod, like Truth, Game Over!! and the main menu theme! Hope you enjoyed listening to them! If you want to hear more of my music, press enter to go to my channel!"', 'https://www.youtube.com/@you-know-its-dog.', 'f5d79d'],
-			['DudeDX', '', 'Charter\n"It\'s not overcharted you\'re just bad."', 'https://bsky.app/profile/dudedx.bsky.social', '5B9A4C'],
+			['DudeDX', 'dudedx', 'Charter\n"why are oranges called oranges, but an apple is not called red?"', 'https://fakecrime.bio/dudeDX', '009116'],
 			['LarryFrosty', larryCred[0], 'Charter and Major Assistant with Coding\n${desc}', 'https://youtube.com/@larryfrosty?si=HBFHaclYVeS6kn8v', '52a8eb'],
 			['NotMagniill', 'bobbo', "Artist and Programmer\nI'm a devil muehehehe... also SMB no offense your code sucks", 'https://twitter.com/magniill', '640911'],
 			['NoahGani1', 'noah', 'Chromatic Maker\n"Say Gex."', 'https://x.com/noah_gani1', '203a53'],
