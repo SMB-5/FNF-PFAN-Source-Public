@@ -197,77 +197,11 @@
 			"fps": 24,
 			"name": "shit",
 			"indices": []
-		},
-		{
-			"offsets": [
-				256,
-				232
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "shoot",
-			"indices": [],
-			"name": "Pico Shoot Hip Full0"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "shootMISS",
-			"indices": [],
-			"name": "Pico Hit Can0"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "cock",
-			"indices": [],
-			"name": "Pico Reload0"
-		},
-		{
-			"offsets": [
-				60,
-				0
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "intro1",
-			"indices": [],
-			"name": "Pico Gets Pissed0"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "cockCutscene",
-			"indices": [],
-			"name": "cutscene cock0"
-		},
-		{
-			"offsets": [
-				255,
-				231
-			],
-			"loop": false,
-			"fps": 24,
-			"anim": "intro2",
-			"indices": [],
-			"name": "shoot and return0"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
-	"image": "characters/Pico_FNF_assetss, characters/picoAnims/Pico_Intro, characters/picoAnims/Pico_Shooting, characters/picoAnims/Pico_Burps, characters/picoAnims/Pico_Censored, characters/picoAnims/pico-cheer, characters/picoAnims/pico-yeah",
+	"image": "characters/Pico_FNF_assetss, characters/picoAnims/Pico_Burps, characters/picoAnims/Pico_Censored, characters/picoAnims/pico-cheer, characters/picoAnims/pico-yeah",
 	"position": [
 		0,
 		300
