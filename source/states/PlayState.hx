@@ -540,6 +540,7 @@ class PlayState extends MusicBeatState
 
 		boyfriend.fixArrowRGB();
 		dad.fixArrowRGB();
+		gf.fixArrowRGB();
 
 		var camPos:FlxPoint = FlxPoint.get(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if(gf != null)
@@ -1542,6 +1543,12 @@ class PlayState extends MusicBeatState
 						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? dad : dad) : (!opponentMode ? boyfriend : boyfriend))
 							.arrowRGB[dunceNote.noteData]);
 					}
+					if (swagNote.gfNote)
+					{
+						// unreadable i know but it works
+						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? gf : gf) : (!opponentMode ? gf : gf))
+							.arrowRGB[dunceNote.noteData]);
+					}
 				}
 				
 				fixNoteColorShit(swagNote);
@@ -2541,6 +2548,7 @@ class PlayState extends MusicBeatState
 								gf.alpha = 0.00001;
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
+								gf.fixArrowRGB();
 							}
 							setOnScripts('gfName', gf.curCharacter);
 						}
