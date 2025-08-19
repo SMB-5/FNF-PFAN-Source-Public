@@ -76,6 +76,10 @@ class ResultsSubstate extends MusicBeatSubstate
         {
             case 'Blue Moon' | 'Tartarus' | 'Destruction' | 'Answer':
                 mode = "p3";
+            case 'Truth' | 'Specialist':
+                mode = "p4";
+            case 'Desire' | 'Foggy Night':
+                mode = "p5";
             default:
                 mode = "fnf";
         }
@@ -198,6 +202,24 @@ class ResultsSubstate extends MusicBeatSubstate
         bg.color = FlxColor.fromString("#51eefc");
         fg.color = FlxColor.fromString("#1269cc");
         fg2.color = FlxColor.fromString("#1269cc");
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P3-RELOAD/After The Battle-RELOAD'));
+        }
+        if (mode == "p4")
+        {
+        bg.color = FlxColor.fromString("#ffe52c");
+        fg.color = FlxColor.fromString("#faa622");
+        fg2.color = FlxColor.fromString("#faa622");
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
+        }
+        if (mode == "p5")
+        {
+        bg.color = FlxColor.fromString("#d92323");
+        fg.color = FlxColor.fromString("#0d0d0d");
+        fg2.color = FlxColor.fromString("#0d0d0d");
+        resultsTxt.color = 0xFFffffff;
+        songTxt.color = 0xFFffffff;
+        scoreTxt.color = 0xFFffffff;
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Triumph'));
         }
         else if (mode == "fnf")
         {
@@ -208,6 +230,7 @@ class ResultsSubstate extends MusicBeatSubstate
         resultsTxt.color = 0xFFfecd5c;
         songTxt.color = 0xFFfecd5c;
         scoreTxt.color = 0xFFfecd5c;
+        FlxG.sound.playMusic(Paths.music('resultsNORMAL'));
         }
 
         if (PlayState.isStoryMode)
@@ -236,7 +259,7 @@ class ResultsSubstate extends MusicBeatSubstate
         {
         if (PlayState.campaignScore > Highscore.getWeekScore(WeekData.getCurrentWeek().weekName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(7, function(tmr:FlxTimer)
+        new FlxTimer().start(5.5, function(tmr:FlxTimer)
  	    {
         trace("new highscore!!!");
 		highscore.visible = true;
@@ -249,7 +272,7 @@ class ResultsSubstate extends MusicBeatSubstate
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
         trace("new highscore!!!");
-        new FlxTimer().start(7, function(tmr:FlxTimer)
+        new FlxTimer().start(5.5, function(tmr:FlxTimer)
  	    {
 		highscore.visible = true;
 		FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
@@ -428,12 +451,12 @@ class ResultsSubstate extends MusicBeatSubstate
         if (PlayState.isStoryMode) 
         {
         MusicBeatState.switchState(new StoryMenuState());
+        FlxG.sound.playMusic(Paths.music('freakyMenu'));
         }
         else
         {
         MusicBeatState.switchState(new FreeplayState());
+        FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
         }
-
-        FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
 }
