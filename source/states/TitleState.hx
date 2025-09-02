@@ -181,7 +181,7 @@ class TitleState extends MusicBeatState
 		if (!initialized)
 		{
 			//if(FlxG.sound.music == null) {
-				FlxG.sound.playMusic(Paths.music('freakyMenuS'), 0);
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 			//}
 		}
 
@@ -582,7 +582,7 @@ class TitleState extends MusicBeatState
 			remove(intro2Txt);
 			remove(logoSpr);
 			remove(credGroup);
-			FlxG.sound.playMusic(Paths.music('freakyMenuS'), 0);
+			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 			FlxG.camera.flash(FlxColor.WHITE, 4);
 			Conductor.bpm = titleJSON.bpm;
 			skippedIntro = true;

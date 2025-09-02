@@ -16,8 +16,8 @@ class TartarusLobby extends BaseStage
 		add(fg);
 
         if(!ClientPrefs.data.lowQuality) {
-			var shadows:BGSprite = new BGSprite('persona/stages/tartarus-lobby/4', -540, -350);
-			add(shadows);
+			//var shadows:BGSprite = new BGSprite('persona/stages/tartarus-lobby/4', -540, -350);
+			//add(shadows);
 		}
 	}
 

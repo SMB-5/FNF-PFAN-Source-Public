@@ -9,6 +9,7 @@ import backend.WeekData;
 import backend.Song;
 import backend.Rating;
 import flixel.util.FlxTimer;
+import flixel.util.FlxGradient;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.effects.FlxFlicker;
@@ -34,6 +35,8 @@ class ResultsSubstate extends MusicBeatSubstate
     public var progressBar:FlxBar;
     public var barTween:FlxTween = null;
     var can_leave = false;
+
+    public var mode:String = "fnf";
 
     var lerpScore:Int = 0;
     var intendedScore:Int = 0;
@@ -69,30 +72,63 @@ class ResultsSubstate extends MusicBeatSubstate
 
 		data = PlayState.metadata;
 
-        var bg:FlxSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
+        switch(PlayState.SONG.song)
+        {
+            case 'Blue Moon' | 'Tartarus' | 'Destruction' | 'Answer':
+                mode = "p3";
+            case 'Truth' | 'Specialist':
+                mode = "p4";
+            case 'Desire' | 'Foggy Night':
+                mode = "p5";
+            default:
+                mode = "fnf";
+        }
+
+        var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.WHITE);
 		bg.scale.set(FlxG.width, FlxG.height);
 		bg.updateHitbox();
-		bg.alpha = 0.4;
+		bg.alpha = 1;
 		bg.scrollFactor.set();
 		add(bg);
+
+        var bgfnf:FlxSprite = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFFFECC5C, 0xFFFDC05C], 90);
+        bgfnf.scale.set(FlxG.width, FlxG.height);
+		bgfnf.updateHitbox();
+		bgfnf.alpha = 0;
+		bgfnf.scrollFactor.set();
+		add(bgfnf);
 
         var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
 		grid.velocity.set(40, 40);
 		grid.alpha = 0;
-		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
-		add(grid);
+		FlxTween.tween(grid, {alpha: 0.5}, 0.5, {ease: FlxEase.quadOut});
+		//add(grid);
+
+        var fg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.WHITE);
+		fg.scale.set(FlxG.width, 130);
+		fg.updateHitbox();
+		fg.alpha = 1;
+		fg.scrollFactor.set();
+		add(fg);
+
+        var fg2:FlxSprite = new FlxSprite(0, 630).makeGraphic(1, 1, FlxColor.WHITE);
+		fg2.scale.set(FlxG.width, 130);
+		fg2.updateHitbox();
+		fg2.alpha = 1;
+		fg2.scrollFactor.set();
+		add(fg2);
 
         var player = new FlxSprite(800, -400).loadGraphic(Paths.image('persona/portraits/placeholder'));
 		player.antialiasing = ClientPrefs.data.antialiasing;
 		add(player);
 
-		resultsTxt = new FlxText(20, 10, "RESULTS!!!", 50);
-        resultsTxt.setFormat(Paths.font("p5hatty-1.ttf"), 80, FlxColor.BLACK);
+		resultsTxt = new FlxText(500, 10, "RESULTS!!!", 50);
+        resultsTxt.setFormat(Paths.font("p5hatty-1.ttf"), 75, FlxColor.BLACK, CENTER);
         resultsTxt.scrollFactor.set();
         resultsTxt.updateHitbox();
         add(resultsTxt);
 
-        songTxt = new FlxText(20, 100, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 50);
+        songTxt = new FlxText(20, 75, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 50);
         songTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
         songTxt.scrollFactor.set();
         songTxt.updateHitbox();
@@ -161,6 +197,42 @@ class ResultsSubstate extends MusicBeatSubstate
 		add(highscore);
 		highscore.visible = false;
 
+        if (mode == "p3")
+        {
+        bg.color = FlxColor.fromString("#51eefc");
+        fg.color = FlxColor.fromString("#1269cc");
+        fg2.color = FlxColor.fromString("#1269cc");
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P3-RELOAD/After The Battle-RELOAD'));
+        }
+        if (mode == "p4")
+        {
+        bg.color = FlxColor.fromString("#ffe52c");
+        fg.color = FlxColor.fromString("#faa622");
+        fg2.color = FlxColor.fromString("#faa622");
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
+        }
+        if (mode == "p5")
+        {
+        bg.color = FlxColor.fromString("#d92323");
+        fg.color = FlxColor.fromString("#0d0d0d");
+        fg2.color = FlxColor.fromString("#0d0d0d");
+        resultsTxt.color = 0xFFffffff;
+        songTxt.color = 0xFFffffff;
+        scoreTxt.color = 0xFFffffff;
+        FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Triumph'));
+        }
+        else if (mode == "fnf")
+        {
+        bg.alpha = 0;
+        bgfnf.alpha = 1;
+        fg.color = 0xFF000000;
+        fg2.color = 0xFF000000;
+        resultsTxt.color = 0xFFfecd5c;
+        songTxt.color = 0xFFfecd5c;
+        scoreTxt.color = 0xFFfecd5c;
+        FlxG.sound.playMusic(Paths.music('resultsNORMAL'));
+        }
+
         if (PlayState.isStoryMode)
         {
         intendedScore = PlayState.campaignScore;
@@ -187,7 +259,7 @@ class ResultsSubstate extends MusicBeatSubstate
         {
         if (PlayState.campaignScore > Highscore.getWeekScore(WeekData.getCurrentWeek().weekName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(7, function(tmr:FlxTimer)
+        new FlxTimer().start(5.5, function(tmr:FlxTimer)
  	    {
         trace("new highscore!!!");
 		highscore.visible = true;
@@ -200,7 +272,7 @@ class ResultsSubstate extends MusicBeatSubstate
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
         trace("new highscore!!!");
-        new FlxTimer().start(7, function(tmr:FlxTimer)
+        new FlxTimer().start(5.5, function(tmr:FlxTimer)
  	    {
 		highscore.visible = true;
 		FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
@@ -208,55 +280,28 @@ class ResultsSubstate extends MusicBeatSubstate
         }
         }
 
-        if (PlayState.isStoryMode)
-        {
-        if (intendedRating > 80)
-        {
-        FlxG.sound.play(Paths.sound('results-intro'), function() {
-        FlxG.sound.play(Paths.sound('confirmMenu'));
-        });
-        }
-        else
-        FlxG.sound.play(Paths.sound('results-shit-intro'), function() {
-        FlxG.sound.playMusic(Paths.music('results/shit'));
-        });
-        }
-        else
-        {
-        if (PlayState.instance.ratingPercent > 0.8)
-        {
-        FlxG.sound.play(Paths.sound('results-intro'), function() {
-        FlxG.sound.play(Paths.sound('confirmMenu'));
-        });
-        }
-        else
-        FlxG.sound.play(Paths.sound('results-shit-intro'), function() {
-        FlxG.sound.playMusic(Paths.music('results/shit'));
-        });
-        }
-
-        new FlxTimer().start(1.5, function(tmr) {
+        new FlxTimer().start(1, function(tmr) {
         can_leave = true;
         showSick = true;
         });
 
-        new FlxTimer().start(2, function(tmr) {
+        new FlxTimer().start(1.5, function(tmr) {
         showGood = true;
         });
 
-        new FlxTimer().start(2.5, function(tmr) {
+        new FlxTimer().start(2, function(tmr) {
         showBad = true;
         });
 
-        new FlxTimer().start(3, function(tmr) {
+        new FlxTimer().start(2.5, function(tmr) {
         showShit = true;
         });
 
-        new FlxTimer().start(3.5, function(tmr) {
+        new FlxTimer().start(3, function(tmr) {
         showMisses = true;
         });
 
-        new FlxTimer().start(4, function(tmr) {
+        new FlxTimer().start(3.5, function(tmr) {
         if (PlayState.isStoryMode)
         {
         if (PlayState.isStoryMode)
@@ -284,6 +329,9 @@ class ResultsSubstate extends MusicBeatSubstate
 
 
         bg.cameras = [camHUD];
+        bgfnf.cameras = [camHUD];
+        fg.cameras = [camHUD];
+        fg2.cameras = [camHUD];
         grid.cameras = [camHUD];
 		resultsTxt.cameras = [camHUD];
         songTxt.cameras = [camHUD];
@@ -294,8 +342,6 @@ class ResultsSubstate extends MusicBeatSubstate
         scoreTxt.cameras = [camHUD];
         missTxt.cameras = [camHUD];
         accTxt.cameras = [camHUD];
-        progressBar.cameras = [camHUD];
-        bar.cameras = [camHUD];
         player.cameras = [camHUD];
 		highscore.cameras = [camHUD];
 
@@ -405,12 +451,12 @@ class ResultsSubstate extends MusicBeatSubstate
         if (PlayState.isStoryMode) 
         {
         MusicBeatState.switchState(new StoryMenuState());
+        FlxG.sound.playMusic(Paths.music('freakyMenu'));
         }
         else
         {
         MusicBeatState.switchState(new FreeplayState());
+        FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
         }
-
-        FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
 }
