@@ -450,11 +450,16 @@ class PlayState extends MusicBeatState
 			introSoundsSuffix = '-pixel';
 		}
 
-        if (SONG.gfVersion == 'nene')
+		// probably an easier way to optimise this but I need abot to be behind nene at all times
+		abot = new ABotSpeaker(gfGroup.x +30, gfGroup.y + 320);
+		updateABotEye(true);
+		add(abot);
+		abot.visible = true;
+		
+		// only reason why this is the other way is so the visualiser doesn't show at the start of the song
+		if (SONG.gfVersion != 'nene')
 		{
-			abot = new ABotSpeaker(gfGroup.x +30, gfGroup.y + 320);
-			updateABotEye(true);
-			add(abot);
+			abot.visible = false;
 		}
 
 		if (SONG.player1 == 'pico-playable')
@@ -929,15 +934,12 @@ class PlayState extends MusicBeatState
 
 	function updateABotEye(finishInstantly:Bool = false)
 	{
-		if(SONG.gfVersion == 'nene')
-		{
-			if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true)
-				abot.lookRight();
-			else
-				abot.lookLeft();
+		if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true)
+			abot.lookRight();
+		else
+			abot.lookLeft();
 
-			if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
-		}
+		if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
 	}
 
 	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
@@ -1410,11 +1412,8 @@ class PlayState extends MusicBeatState
 		setOnScripts('songLength', songLength);
 		callOnScripts('onSongStart');
 
-		if (SONG.gfVersion == 'nene')
-		{
-			abot.snd = FlxG.sound.music;
-			gf.animation.finishCallback = onNeneAnimationFinished;
-		}
+		abot.snd = FlxG.sound.music;
+		gf.animation.finishCallback = onNeneAnimationFinished;
 	}
 
 	function onNeneAnimationFinished(name:String)
@@ -2549,6 +2548,16 @@ class PlayState extends MusicBeatState
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
 								gf.fixArrowRGB();
+								if(gf.curCharacter == 'nene')
+								{
+									abot.visible = true;
+									trace("nene character");
+								}
+								else if(gf.curCharacter != 'nene')
+								{
+									abot.visible = false;
+									trace("not nene");
+								}
 							}
 							setOnScripts('gfName', gf.curCharacter);
 						}
