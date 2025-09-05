@@ -1268,7 +1268,7 @@ class PlayState extends MusicBeatState
                 {
                     daNote.updateRgb(arrRgb[daNote.noteData]);
                 }
-                else if (!isGF && daNote.mustPress == mustPress)
+                else if (!isGF && !daNote.gfNote && daNote.mustPress == mustPress)
                 {
                     daNote.updateRgb(arrRgb[daNote.noteData]);
                 }
