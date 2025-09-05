@@ -1256,21 +1256,28 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function setAllNotesRGBAfterTime(arrRgb:Array<Array<FlxColor>>, time:Float, mustPress:Null<Bool>)
-	{
-		if (mustPress == null)
-			return;
-		var theFunc = function(daNote:Note)
-		{
-			if (daNote.strumTime >= time && daNote.mustPress == mustPress)
-			{
-				daNote.updateRgb(arrRgb[daNote.noteData]);
-			}
-		};
-		for (note in unspawnNotes)
-			theFunc(note);
-		notes.forEach(theFunc);
-	}
+    public function setAllNotesRGBAfterTime(arrRgb:Array<Array<FlxColor>>, time:Float, mustPress:Null<Bool>, isGF:Bool = false)
+    {
+        if (mustPress == null)
+            return;
+        var theFunc = function(daNote:Note)
+        {
+            if (daNote.strumTime >= time)
+            {
+                if (isGF && daNote.gfNote)
+                {
+                    daNote.updateRgb(arrRgb[daNote.noteData]);
+                }
+                else if (!isGF && !daNote.gfNote && daNote.mustPress == mustPress)
+                {
+                    daNote.updateRgb(arrRgb[daNote.noteData]);
+                }
+            }
+        };
+        for (note in unspawnNotes)
+            theFunc(note);
+        notes.forEach(theFunc);
+    }
 
 	// fun fact: Dynamic Functions can be overriden by just doing this
 	// `updateScore = function(miss:Bool = false) { ... }
@@ -1648,12 +1655,12 @@ class PlayState extends MusicBeatState
 				switch(event.value1.toLowerCase()) {
 					case 'gf' | 'girlfriend' | '1':
 						charType = 2;
-						setAllNotesRGBAfterTime(newColor, event.strumTime, false);
+						setAllNotesRGBAfterTime(newColor, event.strumTime, false, true);
 					case 'dad' | 'opponent' | '0':
 						charType = 1;
-						setAllNotesRGBAfterTime(newColor, event.strumTime, false);
+						setAllNotesRGBAfterTime(newColor, event.strumTime, false, false);
 					default:
-					    setAllNotesRGBAfterTime(newColor, event.strumTime, true);
+					    setAllNotesRGBAfterTime(newColor, event.strumTime, true, false);
 						var val1:Int = Std.parseInt(event.value1);
 						if(Math.isNaN(val1)) val1 = 0;
 						charType = val1;
