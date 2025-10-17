@@ -30,25 +30,25 @@ class SongCard extends FlxSpriteGroup
 		text = new FlxText(x + padding, y + padding).setFormat(Paths.font('Fontsona4Golden.ttf'), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.antialiasing = ClientPrefs.data.antialiasing;
 		text.text = toString();
-		text.y = 300;
-		if(ClientPrefs.data.downScroll) text.y = 50;
+		text.y = 500;
+		if(ClientPrefs.data.downScroll) text.y = 150;
 
 		bg = new FlxSprite().makeGraphic(Std.int(text.width + (200)), Std.int(text.height + (padding * 2)), FlxColor.fromRGB(PlayState.instance.dad.healthColorArray[0], PlayState.instance.dad.healthColorArray[1], PlayState.instance.dad.healthColorArray[2]));
 		bg.alpha = 1;
 		bg.y = text.y - 10;
 
-		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('newgrounds_logo'));
+		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('funkintheives-mask'));
 		logo.antialiasing = ClientPrefs.data.antialiasing;
 		logo.alpha = 1;
-		logo.scale.set(0.2, 0.2);
-		logo.x = text.width - 50;
-		logo.y = text.y - 140;
+		logo.scale.set(0.15, 0.15);
+		logo.x = text.width - 380;
+		logo.y = text.y - 390;
 
 		text2 = new FlxText(x + padding, y + padding).setFormat(Paths.font('Fontsona4Golden.ttf'), 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text2.antialiasing = ClientPrefs.data.antialiasing;
 		text2.text = WeekData.getCurrentWeek().weekName;
-		text2.y = 390;
-		if(ClientPrefs.data.downScroll) text2.y = 10;
+		text2.y = 590;
+		if(ClientPrefs.data.downScroll) text2.y = 110;
 
 		bg2 = new FlxSprite().makeGraphic(Std.int(text.width + (100)), Std.int(text.height - 30), FlxColor.BLACK);
 		bg2.alpha = 1;

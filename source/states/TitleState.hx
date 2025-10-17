@@ -280,10 +280,10 @@ class TitleState extends MusicBeatState
 
 		credTextShit.visible = false;
 
-		ftSpr = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('newgrounds_logo'));
+		ftSpr = new FlxSprite(0, 250).loadGraphic(Paths.image('funkinthieves-logo'));
 		add(ftSpr);
 		ftSpr.alpha = 0;
-		ftSpr.setGraphicSize(Std.int(ftSpr.width * 0.8));
+		ftSpr.setGraphicSize(Std.int(ftSpr.width * 0.5));
 		ftSpr.updateHitbox();
 		ftSpr.screenCenter(X);
 		ftSpr.antialiasing = ClientPrefs.data.antialiasing;
@@ -543,22 +543,22 @@ class TitleState extends MusicBeatState
 					case 1:
 						//skipIntro();
 						FlxTween.tween(ftSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
-					case 3:
+					case 4:
 						FlxTween.tween(ftSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
-					case 5:
+					case 6:
 						FlxTween.tween(atlusTxt, {alpha: 1}, 1, {ease: FlxEase.circOut});
 						FlxTween.tween(atlusSpr, {alpha: 1}, 1, {ease: FlxEase.circOut});
-					case 7:
+					case 8:
 						FlxTween.tween(atlusTxt, {alpha: 0}, 1, {ease: FlxEase.circOut});
 						FlxTween.tween(atlusSpr, {alpha: 0}, 1, {ease: FlxEase.circOut});
-					case 9:
+					case 10:
 						FlxTween.tween(intro1Txt, {alpha: 1}, 1, {ease: FlxEase.circOut});
-					case 11:
+					case 12:
 						FlxTween.tween(intro2Txt, {alpha: 1}, 1, {ease: FlxEase.circOut});
-					case 13:
+					case 14:
 					    FlxTween.tween(intro1Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
 						FlxTween.tween(intro2Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
-					case 15:
+					case 16:
 						watching = true;
 						startVideo('Title');
 						trace('starting video...');

@@ -684,7 +684,7 @@ class PlayState extends MusicBeatState
 
 		if (hasMetadata) {
 			card = new SongCard(0, 0, metadata);
-			card.screenCenter(Y);
+			//card.screenCenter(Y);
 			card.x = -card.width;
 			add(card);
 			card.cameras = [camHUD];
