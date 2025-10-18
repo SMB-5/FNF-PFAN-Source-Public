@@ -543,9 +543,12 @@ class PlayState extends MusicBeatState
 		boyfriendGroup.add(boyfriend);
 		startCharacterScripts(boyfriend.curCharacter);
 
+		if (ClientPrefs.data.charRGB)
+		{
 		boyfriend.fixArrowRGB();
 		dad.fixArrowRGB();
 		gf.fixArrowRGB();
+		}
 
 		var camPos:FlxPoint = FlxPoint.get(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if(gf != null)
@@ -1543,13 +1546,13 @@ class PlayState extends MusicBeatState
 
 				var fixNoteColorShit = function(dunceNote:Note)
 				{
-					if (!["Hurt Note"].contains(dunceNote.noteType))
+					if (!["Hurt Note"].contains(dunceNote.noteType) && ClientPrefs.data.charRGB)
 					{
 						// unreadable i know but it works
 						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? dad : dad) : (!opponentMode ? boyfriend : boyfriend))
 							.arrowRGB[dunceNote.noteData]);
 					}
-					if (swagNote.gfNote)
+					if (swagNote.gfNote && ClientPrefs.data.charRGB)
 					{
 						// unreadable i know but it works
 						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? gf : gf) : (!opponentMode ? gf : gf))
@@ -1743,7 +1746,10 @@ class PlayState extends MusicBeatState
 				babyArrow.defaultRGB = boyfriend.arrowRGB;
 				if (opponentMode && ClientPrefs.data.middleScroll)
 				{
+					if (ClientPrefs.data.charRGB)
+					{
 					babyArrow.defaultRGB = dad.arrowRGB;
+					}
 					babyArrow.x -= 330;
 					if (i > 1) { //Up and Right
 						babyArrow.x += FlxG.width / 2 + 25;
@@ -1753,7 +1759,10 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
+				if (ClientPrefs.data.charRGB)
+				{
 				babyArrow.defaultRGB = dad.arrowRGB;
+				}
 				if (ClientPrefs.data.middleScroll)
 				{
 					babyArrow.x += (!opponentMode ? 310 : 640);
@@ -2513,7 +2522,10 @@ class PlayState extends MusicBeatState
 							boyfriend.alpha = 0.00001;
 							boyfriend = boyfriendMap.get(value2);
 							boyfriend.alpha = lastAlpha;
+							if (ClientPrefs.data.charRGB)
+							{
 							boyfriend.fixArrowRGB();
+							}
 							iconP1.changeIcon(boyfriend.healthIcon);
 						}
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
@@ -2527,7 +2539,10 @@ class PlayState extends MusicBeatState
 							var wasGf:Bool = dad.curCharacter.startsWith('gf-') || dad.curCharacter == 'gf';
 							var lastAlpha:Float = dad.alpha;
 							dad.alpha = 0.00001;
+							if (ClientPrefs.data.charRGB)
+							{
 							dad.fixArrowRGB();
+							}
 							dad = dadMap.get(value2);
 							if(!dad.curCharacter.startsWith('gf-') && dad.curCharacter != 'gf') {
 								if(wasGf && gf != null) {
@@ -2554,7 +2569,10 @@ class PlayState extends MusicBeatState
 								gf.alpha = 0.00001;
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
+								if (ClientPrefs.data.charRGB)
+								{
 								gf.fixArrowRGB();
+								}
 								if(gf.curCharacter == 'nene')
 								{
 									abot.visible = true;

@@ -77,6 +77,12 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Character Note Colors',
+			"If unchecked, Character's won't have their custom note colors.",
+			'charRGB',
+			'bool');
+		addOption(option);
+
 		var option:Option = new Option('Hide HUD',
 			'If checked, hides most HUD elements.',
 			'hideHud',
