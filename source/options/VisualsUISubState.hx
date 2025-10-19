@@ -88,6 +88,12 @@ class VisualsUISubState extends BaseOptionsMenu
 			'hideHud',
 			'bool');
 		addOption(option);
+
+		var option:Option = new Option('Show Misses and Accuracy',
+			'If unchecked, hides Misses and Accuracy on the HUD and the Score is displayed like Base Game.',
+			'psychScore',
+			'bool');
+		addOption(option);
 		
 		var option:Option = new Option('Time Bar:',
 			"What should the Time Bar display?",
@@ -111,6 +117,12 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Score Text Zoom on Hit',
 			"If unchecked, disables the Score text zooming\neverytime you hit a note.",
 			'scoreZoom',
+			'bool');
+		addOption(option);
+
+		var option:Option = new Option('Health Bar Colors',
+			"If unchecked, the Health Bar will use the defualt red and green colors.",
+			'healthBarColors',
 			'bool');
 		addOption(option);
 
@@ -158,17 +170,17 @@ class VisualsUISubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
+		var option:Option = new Option('Combo Break on Bad or Shit',
+			"If checked, your Combo will break if you get a Bad or Shit Rating and no Ghost Notes will appear.",
+			'comboBreak',
+			'bool');
+		addOption(option);
+
 		var option:Option = new Option('Combo Stacking',
 			"If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read",
 			'comboStacking',
 			'bool');
 		addOption(option);
-
-		//var option:Option = new Option('Beat the Mod',
-			//"This is for testing purposes only please remove when release",
-			//'modBeaten',
-			//'bool');
-		//addOption(option);
 
 		super();
 		add(notes);

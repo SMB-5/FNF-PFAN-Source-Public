@@ -656,8 +656,16 @@ class PlayState extends MusicBeatState
 		iconP2.alpha = ClientPrefs.data.healthBarAlpha;
 		uiGroup.add(iconP2);
 
+		if (ClientPrefs.data.psychScore)
+		{
 		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		}
+		else
+		{
+		scoreTxt = new FlxText(healthBar.x + healthBar.width - 190, healthBar.y + 30, 0, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		}
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !ClientPrefs.data.hideHud;
@@ -827,8 +835,16 @@ class PlayState extends MusicBeatState
 	#end
 
 	public function reloadHealthBarColors() {
+		if (ClientPrefs.data.healthBarColors)
+		{
 		healthBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]),
 			FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
+		}
+		else
+		{
+		healthBar.setColors(FlxColor.fromRGB(255, 0, 0),
+			FlxColor.fromRGB(102, 255, 51));	
+		}
 	}
 
 	public function addCharacterToList(newCharacter:String, type:Int) {
@@ -1299,12 +1315,20 @@ class PlayState extends MusicBeatState
 			str += ' (${percent}%)';
 		}
 
+		if (ClientPrefs.data.psychScore)
+		{
 		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(songScore, false)}'
 		+ (!instakillOnMiss ? ' | Misses: ${songMisses}' : "")
 		+ ' | Rating: ${str}';
 		// "tempScore" variable is used to prevent another memory leak, just in case
 		// "\n" here prevents the text from being cut off by beat zooms
 		scoreTxt.text = '${tempScore}\n';
+		}
+		else
+		{
+		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(songScore, false)}';
+		scoreTxt.text = '${tempScore}\n';
+		}
 
 		if (!miss && !cpuControlled)
 			doScoreBop();
@@ -2894,7 +2918,7 @@ class PlayState extends MusicBeatState
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
 
-		if (daRating.name == 'bad' || daRating.name == 'shit')
+		if (ClientPrefs.data.comboBreak && (daRating.name == 'bad' || daRating.name == 'shit'))
 		{
 			combo = 0;
 			makeGhostNote(note);
