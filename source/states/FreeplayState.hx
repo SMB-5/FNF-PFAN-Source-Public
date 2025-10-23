@@ -226,7 +226,8 @@ class FreeplayState extends MusicBeatState
 				WeekData.weeksList[i] != "week4" &&
 				WeekData.weeksList[i] != "week5") continue;
 			// Weeks in freeplay category
-			if (mode == "freeplay" && WeekData.weeksList[i] != "bonus") continue;
+			if (mode == "freeplay" && 
+				WeekData.weeksList[i] != "bonusp5") continue;
 			// Weeks in cover category
 			//if (mode == "cover" && WeekData.weeksList[i] != "covers") continue;
 			// All of the weeks (yes it has to be specified)
@@ -236,7 +237,8 @@ class FreeplayState extends MusicBeatState
 				WeekData.weeksList[i] != "week3" &&
 				WeekData.weeksList[i] != "week4" &&
 				WeekData.weeksList[i] != "week5" && 
-				WeekData.weeksList[i] != "bonus") continue;
+				WeekData.weeksList[i] != "bonusp5" &&
+				WeekData.weeksList[i] != "extras") continue;
 
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var leSongs:Array<String> = [];
@@ -298,15 +300,11 @@ class FreeplayState extends MusicBeatState
 			songText.targetY = (i - curSelected);
 			grpSongs.add(songText);
 
-			var maxWidth = 980;
-			if (songText.width > maxWidth)
-			{
-				songText.scaleX = maxWidth / songText.width;
-			}
+			songText.scaleX = Math.min(0.8, 480 / songText.width);
 
 			songText.x += 60;
 			songText.y += 320;
-			songText.scaleX = 0.8;
+			//songText.scaleX = 0.8;
 			songText.scaleY = 0.8;
 			songText.startPosition.set(songText.x, songText.y);
 

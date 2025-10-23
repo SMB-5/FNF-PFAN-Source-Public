@@ -1,0 +1,13 @@
+{
+    "card" : {
+        "name" : "Mass Destruction",
+        "expandBeat" : 9999999999999,
+		"duration": 3
+    },
+    "credits" : {
+        "music" : "Atlus Sound Team, Azumi Takahashi and Lotus Juice",
+        "chart" : "SMB",
+        "art" : "???",
+        "code" : "SMB"
+    }
+}
