@@ -1,13 +1,11 @@
 package states.stages;
 
-class P3RBGLoop extends BaseStage
+class DDR extends BaseStage
 {
 	override function create()
 	{
-		game.startVideo('P3R-BGLoop', true, false, true, false); // Precache first
-		PlayState.instance.videoCutscene.camera = camHUD;
-
-		game.videoCutscene?.play();
+		var bg:BGSprite = new BGSprite('persona/stages/ddr/p3', 0, 0, 1, 1);
+		add(bg);
 	}
 
 	override function countdownStart()

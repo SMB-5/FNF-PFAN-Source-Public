@@ -432,7 +432,7 @@ class PlayState extends MusicBeatState
 			case 'TartarusLobby': new TartarusLobby(); 
 			case 'TVWorld': new TVWorld();
 			case 'VelvetRoomP5': new VelvetRoomP5();
-			case 'P3RBGLoop': new P3RBGLoop();
+			case 'DDR': new DDR();
 			case 'Specialist': new Specialist();
 
 			// base game
