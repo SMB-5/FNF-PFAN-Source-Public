@@ -224,6 +224,9 @@ class PlayState extends MusicBeatState
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
 
+	public var subtitlesTxt:FlxText;
+	var subtitlesBG:FlxSprite;
+
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 	public var camHUD:FlxCamera;
@@ -680,7 +683,24 @@ class PlayState extends MusicBeatState
 		botplayTxt.visible = cpuControlled;
 		uiGroup.add(botplayTxt);
 		if(ClientPrefs.data.downScroll)
+		{
 			botplayTxt.y = healthBar.y + 70;
+		}
+
+		subtitlesBG = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.BLACK);
+		subtitlesBG.alpha = 0.67;
+		uiGroup.add(subtitlesBG);
+
+		subtitlesTxt = new FlxText(0, healthBar.y - 90, 0, "", 24);
+		subtitlesTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		uiGroup.add(subtitlesTxt);
+		if(ClientPrefs.data.downScroll)
+		{
+            subtitlesTxt.y = healthBar.y + 80;
+		}
+
+		subtitlesTxt.visible = false;
+		subtitlesBG.visible = false;
 
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
@@ -2656,6 +2676,29 @@ class PlayState extends MusicBeatState
 			case 'Play Sound':
 				if(flValue2 == null) flValue2 = 1;
 				FlxG.sound.play(Paths.sound(value1), flValue2);
+
+			case 'Subtitles':
+			if(ClientPrefs.data.subtitles)
+			{
+                subtitlesTxt.text = value1;
+				subtitlesTxt.color = FlxColor.fromString(value2);
+				subtitlesTxt.screenCenter(X);
+				subtitlesBG.setGraphicSize(Math.floor(subtitlesTxt.width + 24), Math.floor(subtitlesTxt.height + 24));
+		        subtitlesBG.updateHitbox();
+		        subtitlesBG.y = subtitlesTxt.y - (24 / 2);
+		        subtitlesBG.screenCenter(X);
+                subtitlesTxt.text += "\n";
+
+				subtitlesTxt.visible = true;
+				subtitlesBG.visible = true;
+
+				if(value1 == null || value1.length == 0)
+				{
+					subtitlesTxt.text = "";
+					subtitlesTxt.visible = false;
+					subtitlesBG.visible = false;
+				}
+			}
 		}
 
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
