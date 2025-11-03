@@ -108,8 +108,10 @@ class FreeplayState extends MusicBeatState
 		portrait = new FlxSprite().loadGraphic(Paths.image(''));
 		portrait.antialiasing = ClientPrefs.data.antialiasing;
 		add(portrait);
-		portrait.x = 670;
-		portrait.y = 50;
+		portrait.x = 700;
+		portrait.y = -100;
+		portrait.scale.x = 0.6;
+		portrait.scale.y = 0.6;
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -734,15 +736,11 @@ class FreeplayState extends MusicBeatState
 		}
 		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder'));
+			portrait.loadGraphic(Paths.image('persona/portraits/makoto'));
 		}
-		else if (songs[curSelected].songName.toLowerCase() == 'truth' || songs[curSelected].songName.toLowerCase() == 'specialist')
+		else
 		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder-brother'));
-		}
-		else if (songs[curSelected].songName.toLowerCase() == 'desire')
-		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder-brother'));
+			portrait.loadGraphic(Paths.image('persona/portraits/blank'));
 		}
 	}
 
