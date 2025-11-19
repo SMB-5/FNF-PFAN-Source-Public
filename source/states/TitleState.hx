@@ -296,7 +296,7 @@ class TitleState extends MusicBeatState
 		//atlusSpr.screenCenter(X);
 		atlusSpr.antialiasing = ClientPrefs.data.antialiasing;
 
-		atlusTxt = new FlxText(0, 250, FlxG.width, 'Not Associated With', 60);
+		atlusTxt = new FlxText(0, 250, FlxG.width, 'A Love Letter to', 60);
         atlusTxt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
         add(atlusTxt);
 		atlusTxt.alpha = 0;
