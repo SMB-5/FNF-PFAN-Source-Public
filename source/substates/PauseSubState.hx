@@ -91,7 +91,7 @@ class PauseSubState extends MusicBeatSubstate
 		infoBG.updateHitbox();
 		infoBG.antialiasing = ClientPrefs.data.antialiasing;
 
-		var levelInfo:FlxText = new FlxText(20, 0, 0, PlayState.SONG.song + ' - ' + data.credits.music, 24);
+		var levelInfo:FlxText = new FlxText(20, 0, 0, PlayState.SONG.song + ' - Unknown', 24);
 		levelInfo.scrollFactor.set();
 		levelInfo.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		levelInfo.updateHitbox();
@@ -101,22 +101,30 @@ class PauseSubState extends MusicBeatSubstate
         credtext2.scrollFactor.set();
 		credtext2.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext2.updateHitbox();
-		credtext2.text = 'Art: ${data.credits.art}';
+		credtext2.text = 'Art: Unknown';
         add(credtext2);
 
 		credtext3 = new FlxText(20, 72, 0, "", 24);
         credtext3.scrollFactor.set();
 		credtext3.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext3.updateHitbox();
-		credtext3.text = 'Code: ${data.credits.code}';
+		credtext3.text = 'Code: Unknown';
         add(credtext3);
 
 		credtext4 = new FlxText(20, 104, 0, "", 24);
         credtext4.scrollFactor.set();
 		credtext4.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext4.updateHitbox();
-		credtext4.text = 'Chart: ${data.credits.chart}';
+		credtext4.text = 'Chart: Unknown';
         add(credtext4);
+
+		if (CoolUtil.exists(Paths.json(PlayState.instance.songName + "/metadata")))
+		{
+			levelInfo.text = PlayState.SONG.song + ' - ' + data.credits.music;
+			credtext2.text = 'Art: ${data.credits.art}';
+			credtext3.text = 'Code: ${data.credits.code}';
+			credtext4.text = 'Chart: ${data.credits.chart}';
+		}
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, Difficulty.getString().toUpperCase(), 32);
 		levelDifficulty.scrollFactor.set();
@@ -144,6 +152,10 @@ class PauseSubState extends MusicBeatSubstate
 		desctext.updateHitbox();
 		if (CoolUtil.exists(Paths.txt(PlayState.instance.songName + "/desc"))) {
 			desctext.text = CoolUtil.getText(Paths.txt(PlayState.instance.songName + "/desc"));
+		}
+		else
+		{
+			desctext.text = 'Nice Description you got there. Oh wait this only shows when it does not exist so where is it?';
 		}
 		desctext.text += "\n";
         add(desctext);

@@ -208,7 +208,7 @@ class ScreenshotPlugin extends FlxBasic
       // screenshot spamming timer
       if (screenshotSpammedTimer == null || screenshotSpammedTimer.finished == true)
       {
-        screenshotSpammedTimer = new FlxTimer().start(1, function(_) {
+        screenshotSpammedTimer = new FlxTimer().start(0, function(_) {
           // The player's stopped spamming shots, so we can stop the screenshot spam mode too
           screenshotBeingSpammed = false;
           if (screenshotBuffer[0] != null) saveBufferedScreenshots(screenshotBuffer, screenshotNameBuffer);
@@ -222,7 +222,7 @@ class ScreenshotPlugin extends FlxBasic
       else // Pressing the screenshot key more than once every second enables the screenshot spam mode and resets the timer
       {
         screenshotBeingSpammed = true;
-        screenshotSpammedTimer.reset(1);
+        screenshotSpammedTimer.reset(0);
       }
       FlxG.stage.removeChild(previewSprite);
       screenshotTakenFrame++;
@@ -298,7 +298,7 @@ class ScreenshotPlugin extends FlxBasic
         //UserErrorSubstate.makeMessage("Too many screenshots!",
           //"You've tried taking more than 15 screenshots at a time. Give the game a funkin break! Jeez.\n\n\nIf you wanted those screenshots, well too bad!");
         // I had to put this in it's perfect - SMB
-        Application.current.window.alert("Your taking more than 15 screenshots at a time. You'll now be unable to take any more screenshots until the end of your session.", "STOP TAKING SO MANY SCREENSHOTS");
+        //Application.current.window.alert("Your taking more than 15 screenshots at a time. You'll now be unable to take any more screenshots until the end of your session.", "STOP TAKING SO MANY SCREENSHOTS");
         FlxG.state.subStateClosed.addOnce(state -> {
             noSavingScreenshots = false;
         });

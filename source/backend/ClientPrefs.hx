@@ -19,6 +19,7 @@ import states.TitleState;
 	public var splashSkin:String = 'Psych';
 	public var splashAlpha:Float = 0.6;
 	public var holdSplash:Bool = true;
+	public var charRGB:Bool = true;
 	public var lowQuality:Bool = false;
 	public var shaders:Bool = true;
 	public var cacheOnGPU:Bool = #if !switch false #else true #end; //From Stilic
@@ -39,13 +40,17 @@ import states.TitleState;
 
 	public var ghostTapping:Bool = true;
 	public var timeBarType:String = 'Time Left';
+	public var psychScore:Bool = true;
 	public var scoreZoom:Bool = true;
 	public var noReset:Bool = false;
+	public var healthBarColors:Bool = true;
 	public var healthBarAlpha:Float = 1;
+	public var subtitles:Bool = true;
 	public var hitsoundVolume:Float = 0;
 	public var pauseMusic:String = 'Tea Time';
 	public var checkForUpdates:Bool = true;
 	public var comboStacking:Bool = true;
+	public var comboBreak:Bool = true;
 	public var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -77,8 +82,6 @@ import states.TitleState;
 	public var safeFrames:Float = 10;
 	public var guitarHeroSustains:Bool = true;
 	public var discordRPC:Bool = true;
-
-	public var modBeaten:Bool = false;
 }
 
 class ClientPrefs {

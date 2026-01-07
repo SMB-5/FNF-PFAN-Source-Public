@@ -224,6 +224,9 @@ class PlayState extends MusicBeatState
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
 
+	public var subtitlesTxt:FlxText;
+	var subtitlesBG:FlxSprite;
+
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 	public var camHUD:FlxCamera;
@@ -432,6 +435,7 @@ class PlayState extends MusicBeatState
 			case 'TartarusLobby': new TartarusLobby(); 
 			case 'TVWorld': new TVWorld();
 			case 'VelvetRoomP5': new VelvetRoomP5();
+			case 'DDR': new DDR();
 			case 'Specialist': new Specialist();
 
 			// base game
@@ -543,9 +547,12 @@ class PlayState extends MusicBeatState
 		boyfriendGroup.add(boyfriend);
 		startCharacterScripts(boyfriend.curCharacter);
 
+		if (ClientPrefs.data.charRGB)
+		{
 		boyfriend.fixArrowRGB();
 		dad.fixArrowRGB();
 		gf.fixArrowRGB();
+		}
 
 		var camPos:FlxPoint = FlxPoint.get(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if(gf != null)
@@ -653,8 +660,16 @@ class PlayState extends MusicBeatState
 		iconP2.alpha = ClientPrefs.data.healthBarAlpha;
 		uiGroup.add(iconP2);
 
+		if (ClientPrefs.data.psychScore)
+		{
 		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		}
+		else
+		{
+		scoreTxt = new FlxText(healthBar.x + healthBar.width - 190, healthBar.y + 30, 0, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		}
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !ClientPrefs.data.hideHud;
@@ -668,7 +683,24 @@ class PlayState extends MusicBeatState
 		botplayTxt.visible = cpuControlled;
 		uiGroup.add(botplayTxt);
 		if(ClientPrefs.data.downScroll)
+		{
 			botplayTxt.y = healthBar.y + 70;
+		}
+
+		subtitlesBG = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.BLACK);
+		subtitlesBG.alpha = 0.67;
+		uiGroup.add(subtitlesBG);
+
+		subtitlesTxt = new FlxText(0, healthBar.y - 90, 0, "", 24);
+		subtitlesTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		uiGroup.add(subtitlesTxt);
+		if(ClientPrefs.data.downScroll)
+		{
+            subtitlesTxt.y = healthBar.y + 80;
+		}
+
+		subtitlesTxt.visible = false;
+		subtitlesBG.visible = false;
 
 		uiGroup.cameras = [camHUD];
 		noteGroup.cameras = [camHUD];
@@ -684,7 +716,7 @@ class PlayState extends MusicBeatState
 
 		if (hasMetadata) {
 			card = new SongCard(0, 0, metadata);
-			card.screenCenter(Y);
+			//card.screenCenter(Y);
 			card.x = -card.width;
 			add(card);
 			card.cameras = [camHUD];
@@ -824,8 +856,16 @@ class PlayState extends MusicBeatState
 	#end
 
 	public function reloadHealthBarColors() {
+		if (ClientPrefs.data.healthBarColors)
+		{
 		healthBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]),
 			FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
+		}
+		else
+		{
+		healthBar.setColors(FlxColor.fromRGB(255, 0, 0),
+			FlxColor.fromRGB(102, 255, 51));	
+		}
 	}
 
 	public function addCharacterToList(newCharacter:String, type:Int) {
@@ -1296,12 +1336,20 @@ class PlayState extends MusicBeatState
 			str += ' (${percent}%)';
 		}
 
+		if (ClientPrefs.data.psychScore)
+		{
 		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(songScore, false)}'
 		+ (!instakillOnMiss ? ' | Misses: ${songMisses}' : "")
 		+ ' | Rating: ${str}';
 		// "tempScore" variable is used to prevent another memory leak, just in case
 		// "\n" here prevents the text from being cut off by beat zooms
 		scoreTxt.text = '${tempScore}\n';
+		}
+		else
+		{
+		var tempScore:String = 'Score: ${FlxStringUtil.formatMoney(songScore, false)}';
+		scoreTxt.text = '${tempScore}\n';
+		}
 
 		if (!miss && !cpuControlled)
 			doScoreBop();
@@ -1543,13 +1591,13 @@ class PlayState extends MusicBeatState
 
 				var fixNoteColorShit = function(dunceNote:Note)
 				{
-					if (!["Hurt Note"].contains(dunceNote.noteType))
+					if (!["Hurt Note"].contains(dunceNote.noteType) && ClientPrefs.data.charRGB)
 					{
 						// unreadable i know but it works
 						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? dad : dad) : (!opponentMode ? boyfriend : boyfriend))
 							.arrowRGB[dunceNote.noteData]);
 					}
-					if (swagNote.gfNote)
+					if (swagNote.gfNote && ClientPrefs.data.charRGB)
 					{
 						// unreadable i know but it works
 						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? gf : gf) : (!opponentMode ? gf : gf))
@@ -1743,7 +1791,10 @@ class PlayState extends MusicBeatState
 				babyArrow.defaultRGB = boyfriend.arrowRGB;
 				if (opponentMode && ClientPrefs.data.middleScroll)
 				{
+					if (ClientPrefs.data.charRGB)
+					{
 					babyArrow.defaultRGB = dad.arrowRGB;
+					}
 					babyArrow.x -= 330;
 					if (i > 1) { //Up and Right
 						babyArrow.x += FlxG.width / 2 + 25;
@@ -1753,7 +1804,10 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
+				if (ClientPrefs.data.charRGB)
+				{
 				babyArrow.defaultRGB = dad.arrowRGB;
+				}
 				if (ClientPrefs.data.middleScroll)
 				{
 					babyArrow.x += (!opponentMode ? 310 : 640);
@@ -2513,7 +2567,10 @@ class PlayState extends MusicBeatState
 							boyfriend.alpha = 0.00001;
 							boyfriend = boyfriendMap.get(value2);
 							boyfriend.alpha = lastAlpha;
+							if (ClientPrefs.data.charRGB)
+							{
 							boyfriend.fixArrowRGB();
+							}
 							iconP1.changeIcon(boyfriend.healthIcon);
 						}
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
@@ -2527,7 +2584,10 @@ class PlayState extends MusicBeatState
 							var wasGf:Bool = dad.curCharacter.startsWith('gf-') || dad.curCharacter == 'gf';
 							var lastAlpha:Float = dad.alpha;
 							dad.alpha = 0.00001;
+							if (ClientPrefs.data.charRGB)
+							{
 							dad.fixArrowRGB();
+							}
 							dad = dadMap.get(value2);
 							if(!dad.curCharacter.startsWith('gf-') && dad.curCharacter != 'gf') {
 								if(wasGf && gf != null) {
@@ -2554,7 +2614,10 @@ class PlayState extends MusicBeatState
 								gf.alpha = 0.00001;
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
+								if (ClientPrefs.data.charRGB)
+								{
 								gf.fixArrowRGB();
+								}
 								if(gf.curCharacter == 'nene')
 								{
 									abot.visible = true;
@@ -2613,6 +2676,29 @@ class PlayState extends MusicBeatState
 			case 'Play Sound':
 				if(flValue2 == null) flValue2 = 1;
 				FlxG.sound.play(Paths.sound(value1), flValue2);
+
+			case 'Subtitles':
+			if(ClientPrefs.data.subtitles)
+			{
+                subtitlesTxt.text = value1;
+				subtitlesTxt.color = FlxColor.fromString(value2);
+				subtitlesTxt.screenCenter(X);
+				subtitlesBG.setGraphicSize(Math.floor(subtitlesTxt.width + 24), Math.floor(subtitlesTxt.height + 24));
+		        subtitlesBG.updateHitbox();
+		        subtitlesBG.y = subtitlesTxt.y - (24 / 2);
+		        subtitlesBG.screenCenter(X);
+                subtitlesTxt.text += "\n";
+
+				subtitlesTxt.visible = true;
+				subtitlesBG.visible = true;
+
+				if(value1 == null || value1.length == 0)
+				{
+					subtitlesTxt.text = "";
+					subtitlesTxt.visible = false;
+					subtitlesBG.visible = false;
+				}
+			}
 		}
 
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
@@ -2876,11 +2962,11 @@ class PlayState extends MusicBeatState
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
 
-		if (daRating.name == 'bad' || daRating.name == 'shit')
+		if (ClientPrefs.data.comboBreak && (daRating.name == 'bad' || daRating.name == 'shit'))
 		{
 			combo = 0;
 			makeGhostNote(note);
-			if(char != gf && lastCombo > 5 && gf != null && gf.animOffsets.exists('sad'))
+			if(char != gf && lastCombo > 49 && gf != null && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
 				gf.specialAnim = true;
@@ -3335,7 +3421,7 @@ class PlayState extends MusicBeatState
 			if (!char.animOffsets.exists(animToPlay)) animToPlay = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, direction)))] + 'miss';
 			char.playAnim(animToPlay, true);
 
-			if(char != gf && lastCombo > 5 && gf != null && gf.animOffsets.exists('sad'))
+			if(char != gf && lastCombo > 49 && gf != null && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
 				gf.specialAnim = true;

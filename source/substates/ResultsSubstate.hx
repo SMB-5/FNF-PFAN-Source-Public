@@ -128,11 +128,16 @@ class ResultsSubstate extends MusicBeatSubstate
         resultsTxt.updateHitbox();
         add(resultsTxt);
 
-        songTxt = new FlxText(20, 75, FlxG.width, PlayState.SONG.song + ' By ' + data.credits.music, 50);
+        songTxt = new FlxText(20, 75, FlxG.width, PlayState.SONG.song + ' By Unknown', 50);
         songTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
         songTxt.scrollFactor.set();
         songTxt.updateHitbox();
         add(songTxt);
+
+        if (CoolUtil.exists(Paths.json(PlayState.instance.songName + "/metadata")))
+		{
+        songTxt.text = PlayState.SONG.song + ' By ' + data.credits.music;
+        }
 
         sickTxt = new FlxText(20, 175, FlxG.width, 'Sicks: ' + lerpSick, 50);
         sickTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);

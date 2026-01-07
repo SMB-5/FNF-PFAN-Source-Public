@@ -108,8 +108,10 @@ class FreeplayState extends MusicBeatState
 		portrait = new FlxSprite().loadGraphic(Paths.image(''));
 		portrait.antialiasing = ClientPrefs.data.antialiasing;
 		add(portrait);
-		portrait.x = 670;
-		portrait.y = 50;
+		portrait.x = 700;
+		portrait.y = -100;
+		portrait.scale.x = 0.6;
+		portrait.scale.y = 0.6;
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -226,7 +228,8 @@ class FreeplayState extends MusicBeatState
 				WeekData.weeksList[i] != "week4" &&
 				WeekData.weeksList[i] != "week5") continue;
 			// Weeks in freeplay category
-			if (mode == "freeplay" && WeekData.weeksList[i] != "bonus") continue;
+			if (mode == "freeplay" && 
+				WeekData.weeksList[i] != "bonusp5") continue;
 			// Weeks in cover category
 			//if (mode == "cover" && WeekData.weeksList[i] != "covers") continue;
 			// All of the weeks (yes it has to be specified)
@@ -236,7 +239,8 @@ class FreeplayState extends MusicBeatState
 				WeekData.weeksList[i] != "week3" &&
 				WeekData.weeksList[i] != "week4" &&
 				WeekData.weeksList[i] != "week5" && 
-				WeekData.weeksList[i] != "bonus") continue;
+				WeekData.weeksList[i] != "bonusp5" &&
+				WeekData.weeksList[i] != "extras") continue;
 
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var leSongs:Array<String> = [];
@@ -298,15 +302,11 @@ class FreeplayState extends MusicBeatState
 			songText.targetY = (i - curSelected);
 			grpSongs.add(songText);
 
-			var maxWidth = 980;
-			if (songText.width > maxWidth)
-			{
-				songText.scaleX = maxWidth / songText.width;
-			}
+			songText.scaleX = Math.min(0.8, 480 / songText.width);
 
 			songText.x += 60;
 			songText.y += 320;
-			songText.scaleX = 0.8;
+			//songText.scaleX = 0.8;
 			songText.scaleY = 0.8;
 			songText.startPosition.set(songText.x, songText.y);
 
@@ -736,15 +736,11 @@ class FreeplayState extends MusicBeatState
 		}
 		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder'));
+			portrait.loadGraphic(Paths.image('persona/portraits/makoto'));
 		}
-		else if (songs[curSelected].songName.toLowerCase() == 'truth' || songs[curSelected].songName.toLowerCase() == 'specialist')
+		else
 		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder-brother'));
-		}
-		else if (songs[curSelected].songName.toLowerCase() == 'desire')
-		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder-brother'));
+			portrait.loadGraphic(Paths.image('persona/portraits/blank'));
 		}
 	}
 
