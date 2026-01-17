@@ -118,7 +118,6 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			if (instance == null && optionsArray[i].name == 'Play as Opponent')
 			{
 				// Opponent mode is not available on story mode
-				optionsArray[i].setValue(false);
 				optionsArray.remove(optionsArray[i]);
 				continue;
 			}

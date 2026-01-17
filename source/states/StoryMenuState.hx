@@ -275,12 +275,6 @@ class StoryMenuState extends MusicBeatState
 	{
 		if (!weekIsLocked(loadedWeeks[curWeek].fileName))
 		{
-			if (ClientPrefs.getGameplaySetting('opponentmode'))
-			{
-				ClientPrefs.data.gameplaySettings.set('opponentmode', false); // bandaid fix lmfao im lazy
-				ClientPrefs.saveSettings();
-			}
-
 			// We can't use Dynamic Array .copy() because that crashes HTML5, here's a workaround.
 			var songArray:Array<String> = [];
 			var leWeek:Array<Dynamic> = loadedWeeks[curWeek].songs;
