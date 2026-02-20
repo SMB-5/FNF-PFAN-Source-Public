@@ -38,12 +38,12 @@ class CreditsState extends MusicBeatState
 		#if MODS_ALLOWED
 		for (mod in Mods.parseList().enabled) pushModCreditsToList(mod);
 		#end
-		var desc:String = '"Hello! I charted some of the songs here and helped with some of the code. Also isn\'t my icon so good haha i drew it myself"';
+		var desc:String = '"Hi! I am a charter and also helped with the coding for this mod! Watch out for Baldiplier, he tends to sneak in here.."';
 		var larryCred:Array<String> = ['larryfrosty'];
 		if (FlxG.random.bool(0.1)) {
 			larryCred = FlxG.random.getObject(baldipliers, [90, 25, 5]) ?? ['larryfrosty'];
 			if (larryCred.length > 1)
-				desc = '"Hello. I charted some of the songs. Make sure to keep your pliers ${larryCred[1]}."';
+				desc = '"Hello. You caught me on my day off. Anyways, make sure to keep your pliers ${larryCred[1]}."';
 		}
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['Socials'],
