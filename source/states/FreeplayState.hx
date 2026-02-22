@@ -108,10 +108,10 @@ class FreeplayState extends MusicBeatState
 		portrait = new FlxSprite().loadGraphic(Paths.image(''));
 		portrait.antialiasing = ClientPrefs.data.antialiasing;
 		add(portrait);
-		portrait.x = 700;
+		portrait.x = 400;
 		portrait.y = -100;
-		portrait.scale.x = 0.6;
-		portrait.scale.y = 0.6;
+		portrait.scale.x = 0.45;
+		portrait.scale.y = 0.45;
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -736,7 +736,7 @@ class FreeplayState extends MusicBeatState
 		}
 		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
-			portrait.loadGraphic(Paths.image('persona/portraits/placeholder'));
+			portrait.loadGraphic(Paths.image('persona/portraits/makoto-portrait'));
 		}
 		else
 		{
