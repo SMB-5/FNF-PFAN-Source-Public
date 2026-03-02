@@ -734,9 +734,13 @@ class FreeplayState extends MusicBeatState
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/blank'));
 		}
-		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
+		else if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/makoto-portrait'));
+		}
+		else if (songs[curSelected].songName.toLowerCase() == 'truth')
+		{
+			portrait.loadGraphic(Paths.image('persona/portraits/yu-portrait'));
 		}
 		else
 		{
