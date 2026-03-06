@@ -198,7 +198,7 @@ class EditorPlayState extends MusicBeatSubstate
 				var strum:StrumNote = strumGroup.members[daNote.noteData];
 				daNote.followStrumNote(strum, fakeCrochet, songSpeed / playbackRate);
 
-				if(!daNote.mustPress && daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
+				if(!daNote.mustPress && daNote.canBeHit && !daNote.hitByOpponent && !daNote.ignoreNote)
 					opponentNoteHit(daNote);
 
 				if(daNote.isSustainNote && strum.sustainReduce) daNote.clipToStrumNote(strum);
@@ -373,7 +373,7 @@ class EditorPlayState extends MusicBeatSubstate
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, this);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, true, this);
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				//swagNote.gfNote = (section.gfSection && (songNotes[1]<4));
@@ -392,7 +392,7 @@ class EditorPlayState extends MusicBeatSubstate
 					{
 						oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, oldNote, true, this);
+						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, oldNote, true, true, this);
 						sustainNote.mustPress = gottaHitNote;
 						//sustainNote.gfNote = (section.gfSection && (songNotes[1]<4));
 						sustainNote.noteType = swagNote.noteType;

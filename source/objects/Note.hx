@@ -434,7 +434,7 @@ class Note extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (mustPress != PlayState.opponentMode)
+		if (mustPress != (inEditor ? false : PlayState.opponentMode))
 		{
 			canBeHit = (strumTime > Conductor.songPosition - (Conductor.safeZoneOffset * lateHitMult) &&
 						strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * earlyHitMult));
@@ -502,7 +502,7 @@ class Note extends FlxSprite
 	public function clipToStrumNote(myStrum:StrumNote)
 	{
 		var center:Float = myStrum.y + offsetY + Note.swagWidth / 2;
-		if((mustPress != PlayState.opponentMode || !ignoreNote) && (wasGoodHit || (prevNote.wasGoodHit && !canBeHit)))
+		if((mustPress != (inEditor ? false : PlayState.opponentMode) || !ignoreNote) && (wasGoodHit || (prevNote.wasGoodHit && !canBeHit)))
 		{
 			var swagRect:FlxRect = clipRect;
 			if(swagRect == null) swagRect = new FlxRect(0, 0, frameWidth, frameHeight);
