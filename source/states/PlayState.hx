@@ -434,6 +434,7 @@ class PlayState extends MusicBeatState
 			case 'Dorm': new Dorm();
 			case 'TartarusLobby': new TartarusLobby(); 
 			case 'TVWorld': new TVWorld();
+			case 'Mementos': new Mementos(); 
 			case 'VelvetRoomP5': new VelvetRoomP5();
 			case 'DDR': new DDR();
 			case 'Specialist': new Specialist();
