@@ -41,16 +41,16 @@ class MementosTrain extends BGSprite
 				if (startedMoving)
 				{
 					x -= 400;
-					if (x < -2000 && !finishing)
+					if (x < -0 && !finishing)
 					{
-						x = -1150;
+						x = 850;
 						cars -= 1;
 
 						if (cars <= 0)
 							finishing = true;
 					}
 
-					if (x < -4000 && finishing)
+					if (x < -2000 && finishing)
 						restart();
 				}
 				frameTiming = 0;
