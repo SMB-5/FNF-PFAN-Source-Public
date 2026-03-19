@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="pause_exit.png">
+<TextureAtlas imagePath="pause_Exit.png">
 	<!-- Created using the Spritesheet and XML generator -->
 	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
-	<SubTexture name="selected0000" x="0" y="0" width="765" height="328" frameX="-99" frameY="-761" frameWidth="1794" frameHeight="1099"/>
-	<SubTexture name="unselected0000" x="0" y="328" width="649" height="309" frameX="-141" frameY="-755" frameWidth="1794" frameHeight="1099"/>
+	<SubTexture name="selected0000" x="0" y="0" width="333" height="261" frameX="0" frameY="0" frameWidth="333" frameHeight="261"/>
+	<SubTexture name="unselected20000" x="333" y="0" width="333" height="261" frameX="0" frameY="0" frameWidth="333" frameHeight="261"/>
 </TextureAtlas>

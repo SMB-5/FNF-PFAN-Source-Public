@@ -36,9 +36,9 @@ class PauseSubState extends MusicBeatSubstate
 
 	var menuItemslol:FlxTypedGroup<FlxSprite>;
 	var buttonsBG:FlxSprite;
+	var buttonsBG2:FlxSprite;
 	var back:FlxSprite;
-	var descBG:FlxSprite;
-	var infoBG:FlxSprite;
+	var blocks:FlxSprite;
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
@@ -79,41 +79,53 @@ class PauseSubState extends MusicBeatSubstate
 		bg.scrollFactor.set();
 		add(bg);
 
-		descBG = new FlxSprite(190, 40).loadGraphic(Paths.image('persona/menus/pause/description'));
-		add(descBG);
-		descBG.setGraphicSize(Std.int(descBG.width * 0.6));
-		descBG.updateHitbox();
-		descBG.antialiasing = ClientPrefs.data.antialiasing;
+		back = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/menus/pause/back'));
+		add(back);
+		back.setGraphicSize(Std.int(back.width * 1.0));
+		back.updateHitbox();
+		back.antialiasing = ClientPrefs.data.antialiasing;
 
-		infoBG = new FlxSprite(-180, 0).loadGraphic(Paths.image('persona/menus/pause/info'));
-		add(infoBG);
-		infoBG.setGraphicSize(Std.int(infoBG.width * 0.8));
-		infoBG.updateHitbox();
-		infoBG.antialiasing = ClientPrefs.data.antialiasing;
+		buttonsBG = new FlxSprite(0, 110).loadGraphic(Paths.image('persona/menus/pause/buttonsback'));
+		add(buttonsBG);
+		buttonsBG.setGraphicSize(Std.int(buttonsBG.width * 1.0));
+		buttonsBG.updateHitbox();
+		buttonsBG.antialiasing = ClientPrefs.data.antialiasing;
 
-		var levelInfo:FlxText = new FlxText(20, 0, 0, PlayState.SONG.song + ' - Unknown', 24);
+		buttonsBG2 = new FlxSprite(10, 135).loadGraphic(Paths.image('persona/menus/pause/buttonsback2'));
+		add(buttonsBG2);
+		buttonsBG2.setGraphicSize(Std.int(buttonsBG2.width * 1.0));
+		buttonsBG2.updateHitbox();
+		buttonsBG2.antialiasing = ClientPrefs.data.antialiasing;
+
+		blocks = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/menus/pause/blocks'));
+		add(blocks);
+		blocks.setGraphicSize(Std.int(blocks.width * 1.0));
+		blocks.updateHitbox();
+		blocks.antialiasing = ClientPrefs.data.antialiasing;
+
+		var levelInfo:FlxText = new FlxText(35, 0, 0, PlayState.SONG.song + ' - Unknown', 24);
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		levelInfo.setFormat(Paths.font('ANDYB.TTF'), 18, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
-		credtext2 = new FlxText(20, 40, 0, "", 24);
+		credtext2 = new FlxText(865, 0, 0, "", 24);
         credtext2.scrollFactor.set();
-		credtext2.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		credtext2.setFormat(Paths.font('ANDYB.TTF'), 18, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext2.updateHitbox();
 		credtext2.text = 'Art: Unknown';
         add(credtext2);
 
-		credtext3 = new FlxText(20, 72, 0, "", 24);
+		credtext3 = new FlxText(920, 72, 0, "", 24);
         credtext3.scrollFactor.set();
-		credtext3.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		credtext3.setFormat(Paths.font('ANDYB.TTF'), 18, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext3.updateHitbox();
 		credtext3.text = 'Code: Unknown';
         add(credtext3);
 
-		credtext4 = new FlxText(20, 104, 0, "", 24);
+		credtext4 = new FlxText(60, 70, 0, "", 24);
         credtext4.scrollFactor.set();
-		credtext4.setFormat(Paths.font('ANDYB.TTF'), 24, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		credtext4.setFormat(Paths.font('ANDYB.TTF'), 14, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		credtext4.updateHitbox();
 		credtext4.text = 'Chart: Unknown';
         add(credtext4);
@@ -136,7 +148,7 @@ class PauseSubState extends MusicBeatSubstate
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('ANDYB.TTF'), 28, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		blueballedTxt.updateHitbox();
-		add(blueballedTxt);
+		//add(blueballedTxt);
 
 		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
 		practiceText.scrollFactor.set();
@@ -146,7 +158,7 @@ class PauseSubState extends MusicBeatSubstate
 		practiceText.visible = PlayState.instance.practiceMode;
 		//add(practiceText);
 
-		var desctext = new FlxText(760, 560, 500, "", 20);
+		var desctext = new FlxText(675, 520, 600, "", 20);
         desctext.scrollFactor.set();
 		desctext.setFormat(Paths.font('ANDYB.TTF'), 20, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		desctext.updateHitbox();
@@ -158,6 +170,7 @@ class PauseSubState extends MusicBeatSubstate
 			desctext.text = 'Nice Description you got there. Oh wait this only shows when it does not exist so where is it?';
 		}
 		desctext.text += "\n";
+		desctext.angle += 2;
         add(desctext);
 
 		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
@@ -177,35 +190,23 @@ class PauseSubState extends MusicBeatSubstate
 		credtext3.alpha = 0;
 		credtext4.alpha = 0;
 
-		levelInfo.x = FlxG.width - (levelInfo.width + 20);
+		//levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
-		credtext2.x = FlxG.width - (credtext2.width + 20);
-		credtext3.x = FlxG.width - (credtext3.width + 20);
-		credtext4.x = FlxG.width - (credtext4.width + 20);
+		//credtext2.x = FlxG.width - (credtext2.width + 20);
+		//credtext3.x = FlxG.width - (credtext3.width + 20);
+		//credtext4.x = FlxG.width - (credtext4.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: levelInfo.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9});
-		FlxTween.tween(credtext2, {alpha: 1, y: credtext2.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		FlxTween.tween(desctext, {alpha: 1, y: desctext.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		FlxTween.tween(credtext2, {alpha: 1, y: credtext2.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(credtext3, {alpha: 1, y: credtext3.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(credtext4, {alpha: 1, y: credtext4.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		//add(grpMenuShit);
-
-		back = new FlxSprite(-20, -45).loadGraphic(Paths.image('persona/menus/pause/back'));
-		add(back);
-		back.setGraphicSize(Std.int(back.width * 0.7));
-		back.updateHitbox();
-		back.antialiasing = ClientPrefs.data.antialiasing;
-
-		buttonsBG = new FlxSprite(-20, -45).loadGraphic(Paths.image('persona/menus/pause/Spacefiller'));
-		add(buttonsBG);
-		buttonsBG.setGraphicSize(Std.int(buttonsBG.width * 0.7));
-		buttonsBG.updateHitbox();
-		buttonsBG.antialiasing = ClientPrefs.data.antialiasing;
 
 		menuItemslol = new FlxTypedGroup<FlxSprite>();
 		add(menuItemslol);
@@ -213,16 +214,23 @@ class PauseSubState extends MusicBeatSubstate
 		for (i in 0...optionShit.length)
 		{
 			var offset:Float = (88 - (Math.max(optionShit.length, 4) - 4) * 80);
-			var menuItemlol:FlxSprite = new FlxSprite(-20, -45);
+			var spacing:Float = 80;
+			var menuItemlol:FlxSprite = new FlxSprite(30, 150 + i * spacing);
 			menuItemlol.frames = Paths.getSparrowAtlas('persona/menus/pause/pause_' + menuItems[i]);
 			menuItemlol.animation.addByPrefix('idle', 'unselected', 24);
 			menuItemlol.animation.addByPrefix('selected', 'selected', 24);
 			menuItemlol.animation.play('idle');
 			menuItemlol.ID = i;
-			menuItemlol.setGraphicSize(Std.int(menuItemlol.width * 0.7));
+			menuItemlol.setGraphicSize(Std.int(menuItemlol.width * 1.0));
 			menuItemslol.add(menuItemlol);
 			menuItemlol.antialiasing = ClientPrefs.data.antialiasing;
 			menuItemlol.updateHitbox();
+
+			//why
+			if (i > 0)
+			{
+    		menuItemlol.y += 70;
+			}
 		}
 
 		missingTextBG = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
