@@ -305,8 +305,6 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	var smoothHealth:Float = 1;
-
 	var abot:ABotSpeaker;
 
 	override public function create()
@@ -787,8 +785,6 @@ class PlayState extends MusicBeatState
 
 		cacheCountdown();
 		cachePopUpScore();
-
-		healthBar.valueFunction = function() return smoothHealth;
 
 		super.create();
 		Paths.clearUnusedMemory();
@@ -2158,9 +2154,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
 		callOnScripts('onUpdatePost', [elapsed]);
-
-		var mult:Float = FlxMath.lerp(smoothHealth, health, ((health / smoothHealth) * (elapsed * 8)) * playbackRate);
-    	smoothHealth = mult;
 	}
 
 	function transitionState()
