@@ -12,6 +12,8 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.addons.transition.FlxTransitionableState;
 
+import lime.app.Application;
+
 #if (!flash && sys)
 import flixel.addons.display.FlxRuntimeShader;
 #end
@@ -131,7 +133,7 @@ class FunkinLua {
 		set('rating', 0);
 		set('ratingName', '');
 		set('ratingFC', '');
-		set('version', MainMenuState.psychEngineVersion.trim());
+		set('version', Application.current.meta.get('version').trim());
 
 		set('inGameOver', false);
 		set('mustHitSection', false);
