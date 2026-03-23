@@ -18,7 +18,7 @@ class WarningDemoState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		warnText = new FlxText(0, 0, FlxG.width,"Hey thank you so much for downloading!\nWe hope you look forward to the full release of the mod and enjoy this short demo. Please do note that this is a Demo so not everything is final and some things might change upon the final release also there might be a few bugs.\n\nPress ENTER or ESCAPE to Accept.",32);
+		warnText = new FlxText(0, 0, FlxG.width,"WARNING\n\nThis Mod is still in active development so a lot of things\npresent might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do\nfor the Mod and does not represent the Full Mod.\n\nPress ENTER or ESCAPE to Accept.",32);
 		warnText.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		warnText.screenCenter(Y);
 		add(warnText);
