@@ -100,11 +100,6 @@ class FreeplayState extends MusicBeatState
 		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
 		add(grid);
 
-		songBG = new FlxSprite().loadGraphic(Paths.image('persona/menus/freeplay/triangle'));
-		songBG.antialiasing = ClientPrefs.data.antialiasing;
-		add(songBG);
-		songBG.screenCenter();
-
 		portrait = new FlxSprite().loadGraphic(Paths.image(''));
 		portrait.antialiasing = ClientPrefs.data.antialiasing;
 		add(portrait);
@@ -112,6 +107,11 @@ class FreeplayState extends MusicBeatState
 		portrait.y = -100;
 		portrait.scale.x = 0.45;
 		portrait.scale.y = 0.45;
+
+		songBG = new FlxSprite().loadGraphic(Paths.image('persona/menus/freeplay/songbg'));
+		songBG.antialiasing = ClientPrefs.data.antialiasing;
+		add(songBG);
+		songBG.screenCenter();
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -730,17 +730,16 @@ class FreeplayState extends MusicBeatState
 	//probably gonna change how this works in the future
 	private function updatePortrait()
 	{
-		if (songs[curSelected].songName.toLowerCase() == 'random')
-		{
-			portrait.loadGraphic(Paths.image('persona/portraits/blank'));
-		}
-		else if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
+		portrait.x = 800;
+		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/makoto-portrait'));
+			FlxTween.tween(portrait, {x: 400}, 0.3, {ease: FlxEase.expoOut});
 		}
 		else if (songs[curSelected].songName.toLowerCase() == 'truth')
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/yu-portrait'));
+			FlxTween.tween(portrait, {x: 430}, 0.3, {ease: FlxEase.expoOut});
 		}
 		else
 		{
