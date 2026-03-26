@@ -731,6 +731,7 @@ class FreeplayState extends MusicBeatState
 	private function updatePortrait()
 	{
 		portrait.x = 800;
+		portrait.y = -100;
 		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/makoto-portrait'));
@@ -740,6 +741,12 @@ class FreeplayState extends MusicBeatState
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/yu-portrait'));
 			FlxTween.tween(portrait, {x: 430}, 0.3, {ease: FlxEase.expoOut});
+		}
+		else if (songs[curSelected].songName.toLowerCase() == 'desire')
+		{
+			portrait.loadGraphic(Paths.image('persona/portraits/joker-portrait'));
+			FlxTween.tween(portrait, {x: 430}, 0.3, {ease: FlxEase.expoOut});
+			portrait.y = -200;
 		}
 		else
 		{
