@@ -30,13 +30,12 @@ class ResultsSubstate extends MusicBeatSubstate
     var badTxt:FlxText;
     var shitTxt:FlxText;
     var songTxt:FlxText;
-	var resultsTxt:FlxText;
 
     public var progressBar:FlxBar;
     public var barTween:FlxTween = null;
     var can_leave = false;
 
-    public var mode:String = "fnf";
+    public var mode:String = "p5";
 
     var lerpScore:Int = 0;
     var intendedScore:Int = 0;
@@ -62,15 +61,11 @@ class ResultsSubstate extends MusicBeatSubstate
     var showShit = false;
     var showRank = false;
 
-	var data:MetadataFile;
-
     override function create()
     {
         camHUD = new FlxCamera();
         FlxG.cameras.add(camHUD, false);
         camHUD.bgColor.alpha = 0;
-
-		data = PlayState.metadata;
 
         switch(PlayState.SONG.song)
         {
@@ -78,108 +73,177 @@ class ResultsSubstate extends MusicBeatSubstate
                 mode = "p3";
             case 'Truth' | 'Specialist':
                 mode = "p4";
-            case 'Desire' | 'Foggy Night':
-                mode = "p5";
             default:
-                mode = "fnf";
+                mode = "p5";
         }
 
-        var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.WHITE);
-		bg.scale.set(FlxG.width, FlxG.height);
-		bg.updateHitbox();
-		bg.alpha = 1;
+        var bg:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/results/resultsbg'));
+        bg.updateHitbox();
 		bg.scrollFactor.set();
 		add(bg);
+        bg.cameras = [camHUD];
 
-        var bgfnf:FlxSprite = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFFFECC5C, 0xFFFDC05C], 90);
-        bgfnf.scale.set(FlxG.width, FlxG.height);
-		bgfnf.updateHitbox();
-		bgfnf.alpha = 0;
-		bgfnf.scrollFactor.set();
-		add(bgfnf);
-
-        var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
-		grid.velocity.set(40, 40);
-		grid.alpha = 0;
-		FlxTween.tween(grid, {alpha: 0.5}, 0.5, {ease: FlxEase.quadOut});
-		//add(grid);
-
-        var fg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.WHITE);
-		fg.scale.set(FlxG.width, 130);
-		fg.updateHitbox();
-		fg.alpha = 1;
-		fg.scrollFactor.set();
-		add(fg);
-
-        var fg2:FlxSprite = new FlxSprite(0, 630).makeGraphic(1, 1, FlxColor.WHITE);
-		fg2.scale.set(FlxG.width, 130);
-		fg2.updateHitbox();
-		fg2.alpha = 1;
-		fg2.scrollFactor.set();
-		add(fg2);
+        var line:FlxSprite = new FlxSprite(450, -50).loadGraphic(Paths.image('persona/results/resultsline'));
+        line.updateHitbox();
+		line.scrollFactor.set();
+		add(line);
+        line.cameras = [camHUD];
 
         var player = new FlxSprite(800, -400).loadGraphic(Paths.image('persona/portraits/placeholder'));
 		player.antialiasing = ClientPrefs.data.antialiasing;
-		add(player);
+		//add(player);
+        player.cameras = [camHUD];
 
-		resultsTxt = new FlxText(500, 10, "RESULTS!!!", 50);
-        resultsTxt.setFormat(Paths.font("p5hatty-1.ttf"), 75, FlxColor.BLACK, CENTER);
-        resultsTxt.scrollFactor.set();
-        resultsTxt.updateHitbox();
-        add(resultsTxt);
+        var bg2:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/results/resultsbg2'));
+        bg2.updateHitbox();
+		bg2.scrollFactor.set();
+		add(bg2);
+        bg2.cameras = [camHUD];
 
-        songTxt = new FlxText(20, 75, FlxG.width, PlayState.SONG.song + ' By Unknown', 50);
-        songTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
+        var results:FlxSprite = new FlxSprite(20, 0).loadGraphic(Paths.image('persona/results/results'));
+        results.updateHitbox();
+		results.scrollFactor.set();
+		add(results);
+        results.cameras = [camHUD];
+
+        songTxt = new FlxText(50, 120, FlxG.width, PlayState.SONG.song, 50);
+        songTxt.setFormat(Paths.font("p5hatty-1.ttf"), 40, FlxColor.BLACK);
         songTxt.scrollFactor.set();
+        songTxt.angle += 1;
         songTxt.updateHitbox();
         add(songTxt);
+        songTxt.cameras = [camHUD];
 
-        if (CoolUtil.exists(Paths.json(PlayState.instance.songName + "/metadata")))
-		{
-        songTxt.text = PlayState.SONG.song + ' By ' + data.credits.music;
-        }
+        var sickbg:FlxSprite = new FlxSprite(20, 170).loadGraphic(Paths.image('persona/results/results-sick'));
+        sickbg.updateHitbox();
+		sickbg.scrollFactor.set();
+		add(sickbg);
+        sickbg.cameras = [camHUD];
 
-        sickTxt = new FlxText(20, 175, FlxG.width, 'Sicks: ' + lerpSick, 50);
+        sickTxt = new FlxText(180, 120, FlxG.width, '' + lerpSick, 50);
         sickTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
         sickTxt.scrollFactor.set();
         sickTxt.updateHitbox();
+        sickTxt.angle = -9;
         add(sickTxt);
+        sickTxt.cameras = [camHUD];
 
-        goodTxt = new FlxText(20, 250, FlxG.width, 'Goods: ' + lerpGood, 50);
+        var goodbg:FlxSprite = new FlxSprite(180, 230).loadGraphic(Paths.image('persona/results/results-good'));
+        goodbg.updateHitbox();
+		goodbg.scrollFactor.set();
+		add(goodbg);
+        goodbg.cameras = [camHUD];
+
+        goodTxt = new FlxText(360, 185, FlxG.width, '' + lerpGood, 50);
         goodTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
         goodTxt.scrollFactor.set();
         goodTxt.updateHitbox();
+        goodTxt.angle = -9;
         add(goodTxt);
+        goodTxt.cameras = [camHUD];
 
-        badTxt = new FlxText(20, 325, FlxG.width, 'Bads: ' + lerpBad, 50);
+        var badbg:FlxSprite = new FlxSprite(20, 360).loadGraphic(Paths.image('persona/results/results-bad'));
+        badbg.updateHitbox();
+		badbg.scrollFactor.set();
+		add(badbg);
+        badbg.cameras = [camHUD];
+
+        badTxt = new FlxText(180, 310, FlxG.width, '' + lerpBad, 50);
         badTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
         badTxt.scrollFactor.set();
         badTxt.updateHitbox();
+        badTxt.angle = -9;
         add(badTxt);
+        badTxt.cameras = [camHUD];
 
-        shitTxt = new FlxText(20, 400, FlxG.width, 'Shits: ' + lerpShit, 50);
+        var shitbg:FlxSprite = new FlxSprite(190, 420).loadGraphic(Paths.image('persona/results/results-shit'));
+        shitbg.updateHitbox();
+		shitbg.scrollFactor.set();
+		add(shitbg);
+        shitbg.cameras = [camHUD];
+
+        shitTxt = new FlxText(370, 380, FlxG.width, '' + lerpShit, 50);
         shitTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
         shitTxt.scrollFactor.set();
         shitTxt.updateHitbox();
+        shitTxt.angle = -9;
         add(shitTxt);
+        shitTxt.cameras = [camHUD];
 
-        scoreTxt = new FlxText(20, 650, FlxG.width, 'Score: ' + lerpScore, 70);
-        scoreTxt.setFormat(Paths.font("p5hatty-1.ttf"), 80, FlxColor.BLACK);
-        scoreTxt.scrollFactor.set();
-        scoreTxt.updateHitbox();
-        add(scoreTxt);
+        var missbg:FlxSprite = new FlxSprite(0, 510).loadGraphic(Paths.image('persona/results/results-miss'));
+        missbg.updateHitbox();
+		missbg.scrollFactor.set();
+		add(missbg);
+        missbg.cameras = [camHUD];
 
-        missTxt = new FlxText(20, 475, FlxG.width, 'Misses: ' + lerpMisses, 50);
-        missTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
+        missTxt = new FlxText(100, 480, FlxG.width, '' + lerpMisses, 50);
+        missTxt.setFormat(Paths.font("p5hatty-1.ttf"), 50, FlxColor.BLACK);
         missTxt.scrollFactor.set();
         missTxt.updateHitbox();
+        missTxt.angle = -9;
         add(missTxt);
+        missTxt.cameras = [camHUD];
 
-        accTxt = new FlxText(20, 550, FlxG.width, 'Accuracy: ' + lerpRating + '%', 50);
-        accTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
+        var scorebg:FlxSprite = new FlxSprite(0, 495).loadGraphic(Paths.image('persona/results/results-score'));
+        scorebg.updateHitbox();
+		scorebg.scrollFactor.set();
+		add(scorebg);
+        scorebg.cameras = [camHUD];
+
+        scoreTxt = new FlxText(210, 575, FlxG.width, '' + lerpScore, 70);
+        scoreTxt.setFormat(Paths.font("p5hatty-1.ttf"), 60, FlxColor.BLACK);
+        scoreTxt.scrollFactor.set();
+        scoreTxt.updateHitbox();
+        scoreTxt.angle = -9;
+        add(scoreTxt);
+        scoreTxt.cameras = [camHUD];
+
+        accTxt = new FlxText(330, 40, FlxG.width, 'Accuracy: ' + lerpRating + '%', 50);
+        accTxt.setFormat(Paths.font("p5hatty-1.ttf"), 40, FlxColor.WHITE);
         accTxt.scrollFactor.set();
         accTxt.updateHitbox();
         add(accTxt);
+        accTxt.cameras = [camHUD];
+
+        var F:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/F'));
+        F.updateHitbox();
+		F.scrollFactor.set();
+        F.cameras = [camHUD];
+
+        var E:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/E'));
+        E.updateHitbox();
+		E.scrollFactor.set();
+        E.cameras = [camHUD];
+
+        var D:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/D'));
+        D.updateHitbox();
+		D.scrollFactor.set();
+        D.cameras = [camHUD];
+
+        var C:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/C'));
+        C.updateHitbox();
+		C.scrollFactor.set();
+        C.cameras = [camHUD];
+
+        var B:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/B'));
+        B.updateHitbox();
+		B.scrollFactor.set();
+        B.cameras = [camHUD];
+
+        var A:FlxSprite = new FlxSprite(590, 515).loadGraphic(Paths.image('persona/results/A'));
+        A.updateHitbox();
+		A.scrollFactor.set();
+        A.cameras = [camHUD];
+
+        var S:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/S'));
+        S.updateHitbox();
+		S.scrollFactor.set();
+        S.cameras = [camHUD];
+
+        var P:FlxSprite = new FlxSprite(600, 515).loadGraphic(Paths.image('persona/results/P'));
+        P.updateHitbox();
+		P.scrollFactor.set();
+        P.cameras = [camHUD];
 
         //I FUCKING HATE STRAY PIXELS!!!
         progressBar = new FlxBar(287.8, 437, LEFT_TO_RIGHT, 413, 15);
@@ -194,48 +258,26 @@ class ResultsSubstate extends MusicBeatSubstate
         bar.setGraphicSize(Std.int(bar.width * 0.7));
         //add(bar);
 
-		var highscore:FlxSprite = new FlxSprite(250, 500).loadGraphic(Paths.image('persona/results/highscore'));
+		var highscore:FlxSprite = new FlxSprite(850, 570).loadGraphic(Paths.image('persona/results/highscore'));
 		highscore.scrollFactor.set();
 		highscore.antialiasing = ClientPrefs.data.antialiasing;
 		highscore.updateHitbox();
-		highscore.setGraphicSize(Std.int(highscore.width * 0.4));
+		highscore.setGraphicSize(Std.int(highscore.width * 1.0));
 		add(highscore);
 		highscore.visible = false;
+        highscore.cameras = [camHUD];
 
         if (mode == "p3")
         {
-        bg.color = FlxColor.fromString("#51eefc");
-        fg.color = FlxColor.fromString("#1269cc");
-        fg2.color = FlxColor.fromString("#1269cc");
         FlxG.sound.playMusic(Paths.music('persona/songs from the games/P3-RELOAD/After The Battle-RELOAD'));
         }
         if (mode == "p4")
         {
-        bg.color = FlxColor.fromString("#ffe52c");
-        fg.color = FlxColor.fromString("#faa622");
-        fg2.color = FlxColor.fromString("#faa622");
         FlxG.sound.playMusic(Paths.music('persona/songs from the games/P4/Period'));
         }
         if (mode == "p5")
         {
-        bg.color = FlxColor.fromString("#d92323");
-        fg.color = FlxColor.fromString("#0d0d0d");
-        fg2.color = FlxColor.fromString("#0d0d0d");
-        resultsTxt.color = 0xFFffffff;
-        songTxt.color = 0xFFffffff;
-        scoreTxt.color = 0xFFffffff;
         FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Triumph'));
-        }
-        else if (mode == "fnf")
-        {
-        bg.alpha = 0;
-        bgfnf.alpha = 1;
-        fg.color = 0xFF000000;
-        fg2.color = 0xFF000000;
-        resultsTxt.color = 0xFFfecd5c;
-        songTxt.color = 0xFFfecd5c;
-        scoreTxt.color = 0xFFfecd5c;
-        FlxG.sound.playMusic(Paths.music('resultsNORMAL'));
         }
 
         if (PlayState.isStoryMode)
@@ -264,7 +306,7 @@ class ResultsSubstate extends MusicBeatSubstate
         {
         if (PlayState.campaignScore > Highscore.getWeekScore(WeekData.getCurrentWeek().weekName, PlayState.storyDifficulty)) 
         {
-        new FlxTimer().start(5.5, function(tmr:FlxTimer)
+        new FlxTimer().start(3.5, function(tmr:FlxTimer)
  	    {
         trace("new highscore!!!");
 		highscore.visible = true;
@@ -277,7 +319,7 @@ class ResultsSubstate extends MusicBeatSubstate
         if (PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty)) 
         {
         trace("new highscore!!!");
-        new FlxTimer().start(5.5, function(tmr:FlxTimer)
+        new FlxTimer().start(3.5, function(tmr:FlxTimer)
  	    {
 		highscore.visible = true;
 		FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
@@ -290,23 +332,23 @@ class ResultsSubstate extends MusicBeatSubstate
         showSick = true;
         });
 
-        new FlxTimer().start(1.5, function(tmr) {
+        new FlxTimer().start(1.2, function(tmr) {
         showGood = true;
         });
 
-        new FlxTimer().start(2, function(tmr) {
+        new FlxTimer().start(1.4, function(tmr) {
         showBad = true;
         });
 
-        new FlxTimer().start(2.5, function(tmr) {
+        new FlxTimer().start(1.6, function(tmr) {
         showShit = true;
         });
 
-        new FlxTimer().start(3, function(tmr) {
+        new FlxTimer().start(1.8, function(tmr) {
         showMisses = true;
         });
 
-        new FlxTimer().start(3.5, function(tmr) {
+        new FlxTimer().start(2.0, function(tmr) {
         if (PlayState.isStoryMode)
         {
         if (PlayState.isStoryMode)
@@ -332,23 +374,24 @@ class ResultsSubstate extends MusicBeatSubstate
         showAccuracy = true;
         });
 
+        trace(intendedRating);
 
-        bg.cameras = [camHUD];
-        bgfnf.cameras = [camHUD];
-        fg.cameras = [camHUD];
-        fg2.cameras = [camHUD];
-        grid.cameras = [camHUD];
-		resultsTxt.cameras = [camHUD];
-        songTxt.cameras = [camHUD];
-        sickTxt.cameras = [camHUD];
-        goodTxt.cameras = [camHUD];
-        badTxt.cameras = [camHUD];
-        shitTxt.cameras = [camHUD];
-        scoreTxt.cameras = [camHUD];
-        missTxt.cameras = [camHUD];
-        accTxt.cameras = [camHUD];
-        player.cameras = [camHUD];
-		highscore.cameras = [camHUD];
+        if (intendedRating == 100)
+            add(P);
+        else if (intendedRating >= 94.99)
+            add(S);
+        else if (intendedRating >= 89.99)
+            add(A);
+        else if (intendedRating >= 79.99)
+            add(B);
+        else if (intendedRating >= 69.99)
+            add(C);
+        else if (intendedRating >= 39.99)
+            add(D);
+        else if (intendedRating >= 19.99)
+            add(E);
+        else
+            add(F);
 
         super.create();
     }
@@ -418,13 +461,13 @@ class ResultsSubstate extends MusicBeatSubstate
 			lerpShit = intendedShit;
         }
 
-        scoreTxt.text = 'Score: ' + lerpScore;
-        missTxt.text = 'Misses: ' + lerpMisses;
+        scoreTxt.text = '' + lerpScore;
+        missTxt.text = '' + lerpMisses;
         accTxt.text = 'Accuracy: ' + ' ' + ratingSplit.join('.') + '%';
-        sickTxt.text = 'Sicks: ' + lerpSick;
-        goodTxt.text = 'Goods: ' + lerpGood;
-        badTxt.text = 'Bads: ' + lerpBad;
-        shitTxt.text = 'Shits: ' + lerpShit;
+        sickTxt.text = '' + lerpSick;
+        goodTxt.text = '' + lerpGood;
+        badTxt.text = '' + lerpBad;
+        shitTxt.text = '' + lerpShit;
 
         super.update(elapsed);
 
