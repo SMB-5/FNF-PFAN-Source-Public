@@ -77,6 +77,17 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Strum Background Opacity',
+			'How much transparent should the Strumline Background be.',
+			'strumlineBGAlpha',
+			'percent');
+		option.scrollSpeed = 1.6;
+		option.minValue = 0.0;
+		option.maxValue = 1;
+		option.changeValue = 0.1;
+		option.decimals = 1;
+		addOption(option);
+
 		var option:Option = new Option('Character Note Colors',
 			"If unchecked, Character's won't have their custom note colors.",
 			'charRGB',
@@ -177,7 +188,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		#end
 
 		var option:Option = new Option('Combo Break on Bad or Shit',
-			"If checked, your Combo will break if you get a Bad or Shit Rating and no Ghost Notes will appear.",
+			"If checked, your Combo will break if you get a Bad or Shit Rating and Ghost Notes will appear.",
 			'comboBreak',
 			'bool');
 		addOption(option);
