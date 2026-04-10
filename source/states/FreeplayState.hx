@@ -42,6 +42,7 @@ class FreeplayState extends MusicBeatState
 
 	private var grpSongs:FlxTypedGroup<FlxText>;
 	private var grpTextBG:FlxTypedGroup<FlxSprite>;
+	var rankSprites:Array<AttachedSprite> = [];
 	private var curPlaying:Bool = false;
 
 	//private var iconArray:Array<HealthIcon> = [];
@@ -278,7 +279,21 @@ class FreeplayState extends MusicBeatState
 	override function closeSubState() {
 		changeSelection(0, false);
 		persistentUpdate = true;
+		updateAllRanks();
 		super.closeSubState();
+	}
+
+	function updateAllRanks()
+	{
+    	for (i in 0...songs.length)
+    	{
+        	var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
+        	var rank = rankSprites[i];
+
+        	if (rank == null) continue;
+
+        	rank.loadGraphic(getRankGraphic(rating));
+    	}
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -293,6 +308,8 @@ class FreeplayState extends MusicBeatState
 
 	function regenList() {
 		//curSelected = 0;
+		rankSprites = [];
+
 		for (item in grpSongs.members) item.destroy();
 		for (sprite in grpTextBG.members) sprite.destroy();
 		for (obj in grpIcons.members) obj.destroy();
@@ -332,7 +349,23 @@ class FreeplayState extends MusicBeatState
 			textbg.scale.y = 0.1;
 			textbg.sprTracker = songText;
 			textbg.color = songs[i].color;
+
+			var rank: AttachedSprite = new AttachedSprite('blank');
+			rank.antialiasing = ClientPrefs.data.antialiasing;
+			rank.xAdd = songText.x + 210;
+    		rank.yAdd = songText.y - 390;
+			rank.scale.x = 0.3;
+			rank.scale.y = 0.3;
+			rank.sprTracker = songText;
+
+			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
+
+			rank.loadGraphic(getRankGraphic(rating));
+
+			rankSprites.push(rank);
+
 			grpTextBG.add(textbg);
+			grpTextBG.add(rank);
 			grpSongs.add(songText);
 
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
@@ -740,6 +773,13 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
+		for (i in 0...songs.length)
+		{
+    		var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
+    		var rank = rankSprites[i];
+    		rank.loadGraphic(getRankGraphic(rating));
+		}
+
 		changeDiff();
 		_updateSongLastDifficulty();
 		if(playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
@@ -750,11 +790,36 @@ class FreeplayState extends MusicBeatState
 		songs[curSelected].lastDifficulty = Difficulty.getString(curDifficulty);
 	}
 
+	function getRankGraphic(rating:Float):Dynamic
+	{
+    	var percent:Float = rating * 100;
+
+    	if (percent >= 100)
+        	return Paths.image('persona/results/P');
+    	else if (percent >= 94.99)
+        	return Paths.image('persona/results/S');
+    	else if (percent >= 89.99)
+        	return Paths.image('persona/results/A');
+    	else if (percent >= 79.99)
+        	return Paths.image('persona/results/B');
+    	else if (percent >= 69.99)
+        	return Paths.image('persona/results/C');
+    	else if (percent >= 39.99)
+        	return Paths.image('persona/results/D');
+    	else if (percent >= 19.99)
+        	return Paths.image('persona/results/E');
+    	else if (percent >= 0.99)
+        	return Paths.image('persona/results/F');
+		else 
+			return Paths.image('blank');
+	}
+
 	//probably gonna change how this works in the future
 	private function updatePortrait()
 	{
 		portrait.x = 800;
 		portrait.y = -100;
+		FlxTween.cancelTweensOf(portrait);
 		if (songs[curSelected].songName.toLowerCase() == 'tartarus' || songs[curSelected].songName.toLowerCase() == 'foggy night')
 		{
 			portrait.loadGraphic(Paths.image('persona/portraits/makoto-portrait'));
