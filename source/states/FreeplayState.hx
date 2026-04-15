@@ -314,7 +314,7 @@ class FreeplayState extends MusicBeatState
 		for (sprite in grpTextBG.members) sprite.destroy();
 		for (obj in grpIcons.members) obj.destroy();
 
-		//thank you larry -SMB
+		//thank you melodie -SMB
 		grpSongs.clear();
 		_lastVisibles = [];
 

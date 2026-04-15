@@ -38,14 +38,14 @@ class CreditsState extends MusicBeatState
 		#if MODS_ALLOWED
 		for (mod in Mods.parseList().enabled) pushModCreditsToList(mod);
 		#end
-		var desc:String = '"Hi! I am a charter and also helped with the coding for this mod! Watch out for Baldiplier, he tends to sneak in here.."';
-		var color:String = '81d7ff';
-		var larryCred:Array<String> = ['larryfrosty'];
+		var desc:String = '"Hi! I am a charter and also helped with the coding for this mod! Also, watch out for Baldiplier, he tends to sneak in here.."';
+		var color:String = 'c0ebff';
+		var melodieCred:Array<String> = ['melodiekit'];
 		if (FlxG.random.bool(0.5)) {
-			larryCred = FlxG.random.getObject(baldipliers, [90, 25, 5]) ?? ['larryfrosty'];
-			if (larryCred.length > 1) {
-				desc = '"Hello. You caught me on my day off. Anyways, make sure to keep your pliers ${larryCred[1]}."';
-				color = larryCred[2];
+			melodieCred = FlxG.random.getObject(baldipliers, [90, 25, 5]) ?? melodieCred;
+			if (melodieCred.length > 1) {
+				desc = '"Hello. You caught me on my day off. Anyways, make sure to keep your pliers ${melodieCred[1]}."';
+				color = melodieCred[2];
 			}
 		}
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
@@ -58,7 +58,7 @@ class CreditsState extends MusicBeatState
 			['Cobalt', 'cobalt', 'Programmer\n"I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next."', 'https://cobaltbar.github.io/', '0065FF'],
 			['Dog', 'doggo', 'Musician\n"Hi! I composed a few songs for le epic persona mod, like Truth, Game Over!! and the main menu theme! Hope you enjoyed listening to them! If you want to hear more of my music, press enter to go to my channel!"', 'https://www.youtube.com/@you-know-its-dog.', 'f5d79d'],
 			['DudeDX', 'dudedx', 'Charter\n"why are oranges called oranges, but an apple is not called red?"', 'https://fakecrime.bio/dudeDX', '009116'],
-			['LarryFrosty', larryCred[0], 'Charter and Major Assistant with Coding\n${desc}', 'https://youtube.com/@larryfrosty', color],
+			['melodiekit', melodieCred[0], 'Charter and Major Assistant with Coding\n${desc}', 'https://youtube.com/@melodiekit', color],
 			['MrEights', '', 'Musician\n"It ain\'t easy being cheesy!"', 'https://www.youtube.com/@Mr3ights', '1e1e1e'],
 			['NotMagniill', 'bobbo', 'Artist and Programmer\n"I\'m a devil muehehehe... also SMB no offense your code sucks"', 'https://twitter.com/magniill', '640911'],
 			['NoahGani1', 'noah', 'Chromatic Maker\n"Say Gex."', 'https://x.com/noah_gani1', '203a53'],
