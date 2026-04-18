@@ -87,6 +87,12 @@ class PersonaCardSubstate extends MusicBeatSubstate
             titleText.text = "Before You Start The Demo";
             cardText.text = "This Mod is still in active development so a lot of things present might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do for the Mod and does not represent the Final Mod.\n\nPlease also note that this Mod contains Flashing Lights which can be disabled at Anytime in the Config Menu.";
         }
+        else if (Prompt == "LockedDemo")
+        {
+            promptText.text = "INFOMATION";
+            titleText.text = "Not Available in the Demo";
+            cardText.text = "This Menu will be Available in the First Release of the Full Mod.";
+        }
         else
         {
             promptText.text = "SYSTEM";

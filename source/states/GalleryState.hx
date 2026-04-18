@@ -70,7 +70,7 @@ class GalleryState extends MusicBeatState {
 			itemGroup.add(newItem);
 		}
 
-		background = new FlxSprite().loadGraphic(Paths.image("gallery/ui/background"));
+		background = new FlxSprite(-150, -150).loadGraphic(Paths.image('menuWall'));
 		add(background);
 
 		hudTopBar = new FlxSprite(0, 0);
@@ -125,7 +125,7 @@ class GalleryState extends MusicBeatState {
 		if (controls.BACK && allowInputs) {
 			allowInputs = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new ThievesDenState());
+			MusicBeatState.switchState(new MainMenuState());
 			//FlxFlicker.flicker(backspace, 0.4, 0.10, false);
 		}
 
@@ -145,19 +145,19 @@ class GalleryState extends MusicBeatState {
 		currentIndex = FlxMath.wrap(currentIndex + i, 0, imageTitle.length - 1);
 
 		if (imageData != null && currentIndex >= 0 && currentIndex < imageData.length) {
-			var newColor:FlxColor = colorFromString(imageData[currentIndex].color);
+			//var newColor:FlxColor = colorFromString(imageData[currentIndex].color);
 
-			if (newColor != intendedColor) {
-				if (colorTween != null) {
-					colorTween.cancel();
-				}
-				intendedColor = newColor;
-				colorTween = FlxTween.color(background, 1, background.color, intendedColor, {
-					onComplete: function(twn:FlxTween) {
-						colorTween = null;
-					}
-				});
-			}
+			//if (newColor != intendedColor) {
+				//if (colorTween != null) {
+					//colorTween.cancel();
+				//}
+				//intendedColor = newColor;
+				//colorTween = FlxTween.color(background, 1, background.color, intendedColor, {
+					//onComplete: function(twn:FlxTween) {
+						//colorTween = null;
+					//}
+				//});
+			//}
 
 			descriptionText.text = imageDescriptions[currentIndex];
 			titleText.text = imageTitle[currentIndex];
