@@ -868,8 +868,13 @@ class FreeplayState extends MusicBeatState
 		{
 			var item:FlxText = grpSongs.members[i];
 			item.visible = item.active = true;
-			item.x = ((item.ID - lerpSelected) * 15) + 50;
-			item.y = ((item.ID - lerpSelected) * 1.3 * 80) + 300;
+			var baseX = ((item.ID - lerpSelected) * 15) + 50;
+			var targetX = baseX + ((item.ID == curSelected) ? 60 : 0);
+			item.y = ((item.ID - lerpSelected) * 1.3 * 80) + 350;
+
+			var offsetX:Float = (item.ID == curSelected) ? 60 : 0;
+
+			item.x = FlxMath.lerp(item.x, targetX, Math.exp(-elapsed * 12));
 
 			//var icon:HealthIcon = iconArray[i];
 			//icon.visible = icon.active = true;

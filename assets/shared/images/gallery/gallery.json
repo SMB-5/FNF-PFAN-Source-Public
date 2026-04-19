@@ -22,8 +22,15 @@
     },
     {
         "path": "tartarusconcept",
-        "description": "Tartarus Concept Art and Very Old Makoto Sprite.\nArt By Juho Sprite",
+        "description": "Tartarus Concept Art from 2024.\nArt By Juho Sprite",
         "title": "Tartarus Concept",
+        "link": "https://bsky.app/profile/juhosprite.bsky.social",
+        "color": "CD7CEB"
+    },
+    {
+        "path": "very-old-makoto",
+        "description": "The Very First sprite made for Makoto Yuki back in 2024.\nArt By Juho Sprite",
+        "title": "Very Old Makoto Sprite",
         "link": "https://bsky.app/profile/juhosprite.bsky.social",
         "color": "CD7CEB"
     },
@@ -67,6 +74,20 @@
         "description": "Old Version of the Pause Menu from 2025.\nArt By Clefanight",
         "title": "Old Pause Menu",
         "link": "https://bsky.app/profile/xer0heavenxx.bsky.social",
+        "color": "CD7CEB"
+    },
+    {
+        "path": "tv-world-draft",
+        "description": "A Draft of the TV World Stage from 2025.\nArt By BubblezXP",
+        "title": "TV World Stage Draft",
+        "link": "https://www.instagram.com/bubblez_xp",
+        "color": "CD7CEB"
+    },
+    {
+        "path": "mementos-draft",
+        "description": "A Draft of the Mementos Stage from 2026.\nArt By Taraform",
+        "title": "Mementos Stage Draft",
+        "link": "https://vgen.co/TaraForm",
         "color": "CD7CEB"
     }
 ]
