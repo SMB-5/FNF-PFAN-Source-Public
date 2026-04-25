@@ -504,7 +504,7 @@ class ResultsSubstate extends MusicBeatSubstate
         else
         {
         MusicBeatState.switchState(new FreeplayState());
-        FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
         }
+        FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
 }

@@ -70,8 +70,6 @@ class FreeplayState extends MusicBeatState
 
 	var player:MusicPlayer;
 
-	public static var intro:Bool = false;
-
 	override function create()
 	{
 		//Paths.clearStoredMemory();
@@ -85,12 +83,6 @@ class FreeplayState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
-
-		if(intro) {
-			FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
-		}
-
-		intro = false;
 
 		var bg:FlxSprite = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
@@ -550,7 +542,6 @@ class FreeplayState extends MusicBeatState
 				player.playingMusic = false;
 				player.switchPlayMusic();
 
-				FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'), 0);
 				FlxTween.tween(FlxG.sound.music, {volume: 1}, 1);
 			}
 			else 
@@ -559,7 +550,6 @@ class FreeplayState extends MusicBeatState
 				if(colorTween != null) {
 					colorTween.cancel();
 				}
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState());
 			}

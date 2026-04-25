@@ -418,14 +418,13 @@ class PauseSubState extends MusicBeatSubstate
 					if(PlayState.isStoryMode)
 					{
 						MusicBeatState.switchState(new StoryMenuState());
-						FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					}
 					else 
 					{
 						MusicBeatState.switchState(new FreeplayState());
-						FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
 					}
-
+					
+					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
 					PlayState.chartingMode = false;
 					FlxG.camera.followLerp = 0;
