@@ -419,6 +419,7 @@ class FreeplayState extends MusicBeatState
 				scoreText.text = 'HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 			}
 			positionHighscore();
+			updateAllRanks();
 			
 			if(songs.length > 1)
 			{
