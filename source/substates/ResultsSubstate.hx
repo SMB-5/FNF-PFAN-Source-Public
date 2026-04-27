@@ -31,6 +31,8 @@ class ResultsSubstate extends MusicBeatSubstate
     var shitTxt:FlxText;
     var songTxt:FlxText;
 
+    var portrait:FlxSprite;
+
     public var progressBar:FlxBar;
     public var barTween:FlxTween = null;
     var can_leave = false;
@@ -89,10 +91,14 @@ class ResultsSubstate extends MusicBeatSubstate
 		add(line);
         line.cameras = [camHUD];
 
-        var player = new FlxSprite(800, -400).loadGraphic(Paths.image('persona/portraits/placeholder'));
-		player.antialiasing = ClientPrefs.data.antialiasing;
-		//add(player);
-        player.cameras = [camHUD];
+        portrait = new FlxSprite().loadGraphic(Paths.image(''));
+		portrait.antialiasing = ClientPrefs.data.antialiasing;
+		add(portrait);
+		portrait.x = 350;
+		portrait.y = -300;
+		portrait.scale.x = 0.4;
+		portrait.scale.y = 0.4;
+        portrait.cameras = [camHUD];
 
         var bg2:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('persona/results/resultsbg2'));
         bg2.updateHitbox();
@@ -266,6 +272,29 @@ class ResultsSubstate extends MusicBeatSubstate
 		add(highscore);
 		highscore.visible = false;
         highscore.cameras = [camHUD];
+
+        if (PlayState.SONG.player1 == 'yu-narukami-player')
+        {
+            portrait.loadGraphic(Paths.image('persona/portraits/yu-portrait'));
+            portrait.y = -190;
+        }
+        else if (PlayState.SONG.player2 == 'makoto-yuki' && PlayState.opponentMode == true)
+        {
+            portrait.loadGraphic(Paths.image('persona/portraits/makoto-portrait'));
+            portrait.y = -200;
+        }
+        else if (PlayState.SONG.player2 == 'yu-narukami' && PlayState.opponentMode == true)
+        {
+            portrait.loadGraphic(Paths.image('persona/portraits/yu-portrait'));
+            portrait.y = -190;
+        }
+        else if (PlayState.SONG.player2 == 'joker' && PlayState.opponentMode == true)
+        {
+            portrait.loadGraphic(Paths.image('persona/portraits/joker-portrait'));
+            portrait.y = -290;
+        }
+        else
+            portrait.loadGraphic(Paths.image('persona/portraits/bf-portrait'));
 
         if (mode == "p3")
         {
@@ -487,7 +516,7 @@ class ResultsSubstate extends MusicBeatSubstate
         }
         else
         {
-		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent);
+		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
         }
 
         PlayState.campaignPercent = PlayState.songsPlayed = 0;
