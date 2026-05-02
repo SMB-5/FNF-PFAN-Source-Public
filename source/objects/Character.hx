@@ -182,36 +182,13 @@ class Character extends FlxSprite
 	 * "char-pixel" => "char"
 	 * it just does a redirection to the og chars color
 	 */
-	static var arrowColors:Map<String, OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>>> = [
-		"makoto-yuki" => [
-			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
-			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
-			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1],
-			[0xFF1A50CA, 0xFFFFFFFF, 0xFF2E2EA1]
-		],
-		
+	static var arrowColors:Map<String, OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>>> = [		
 		"shadow-makoto" => [
 			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
 			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
 			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
 			[0xFF606060, 0xFFFFFFFF, 0xFF303030]
 		],
-
-		"yu-narukami" => [
-			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
-			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
-			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00],
-			[0xFFFFD800, 0xFFFFFFFF, 0xFF7F6A00]
-		],
-		"yu-narukami-player" => "yu-narukami",
-
-		"joker" => [
-			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A],
-			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A],
-			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A],
-			[0xFFFF2D32, 0xFFFFFFFF, 0xFFAB164A]
-		],
-		"joker-player" => "joker",
 	];
 
 	public function fixArrowRGB()
