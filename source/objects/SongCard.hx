@@ -50,7 +50,7 @@ class SongCard extends FlxSpriteGroup
 		text2.y = 590;
 		if(ClientPrefs.data.downScroll) text2.y = 110;
 
-		bg2 = new FlxSprite().makeGraphic(Std.int(text.width + (100)), Std.int(text.height - 30), FlxColor.BLACK);
+		bg2 = new FlxSprite().makeGraphic(Std.int(text2.width + (50)), Std.int(text.height - 30), FlxColor.BLACK);
 		bg2.alpha = 1;
 		bg2.y = text2.y - 10;
 

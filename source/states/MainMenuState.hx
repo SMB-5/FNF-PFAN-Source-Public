@@ -166,9 +166,6 @@ class MainMenuState extends MusicBeatState
 							//case 'story_mode':
 								//MusicBeatState.switchState(new StoryMenuState());
 							case 'FREEPLAY':
-								if(!FreeplayState.intro) {
-									FlxG.sound.playMusic(Paths.music('PFAN-Electronica of the Soul'));
-								}
 								MusicBeatState.switchState(new FreeplayState());
 
 							#if MODS_ALLOWED
