@@ -13,6 +13,7 @@ import flixel.addons.display.FlxGridOverlay;
 
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
+import substates.StickerSubState;
 
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
@@ -70,6 +71,14 @@ class FreeplayState extends MusicBeatState
 
 	var player:MusicPlayer;
 
+	var stickerSubState:StickerSubState;
+
+	public function new(?stickers:StickerSubState = null)
+	{
+		super();
+		stickerSubState = stickers;
+	}
+
 	override function create()
 	{
 		//Paths.clearStoredMemory();
@@ -83,6 +92,13 @@ class FreeplayState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+		if (stickerSubState != null)
+		{
+			openSubState(stickerSubState);
+			stickerSubState.degenStickers();
+			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		}
 
 		var bg:FlxSprite = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;

@@ -9,6 +9,8 @@ import flixel.FlxSubState;
 import states.StoryMenuState;
 import states.FreeplayState;
 
+import substates.StickerSubState;
+
 class GameOverSubstate extends MusicBeatSubstate
 {
 	public var boyfriend:Character;
@@ -194,10 +196,10 @@ class GameOverSubstate extends MusicBeatSubstate
 			}
 			else
 			{
-				MusicBeatState.switchState(new FreeplayState());
+				openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
 			}
 
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
 		}
 		else if (justPlayedLoop)

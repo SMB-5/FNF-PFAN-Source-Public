@@ -28,6 +28,14 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 	var textbg:FlxSprite;
 
+	var stickerSubState:Bool;
+
+	public function new(?stickers:Bool = false)
+	{
+		super();
+		stickerSubState = stickers;
+	}
+
 	override function create()
 	{
 		#if MODS_ALLOWED

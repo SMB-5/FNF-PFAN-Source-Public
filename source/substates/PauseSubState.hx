@@ -12,6 +12,7 @@ import flixel.util.FlxStringUtil;
 import states.StoryMenuState;
 import states.FreeplayState;
 import options.OptionsState;
+import substates.StickerSubState;
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -421,10 +422,10 @@ class PauseSubState extends MusicBeatSubstate
 					}
 					else 
 					{
-						MusicBeatState.switchState(new FreeplayState());
+						openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
 					}
 					
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					//FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
 					PlayState.chartingMode = false;
 					FlxG.camera.followLerp = 0;

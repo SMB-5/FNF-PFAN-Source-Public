@@ -1,0 +1,16 @@
+{
+  "name": "stickers-set-1",
+  "artist": "PhantomArcade3K, Clefanight",
+  "stickers": {
+    "bf": ["bfSticker1", "bfSticker2", "bfSticker3"],
+    "pico": ["picoSticker1", "picoSticker2", "picoSticker3"],
+    "gf": ["gfSticker1", "gfSticker2", "gfSticker3"],
+    "makoto": ["makoto-sticker-1", "makoto-sticker-2", "makoto-sticker-3"],
+    "yu": ["yu-sticker-1", "yu-sticker-2", "yu-sticker-3"],
+    "joker": ["joker-sticker-1", "joker-sticker-2", "joker-sticker-3"]
+  },
+  "stickerPacks": {
+    "tutorial": ["bf", "gf"],
+    "all": ["bf", "gf", "makoto", "yu", "joker"]
+  }
+}

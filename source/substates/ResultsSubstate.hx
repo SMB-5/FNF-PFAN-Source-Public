@@ -18,6 +18,8 @@ import flixel.ui.FlxBar;
 import flixel.math.FlxMath;
 import backend.Metadata;
 
+import substates.StickerSubState;
+
 class ResultsSubstate extends MusicBeatSubstate
 {
     public var camHUD:FlxCamera;
@@ -503,6 +505,8 @@ class ResultsSubstate extends MusicBeatSubstate
         if (controls.ACCEPT && can_leave == true)
         {
             endthis();
+            FlxG.sound.music.stop();
+            FlxG.sound.music.destroy();
         }
     }
 
@@ -512,11 +516,11 @@ class ResultsSubstate extends MusicBeatSubstate
         
         if(PlayState.isStoryMode)
         {
-        Highscore.saveWeekScore(WeekData.getWeekFileName(), PlayState.campaignScore, PlayState.storyDifficulty);
+            Highscore.saveWeekScore(WeekData.getWeekFileName(), PlayState.campaignScore, PlayState.storyDifficulty);
         }
         else
         {
-		Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
+		    Highscore.saveScore(PlayState.SONG.song, PlayState.instance.songScore, PlayState.storyDifficulty, percent, PlayState.opponentMode);
         }
 
         PlayState.campaignPercent = PlayState.songsPlayed = 0;
@@ -527,13 +531,11 @@ class ResultsSubstate extends MusicBeatSubstate
         
         if (PlayState.isStoryMode) 
         {
-        MusicBeatState.switchState(new StoryMenuState());
-        FlxG.sound.playMusic(Paths.music('freakyMenu'));
+            MusicBeatState.switchState(new StoryMenuState());
         }
         else
         {
-        MusicBeatState.switchState(new FreeplayState());
+            openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
         }
-        FlxG.sound.playMusic(Paths.music('freakyMenu'));
     }
 }
