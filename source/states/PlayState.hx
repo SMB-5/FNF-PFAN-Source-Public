@@ -3491,10 +3491,12 @@ class PlayState extends MusicBeatState
 		else {
 			strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		}
-		if (spr != null && note.isSustainNote && note.animation.curAnim.name.endsWith('end')) {
-			spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+		if (spr != null) {
+			if (note.isSustainNote && note.animation.curAnim.name.endsWith('end')) {
+				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+			}
+			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}
-		spr?.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 
 		if (opponentVocals.length <= 0) vocals.volume = 1;
 		else opponentVocals.volume = 1;
@@ -3601,10 +3603,12 @@ class PlayState extends MusicBeatState
 		else {
 			strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		}
-		if (spr != null && note.isSustainNote && note.animation.curAnim.name.endsWith('end')) {
-			spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+		if (spr != null) {
+			if (note.isSustainNote && note.animation.curAnim.name.endsWith('end')) {
+				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+			}
+			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}
-		spr?.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 
 		vocals.volume = 1;
 

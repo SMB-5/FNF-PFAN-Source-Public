@@ -24,7 +24,7 @@ class StrumNote extends FlxSprite
 		return value;
 	}
 
-	public var defaultRGB:Array<Array<FlxColor>> = ClientPrefs.data.arrowRGB;
+	public var defaultRGB(get, never):Array<Array<FlxColor>>;
 
 	public var useRGBShader:Bool = true;
 	public function new(x:Float, y:Float, leData:Int, player:Int) {
@@ -161,6 +161,7 @@ class StrumNote extends FlxSprite
 	}
 
 	public function updateRgb(palette:Array<FlxColor>) {
+		if (!useRGBShader) return;
 		rgbShader.r = palette[0];
 		rgbShader.g = palette[1];
 		rgbShader.b = palette[2];
@@ -178,5 +179,9 @@ class StrumNote extends FlxSprite
 			}
 			rgbShader.enabled = animation.name != 'static';
 		}
+	}
+
+	function get_defaultRGB():Array<Array<FlxColor>> {
+		return PlayState.isPixelStage ? ClientPrefs.data.arrowRGBPixel : ClientPrefs.data.arrowRGB;
 	}
 }

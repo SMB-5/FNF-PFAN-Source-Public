@@ -316,6 +316,7 @@ class Note extends FlxSprite
 	}
 
 	public function updateRgb(palette:Array<FlxColor>, updateSplash:Bool = false) {
+		if (!rgbShader.enabled) return;
 		rgbShader.r = palette[0];
 		rgbShader.g = palette[1];
 		rgbShader.b = palette[2];
