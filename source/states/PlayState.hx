@@ -1563,8 +1563,14 @@ class PlayState extends MusicBeatState
 					makeEvent(event, i);
 		}
 
+		var bpmIndex:Int = -1;
+		var bpmPos:Float = 0;
 		for (section in noteData)
 		{
+			if (section.changeBPM != null && section.changeBPM) {
+				bpmPos = Conductor.bpmChangeMap[++bpmIndex]?.songTime;
+			}
+
 			for (songNotes in section.sectionNotes)
 			{
 				var daStrumTime:Float = songNotes[0];
@@ -1591,26 +1597,15 @@ class PlayState extends MusicBeatState
 				swagNote.gfNote = (section.gfSection && (songNotes[1]<4));
 				swagNote.noteType = songNotes[3];
 				if(!Std.isOfType(songNotes[3], String)) swagNote.noteType = ChartingState.noteTypeList[songNotes[3]]; //Backward compatibility + compatibility with Week 7 charts
-
 				swagNote.scrollFactor.set();
 
-				var fixNoteColorShit = function(dunceNote:Note)
-				{
-					if (!["Hurt Note"].contains(dunceNote.noteType) && ClientPrefs.data.charRGB)
-					{
-						// unreadable i know but it works
-						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? dad : dad) : (!opponentMode ? boyfriend : boyfriend))
-							.arrowRGB[dunceNote.noteData]);
-					}
-					if (swagNote.gfNote && ClientPrefs.data.charRGB)
-					{
-						// unreadable i know but it works
-						dunceNote.updateRgb((!dunceNote.mustPress ? (opponentMode ? gf : gf) : (!opponentMode ? gf : gf))
-							.arrowRGB[dunceNote.noteData]);
-					}
+				if (ClientPrefs.data.noteQuantization) {
+					swagNote.setNoteQuantization(Math.round(Conductor.bpm * (daStrumTime - bpmPos - ClientPrefs.data.noteOffset) / 1000 / 60 * 48), true);
 				}
-				
-				fixNoteColorShit(swagNote);
+				else if (ClientPrefs.data.charRGB && !["Hurt Note"].contains(swagNote.noteType)) {
+					var char:Character = swagNote.gfNote ? gf : swagNote.mustPress ? boyfriend : dad;
+					swagNote.updateRgb(char.arrowRGB[swagNote.noteData]);
+				}
 
 				unspawnNotes.push(swagNote);
 
@@ -1628,9 +1623,9 @@ class PlayState extends MusicBeatState
 						sustainNote.noteType = swagNote.noteType;
 						sustainNote.scrollFactor.set();
 						sustainNote.parent = swagNote;
+						sustainNote.updateRgb([swagNote.rgbShader.r, swagNote.rgbShader.g, swagNote.rgbShader.b]);
 						unspawnNotes.push(sustainNote);
 						swagNote.tail.push(sustainNote);
-						fixNoteColorShit(sustainNote);
 
 						sustainNote.correctionOffset = swagNote.height / 2;
 						if(!PlayState.isPixelStage)
@@ -3489,22 +3484,18 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (!cpuControlled && opponentMode && note.isSustainNote)
-		{
-			var spr = opponentStrums.members[note.noteData];
- 			if(note.animation.curAnim.name.endsWith('end')) {
- 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
- 			} else spr.resetAnim = 0;
- 		} 
-		if (note.isSustainNote) {
- 			var spr = opponentStrums.members[note.noteData];
- 			if(note.animation.curAnim.name.endsWith('end')) {
- 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
- 			} else spr.resetAnim = 0;
+		var spr = opponentStrums.members[note.noteData];
+		if (!cpuControlled && opponentMode) {
+			if (spr != null) spr.playAnim('confirm', true);
 		}
 		else {
 			strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		}
+		if (spr != null && note.isSustainNote && note.animation.curAnim.name.endsWith('end')) {
+			spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+		}
+		spr?.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
+
 		if (opponentVocals.length <= 0) vocals.volume = 1;
 		else opponentVocals.volume = 1;
 		note.hitByOpponent = true;
@@ -3603,21 +3594,18 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if(!cpuControlled && !opponentMode)
-		{
-			var spr = playerStrums.members[note.noteData];
-			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
-		if (spr != null && spr.animation.name != 'confirm') spr.playAnim('confirm', true);
- 		} else {
- 			if (note.isSustainNote) {
- 				var spr = playerStrums.members[note.noteData];
- 				if(note.animation.curAnim.name.endsWith('end')) {
- 					spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
- 				} else spr.resetAnim = 0;
- 			} else {
- 				strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
- 			}
+		var spr = playerStrums.members[note.noteData];
+		if(!cpuControlled && !opponentMode) {
+			if (spr != null && spr.animation.name != 'confirm') spr.playAnim('confirm', true);
+ 		}
+		else {
+			strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		}
+		if (spr != null && note.isSustainNote && note.animation.curAnim.name.endsWith('end')) {
+			spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
+		}
+		spr?.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
+
 		vocals.volume = 1;
 
 		if(!opponentMode && char != gf && gf != null && !note.isSustainNote)

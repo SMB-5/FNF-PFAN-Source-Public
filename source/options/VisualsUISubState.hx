@@ -77,6 +77,12 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Note Quantization',
+			'If checked, colors the notes based on their snap.',
+			'noteQuantization',
+			BOOL);
+		addOption(option);
+
 		var option:Option = new Option('Strum Background Opacity',
 			'How much transparent should the Strumline Background be.',
 			'strumlineBGAlpha',

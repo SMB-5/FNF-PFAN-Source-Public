@@ -160,7 +160,7 @@ class StrumNote extends FlxSprite
 		super.update(elapsed);
 	}
 
-	public function updateRgb(palette:Array<flixel.util.FlxColor>) {
+	public function updateRgb(palette:Array<FlxColor>) {
 		rgbShader.r = palette[0];
 		rgbShader.g = palette[1];
 		rgbShader.b = palette[2];
@@ -168,15 +168,15 @@ class StrumNote extends FlxSprite
 
 	public function playAnim(anim:String, ?force:Bool = false) {
 		animation.play(anim, force);
-		if(animation.curAnim != null)
-		{
+		if (animation.curAnim != null) {
 			centerOffsets();
 			centerOrigin();
 		}
-		var animName = (animation.curAnim != null ? animation.curAnim.name : "");
-		if (animName == "static") {
-			updateRgb(defaultRGB[noteData]);
+		if (useRGBShader) {
+			if (animation.name == "static") {
+				updateRgb(defaultRGB[noteData]);
+			}
+			rgbShader.enabled = animation.name != 'static';
 		}
-		if(useRGBShader) rgbShader.enabled = (animation.curAnim != null && animation.curAnim.name != 'static');
 	}
 }

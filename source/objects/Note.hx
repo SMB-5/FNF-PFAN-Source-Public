@@ -38,6 +38,23 @@ typedef NoteSplashData = {
 **/
 class Note extends FlxSprite
 {
+	// Quantized notes, the first index is the snap and the second index is an array of an RGB color to be used for that snap
+	public static var quantizations:Array<Dynamic> = [
+		[4, [0xFFFF0000, 0xFFFFFFFF, 0xFF7F0000]],
+		[8, [0xFF0000FF, 0xFFFFFFFF, 0xFF00007F]],
+		[12, [0xFF800080, 0xFFFFFFFF, 0xFF3F003F]],
+		[16, [0xFFFFFF00, 0xFFFFFFFF, 0xFF7F7F00]],
+		[24, [0xFFFFC0CB, 0xFFFFFFFF, 0xFF7F5F64]],
+		[32, [0xFFFFA500, 0xFFFFFFFF, 0xFF7F5000]],
+		[48, [0xFF00FFFF, 0xFFFFFFFF, 0xFF007F7F]],
+		[64, [0xFF00FF00, 0xFFFFFFFF, 0xFF007F00]],
+	];
+
+	// These notetypes will not be quantized
+	public static var typesDisabledOnQuant:Array<String> = [
+		'Hurt Note'
+	];
+
 	public var extraData:Map<String, Dynamic> = new Map<String, Dynamic>();
 
     public var row:Int = 0;
@@ -298,10 +315,15 @@ class Note extends FlxSprite
 		x += offsetX;
 	}
 
-	public function updateRgb(palette:Array<FlxColor>) {
+	public function updateRgb(palette:Array<FlxColor>, updateSplash:Bool = false) {
 		rgbShader.r = palette[0];
 		rgbShader.g = palette[1];
 		rgbShader.b = palette[2];
+		if (updateSplash) {
+			noteSplashData.r = rgbShader.r;
+			noteSplashData.g = rgbShader.g;
+			noteSplashData.b = rgbShader.b;
+		}
 	}
 
 	public static function initializeGlobalRGBShader(noteData:Int)
@@ -389,6 +411,19 @@ class Note extends FlxSprite
 
 		if(animName != null)
 			animation.play(animName, true);
+	}
+
+	public function setNoteQuantization(snap:Int, checkForNotetypes:Bool = true) {
+		if (checkForNotetypes && typesDisabledOnQuant.contains(noteType)) return;
+
+		for (quant in quantizations) {
+			if (snap % (192 / quant[0]) == 0) {
+				updateRgb(quant[1], true);
+				return;
+			}
+		}
+		// Anything above 64th or unsnapped is defaulted to gray
+		updateRgb([0xFF808080, 0xFFFFFFFF, 0xFF000000], true);
 	}
 
 	public static function getNoteSkinPostfix()
