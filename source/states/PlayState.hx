@@ -1567,7 +1567,7 @@ class PlayState extends MusicBeatState
 		var bpmPos:Float = 0;
 		for (section in noteData)
 		{
-			if (section.changeBPM != null && section.changeBPM) {
+			if (section.changeBPM == true) {
 				bpmPos = Conductor.bpmChangeMap[++bpmIndex]?.songTime;
 			}
 
