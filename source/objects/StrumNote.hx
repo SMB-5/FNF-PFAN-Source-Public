@@ -24,7 +24,7 @@ class StrumNote extends FlxSprite
 		return value;
 	}
 
-	public var defaultRGB:Array<Array<FlxColor>> = PlayState.isPixelStage ? ClientPrefs.data.arrowRGBPixel ? ClientPrefs.data.arrowRGB;
+	public var defaultRGB:Array<Array<FlxColor>> = PlayState.isPixelStage ? ClientPrefs.data.arrowRGBPixel : ClientPrefs.data.arrowRGB;
 
 	public var useRGBShader:Bool = true;
 	public function new(x:Float, y:Float, leData:Int, player:Int) {
