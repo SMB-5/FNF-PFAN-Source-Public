@@ -4079,8 +4079,8 @@ class PlayState extends MusicBeatState
 			spr = playerStrums.members[id];
 		}
 
-		if(spr != null && spr.animation.name != 'confirm') {
-			spr.playAnim('confirm', true);
+		if(spr != null) {
+			if (spr.animation.name != 'confirm') spr.playAnim('confirm', true);
 			spr.resetAnim = time;
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}
