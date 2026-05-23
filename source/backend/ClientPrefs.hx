@@ -32,12 +32,24 @@ import states.TitleState;
 		[0xFFC24B99, 0xFFFFFFFF, 0xFF3C1F56],
 		[0xFF00FFFF, 0xFFFFFFFF, 0xFF1542B7],
 		[0xFF12FA05, 0xFFFFFFFF, 0xFF0A4447],
-		[0xFFF9393F, 0xFFFFFFFF, 0xFF651038]];
+		[0xFFF9393F, 0xFFFFFFFF, 0xFF651038]
+	];
 	public var arrowRGBPixel:Array<Array<FlxColor>> = [
 		[0xFFE276FF, 0xFFFFF9FF, 0xFF60008D],
 		[0xFF3DCAFF, 0xFFF4FFFF, 0xFF003060],
 		[0xFF71E300, 0xFFF6FFE6, 0xFF003100],
-		[0xFFFF884E, 0xFFFFFAF5, 0xFF6C0000]];
+		[0xFFFF884E, 0xFFFFFAF5, 0xFF6C0000]
+	];
+	public var arrowRGBQuantization:Array<Array<FlxColor>> = [
+		[0xFFFF0000, 0xFFFFFFFF, 0xFF7F0000], // 4th Note
+		[0xFF0000FF, 0xFFFFFFFF, 0xFF00007F], // 8th Note
+		[0xFF800080, 0xFFFFFFFF, 0xFF3F003F], // 12th Note
+		[0xFFFFFF00, 0xFFFFFFFF, 0xFF7F7F00], // 16th Note
+		[0xFFFFC0CB, 0xFFFFFFFF, 0xFF7F5F64], // 24th Note
+		[0xFFFFA500, 0xFFFFFFFF, 0xFF7F5000], // 32th Note
+		[0xFF00FFFF, 0xFFFFFFFF, 0xFF007F7F], // 48th Note
+		[0xFF00FF00, 0xFFFFFFFF, 0xFF007F00] // 64th Note
+	];
 
 	public var ghostTapping:Bool = true;
 	public var timeBarType:String = 'Time Left';

@@ -15,6 +15,9 @@ class Option
 	// Bool will use checkboxes
 	// Everything else will use a text
 
+	public var customizable:Bool = false;
+	public var customizationClass:Class<Dynamic>;
+
 	public var scrollSpeed:Float = 50; //Only works on int/float, defines how fast it scrolls per second while holding left/right
 	private var variable:String = null; //Variable from ClientPrefs.hx
 	public var defaultValue:Dynamic = null;
@@ -33,13 +36,19 @@ class Option
 	public var defaultKeys:Keybind = null; //Only used in keybind type
 	public var keys:Keybind = null; //Only used in keybind type
 
-	public function new(name:String, description:String = '', variable:String, type:String = 'bool', ?options:Array<String> = null)
+	public function new(name:String, description:String = '', variable:String, type:String = 'bool', ?options:Array<String> = null, customizable = false, ?customizationClass:Class<Dynamic>)
 	{
 		this.name = name;
 		this.description = description;
 		this.variable = variable;
 		this.type = type;
 		this.options = options;
+		this.customizable = customizable;
+		this.customizationClass = customizationClass;
+		if (this.customizationClass == null) this.customizable = false;
+
+		if (this.customizable)
+			this.description = '(This setting is customizable, click the cog!)\n${this.description}';
 
 		if(this.type != 'keybind') this.defaultValue = Reflect.getProperty(ClientPrefs.defaultData, variable);
 		switch(type)

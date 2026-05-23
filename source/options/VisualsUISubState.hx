@@ -80,7 +80,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Note Quantization',
 			'If checked, colors the notes based on their snap.',
 			'noteQuantization',
-			'bool');
+			'bool', null, true, options.QuantizationColorSubstate);
 		addOption(option);
 
 		var option:Option = new Option('Strum Background Opacity',

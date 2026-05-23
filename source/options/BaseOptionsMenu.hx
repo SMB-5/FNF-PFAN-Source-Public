@@ -6,12 +6,15 @@ import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.gamepad.FlxGamepadManager;
 
 import objects.CheckboxThingie;
+import objects.AttachedSprite;
 import objects.AttachedText;
 import options.Option;
 import backend.InputFormatter;
 
 class BaseOptionsMenu extends MusicBeatSubstate
 {
+	private var ignoreCheck:Bool = false;
+
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Option>;
@@ -19,6 +22,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
+	private var settingGroup:FlxTypedGroup<AttachedSprite>;
 
 	private var descBox:FlxSprite;
 	private var descText:FlxText;
@@ -54,6 +58,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
 		add(checkboxGroup);
 
+		settingGroup = new FlxTypedGroup<AttachedSprite>();
+		add(settingGroup);
+
 		descBox = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		descBox.alpha = 0.6;
 		add(descBox);
@@ -77,6 +84,21 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			optionText.yMult = 90;*/
 			optionText.targetY = i;
 			grpOptions.add(optionText);
+
+			if (optionsArray[i].customizable) {
+				if (!controls.controllerMode && !FlxG.mouse.visible) FlxG.mouse.visible = true;
+				var setting:AttachedSprite = new AttachedSprite('settingButton');
+				setting.scale.set(1.5, 1.5);
+				setting.updateHitbox();
+				setting.ID = i;
+				setting.copyAlpha = false;
+				setting.alpha = 0;
+				setting.sprTracker = optionText;
+				setting.xAdd = optionText.width + 30;
+				setting.yAdd = 50;
+				setting.offset.x = 150;
+				settingGroup.add(setting);
+			}
 
 			if(optionsArray[i].type == 'bool')
 			{
@@ -124,6 +146,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
+		if (ignoreCheck) {
+			ignoreCheck = false;
+			return;
+		}
+
 		if(bindingKey)
 		{
 			bindingKeyUpdate(elapsed);
@@ -146,6 +173,15 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		if(nextAccept <= 0)
 		{
+			for (setting in settingGroup) {
+				if (setting.ID == curSelected) {
+					var pressed:Bool = FlxG.mouse.overlaps(setting) && FlxG.mouse.justPressed;
+					if (pressed || FlxG.gamepads.anyJustPressed(LEFT_STICK_CLICK)) { // idk what button to use for controller lol
+						openSubState(Type.createInstance(curOption.customizationClass, []));
+						FlxG.sound.play(Paths.sound('scrollMenu'));
+					}
+				}
+			}
 			if(curOption.type == 'bool')
 			{
 				if(controls.ACCEPT)
@@ -389,6 +425,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 	}
 
+	override function closeSubState() {
+		ignoreCheck = true;
+		super.closeSubState();
+	}
+
 	final MAX_KEYBIND_WIDTH = 320;
 	function updateBind(?text:String = null, ?option:Option = null)
 	{
@@ -495,6 +536,18 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		{
 			text.alpha = 0.6;
 			if(text.ID == curSelected) text.alpha = 1;
+		}
+		for (setting in settingGroup) {
+			if (setting.ID == curSelected) {
+				FlxTween.cancelTweensOf(setting);
+				setting.health = 0.5;
+				FlxTween.tween(setting, { 'offset.x': 0, alpha: 1 }, 0.15, { ease: FlxEase.quadOut });
+			}
+			else if (setting.health == 0.5) { // health 0.5 = previous option
+				FlxTween.cancelTweensOf(setting);
+				setting.health = 1;
+				FlxTween.tween(setting, { 'offset.x': 150, alpha: 0 }, 0.15, { ease: FlxEase.quadOut });
+			}
 		}
 
 		descBox.setPosition(descText.x - 10, descText.y - 10);
