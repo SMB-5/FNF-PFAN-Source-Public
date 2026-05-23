@@ -138,7 +138,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Health Bar Colors',
-			"If unchecked, the Health Bar will use the defualt red and green colors.",
+			"If unchecked, the Health Bar will use the default red and green colors.",
 			'healthBarColors',
 			'bool');
 		addOption(option);

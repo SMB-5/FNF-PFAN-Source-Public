@@ -295,8 +295,8 @@ class TitleState extends MusicBeatState
 		atlusSpr.antialiasing = ClientPrefs.data.antialiasing;
 
 		atlusTxt = new FlxText(0, 250, FlxG.width, 'A Love Letter to', 60);
-        atlusTxt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
-        add(atlusTxt);
+		atlusTxt.setFormat(Paths.font("Fontsona5Royal.ttf"), 60, CENTER, FlxColor.WHITE);
+		add(atlusTxt);
 		atlusTxt.alpha = 0;
 		atlusTxt.screenCenter(X);
 
@@ -307,7 +307,7 @@ class TitleState extends MusicBeatState
 		switch [leMonth, leDay]
 		{
 			case [3, 30]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Birthday", 60);
-			case [6, 6] | [8, 20] | [9, 5]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Aniversary", 60);
+			case [6, 6] | [8, 20] | [9, 5]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy Anniversary", 60);
 			case [9, 31] | [0, 1]: intro1Txt = new FlxText(0, 250, FlxG.width, "Happy", 60);
 			case [11, 25]: intro1Txt = new FlxText(0, 250, FlxG.width, "Merry", 60);
 			default: intro1Txt = new FlxText(0, 250, FlxG.width, curWacky[0], 60);
@@ -554,7 +554,7 @@ class TitleState extends MusicBeatState
 					case 12:
 						FlxTween.tween(intro2Txt, {alpha: 1}, 1, {ease: FlxEase.circOut});
 					case 14:
-					    FlxTween.tween(intro1Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
+						FlxTween.tween(intro1Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
 						FlxTween.tween(intro2Txt, {alpha: 0}, 1, {ease: FlxEase.circOut});
 					case 16:
 						watching = true;
@@ -565,7 +565,7 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-    var watching:Bool = false;
+	var watching:Bool = false;
 	var skippedIntro:Bool = false;
 	var increaseVolume:Bool = false;
 	function skipIntro():Void

@@ -15,9 +15,9 @@ class TVWorld extends BaseStage
 		var floor:BGSprite = new BGSprite('persona/stages/tv-world/floor', -600, 0);
 		add(floor);
 
-        if(!ClientPrefs.data.lowQuality) {
-		var lights:BGSprite = new BGSprite('persona/stages/tv-world/lights', -600, 0, 0.9, 0.9);
-		add(lights);
+		if(!ClientPrefs.data.lowQuality) {
+			var lights:BGSprite = new BGSprite('persona/stages/tv-world/lights', -600, 0, 0.9, 0.9);
+			add(lights);
 		}
 
 		var platforms:BGSprite = new BGSprite('persona/stages/tv-world/platforms', -600, 0);

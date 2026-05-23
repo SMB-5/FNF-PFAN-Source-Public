@@ -20,7 +20,7 @@ class InitialState extends MusicBeatState
 		add(bg);
 
 		new FlxTimer().start(1, function(tmr) {
-		openSubState(new PersonaCardSubstate("WarningDemo"));
+			openSubState(new PersonaCardSubstate("WarningDemo"));
 		});
 	}
 

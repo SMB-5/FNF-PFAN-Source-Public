@@ -89,10 +89,10 @@ class MainMenuState extends MusicBeatState
 				scr = 0;
 			var color = FlxColor.WHITE;
 
-    		if (optionShit[i] == 'STORY MODE' || optionShit[i] == 'AWARDS')
-    		{
-        		color = FlxColor.GRAY;
-    		}
+			if (optionShit[i] == 'STORY MODE' || optionShit[i] == 'AWARDS')
+			{
+				color = FlxColor.GRAY;
+			}
 
 			menuItem.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, color, LEFT);
 		}
@@ -246,9 +246,9 @@ class MainMenuState extends MusicBeatState
 
 	function getItemColor(index:Int):FlxColor
 	{
-    	if (optionShit[index] == 'STORY MODE' || optionShit[index] == 'AWARDS')
-        	return FlxColor.GRAY;
+		if (optionShit[index] == 'STORY MODE' || optionShit[index] == 'AWARDS')
+			return FlxColor.GRAY;
 
-    	return FlxColor.WHITE;
+		return FlxColor.WHITE;
 	}
 }

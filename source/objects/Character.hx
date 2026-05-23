@@ -51,7 +51,7 @@ class Character extends FlxSprite
 	**/
 	public static final DEFAULT_CHARACTER:String = 'bf';
 
-    public var mostRecentRow:Int = 0;
+	public var mostRecentRow:Int = 0;
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 	public var extraData:Map<String, Dynamic> = new Map<String, Dynamic>();
@@ -397,10 +397,10 @@ class Character extends FlxSprite
 		return !isAnimateAtlas ? (animation.curAnim == null) : (atlas.anim.curInstance == null || atlas.anim.curSymbol == null);
 	}
 
-    var _lastPlayedAnimation:String;
+	var _lastPlayedAnimation:String;
 	inline public function getAnimationName():String
 	{
-        return _lastPlayedAnimation;
+		return _lastPlayedAnimation;
 	}
 
 	public function isAnimationFinished():Bool

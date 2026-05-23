@@ -28,7 +28,7 @@ class FreeplayState extends MusicBeatState
 	var curDifficulty:Int = -1;
 	private static var lastDifficultyName:String = Difficulty.getDefault();
 
-    var catText:Alphabet;
+	var catText:Alphabet;
 	var scoreBG:FlxSprite;
 	var scoreText:FlxText;
 	var diffText:FlxText;
@@ -293,15 +293,15 @@ class FreeplayState extends MusicBeatState
 
 	function updateAllRanks()
 	{
-    	for (i in 0...songs.length)
-    	{
-        	var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
-        	var rank = rankSprites[i];
+		for (i in 0...songs.length)
+		{
+			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
+			var rank = rankSprites[i];
 
-        	if (rank == null) continue;
+			if (rank == null) continue;
 
-        	rank.loadGraphic(getRankGraphic(rating));
-    	}
+			rank.loadGraphic(getRankGraphic(rating));
+		}
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -336,7 +336,7 @@ class FreeplayState extends MusicBeatState
 			songText.ID = i;
 			songText.setFormat(Paths.font("p5hatty-1.ttf"), 42, FlxColor.BLACK, LEFT);
 			songText.autoSize = false;
-            songText.textField.multiline = true;
+			songText.textField.multiline = true;
 			//songText.targetY = (i - curSelected);
 
 			//songText.scaleX = Math.min(0.8, 480 / songText.width);
@@ -352,7 +352,7 @@ class FreeplayState extends MusicBeatState
 			var textbg: AttachedSprite = new AttachedSprite('persona/menus/freeplay/textbg');
 			textbg.antialiasing = ClientPrefs.data.antialiasing;
 			textbg.xAdd = songText.x - 520;
-    		textbg.yAdd = songText.y - 660;
+			textbg.yAdd = songText.y - 660;
 			textbg.scale.x = 0.35;
 			textbg.scale.y = 0.1;
 			textbg.sprTracker = songText;
@@ -361,7 +361,7 @@ class FreeplayState extends MusicBeatState
 			var rank: AttachedSprite = new AttachedSprite('blank');
 			rank.antialiasing = ClientPrefs.data.antialiasing;
 			rank.xAdd = songText.x + 210;
-    		rank.yAdd = songText.y - 390;
+			rank.yAdd = songText.y - 390;
 			rank.scale.x = 0.3;
 			rank.scale.y = 0.3;
 			rank.sprTracker = songText;
@@ -620,7 +620,7 @@ class FreeplayState extends MusicBeatState
 		else if (controls.ACCEPT && !player.playingMusic)
 		{
 			if (songs[curSelected].songName.toLowerCase() == 'random')
-		    {
+			{
 				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
 				picked_random = true;
 				new FlxTimer().start(1, function(tmr) {
@@ -782,9 +782,9 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-    		var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
-    		var rank = rankSprites[i];
-    		rank.loadGraphic(getRankGraphic(rating));
+			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
+			var rank = rankSprites[i];
+			rank.loadGraphic(getRankGraphic(rating));
 		}
 
 		changeDiff();
@@ -799,24 +799,24 @@ class FreeplayState extends MusicBeatState
 
 	function getRankGraphic(rating:Float):Dynamic
 	{
-    	var percent:Float = rating * 100;
+		var percent:Float = rating * 100;
 
-    	if (percent >= 100)
-        	return Paths.image('persona/results/P');
-    	else if (percent >= 94.99)
-        	return Paths.image('persona/results/S');
-    	else if (percent >= 89.99)
-        	return Paths.image('persona/results/A');
-    	else if (percent >= 79.99)
-        	return Paths.image('persona/results/B');
-    	else if (percent >= 69.99)
-        	return Paths.image('persona/results/C');
-    	else if (percent >= 39.99)
-        	return Paths.image('persona/results/D');
-    	else if (percent >= 19.99)
-        	return Paths.image('persona/results/E');
-    	else if (percent >= 0.99)
-        	return Paths.image('persona/results/F');
+		if (percent >= 100)
+			return Paths.image('persona/results/P');
+		else if (percent >= 94.99)
+			return Paths.image('persona/results/S');
+		else if (percent >= 89.99)
+			return Paths.image('persona/results/A');
+		else if (percent >= 79.99)
+			return Paths.image('persona/results/B');
+		else if (percent >= 69.99)
+			return Paths.image('persona/results/C');
+		else if (percent >= 39.99)
+			return Paths.image('persona/results/D');
+		else if (percent >= 19.99)
+			return Paths.image('persona/results/E');
+		else if (percent >= 0.99)
+			return Paths.image('persona/results/F');
 		else 
 			return Paths.image('blank');
 	}
