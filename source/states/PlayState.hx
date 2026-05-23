@@ -2320,7 +2320,7 @@ class PlayState extends MusicBeatState
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!
 	function doDeathCheck(?skipHealthCheck:Bool = false) {
-		if (((skipHealthCheck && instakillOnMiss) || health <= 0) && !practiceMode && !isDead)
+		if (!isDead && (merciless || (skipHealthCheck || health <= 0) && !practiceMode))
 		{
 			var ret:Dynamic = callOnScripts('onGameOver', null, true);
 			if(ret != LuaUtils.Function_Stop) {
@@ -2345,51 +2345,6 @@ class PlayState extends MusicBeatState
 				#end
 
 				openSubState(new GameOverSubstate());
-
-				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-				#if DISCORD_ALLOWED
-				// Game Over doesn't get his its variable because it's only used here
-				if(autoUpdateRPC) DiscordClient.changePresence("Game Over - " + detailsText, SONG.song, iconP2.getCharacter());
-				#end
-				isDead = true;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	function doMerciDeathCheck() {
-		if (combo == 0)
-		{
-			trace('no mercy for you');
-			vocals.volume = 0;
-			opponentVocals.volume = 0;
-			var ret:Dynamic = callOnScripts('onGameOver', null, true);
-			if(ret != LuaUtils.Function_Stop) {
-				FlxG.animationTimeScale = 1;
-				if (!opponentMode) boyfriend.stunned = true;
-				else dad.stunned = true;
-				deathCounter++;
-
-				paused = true;
-
-				vocals.stop();
-				opponentVocals.stop();
-				FlxG.sound.music.stop();
-
-				persistentUpdate = false;
-				persistentDraw = false;
-				FlxTimer.globalManager.clear();
-				FlxTween.globalManager.clear();
-				#if LUA_ALLOWED
-				modchartTimers.clear();
-				modchartTweens.clear();
-				#end
-
-				openSubState(new GameOverSubstate());
-
-				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 				#if DISCORD_ALLOWED
 				// Game Over doesn't get his its variable because it's only used here
@@ -2965,7 +2920,7 @@ class PlayState extends MusicBeatState
 		if(daRating.noteSplash && !note.noteSplashData.disabled)
 			spawnNoteSplashOnNote(note);
 
-		if (ClientPrefs.data.comboBreak && (daRating.name == 'bad' || daRating.name == 'shit'))
+		if ((ClientPrefs.data.comboBreak || merciless) && (daRating.name == 'bad' || daRating.name == 'shit'))
 		{
 			combo = 0;
 			makeGhostNote(note);
@@ -2975,9 +2930,11 @@ class PlayState extends MusicBeatState
 				gf.specialAnim = true;
 			}
 			if (merciless)
-		    {
-		    doMerciDeathCheck();
-		    }
+			{
+				vocals.volume = 0;
+				opponentVocals.volume = 0;
+				doDeathCheck(true);
+			}
 		}
 
 		if(!practiceMode && !cpuControlled) {
@@ -3389,8 +3346,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-
-		if(instakillOnMiss)
+		if (instakillOnMiss || merciless)
 		{
 			vocals.volume = 0;
 			opponentVocals.volume = 0;
@@ -3399,10 +3355,6 @@ class PlayState extends MusicBeatState
 
 		var lastCombo:Int = combo;
 		combo = 0;
-		if (merciless)
-		{
-		doMerciDeathCheck();
-		}
 
 		health -= subtract * healthLoss;
 		if(!practiceMode) songScore -= 100;

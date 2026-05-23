@@ -168,8 +168,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		disallowedText.visible = false;
 		add(disallowedText);
 
-		glText = new FlxText(0, 270, FlxG.width - 100, '', 32);
+		glText = new FlxText(0, 270, FlxG.width - 100, 'You will need to beat the song without breaking your combo or getting a Bad/Shit rating. Good Luck! You\'re gonna need it!', 32);
 		glText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		glText.screenCenter(X);
 		glText.scrollFactor.set();
 		glText.visible = false;
 		add(glText);
@@ -231,19 +232,15 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					}
 					else
 					{
-						if (curOption.name == "Merciless" && ClientPrefs.getGameplaySetting('merciless') == false)
-						{
-						glText.text= 'You will need to beat the song without breaking your combo. Good Luck! You\'re gonna need it!';
-						glText.screenCenter(X);
-						glText.visible = true;
-						}
-						if (curOption.name == "Merciless" && ClientPrefs.getGameplaySetting('merciless') == true)
-						{
-						glText.visible = false;
-						}
+						var optionValue:Bool = (curOption.getValue() == true) ? false : true;
 						FlxG.sound.play(Paths.sound('scrollMenu'));
-						curOption.setValue((curOption.getValue() == true) ? false : true);
+						curOption.setValue(optionValue);
 						curOption.change();
+
+						if (curOption.name == "Merciless")
+						{
+							glText.visible = optionValue;
+						}
 					}
 					reloadCheckboxes();
 				}
