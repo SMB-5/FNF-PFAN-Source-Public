@@ -47,8 +47,10 @@ class Option
 		this.customizationClass = customizationClass;
 		if (this.customizationClass == null) this.customizable = false;
 
-		if (this.customizable)
-			this.description = '(This setting is customizable, click the cog!)\n${this.description}';
+		if (this.customizable) {
+			var input:String = !Controls.instance.controllerMode ? 'click the cog' : 'press L3 to customize it';
+			this.description = '(This setting is customizable, $input!)\n${this.description}';
+		}
 
 		if(this.type != 'keybind') this.defaultValue = Reflect.getProperty(ClientPrefs.defaultData, variable);
 		switch(type)
