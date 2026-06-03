@@ -30,6 +30,8 @@ class MainMenuState extends MusicBeatState
 
 	var stickerSubState:Bool;
 
+	var yu:FlxSprite;
+
 	public function new(?stickers:Bool = false)
 	{
 		super();
@@ -51,6 +53,8 @@ class MainMenuState extends MusicBeatState
 		if(!FlxG.sound.music.playing) {
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 		}
+
+		Conductor.bpm = 125;
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -96,6 +100,14 @@ class MainMenuState extends MusicBeatState
 
 			menuItem.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, color, LEFT);
 		}
+
+		yu = new FlxSprite(600, 100);
+		yu.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Yu-Menu');
+		yu.animation.addByPrefix('idle', 'menu_idle', 24, false);
+        //yu.scale.x = 0.7;
+        //yu.scale.y = 0.7;
+        yu.updateHitbox();
+        add(yu);
 
 		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v" + Application.current.meta.get('version'), 12);
 		pfanVer.scrollFactor.set();
@@ -220,8 +232,26 @@ class MainMenuState extends MusicBeatState
 			}
 			#end
 		}
-
+		Conductor.songPosition = FlxG.sound.music.time;
 		super.update(elapsed);
+	}
+
+	var lastBeatHit:Int = -1;
+	override public function beatHit()
+	{
+		super.beatHit();
+
+		if(lastBeatHit == curBeat)
+		{
+			return;
+		}
+
+		if(curBeat % 2 == 0)
+		{
+			yu.animation.play('idle');
+		}
+
+		lastBeatHit = curBeat;
 	}
 
 	function changeItem(huh:Int = 0)
