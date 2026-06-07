@@ -2322,7 +2322,8 @@ class PlayState extends MusicBeatState
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!
 	function doDeathCheck(?skipHealthCheck:Bool = false) {
-		if (!isDead && (merciless || (skipHealthCheck || health <= 0) && !practiceMode))
+		var modCheck:Bool = skipHealthCheck && (merciless || instakillOnMiss);
+		if (!isDead && (modCheck || health <= 0) && !practiceMode)
 		{
 			var ret:Dynamic = callOnScripts('onGameOver', null, true);
 			if(ret != LuaUtils.Function_Stop) {
