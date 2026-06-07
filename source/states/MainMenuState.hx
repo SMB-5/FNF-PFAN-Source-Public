@@ -30,6 +30,9 @@ class MainMenuState extends MusicBeatState
 
 	var stickerSubState:Bool;
 
+	var bf:FlxSprite;
+	var yu:FlxSprite;
+
 	public function new(?stickers:Bool = false)
 	{
 		super();
@@ -51,6 +54,8 @@ class MainMenuState extends MusicBeatState
 		if(!FlxG.sound.music.playing) {
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 		}
+
+		Conductor.bpm = 125;
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -95,6 +100,27 @@ class MainMenuState extends MusicBeatState
 			}
 
 			menuItem.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, color, LEFT);
+		}
+
+		bf = new FlxSprite(650, 100);
+		bf.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/BF-Menu');
+		bf.animation.addByPrefix('idle', 'menu_idle', 24, false);
+        bf.updateHitbox();
+
+		yu = new FlxSprite(600, 100);
+		yu.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Yu-Menu');
+		yu.animation.addByPrefix('idle', 'menu_idle', 24, false);
+        yu.updateHitbox();
+
+		var randomChar:Int = FlxG.random.int(1, 2);
+
+		//it'd be funny if they're number was their game number minus bf, gf and the rest of the characters
+		switch (randomChar)
+		{
+    		case 1:
+        		add(bf);
+    		case 2:
+        		add(yu);
 		}
 
 		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v" + Application.current.meta.get('version'), 12);
@@ -220,8 +246,27 @@ class MainMenuState extends MusicBeatState
 			}
 			#end
 		}
-
+		Conductor.songPosition = FlxG.sound.music.time;
 		super.update(elapsed);
+	}
+
+	var lastBeatHit:Int = -1;
+	override public function beatHit()
+	{
+		super.beatHit();
+
+		if(lastBeatHit == curBeat)
+		{
+			return;
+		}
+
+		if(curBeat % 2 == 0)
+		{
+			bf.animation.play('idle');
+			yu.animation.play('idle');
+		}
+
+		lastBeatHit = curBeat;
 	}
 
 	function changeItem(huh:Int = 0)
