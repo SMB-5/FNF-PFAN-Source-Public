@@ -459,13 +459,10 @@ class PlayState extends MusicBeatState
 		abot = new ABotSpeaker(gfGroup.x +30, gfGroup.y + 320);
 		updateABotEye(true);
 		add(abot);
-		abot.visible = true;
 		
 		// only reason why this is the other way is so the visualiser doesn't show at the start of the song
 		if (SONG.gfVersion != 'nene')
-		{
-			abot.visible = false;
-		}
+			remove(abot);
 
 		if (SONG.player1 == 'pico-playable')
 		{
@@ -2579,16 +2576,6 @@ class PlayState extends MusicBeatState
 								{
 									gf.fixArrowRGB();
 								}
-								if(gf.curCharacter == 'nene')
-								{
-									abot.visible = true;
-									trace("nene character");
-								}
-								else if(gf.curCharacter != 'nene')
-								{
-									abot.visible = false;
-									trace("not nene");
-								}
 							}
 							setOnScripts('gfName', gf.curCharacter);
 						}
@@ -3763,7 +3750,9 @@ class PlayState extends MusicBeatState
 
 	override function sectionHit()
 	{
-		updateABotEye();
+		if (SONG.gfVersion == 'nene')
+			updateABotEye();
+		
 		if (SONG.notes[curSection] != null)
 		{
 			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
