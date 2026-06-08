@@ -3433,7 +3433,7 @@ class PlayState extends MusicBeatState
 
 		var spr = opponentStrums.members[note.noteData];
 		if (!cpuControlled && opponentMode) {
-			if (spr != null && spr.animation.name != 'confirm') spr.playAnim('confirm', true);
+			if (spr != null && (!note.isSustainNote || spr.animation.name != 'confirm')) spr.playAnim('confirm', true);
 		}
 		else {
 			strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
@@ -3545,7 +3545,7 @@ class PlayState extends MusicBeatState
 
 		var spr = playerStrums.members[note.noteData];
 		if(!cpuControlled && !opponentMode) {
-			if (spr != null && spr.animation.name != 'confirm') spr.playAnim('confirm', true);
+			if (spr != null && (!note.isSustainNote || spr.animation.name != 'confirm')) spr.playAnim('confirm', true);
  		}
 		else {
 			strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
@@ -4027,7 +4027,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(spr != null) {
-			if (spr.animation.name != 'confirm') spr.playAnim('confirm', true);
+			if (!note.isSustainNote || spr.animation.name != 'confirm') spr.playAnim('confirm', true);
 			spr.resetAnim = time;
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}
