@@ -3116,7 +3116,7 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = lastTime;
 
 		var spr:StrumNote = strumGroup.members[key];
-		if(strumsBlocked[key] != true && spr != null && spr.animation.curAnim.name != 'confirm')
+		if(strumsBlocked[key] != true && spr != null && !spr.animation.curAnim.name.startsWith('confirm'))
 		{
 			spr.playAnim('pressed');
 			spr.resetAnim = 0;
@@ -3174,6 +3174,7 @@ class PlayState extends MusicBeatState
 	}
 
 	// Hold notes
+	var sustainsHeld:Array<Note> = [];
 	private function keysCheck():Void
 	{
 		// HOLDING
@@ -3214,21 +3215,31 @@ class PlayState extends MusicBeatState
 
 						if (!released)
 						{
-							if (!opponentMode)
+							if (!opponentMode) {
 								goodNoteHit(n);
-							else
+							}
+							else {
 								opponentNoteHit(n);
+							}
 						}
-					}
+						sustainsHeld[n.noteData] = n;
 				}
 			}
 
-			if (!holdArray.contains(true) || endingSong)
+			if (!holdArray.contains(true) || endingSong) {
 				playerDance();
-
-			#if ACHIEVEMENTS_ALLOWED
-			else checkForAchievement(['oversinging']);
-			#end
+			}
+			else if (holdArray.contains(true)) {
+				var strumGroup:FlxTypedGroup<StrumNote> = !opponentMode ? playerStrums : opponentStrums;
+				for (i in 0...holdArray.length) {
+					if (holdArray[i] && strumGroup.members[i].animation.name == 'static') {
+						strumGroup.members[i].playAnim('pressed', true);
+					}
+				}
+				#if ACHIEVEMENTS_ALLOWED
+				checkForAchievement(['oversinging']);
+				#end
+			}
 		}
 
 		// TO DO: Find a better way to handle controller inputs, this should work for now
@@ -3419,8 +3430,13 @@ class PlayState extends MusicBeatState
 		}
 
 		var spr = opponentStrums.members[note.noteData];
-		if (!cpuControlled && opponentMode) {
-			if (spr != null && (!note.isSustainNote || spr.animation.name != 'confirm')) spr.playAnim('confirm', true);
+		if (opponentMode && !cpuControlled) {
+			if (spr != null) {
+				if (!note.isSustainNote || !spr.animation.name.startsWith('confirm')) {
+					spr.playAnim(note.isSustainNote ? 'confirm-hold' : 'confirm', true);
+				}
+				spr.resetAnim = note.isSustainNote ? -1 : 0;
+			}
 		}
 		else {
 			strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
@@ -3531,9 +3547,14 @@ class PlayState extends MusicBeatState
 		}
 
 		var spr = playerStrums.members[note.noteData];
-		if(!cpuControlled && !opponentMode) {
-			if (spr != null && (!note.isSustainNote || spr.animation.name != 'confirm')) spr.playAnim('confirm', true);
- 		}
+		if (!opponentMode && !cpuControlled) {
+			if (spr != null) {
+				if (!note.isSustainNote || !spr.animation.name.startsWith('confirm')) {
+					spr.playAnim(note.isSustainNote ? 'confirm-hold' : 'confirm', true);
+				}
+				spr.resetAnim = note.isSustainNote ? -1 : 0;
+			}
+		}
 		else {
 			strumPlayAnim(false, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate, note);
 		}
@@ -4016,7 +4037,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(spr != null) {
-			if (!note.isSustainNote || spr.animation.name != 'confirm') spr.playAnim('confirm', true);
+			if (!note.isSustainNote || !spr.animation.name.startsWith('confirm')) spr.playAnim(note.isSustainNote ? 'confirm-hold' : 'confirm', true);
 			spr.resetAnim = time;
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 		}

@@ -88,18 +88,22 @@ class StrumNote extends FlxSprite
 					animation.add('static', [0]);
 					animation.add('pressed', [4, 8], 12, false);
 					animation.add('confirm', [12, 16], 24, false);
+					animation.add('confirm-hold', [12, 16], 24, false);
 				case 1:
 					animation.add('static', [1]);
 					animation.add('pressed', [5, 9], 12, false);
 					animation.add('confirm', [13, 17], 24, false);
+					animation.add('confirm-hold', [13, 17], 24, false);
 				case 2:
 					animation.add('static', [2]);
 					animation.add('pressed', [6, 10], 12, false);
 					animation.add('confirm', [14, 18], 12, false);
+					animation.add('confirm-hold', [14, 18], 12, false);
 				case 3:
 					animation.add('static', [3]);
 					animation.add('pressed', [7, 11], 12, false);
 					animation.add('confirm', [15, 19], 24, false);
+					animation.add('confirm-hold', [15, 19], 24, false);
 			}
 		}
 		else
@@ -119,18 +123,22 @@ class StrumNote extends FlxSprite
 					animation.addByPrefix('static', 'arrowLEFT');
 					animation.addByPrefix('pressed', 'left press', 24, false);
 					animation.addByPrefix('confirm', 'left confirm', 24, false);
+					animation.addByPrefix('confirm-hold', 'left confirm', 24, false);
 				case 1:
 					animation.addByPrefix('static', 'arrowDOWN');
 					animation.addByPrefix('pressed', 'down press', 24, false);
 					animation.addByPrefix('confirm', 'down confirm', 24, false);
+					animation.addByPrefix('confirm-hold', 'down confirm', 24, false);
 				case 2:
 					animation.addByPrefix('static', 'arrowUP');
 					animation.addByPrefix('pressed', 'up press', 24, false);
 					animation.addByPrefix('confirm', 'up confirm', 24, false);
+					animation.addByPrefix('confirm-hold', 'up confirm', 24, false);
 				case 3:
 					animation.addByPrefix('static', 'arrowRIGHT');
 					animation.addByPrefix('pressed', 'right press', 24, false);
 					animation.addByPrefix('confirm', 'right confirm', 24, false);
+					animation.addByPrefix('confirm-hold', 'right confirm', 24, false);
 			}
 		}
 		updateHitbox();
@@ -138,6 +146,14 @@ class StrumNote extends FlxSprite
 		if(lastAnim != null)
 		{
 			playAnim(lastAnim, true);
+		}
+
+		animation.finishCallback = function(name:String) {
+			if (!PlayState.opponentMode && player == 1 || PlayState.opponentMode && player == 0) {
+				if (name == 'confirm' && resetAnim >= 0) {
+					resetAnim = 0.15;
+				}
+			}
 		}
 	}
 
