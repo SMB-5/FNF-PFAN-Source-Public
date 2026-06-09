@@ -3227,6 +3227,16 @@ class PlayState extends MusicBeatState
 				}
 			}
 
+			for (i in 0...holdArray.length) {
+				if (!holdArray[i] && sustainsHeld[i] != null) {
+					var end:Note = sustainsHeld[i].parent.tail[sustainsHeld[i].parent.tail.length - 1];
+					if (end != null && sustainsHeld[i] != end && end.extraData.get('holdSplash') != null && end.extraData.get('holdSplash').animation.name != 'end') {
+						end.extraData.get('holdSplash').visible = false;
+					}
+					sustainsHeld[i] = null;
+				}
+			}
+
 			if (!holdArray.contains(true) || endingSong) {
 				playerDance();
 			}
