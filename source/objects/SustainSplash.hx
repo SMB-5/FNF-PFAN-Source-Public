@@ -35,12 +35,13 @@ class SustainSplash extends FlxSprite
 			shader.data.mult.value = daNote.shader.data.mult.value;
 		}
 
+		alpha = realNote.alpha;
 		setPosition(strum.x, strum.y);
 		offset.set(PlayState.isPixelStage ? 112.5 : 106.25, 100);
 
 		new FlxTimer().start(timeThingy, (_) -> {
 			if (tailEnd.mustPress != PlayState.opponentMode && !realNote.noteSplashData.disabled && ClientPrefs.data.splashAlpha != 0) {
-				alpha = ClientPrefs.data.splashAlpha;
+				alpha = realNote.noteSplashData.a;
 				animation.play('end', true);
 				animation.curAnim.looped = false;
 				animation.curAnim.frameRate = 24;

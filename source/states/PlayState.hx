@@ -1214,11 +1214,11 @@ class PlayState extends MusicBeatState
 				}
 
 				notes.forEachAlive(function(note:Note) {
-					if(ClientPrefs.data.opponentStrums || note.mustPress)
+					if(ClientPrefs.data.opponentStrums || note.mustPress != PlayState.opponentMode)
 					{
 						note.copyAlpha = false;
 						note.alpha = note.multAlpha;
-						if(ClientPrefs.data.middleScroll && !note.mustPress)
+						if(ClientPrefs.data.middleScroll && note.mustPress == PlayState.opponentMode)
 							note.alpha *= 0.35;
 					}
 				});
