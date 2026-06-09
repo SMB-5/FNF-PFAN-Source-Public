@@ -184,6 +184,7 @@ class MainMenuState extends MusicBeatState
 				if (optionShit[curSelected] == 'STORY MODE' || optionShit[curSelected] == 'AWARDS')
 				{
 					FlxG.sound.play(Paths.sound('cancelMenu'));
+					selectedSomethin = true;
 					new FlxTimer().start(0.5, function(tmr) {
 						openSubState(new PersonaCardSubstate("LockedDemo"));
 					});
@@ -267,6 +268,11 @@ class MainMenuState extends MusicBeatState
 		}
 
 		lastBeatHit = curBeat;
+	}
+
+	override function closeSubState() {
+		selectedSomethin = false;
+		super.closeSubState();
 	}
 
 	function changeItem(huh:Int = 0)
