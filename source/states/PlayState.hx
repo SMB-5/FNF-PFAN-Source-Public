@@ -3223,6 +3223,7 @@ class PlayState extends MusicBeatState
 							}
 						}
 						sustainsHeld[n.noteData] = n;
+					}
 				}
 			}
 
