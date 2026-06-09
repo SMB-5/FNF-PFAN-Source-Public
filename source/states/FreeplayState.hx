@@ -224,6 +224,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		updatePortrait();
 		updateTexts();
+		updateAllRanks();
 		super.create();
 	}
 
@@ -385,6 +386,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		updatePortrait();
 		changeDiff();
+		updateAllRanks();
 	}
 
 	var instPlaying:Int = -1;
@@ -427,7 +429,6 @@ class FreeplayState extends MusicBeatState
 				scoreText.text = 'HIGHSCORE: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 			}
 			positionHighscore();
-			updateAllRanks();
 			
 			if(songs.length > 1)
 			{
