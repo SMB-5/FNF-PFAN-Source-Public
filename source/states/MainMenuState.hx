@@ -84,7 +84,7 @@ class MainMenuState extends MusicBeatState
 
 		for (i in 0...optionShit.length)
 		{
-			var offset:Float = 258 - (Math.max(optionShit.length, 4) - 4) * 80;
+			var offset:Float = 248 - (Math.max(optionShit.length, 4) - 4) * 80;
 			var menuItem:FlxText = new FlxText(30, (i * 80) + offset, "", 48);
 			menuItem.antialiasing = ClientPrefs.data.antialiasing;
 			menuItem.text = optionShit[i];
@@ -123,18 +123,48 @@ class MainMenuState extends MusicBeatState
         		add(yu);
 		}
 
-		var pfanVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Persona: Funkin' All Night v" + Application.current.meta.get('version'), 12);
+		var pfanVer:FlxText = new FlxText(12, FlxG.height - 154, 0, "Persona: Funkin' All Night v" + Application.current.meta.get('version'), 12);
 		pfanVer.scrollFactor.set();
 		pfanVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(pfanVer);
-		var psychVer:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
+		var psychVer:FlxText = new FlxText(12, FlxG.height - 134, 0, "Psych Engine v" + psychEngineVersion, 12);
 		psychVer.scrollFactor.set();
 		psychVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(psychVer);
-		var fnfVer:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v0.2.8", 12);
+		var fnfVer:FlxText = new FlxText(12, FlxG.height - 114, 0, "Friday Night Funkin' v0.2.8", 12);
 		fnfVer.scrollFactor.set();
 		fnfVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fnfVer);
+
+		var upKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_up')[1]);
+		var downKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_down')[1]);
+		var leftKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_left')[1]);
+		var rightKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_right')[1]);
+
+		var moveUpIcon:FlxSprite = new FlxSprite(12, FlxG.height - 164).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + upKeyName));
+		moveUpIcon.setGraphicSize(Std.int(moveUpIcon.width * 0.15));
+		add(moveUpIcon);
+
+		var moveDownIcon:FlxSprite = new FlxSprite(12, FlxG.height - 124).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + downKeyName));
+		moveDownIcon.setGraphicSize(Std.int(moveDownIcon.width * 0.15));
+		add(moveDownIcon);
+
+		var moveLeftIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 124).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + leftKeyName));
+		moveLeftIcon.setGraphicSize(Std.int(moveLeftIcon.width * 0.15));
+		add(moveLeftIcon);
+
+		var moveRightIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 124).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + rightKeyName));
+		moveRightIcon.setGraphicSize(Std.int(moveRightIcon.width * 0.15));
+		add(moveRightIcon);
+
+		moveDownIcon.x = moveLeftIcon.x + 40;
+		moveUpIcon.x = moveDownIcon.x;
+		moveRightIcon.x = moveDownIcon.x + 40;
+
+		var moveText:FlxText = new FlxText(moveRightIcon.x + 130, FlxG.height - 39, 0, "Select", 24);
+		moveText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(moveText);
+
 		changeItem();
 
 		#if ACHIEVEMENTS_ALLOWED
