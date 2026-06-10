@@ -20,11 +20,7 @@ import flixel.util.FlxTimer;
 
 class FreeplayState extends MusicBeatState
 {
-	var categories:Array<CategoryMetadata> = [
-		new CategoryMetadata('Main Story', ['week1', 'week2', 'week3', 'week4', 'week5']),
-		new CategoryMetadata('Side Stories', ['bonusp5']),
-		new CategoryMetadata('All', ['week1', 'week2', 'week3', 'week4', 'week5', 'bonusp5', 'extras'])
-	];
+	var categories:Array<CategoryMetadata> = [];
 	var songs:Array<SongMetadata> = [];
 
 	public static var curCategory:Int = 0;
@@ -91,6 +87,7 @@ class FreeplayState extends MusicBeatState
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
+		reloadCategories();
 
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
@@ -171,7 +168,7 @@ class FreeplayState extends MusicBeatState
 		missingText.visible = false;
 		add(missingText);
 
-		regenerateSongs('');
+		regenerateSongs();
 		Mods.loadTopMod();
 		WeekData.setDirectoryFromWeek();
 
@@ -214,7 +211,51 @@ class FreeplayState extends MusicBeatState
 		super.create();
 	}
 
+	function reloadCategories() {
+		var directories:Array<String> = [];
+		#if MODS_ALLOWED
+		directories = [Paths.mods()];
+
+		for (mod in Mods.parseList().enabled)
+			directories.push(Paths.mods(mod + '/'));
+		#end
+		directories.push(Paths.getSharedPath());
+
+		for (dir in directories) {
+			dir += 'categories/';
+			if (!FileSystem.exists(dir)) continue;
+
+			var categoryList:Array<String> = CoolUtil.coolTextFile(dir + 'categoryList.txt');
+			for (cat in categoryList) {
+				var fileToCheck:String = dir + cat + '.json';
+				if (FileSystem.exists(fileToCheck)) {
+					var parsedCategory = haxe.Json.parse(File.getContent(fileToCheck));
+					addCategory(parsedCategory.categoryName, parsedCategory.weeks);
+				}
+			}
+
+			for (file in FileSystem.readDirectory(dir)) {
+				var path:String = haxe.io.Path.join([dir, file]);
+				if (!FileSystem.isDirectory(path) && path.endsWith('.json')) {
+					var parsedCategory = haxe.Json.parse(File.getContent(path));
+					addCategory(parsedCategory.categoryName, parsedCategory.weeks);
+				}
+			}
+		}
+	}
+
+	function addCategory(name:String, weeks:Array<String>) {
+		for (category in categories) {
+			if (category.categoryName == name) return;
+		}
+		categories.push(new CategoryMetadata(name, weeks));
+	}
+
 	function regenerateSongs(?start:String = '') {
+		if (categories.length < 1) {
+			catText.text = 'NO CATEGORIES FOUND';
+			return;
+		}
 		songs = [new SongMetadata("Random", 0, "Face", FlxColor.fromRGB(255, 255, 255))];
 		catText.text = '< ${categories[curCategory].categoryName} >';
 		for (i in 0...WeekData.weeksList.length) {
@@ -414,6 +455,7 @@ class FreeplayState extends MusicBeatState
 			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
 			{
 				curCategory = FlxMath.wrap(curCategory + (controls.UI_LEFT_P ? -1 : 1), 0, categories.length - 1);
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 				regenerateSongs();
 			}
 
@@ -425,7 +467,7 @@ class FreeplayState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (songs[curSelected].songName.toLowerCase() == 'random')
+				if (songs[curSelected].songName.toLowerCase() == 'random' && songs.length > 1)
 				{
 					changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
 					pickedRandom = true;
