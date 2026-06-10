@@ -12,6 +12,8 @@ class PersonaCardSubstate extends MusicBeatSubstate
     var promptText:FlxText;
     var titleText:FlxText;
     var cardText:FlxText;
+    var acceptIcon:FlxSprite;
+    var confirmText:FlxText;
 
     public function new(Prompt:String)
     {
@@ -72,12 +74,32 @@ class PersonaCardSubstate extends MusicBeatSubstate
 
         //cardText.screenCenter(X);
 
+        var acceptKeyName:String = Std.string(ClientPrefs.keyBinds.get('accept')[1]);
+
+        acceptIcon = new FlxSprite(20, FlxG.height - 44).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + acceptKeyName));
+		acceptIcon.setGraphicSize(Std.int(acceptIcon.width * 0.15));
+		acceptIcon.updateHitbox();
+		acceptIcon.antialiasing = true;
+		add(acceptIcon);
+
+        acceptIcon.alpha = 0;
+        acceptIcon.y = cardBG.y + 440;
+
+		confirmText = new FlxText(0, FlxG.height - 39, 0, "Close", 24);
+		confirmText.setFormat("p5hatty-1.ttf", 32, FlxColor.WHITE, RIGHT);
+		add(confirmText);
+
+        confirmText.y = acceptIcon.y + 5;
+        confirmText.alpha = 0;
+
         FlxTween.tween(bg, {alpha: 0.6}, 0.3, {ease: FlxEase.quartInOut});
         FlxTween.tween(cardBG, {x: 210, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(titleBG, {x: 260, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(promptText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(titleText, {x: 0, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(cardText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+        FlxTween.tween(acceptIcon, {x: 920, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+        FlxTween.tween(confirmText, {x: acceptIcon.x + acceptIcon.width + 10, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 
         super.create();
 
@@ -103,6 +125,8 @@ class PersonaCardSubstate extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
+        //tweens don't move the text for some reason
+        confirmText.x = acceptIcon.x + acceptIcon.width + 10;
 		if (controls.ACCEPT) 
         {
 		    FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -111,6 +135,8 @@ class PersonaCardSubstate extends MusicBeatSubstate
             FlxTween.tween(titleBG, {x: 460, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(promptText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(titleText, {x: 400, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+            FlxTween.tween(acceptIcon, {x: 1220, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+            FlxTween.tween(confirmText, {x: acceptIcon.x + acceptIcon.width + 10, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(cardText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut,
             onComplete: function(twn:FlxTween)
             {
