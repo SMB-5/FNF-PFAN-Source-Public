@@ -31,6 +31,12 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'ghostTapping',
 			'bool');
 		addOption(option);
+
+		var option:Option = new Option('Combo Break on Bad or Shit',
+			"If checked, your Combo will break if you get a Bad or Shit Rating and Ghost Notes will appear.",
+			'comboBreak',
+			'bool');
+		addOption(option);
 		
 		var option:Option = new Option('Auto Pause',
 			"If checked, the game automatically pauses if the screen isn't on focus.",
