@@ -200,7 +200,6 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 
 		if (controls.BACK) {
-			close();
 			if (instance != null && FreeplayState.opponentMode != ClientPrefs.getGameplaySetting('opponentmode'))
 			{
 				FreeplayState.opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
@@ -208,6 +207,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			}
 			ClientPrefs.saveSettings();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
+			close();
 		}
 
 		if(nextAccept <= 0)

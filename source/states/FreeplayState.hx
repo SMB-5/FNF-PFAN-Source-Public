@@ -781,13 +781,6 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		for (i in 0...songs.length)
-		{
-			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
-			var rank = rankSprites[i];
-			rank.loadGraphic(getRankGraphic(rating));
-		}
-
 		changeDiff();
 		_updateSongLastDifficulty();
 		if(playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
