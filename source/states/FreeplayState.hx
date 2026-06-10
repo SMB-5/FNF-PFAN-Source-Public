@@ -222,7 +222,7 @@ class FreeplayState extends MusicBeatState
 		directories.push(Paths.getSharedPath());
 
 		for (dir in directories) {
-			dir += 'categories/';
+			dir += 'weeks/categories/';
 			if (!FileSystem.exists(dir)) continue;
 
 			var categoryList:Array<String> = CoolUtil.coolTextFile(dir + 'categoryList.txt');
