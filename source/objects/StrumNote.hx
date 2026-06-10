@@ -13,6 +13,7 @@ class StrumNote extends FlxSprite
 	public var direction:Float = 90;//plan on doing scroll directions soon -bb
 	public var downScroll:Bool = false;//plan on doing scroll directions soon -bb
 	public var sustainReduce:Bool = true;
+	public var isPlayer(get, never):Bool;
 	private var player:Int;
 	
 	public var texture(default, set):String = null;
@@ -149,7 +150,7 @@ class StrumNote extends FlxSprite
 		}
 
 		animation.finishCallback = function(name:String) {
-			if (!PlayState.opponentMode && player == 1 || PlayState.opponentMode && player == 0) {
+			if (isPlayer) {
 				if (name == 'confirm' && resetAnim >= 0) {
 					resetAnim = 0.15;
 				}
@@ -169,6 +170,7 @@ class StrumNote extends FlxSprite
 		if(resetAnim > 0) {
 			resetAnim -= elapsed;
 			if(resetAnim <= 0) {
+				if (isPlayer && animation.name == 'confirm') resetRGB = false;
 				playAnim('static');
 				resetAnim = 0;
 			}
@@ -183,6 +185,11 @@ class StrumNote extends FlxSprite
 		rgbShader.b = palette[2];
 	}
 
+	function get_isPlayer() {
+		return !PlayState.opponentMode && player == 1 || PlayState.opponentMode && player == 0;
+	}
+
+	public var resetRGB:Bool = true;
 	public function playAnim(anim:String, ?force:Bool = false) {
 		animation.play(anim, force);
 		if (animation.curAnim != null) {
@@ -191,7 +198,8 @@ class StrumNote extends FlxSprite
 		}
 		if (useRGBShader) {
 			if (animation.name == "static") {
-				updateRgb(defaultRGB[noteData]);
+				if (resetRGB) updateRgb(defaultRGB[noteData]);
+				else resetRGB = true;
 			}
 			rgbShader.enabled = animation.name != 'static';
 		}

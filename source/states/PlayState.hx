@@ -3227,12 +3227,14 @@ class PlayState extends MusicBeatState
 				}
 			}
 
+			var strumGroup:FlxTypedGroup<StrumNote> = !opponentMode ? playerStrums : opponentStrums;
 			for (i in 0...holdArray.length) {
 				if (!holdArray[i] && sustainsHeld[i] != null) {
 					var end:Note = sustainsHeld[i].parent.tail[sustainsHeld[i].parent.tail.length - 1];
 					if (end != null && sustainsHeld[i] != end && end.extraData.get('holdSplash') != null && end.extraData.get('holdSplash').animation.name != 'end') {
 						end.extraData.get('holdSplash').visible = false;
 					}
+					strumGroup.members[i].resetRGB = true;
 					sustainsHeld[i] = null;
 				}
 			}
@@ -3241,7 +3243,6 @@ class PlayState extends MusicBeatState
 				playerDance();
 			}
 			else if (holdArray.contains(true)) {
-				var strumGroup:FlxTypedGroup<StrumNote> = !opponentMode ? playerStrums : opponentStrums;
 				for (i in 0...holdArray.length) {
 					if (holdArray[i] && strumGroup.members[i].animation.name == 'static') {
 						strumGroup.members[i].playAnim('pressed', true);
@@ -3457,6 +3458,7 @@ class PlayState extends MusicBeatState
 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
 			}
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
+			if (note.isSustainNote) spr.resetRGB = false;
 		}
 
 		if (opponentVocals.length <= 0) vocals.volume = 1;
@@ -3574,6 +3576,7 @@ class PlayState extends MusicBeatState
 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
 			}
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
+			if (note.isSustainNote) spr.resetRGB = false;
 		}
 
 		vocals.volume = 1;

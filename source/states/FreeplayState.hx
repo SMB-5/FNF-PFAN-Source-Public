@@ -455,7 +455,6 @@ class FreeplayState extends MusicBeatState
 			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
 			{
 				curCategory = FlxMath.wrap(curCategory + (controls.UI_LEFT_P ? -1 : 1), 0, categories.length - 1);
-				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 				regenerateSongs();
 			}
 
