@@ -11,13 +11,14 @@ class SustainSplash extends FlxSprite
 		frames = Paths.getSparrowAtlas('noteSplashes/holdSplashes/holdSplash');
 		animation.addByPrefix('hold', 'hold', 24, true);
 		animation.addByPrefix('end', 'end', 24, false);
-		animation.play('hold', true);
-		animation.curAnim.frameRate = frameRate;
-		animation.curAnim.looped = true;
 	}
 
 	public function setupSusSplash(strum:StrumNote, daNote:Note, ?playbackRate:Float = 1)
 	{
+		animation.play('hold', true);
+		animation.curAnim.frameRate = frameRate;
+		animation.curAnim.looped = true;
+
 		var realNote:Note = !daNote.isSustainNote ? daNote : daNote.parent;
 		var lengthToGet:Int = realNote.tail.length;
 		var timeToGet:Float = realNote.strumTime;
@@ -46,10 +47,10 @@ class SustainSplash extends FlxSprite
 				animation.curAnim.looped = false;
 				animation.curAnim.frameRate = 24;
 				clipRect = null;
-				animation.finishCallback = (_) ->visible = false;
+				animation.finishCallback = (_) -> kill();
 				return;
 			}
-			visible = false;
+			kill();
 		});
 	}
 }
