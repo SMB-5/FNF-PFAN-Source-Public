@@ -320,7 +320,6 @@ class PlayState extends MusicBeatState
 		// for lua
 		instance = this;
 
-		PauseSubState.songName = null; //Reset to default
 		playbackRate = ClientPrefs.getGameplaySetting('songspeed');
 
 		keysArray = [
@@ -779,10 +778,7 @@ class PlayState extends MusicBeatState
 		for (i in 1...4) Paths.sound('missnote$i');
 		Paths.image('alphabet');
 
-		if (PauseSubState.songName != null)
-			Paths.music(PauseSubState.songName);
-		else if(Paths.formatToSongPath(ClientPrefs.data.pauseMusic) != 'none')
-			Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic));
+		Paths.music('persona/songs from the games/P5/Have a Short Rest');
 
 		resetRPC();
 
