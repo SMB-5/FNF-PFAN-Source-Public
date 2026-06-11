@@ -3148,9 +3148,18 @@ class PlayState extends MusicBeatState
 		var spr:StrumNote = strumGroup.members[key];
 		if(spr != null)
 		{
+			if (sustainsHeld[key] != null) {
+				var end:Note = sustainsHeld[key].parent.tail[sustainsHeld[key].parent.tail.length - 1];
+				if (end != null && sustainsHeld[key] != end && end.extraData.get('holdSplash') != null && end.extraData.get('holdSplash').animation.name != 'end') {
+					end.extraData.get('holdSplash').visible = false;
+				}
+				spr.resetRGB = true;
+				sustainsHeld[key] = null;
+			}
 			spr.playAnim('static');
 			spr.resetAnim = 0;
 		}
+		
 		callOnScripts('onKeyRelease', [key]);
 	}
 
@@ -3223,22 +3232,11 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			var strumGroup:FlxTypedGroup<StrumNote> = !opponentMode ? playerStrums : opponentStrums;
-			for (i in 0...holdArray.length) {
-				if (!holdArray[i] && sustainsHeld[i] != null) {
-					var end:Note = sustainsHeld[i].parent.tail[sustainsHeld[i].parent.tail.length - 1];
-					if (end != null && sustainsHeld[i] != end && end.extraData.get('holdSplash') != null && end.extraData.get('holdSplash').animation.name != 'end') {
-						end.extraData.get('holdSplash').visible = false;
-					}
-					strumGroup.members[i].resetRGB = true;
-					sustainsHeld[i] = null;
-				}
-			}
-
 			if (!holdArray.contains(true) || endingSong) {
 				playerDance();
 			}
 			else if (holdArray.contains(true)) {
+				var strumGroup:FlxTypedGroup<StrumNote> = !opponentMode ? playerStrums : opponentStrums;
 				for (i in 0...holdArray.length) {
 					if (holdArray[i] && strumGroup.members[i].animation.name == 'static') {
 						strumGroup.members[i].playAnim('pressed', true);

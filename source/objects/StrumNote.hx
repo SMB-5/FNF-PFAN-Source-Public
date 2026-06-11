@@ -150,7 +150,7 @@ class StrumNote extends FlxSprite
 		}
 
 		animation.finishCallback = function(name:String) {
-			if (isPlayer) {
+			if (isPlayer && (PlayState.instance == null || !PlayState.instance.cpuControlled)) {
 				if (name == 'confirm' && resetAnim >= 0) {
 					resetAnim = 0.15;
 				}
