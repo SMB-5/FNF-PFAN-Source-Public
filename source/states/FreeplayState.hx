@@ -82,6 +82,7 @@ class FreeplayState extends MusicBeatState
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
 		reloadCategories();
+		Difficulty.list = [Difficulty.getDefault()]; // Only normal difficulty for now
 
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
