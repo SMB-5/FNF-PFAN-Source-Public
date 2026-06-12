@@ -164,7 +164,27 @@ class VideoSprite extends FlxSpriteGroup {
 	}
 
 	public function play() videoSprite?.play();
-	public function resume() videoSprite?.resume();
-	public function pause() videoSprite?.pause();
+	public function resume(addFocus:Bool = true) {
+		videoSprite?.resume();
+		if (addFocus) {
+			@:privateAccess {
+				if (!FlxG.signals.focusLost.has(videoSprite?.onFocusLost))
+					FlxG.signals.focusLost.add(videoSprite?.onFocusLost);
+				if (!FlxG.signals.focusGained.has(videoSprite?.onFocusGained))
+					FlxG.signals.focusGained.add(videoSprite?.onFocusGained);
+			}
+		}
+	}
+	public function pause(removeFocus:Bool = true) {
+		videoSprite?.pause();
+		if (removeFocus) {
+			@:privateAccess {
+				if (FlxG.signals.focusLost.has(videoSprite?.onFocusLost))
+					FlxG.signals.focusLost.remove(videoSprite?.onFocusLost);
+				if (FlxG.signals.focusGained.has(videoSprite?.onFocusGained))
+					FlxG.signals.focusGained.remove(videoSprite?.onFocusGained);
+			}
+		}
+	}
 	#end
 }

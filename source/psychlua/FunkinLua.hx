@@ -84,7 +84,7 @@ class FunkinLua {
 		set('Function_Continue', LuaUtils.Function_Continue);
 		set('luaDebugMode', false);
 		set('luaDeprecatedWarnings', true);
-		set('version', Application.current.meta.get('version').trim());
+		set('version', FlxG.stage.application.meta.get('version').trim());
 		set('modFolder', this.modFolder);
 
 		// Song/Week shit
