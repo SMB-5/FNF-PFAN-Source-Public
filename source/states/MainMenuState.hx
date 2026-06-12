@@ -1,7 +1,6 @@
 package states;
 
 import flixel.FlxObject;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
 import lime.app.Application;
 import states.editors.MasterEditorMenu;
@@ -10,7 +9,7 @@ import substates.PersonaCardSubstate;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var psychEngineVersion:String = '0.7.3';
+	public static var psychEngineVersion:String = '1.0.4';
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxText>;
@@ -56,9 +55,6 @@ class MainMenuState extends MusicBeatState
 		}
 
 		Conductor.bpm = 125;
-
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 
 		persistentUpdate = false;
 		persistentDraw = true; 

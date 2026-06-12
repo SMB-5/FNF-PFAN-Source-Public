@@ -50,8 +50,7 @@ class Highscore
 			if (weekScores.get(daWeek) < score)
 				setWeekScore(daWeek, score);
 		}
-		else
-			setWeekScore(daWeek, score);
+		else setWeekScore(daWeek, score);
 	}
 
 	/**

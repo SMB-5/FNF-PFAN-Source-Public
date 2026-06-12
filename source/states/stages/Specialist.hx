@@ -26,7 +26,7 @@ class Specialist extends BaseStage
 		game.healthBar.visible = false;
 	}
 
-	override function songStart()
+	override function startSong()
 	{
 		game.videoCutscene?.play(); // Now play
 	}

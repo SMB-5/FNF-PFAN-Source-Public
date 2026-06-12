@@ -5,6 +5,7 @@ import backend.WeekData;
 import objects.Character;
 import flixel.FlxObject;
 import flixel.FlxSubState;
+import flixel.math.FlxPoint;
 
 import states.StoryMenuState;
 import states.FreeplayState;
@@ -14,12 +15,10 @@ import substates.StickerSubState;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	public var boyfriend:Character;
-	public var fakeboyfriend:Character;
+	public var fakeBoyfriend:Character;
 	var camFollow:FlxObject;
-	var moveCamera:Bool = false;
-	var playingDeathSound:Bool = false;
 
-	var stageSuffix:String = "";
+	var stagePostfix:String = "";
 
 	public static var characterName:String = 'bf-dead';
 	public static var deathSoundName:String = 'fnf_loss_sfx';
@@ -54,10 +53,11 @@ class GameOverSubstate extends MusicBeatSubstate
 		}
 	}
 
-	var overlay:FlxSprite;
-	var overlayConfirmOffsets:FlxPoint = FlxPoint.get();
 	var charX:Float = 0;
 	var charY:Float = 0;
+
+	var overlay:FlxSprite;
+	var overlayConfirmOffsets:FlxPoint = FlxPoint.get();
 	override function create()
 	{
 		instance = this;
@@ -65,9 +65,13 @@ class GameOverSubstate extends MusicBeatSubstate
 		Conductor.songPosition = 0;
 
 		var char:Character = !PlayState.opponentMode ? PlayState.instance.boyfriend : PlayState.instance.dad;
-		boyfriend = new Character(char.getScreenPosition().x, char.getScreenPosition().y, characterName, !PlayState.opponentMode);
-		boyfriend.x += boyfriend.positionArray[0] - char.positionArray[0];
-		boyfriend.y += boyfriend.positionArray[1] - char.positionArray[1];
+		if(boyfriend == null)
+		{
+			boyfriend = new Character(char.getScreenPosition().x, char.getScreenPosition().y, characterName, !PlayState.opponentMode);
+			boyfriend.x += boyfriend.positionArray[0] - char.positionArray[0];
+			boyfriend.y += boyfriend.positionArray[1] - char.positionArray[1];
+		}
+		boyfriend.skipDance = true;
 		add(boyfriend);
 
 		FlxG.camera.scroll.set();
@@ -77,15 +81,15 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			trace('its a fakeout!');
 			boyfriend.alpha = 0;
-			fakeboyfriend = new Character(char.getScreenPosition().x, char.getScreenPosition().y, 'bf-fakeout', !PlayState.opponentMode);
-			fakeboyfriend.x += fakeboyfriend.positionArray[0] - char.positionArray[0];
-			fakeboyfriend.y += fakeboyfriend.positionArray[1] - char.positionArray[1];
-			fakeboyfriend.playAnim('fakeoutDeath');
-			add(fakeboyfriend);
+			fakeBoyfriend = new Character(char.getScreenPosition().x, char.getScreenPosition().y, 'bf-fakeout', !PlayState.opponentMode);
+			fakeBoyfriend.x += fakeBoyfriend.positionArray[0] - char.positionArray[0];
+			fakeBoyfriend.y += fakeBoyfriend.positionArray[1] - char.positionArray[1];
+			fakeBoyfriend.playAnim('fakeoutDeath');
+			add(fakeBoyfriend);
 			FlxG.sound.play(Paths.sound('fakeout_death'));
 			new FlxTimer().start(6.2, function(tmr) { //this was the only way it would work
 				trace('fakeout should be over');
-				fakeboyfriend.alpha = 0;
+				fakeBoyfriend.alpha = 0;
 				boyfriend.alpha = 1;
 				FlxG.sound.play(Paths.sound(deathSoundName));
 				boyfriend.playAnim('firstDeath');
@@ -100,7 +104,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(boyfriend.getGraphicMidpoint().x + boyfriend.cameraPosition[0], boyfriend.getGraphicMidpoint().y + boyfriend.cameraPosition[1]);
 		FlxG.camera.focusOn(new FlxPoint(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2)));
-		FlxG.camera.follow(camFollow, LOCKON, 0.6);
+		FlxG.camera.follow(camFollow, LOCKON, 0.01);
 		add(camFollow);
 		
 		PlayState.instance.setOnScripts('inGameOver', true);
@@ -153,7 +157,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		super.create();
 	}
 
-	public var startedDeath:Bool = false;
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -172,63 +175,46 @@ class GameOverSubstate extends MusicBeatSubstate
 			justPlayedLoop = true;
 		}
 
-		if (controls.ACCEPT)
+		if(!isEnding)
 		{
-			endBullshit();
-		}
-
-		if (controls.BACK)
-		{
-			#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-			FlxG.sound.music.stop();
-			PlayState.deathCounter = 0;
-			PlayState.seenCutscene = false;
-			PlayState.chartingMode = false;
-
-			Mods.loadTopMod();
-			if (PlayState.isStoryMode)
+			if (controls.ACCEPT)
 			{
-				MusicBeatState.switchState(new StoryMenuState());
+				endBullshit();
 			}
-			else
+			else if (controls.BACK)
 			{
-				openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
-			}
+				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
+				FlxG.sound.music.stop();
+				PlayState.deathCounter = 0;
+				PlayState.seenCutscene = false;
+				PlayState.chartingMode = false;
 
-			//FlxG.sound.playMusic(Paths.music('freakyMenu'));
-			PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
-		}
-		else if (justPlayedLoop)
-			{
-				switch(PlayState.SONG.stage)
+				Mods.loadTopMod();
+				if (PlayState.isStoryMode)
 				{
-					case 'tank':
-						coolStartDeath(0.2);
-						
-						var exclude:Array<Int> = [];
-						//if(!ClientPrefs.cursing) exclude = [1, 3, 8, 13, 17, 21];
-	
-						FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + FlxG.random.int(1, 25, exclude)), 1, false, null, true, function() {
-							if(!isEnding)
-							{
-								FlxG.sound.music.fadeIn(0.2, 1, 4);
-							}
-						});
-
-					default:
-						coolStartDeath();
+					MusicBeatState.switchState(new StoryMenuState());
 				}
+				else
+				{
+					openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
+				}
+
+				PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
+			}
+			else if (justPlayedLoop)
+			{
+				coolStartDeath();
 			}
 		
-		if (FlxG.sound.music.playing)
-		{
-			Conductor.songPosition = FlxG.sound.music.time;
+			if (FlxG.sound.music.playing)
+			{
+				Conductor.songPosition = FlxG.sound.music.time;
+			}
 		}
 		PlayState.instance.callOnScripts('onUpdatePost', [elapsed]);
 	}
 
 	var isEnding:Bool = false;
-
 	function coolStartDeath(?volume:Float = 1):Void
 	{
 		FlxG.sound.music.play(true);

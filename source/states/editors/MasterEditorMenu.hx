@@ -114,8 +114,8 @@ class MasterEditorMenu extends MusicBeatState
 					LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
 				case 'Dialogue Portrait Editor':
 					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
-				case 'Note Splash Debug':
-					MusicBeatState.switchState(new NoteSplashDebugState());
+				case 'Note Splash Editor':
+					MusicBeatState.switchState(new NoteSplashEditorState());
 				case 'Results Screens Debug':
 					MusicBeatState.switchState(new ResultsTestState());
 			}

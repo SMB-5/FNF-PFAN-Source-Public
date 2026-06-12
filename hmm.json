@@ -13,12 +13,12 @@
     {
       "name": "flixel",
       "type": "haxelib",
-      "version": "5.8.0"
+      "version": "5.6.1"
     },
     {
       "name": "flixel-addons",
       "type": "haxelib",
-      "version": "3.2.3"
+      "version": "3.2.2"
     },
     {
       "name": "flixel-tools",
@@ -26,19 +26,16 @@
       "version": "1.5.1"
     },
     {
-      "name": "flixel-ui",
-      "type": "haxelib",
-      "version": "2.6.1"
-    },
-    {
       "name": "hxcpp",
-      "type": "haxelib",
-      "version": "4.3.2"
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/haxefoundation/hxcpp"
     },
     {
       "name": "hxvlc",
       "type": "haxelib",
-      "version": "1.9.2"
+      "version": "2.0.1"
     },
     {
       "name": "hxcpp-debug-server",
@@ -59,14 +56,14 @@
       "name": "flxanimate",
       "type": "git",
       "dir": null,
-      "ref": "dev",
-      "url": "https://github.com/ShadowMario/flxanimate"
+      "ref": "768740a56b26aa0c072720e0d1236b94afe68e3e",
+      "url": "https://github.com/Dot-Stuff/flxanimate"
     },
     {
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "master",
+      "ref": "1906c4a96f6bb6df66562b3f24c62f4c5bba14a7",
       "url": "https://github.com/superpowers04/linc_luajit"
     },
     {
