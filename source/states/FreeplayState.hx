@@ -317,35 +317,33 @@ class FreeplayState extends MusicBeatState
 			//had a clipping issue with the text ugh I hate flixel
 			var songText:FlxText = new FlxText(90, 320, songs[i].songName + "\n ", 48);
 			//songText.isPersonaItem = true; //what is this used for? -SMB
+			songText.antialiasing = ClientPrefs.data.antialiasing;
 			songText.ID = i;
 			songText.setFormat(Paths.font("p5hatty-1.ttf"), 42, FlxColor.BLACK, LEFT);
 			songText.autoSize = false;
 			songText.textField.multiline = true;
 
-			var textbg: AttachedSprite = new AttachedSprite('persona/menus/freeplay/textbg');
-			textbg.antialiasing = ClientPrefs.data.antialiasing;
-			textbg.xAdd = songText.x - 520;
-			textbg.yAdd = songText.y - 660;
-			textbg.scale.x = 0.35;
-			textbg.scale.y = 0.1;
-			textbg.sprTracker = songText;
-			textbg.color = songs[i].color;
+			var textBG:AttachedSprite = new AttachedSprite('persona/menus/freeplay/textbg');
+			textBG.antialiasing = ClientPrefs.data.antialiasing;
+			textBG.scale.x = 0.35;
+			textBG.scale.y = 0.1;
+			textBG.updateHitbox();
+			textBG.xAdd = -20;
+			textBG.yAdd = -20;
+			textBG.sprTracker = songText;
+			textBG.color = songs[i].color;
 
-			var rank: AttachedSprite = new AttachedSprite('blank');
+			var rank:AttachedSprite = new AttachedSprite('blank');
 			rank.antialiasing = ClientPrefs.data.antialiasing;
-			rank.xAdd = songText.x + 210;
-			rank.yAdd = songText.y - 390;
 			rank.scale.x = 0.3;
 			rank.scale.y = 0.3;
+			rank.updateHitbox();
+			rank.xAdd = 305;
+			rank.yAdd = -75;
 			rank.sprTracker = songText;
-
-			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
-
-			rank.loadGraphic(getRankGraphic(rating));
-
 			rankSprites.push(rank);
 
-			grpTextBG.add(textbg);
+			grpTextBG.add(textBG);
 			grpTextBG.add(rank);
 			grpSongs.add(songText);
 		}
@@ -386,6 +384,8 @@ class FreeplayState extends MusicBeatState
 
 		var shiftMult:Int = 1;
 		if (FlxG.keys.pressed.SHIFT) shiftMult = 3;
+
+		if (missingText.visible && FlxG.keys.justPressed.ANY) missingText.visible = missingTextBG.visible = false;
 
 		if (!player.playingMusic && !pickedRandom)
 		{
@@ -446,7 +446,18 @@ class FreeplayState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (songs[curSelected].songName.toLowerCase() == 'random' && songs.length > 1)
+				if (songs.length <= 1) {
+					missingText.text = 'There are no songs to play!';
+					missingText.screenCenter(Y);
+					missingText.visible = true;
+					missingTextBG.visible = true;
+					FlxG.sound.play(Paths.sound('cancelMenu'));
+
+					super.update(elapsed);
+					return;
+				}
+
+				if (songs[curSelected].songName.toLowerCase() == 'random')
 				{
 					changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
 					pickedRandom = true;
