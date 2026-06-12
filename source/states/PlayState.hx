@@ -93,15 +93,15 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['F - Failure', 0.2], //From 0% to 19%
-		['E - Terrible', 0.4], //From 20% to 39%
-		['D - Awful', 0.69], //From 40% to 68%
+		['Failure', 0.2], //From 0% to 19%
+		['Terrible', 0.4], //From 20% to 39%
+		['Awful', 0.69], //From 40% to 68%
 		['Nice', 0.7], //69%
-		['C - Not Bad', 0.8], //From 70% to 79%
-		['B - Good', 0.9], //From 80% to 89%
-		['A - Great', 0.95], //From 90% to 95%
-		['S - Sick', 1], //From 95% to 99%
-		['P - Perfect', 1] //The value on this one isn't used actually, since Perfect is always "1"
+		['Not Bad', 0.8], //From 70% to 79%
+		['Good', 0.9], //From 80% to 89%
+		['Great', 0.95], //From 90% to 95%
+		['Sick', 1], //From 95% to 99%
+		['Perfect', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 
 	final MIN_BLINK_DELAY:Int = 3;
@@ -1336,13 +1336,13 @@ class PlayState extends MusicBeatState
 		if(totalPlayed != 0)
 		{
 			var percent:Float = CoolUtil.floorDecimal(ratingPercent * 100, 2);
-			str += ' (${percent}%) - ' + Language.getPhrase(ratingFC);
+			str += ' (${percent}%)';
 		}
 
 		var tempScore:String = Language.getPhrase('score_text_basegame', 'Score: {1}', [FlxStringUtil.formatMoney(songScore, false)]);
 		if (ClientPrefs.data.psychScore) {
-			if(!instakillOnMiss) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [songScore, songMisses, str]);
-			else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [songScore, str]);
+			if(!instakillOnMiss) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [FlxStringUtil.formatMoney(songScore, false), songMisses, str]);
+			else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [FlxStringUtil.formatMoney(songScore, false), str]);
 		}
 		scoreTxt.text = tempScore;
 	}

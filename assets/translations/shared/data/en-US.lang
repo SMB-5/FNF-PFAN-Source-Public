@@ -1,0 +1,249 @@
+English (US)
+
+// Difficulties
+difficulty_: ""
+
+difficulty_easy: "Easy"
+difficulty_normal: "Normal"
+difficulty_hard: "Hard"
+
+// Achievements (IGNORE THIS FOR DEMO - SMB)
+achievement_: ""
+description_: ""
+
+achievement_friday_night_play: "Freaky on a Friday Night"
+description_friday_night_play: "Play on a Friday... Night."
+
+achievement_oversinging: "Oversinging Much...?"
+description_oversinging: "Sing for 10 seconds without going back to Idle."
+
+achievement_hype: "Hyperactive"
+description_hype: "Finish a Song without going back to Idle."
+
+achievement_two_keys: "Just the Two of Us"
+description_two_keys: "Finish a Song pressing only two keys."
+
+reset_achievement: "Reset Achievement:"
+
+// Freeplay
+freeplay_tip: "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy."
+personal_best: "HIGHSCORE: {1} ({2}%)"
+
+musicplayer_playing: "PLAYING: {1}"
+musicplayer_paused: "PLAYING: {1} (PAUSED)"
+musicplayer_tip: "Press SPACE to Pause / Press ESCAPE to Exit / Press R to Reset the Song"
+
+// Options
+setting_scroll_type: "Scroll Type"
+setting_scroll_type-constant: "Constant"
+setting_scroll_type-multiplicative: "Multiplicative"
+
+setting_scroll_speed: "Scroll Speed"
+setting_playback_rate: "Playback Rate"
+setting_health_gain_multiplier: "Health Gain Multiplier"
+setting_health_loss_multiplier: "Health Loss Multiplier"
+setting_instakill_on_miss: "Instakill on Miss"
+setting_practice_mode: "Practice Mode"
+setting_botplay: "Botplay"
+
+gameplay_menu: "Gameplay Settings"
+graphics_menu: "Graphic Settings"
+visuals_menu: "Visual Settings"
+
+setting_low_quality: "Low Quality"
+description_low_quality: "If checked, disables some background details,\ndecreases loading times and improves performance."
+
+setting_anti-aliasing: "Anti-Aliasing"
+description_anti-aliasing: "If unchecked, disables anti-aliasing, increases performance\nat the cost of sharper visuals."
+
+setting_shaders: "Shaders"
+description_shaders: "If unchecked, disables shaders.\nIt's used for some visual effects, and also CPU intensive for weaker PCs."
+
+setting_gpu_caching: "GPU Caching"
+description_gpu_caching: "If checked, allows the GPU to be used for caching textures, decreasing RAM usage.\nDon't turn this on if you have a shitty Graphics Card."
+
+setting_framerate: "Framerate"
+description_framerate: "Pretty self explanatory, isn't it?"
+
+setting_note_skins: "Note Skins:"
+setting_note_skins-default: "Default"
+setting_note_skins-future: "Future"
+setting_note_skins-chip: "Chip"
+
+description_note_skins: "Select your prefered Note skin."
+setting_note_splashes: "Note Splashes:"
+setting_note_splashes-diamond: "Diamond"
+setting_note_splashes-electric: "Electric"
+setting_note_splashes-sparkles: "Sparkles"
+setting_note_splashes-vanilla: "Vanilla"
+
+description_note_splashes: "Select your prefered Note Splash variation or turn it off."
+
+setting_note_splash_opacity: "Note Splash Opacity"
+description_note_splash_opacity: "How transparent the Note Splashes should be."
+
+setting_hide_hud: "Hide HUD"
+description_hide_hud: "If checked, hides most HUD elements."
+
+setting_time_bar: "Time Bar:"
+setting_time_bar-time_left: "Time Left"
+setting_time_bar-time_elapsed: "Time Elapsed"
+setting_time_bar-song_name: "Song Name"
+setting_time_bar-disabled: "Disabled"
+
+description_time_bar: "What should the Time Bar display?"
+
+setting_flashing_lights: "Flashing Lights"
+description_flashing_lights: "Uncheck this if you're sensitive to flashing lights!"
+
+setting_camera_zooms: "Camera Zooms"
+description_camera_zooms: "If unchecked, the camera won't zoom in on a beat hit."
+
+setting_score_text_grow_on_hit: "Score Text Grow on Hit"
+description_score_text_grow_on_hit: "If unchecked, disables the Score text growing\nevery time you hit a note."
+
+setting_health_bar_opacity: "Health Bar Opacity"
+description_health_bar_opacity: "How transparent the health bar and icons should be."
+
+setting_fps_counter: "FPS Counter"
+description_fps_counter: "If unchecked, hides FPS Counter."
+
+setting_pause_screen_song: "Pause Music:"
+description_pause_screen_song: "What song do you prefer for the Pause Screen?"
+
+setting_check_for_updates: "Check for Updates"
+description_check_for_updates: "On Release Builds, turn this on to check for updates when you start the game."
+
+setting_discord_rich_presence: "Discord Rich Presence"
+description_discord_rich_presence: "Uncheck this to prevent accidental leaks, it will hide the Application from your "Playing" box on Discord"
+
+setting_combo_stacking: "Combo Stacking"
+description_combo_stacking: "If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read"
+
+setting_downscroll: "Downscroll"
+description_downscroll: "If checked, notes go Down instead of Up, simple enough."
+
+setting_middlescroll: "Middlescroll"
+description_middlescroll: "If checked, your notes get centered."
+
+setting_opponent_notes: "Opponent Notes"
+description_opponent_notes: "If unchecked, opponent notes get hidden."
+
+setting_ghost_tapping: "Ghost Tapping"
+description_ghost_tapping: "If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit."
+
+setting_auto_pause: "Auto Pause"
+description_auto_pause: "If checked, the game automatically pauses if the screen isn't on focus."
+
+setting_disable_reset_button: "Disable Reset Button"
+description_disable_reset_button: "If checked, pressing Reset won't do anything."
+
+setting_hitsound_volume: "Hitsound Volume"
+description_hitsound_volume: "Funny notes go \"Tick!\" when you hit them."
+
+setting_rating_offset: "Rating Offset"
+description_rating_offset: "Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later."
+
+setting_sick_hit_window: "Sick! Hit Window"
+description_sick_hit_window: "Changes the amount of time you have\nfor hitting a "Sick!" in milliseconds."
+
+setting_good_hit_window: "Good Hit Window"
+description_good_hit_window: "Changes the amount of time you have\nfor hitting a "Good" in milliseconds."
+
+setting_bad_hit_window: "Bad Hit Window"
+description_bad_hit_window: "Changes the amount of time you have\nfor hitting a "Bad" in milliseconds."
+
+setting_safe_frames: "Safe Frames"
+description_safe_frames: "Changes how many frames you have for\nhitting a note earlier or late."
+
+setting_sustains_as_one_note: "Sustains as One Note"
+description_sustains_as_one_note: "If checked, Hold Notes can't be pressed if you miss,\nand count as a single Hit/Miss.\nUncheck this if you prefer the old Input System."
+
+// Control Rebinding
+controls_rebinding: "Rebinding {1}"
+controls_rebinding2: "Hold ESC to Cancel\nHold Backspace to Delete"
+
+keygroup_NOTES: "NOTES"
+key_note_left: "Left"
+key_note_down: "Down"
+key_note_up: "Up"
+key_note_right: "Right"
+
+keygroup_UI: "UI"
+key_ui_left: "Left"
+key_ui_down: "Down"
+key_ui_up: "Up"
+key_ui_right: "Right"
+key_reset: "Reset"
+key_accept: "Accept"
+key_back: "Back"
+key_pause: "Pause"
+
+keygroup_VOLUME: "VOLUME"
+key_volume_mute: "Mute"
+key_volume_up: "Up"
+key_volume_down: "Down"
+
+keygroup_DEBUG: "DEBUG"
+key_debug_1: "Key 1"
+key_debug_2: "Key 2"
+
+//Other option stuff
+delay_beat_hit: "Beat Hit!"
+combo_rating_offset: "Rating Offset:"
+combo_numbers_offset: "Numbers Offset:"
+delay_curren"t_offset: "Current offset: {1} ms"
+combo_offset: "Combo Offset"
+note_delay: "Note/Beat Delay"
+switch_on_accept: "(Press Accept to Switch)"
+switch_on_start: "(Press Start to Switch)"
+
+note_colors_tip: "Press RESET to Reset the selected Note Part."
+note_colors_shift: "Shift"
+note_colors_lb: "Left Shoulder Button"
+note_colors_hold_tip: "Hold {1} + Press RESET key to fully reset the selected Note."
+
+options_note_colors: "Note Colors"
+options_controls: "Controls"
+options_adjust_delay_and_combo: "Adjust Delay and Combo"
+options_graphics: "Graphics"
+options_visuals: "Visuals"
+options_gameplay: "Gameplay"
+options_language: "Language"
+
+//other
+yes: "Yes"
+no: "No"
+
+reset_score: "Reset the score of"
+
+now_loading: "Now Loading{1}"
+
+//PlayState
+botplay: "Botplay"
+
+rating_failure: "F - Failure"
+rating_terrible: "E - Terrible"
+rating_awful: "D - Awful"
+rating_nice: "Nice"
+rating_not_bad: "C- Not Bad"
+rating_good: "B - Good"
+rating_great: "A - Great"
+rating_sick: "S - Sick"
+rating_perfect: "P - Perfect"
+
+score_text: "Score: {1} | Misses: {2} | Rating: {3}"
+score_text_instakill: "Score: {1} | Rating: {2}"
+
+//story mode (IGNORE FOR DEMO - SMB)
+week_score: "WEEK SCORE: {1}"
+
+storyname_tutorial: "Tutorial"
+storyname_week1: "Daddy Dearest"
+storyname_week2: "Spooky Month"
+storyname_week3: "Pico"
+storyname_week4: "Mommy Must Murder"
+storyname_week5: "Red Snow"
+storyname_week6: "Hating Simulator ft. Moawling"
+storyname_week7: "Tankman"
+storyname_weekend1: "Due Debts"
