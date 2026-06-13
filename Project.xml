@@ -32,7 +32,6 @@
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="PSYCH_WATERMARKS" />
 	<define name="VIDEOS_ALLOWED" if="desktop || mobile" unless="32bits" />
-	<define name="COPYSTATE_ALLOWED" if="mobile" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 

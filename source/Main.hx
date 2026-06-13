@@ -20,14 +20,6 @@ import crowplexus.iris.Iris;
 import psychlua.HScript.HScriptInfos;
 #end
 
-#if COPYSTATE_ALLOWED
-import states.CopyState;
-#end
-
-#if mobile
-import util.StorageUtil;
-#end
-
 #if (linux || mac)
 import lime.graphics.Image;
 #end
@@ -80,13 +72,6 @@ class Main extends Sprite
 		backend.Native.fixScaling();
 		#end
 
-		// Credits to MAJigsaw77 (he's the og author for this code)
-		#if mobile
-		#if android
-		StorageUtil.requestPermissions();
-		#end
-		Sys.setCwd(StorageUtil.getStorageDirectory());
-		#end
 		#if VIDEOS_ALLOWED
 		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
 		#end
@@ -162,7 +147,7 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-		var game:FlxGame = new FlxGame(game.width, game.height, #if COPYSTATE_ALLOWED !CopyState.checkExistingFiles() ? CopyState : #end game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen);
+		var game:FlxGame = new FlxGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen);
 		@:privateAccess
 		game._customSoundTray = PersonaSoundTray;
 		addChild(game);
@@ -187,9 +172,6 @@ class Main extends Sprite
 
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
-		#if android
-		FlxG.android.preventDefaultKeys = [BACK];
-		#end
 		
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
@@ -229,7 +211,7 @@ class Main extends Sprite
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
 		var errMsg:String = "";
-		var cwd:String = #if android StorageUtil.getExternalStorageDirectory() #else Sys.getCwd() #end;
+		var cwd:String = Sys.getCwd();
 		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
 		var dateNow:String = Date.now().toString();
