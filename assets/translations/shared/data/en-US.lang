@@ -1,11 +1,85 @@
 English (US)
 
+//Main Menu (Please make sure the text is capitalised in your language)
+menu_story_mode: "STORY MODE"
+menu_freeplay: "FREEPLAY"
+menu_awards: "AWARDS"
+menu_gallery: "GALLERY"
+menu_credits: "CREDITS"
+menu_config: "CONFIG"
+
+//story mode (IGNORE FOR DEMO - SMB)
+week_score: "WEEK SCORE: {1}"
+
+storyname_tutorial: "Tutorial"
+storyname_week1: "Daddy Dearest"
+storyname_week2: "Spooky Month"
+storyname_week3: "Pico"
+storyname_week4: "Mommy Must Murder"
+storyname_week5: "Red Snow"
+storyname_week6: "Hating Simulator ft. Moawling"
+storyname_week7: "Tankman"
+storyname_weekend1: "Due Debts"
+
+// Freeplay
+freeplay_tip: "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy."
+personal_best: "HIGHSCORE: {1} ({2}%)"
+
+musicplayer_playing: "PLAYING: {1}"
+musicplayer_paused: "PLAYING: {1} (PAUSED)"
+musicplayer_tip: "Press SPACE to Pause / Press ESCAPE to Exit / Press R to Reset the Song"
+
 // Difficulties
 difficulty_: ""
 
 difficulty_easy: "Easy"
 difficulty_normal: "Normal"
 difficulty_hard: "Hard"
+
+//ui
+yes: "Yes"
+no: "No"
+
+reset_score: "Reset the score of"
+
+now_loading: "Now Loading{1}"
+
+ui_select: "Select"
+ui_confirm: "Confirm"
+ui_close: "Close"
+
+//Persona PopUp Cards
+prompt_info: "INFORMATION"
+promp_system: "SYSTEM"
+error_title: "Error"
+
+demo_title: "Before You Start The Demo"
+demo_text: "This Mod is still in active development so a lot of things present might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do for the Mod and does not represent the Final Mod.\n\nPlease also note that this Mod contains Flashing Lights which can be disabled at Anytime in the Config Menu."
+
+demolock_title: "Not Available in the Demo"
+demolock_text: "This Menu will be Available in the First Release of the Full Mod."
+
+//PlayState
+botplay: "Botplay"
+
+rating_failure: "F - Failure"
+rating_terrible: "E - Terrible"
+rating_awful: "D - Awful"
+rating_nice: "Nice"
+rating_not_bad: "C- Not Bad"
+rating_good: "B - Good"
+rating_great: "A - Great"
+rating_sick: "S - Sick"
+rating_perfect: "P - Perfect"
+
+score_text: "Score: {1} | Misses: {2} | Rating: {3}"
+score_text_instakill: "Score: {1} | Rating: {2}"
+
+//Song Descriptions
+desc_tartarus: "The Dark Hour has struck and Bf and Gf haven't turned into coffins. Surprised by this and unsure what to do, SEES decides to take them to Tartarus but as they're chilling in the lobby preparing for their exploration, Bf decides to do another stupid rap battle with Makoto Yuki."
+desc_truth: "Bf and Gf rush to JUNES to find the Investigation Team and tell them what they saw on the Midnight Channel last night. The Investigation Team decide to take Bf and Gf into the TV World as they might be able to give them clues about the recent victim and as they begin their search, Bf decides to do another stupid rap battle with Yu Narukami."
+desc_desire: "Gf suddenly gets the MetaNav on her phone and accidentally activates it, transporting herself, Bf and the Phantom Thieves to Mementos. The Phantom Thieves try to send Bf and Gf back to the real world, however Bf decides to do yet another stupid rap battle with Ren Amamiya (Joker)."
+desc_foggy-night: "Makoto Yuki and Yu Narukami have suddenly been summoned into the Velvet Room through their dreams. However this isn't the Velvet Room either of them remember. A great challenge awaits them so it's time for a good ol showdown!"
 
 // Achievements (IGNORE THIS FOR DEMO - SMB)
 achievement_: ""
@@ -25,15 +99,7 @@ description_two_keys: "Finish a Song pressing only two keys."
 
 reset_achievement: "Reset Achievement:"
 
-// Freeplay
-freeplay_tip: "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy."
-personal_best: "HIGHSCORE: {1} ({2}%)"
-
-musicplayer_playing: "PLAYING: {1}"
-musicplayer_paused: "PLAYING: {1} (PAUSED)"
-musicplayer_tip: "Press SPACE to Pause / Press ESCAPE to Exit / Press R to Reset the Song"
-
-// Options
+//Gameplay Modifiers
 setting_scroll_type: "Scroll Type"
 setting_scroll_type-constant: "Constant"
 setting_scroll_type-multiplicative: "Multiplicative"
@@ -46,6 +112,7 @@ setting_instakill_on_miss: "Instakill on Miss"
 setting_practice_mode: "Practice Mode"
 setting_botplay: "Botplay"
 
+// Options
 gameplay_menu: "Gameplay Settings"
 graphics_menu: "Graphic Settings"
 visuals_menu: "Visual Settings"
@@ -76,14 +143,27 @@ setting_note_splashes-diamond: "Diamond"
 setting_note_splashes-electric: "Electric"
 setting_note_splashes-sparkles: "Sparkles"
 setting_note_splashes-vanilla: "Vanilla"
+setting_note_splashes-psych-old: "Psych-Old"
 
 description_note_splashes: "Select your prefered Note Splash variation or turn it off."
 
 setting_note_splash_opacity: "Note Splash Opacity"
 description_note_splash_opacity: "How transparent the Note Splashes should be."
 
+setting_hold_note_splashes: "Hold Note Splashes"
+description_hold_note_splashes: "If unchecked, Splashes won't appear on the notes when holding a sustain."
+
+setting_note_quantization: "Note Quantization"
+description_note_splash_opacity: "If checked, colors the notes based on their snap."
+
+setting_strum_background_opacity: "Strum Background Opacity"
+description_strum_background_opacity: "How much transparent should the Strumline Background be?"
+
 setting_hide_hud: "Hide HUD"
 description_hide_hud: "If checked, hides most HUD elements."
+
+setting_show_misses_and_accuracy: "Show Misses and Accuracy"
+description_show_misses_and_accuracy: "If unchecked, hides Misses and Accuracy on the HUD and the Score is displayed like Base Game."
 
 setting_time_bar: "Time Bar:"
 setting_time_bar-time_left: "Time Left"
@@ -92,6 +172,9 @@ setting_time_bar-song_name: "Song Name"
 setting_time_bar-disabled: "Disabled"
 
 description_time_bar: "What should the Time Bar display?"
+
+setting_subtitles: "Subtitles"
+description_subtitles: "If Checked, Subtitles will appear if a Character Speaks or Sings Lyrics."
 
 setting_flashing_lights: "Flashing Lights"
 description_flashing_lights: "Uncheck this if you're sensitive to flashing lights!"
@@ -102,14 +185,14 @@ description_camera_zooms: "If unchecked, the camera won't zoom in on a beat hit.
 setting_score_text_grow_on_hit: "Score Text Grow on Hit"
 description_score_text_grow_on_hit: "If unchecked, disables the Score text growing\nevery time you hit a note."
 
+setting_health_bar_colors: "Health Bar Colors"
+description_health_bar_colors: "If unchecked, the Health Bar will use the default red and green colors."
+
 setting_health_bar_opacity: "Health Bar Opacity"
 description_health_bar_opacity: "How transparent the health bar and icons should be."
 
 setting_fps_counter: "FPS Counter"
 description_fps_counter: "If unchecked, hides FPS Counter."
-
-setting_pause_screen_song: "Pause Music:"
-description_pause_screen_song: "What song do you prefer for the Pause Screen?"
 
 setting_check_for_updates: "Check for Updates"
 description_check_for_updates: "On Release Builds, turn this on to check for updates when you start the game."
@@ -131,6 +214,9 @@ description_opponent_notes: "If unchecked, opponent notes get hidden."
 
 setting_ghost_tapping: "Ghost Tapping"
 description_ghost_tapping: "If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit."
+
+setting_combo_break_on_bad_or_shit: "Combo Break on Bad or Shit"
+description_combo_break_on_bad_or_shit: "If checked, your Combo will break if you get a Bad or Shit Rating and Ghost Notes will appear."
 
 setting_auto_pause: "Auto Pause"
 description_auto_pause: "If checked, the game automatically pauses if the screen isn't on focus."
@@ -178,6 +264,7 @@ key_reset: "Reset"
 key_accept: "Accept"
 key_back: "Back"
 key_pause: "Pause"
+key_capture: "Pause"
 
 keygroup_VOLUME: "VOLUME"
 key_volume_mute: "Mute"
@@ -210,40 +297,3 @@ options_graphics: "Graphics"
 options_visuals: "Visuals"
 options_gameplay: "Gameplay"
 options_language: "Language"
-
-//other
-yes: "Yes"
-no: "No"
-
-reset_score: "Reset the score of"
-
-now_loading: "Now Loading{1}"
-
-//PlayState
-botplay: "Botplay"
-
-rating_failure: "F - Failure"
-rating_terrible: "E - Terrible"
-rating_awful: "D - Awful"
-rating_nice: "Nice"
-rating_not_bad: "C- Not Bad"
-rating_good: "B - Good"
-rating_great: "A - Great"
-rating_sick: "S - Sick"
-rating_perfect: "P - Perfect"
-
-score_text: "Score: {1} | Misses: {2} | Rating: {3}"
-score_text_instakill: "Score: {1} | Rating: {2}"
-
-//story mode (IGNORE FOR DEMO - SMB)
-week_score: "WEEK SCORE: {1}"
-
-storyname_tutorial: "Tutorial"
-storyname_week1: "Daddy Dearest"
-storyname_week2: "Spooky Month"
-storyname_week3: "Pico"
-storyname_week4: "Mommy Must Murder"
-storyname_week5: "Red Snow"
-storyname_week6: "Hating Simulator ft. Moawling"
-storyname_week7: "Tankman"
-storyname_weekend1: "Due Debts"

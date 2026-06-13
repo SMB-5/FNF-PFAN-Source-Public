@@ -92,7 +92,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Strum Background Opacity',
-			'How much transparent should the Strumline Background be.',
+			'How much transparent should the Strumline Background be?',
 			'strumlineBGAlpha',
 			PERCENT);
 		option.scrollSpeed = 1.6;

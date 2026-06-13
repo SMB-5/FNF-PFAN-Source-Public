@@ -83,7 +83,7 @@ class MainMenuState extends MusicBeatState
 			var offset:Float = 248 - (Math.max(optionShit.length, 4) - 4) * 80;
 			var menuItem:FlxText = new FlxText(30, (i * 80) + offset, "", 48);
 			menuItem.antialiasing = ClientPrefs.data.antialiasing;
-			menuItem.text = optionShit[i];
+			menuItem.text = Language.getPhrase('menu_${optionShit[i]}', optionShit[i]);
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if (optionShit.length < 6)
@@ -166,7 +166,7 @@ class MainMenuState extends MusicBeatState
 		moveUpIcon.x = moveDownIcon.x + (moveDownIcon.width - moveUpIcon.width) / 2;
 		moveRightIcon.x = moveDownIcon.x + moveDownIcon.width + 10;
 
-		var moveText:FlxText = new FlxText(0, FlxG.height - 39, 0, "Select", 24);
+		var moveText:FlxText = new FlxText(0, FlxG.height - 39, 0, Language.getPhrase("ui_select"), 24);
 		moveText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(moveText);
 
@@ -180,7 +180,7 @@ class MainMenuState extends MusicBeatState
 
 		acceptIcon.x = moveText.x + moveText.width + 10;
 
-		var confirmText:FlxText = new FlxText(0, FlxG.height - 39, 0, "Confirm", 24);
+		var confirmText:FlxText = new FlxText(0, FlxG.height - 39, 0, Language.getPhrase("ui_confirm"), 24);
 		confirmText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(confirmText);
 

@@ -14,6 +14,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
     var cardText:FlxText;
     var acceptIcon:FlxSprite;
     var confirmText:FlxText;
+    var stopText:FlxText;
 
     public function new(Prompt:String)
     {
@@ -85,10 +86,17 @@ class PersonaCardSubstate extends MusicBeatSubstate
         acceptIcon.alpha = 0;
         acceptIcon.y = cardBG.y + 440;
 
-		confirmText = new FlxText(0, FlxG.height - 39, 0, "Close", 24);
+		confirmText = new FlxText(0, FlxG.height - 39, 0, Language.getPhrase("ui_close"), 24);
 		confirmText.setFormat("p5hatty-1.ttf", 32, FlxColor.WHITE, RIGHT);
 		add(confirmText);
 
+        stopText = new FlxText(50, FlxG.height - 39, 0, "I", 24);
+		stopText.setFormat("p5hatty-1.ttf", 32, FlxColor.WHITE, RIGHT);
+		add(stopText);
+        stopText.alpha = 0;
+        stopText.y = acceptIcon.y + 5;
+
+        acceptIcon.x = confirmText.x - 70;
         confirmText.y = acceptIcon.y + 5;
         confirmText.alpha = 0;
 
@@ -98,27 +106,29 @@ class PersonaCardSubstate extends MusicBeatSubstate
         FlxTween.tween(promptText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(titleText, {x: 0, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(cardText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
-        FlxTween.tween(acceptIcon, {x: 920, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+        FlxTween.tween(acceptIcon, {x: confirmText.x - 70, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+        FlxTween.tween(stopText, {x: 1050, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
         FlxTween.tween(confirmText, {x: acceptIcon.x + acceptIcon.width + 10, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 
         super.create();
 
         if (Prompt == "WarningDemo")
         {
-            promptText.text = "INFORMATION";
-            titleText.text = "Before You Start The Demo";
-            cardText.text = "This Mod is still in active development so a lot of things present might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do for the Mod and does not represent the Final Mod.\n\nPlease also note that this Mod contains Flashing Lights which can be disabled at Anytime in the Config Menu.";
+            promptText.text = Language.getPhrase("prompt_info");
+            titleText.text = Language.getPhrase("demo_title");
+            cardText.text = Language.getPhrase("demo_text");
         }
         else if (Prompt == "LockedDemo")
         {
-            promptText.text = "INFORMATION";
-            titleText.text = "Not Available in the Demo";
-            cardText.text = "This Menu will be Available in the First Release of the Full Mod.";
+            promptText.text = Language.getPhrase("prompt_info");
+            titleText.text = Language.getPhrase("demolock_title");
+            cardText.text = Language.getPhrase("demolock_text");
         }
         else
         {
-            promptText.text = "SYSTEM";
-            titleText.text = "Error";
+            promptText.text = Language.getPhrase("prompt_system");
+            titleText.text = Language.getPhrase("error_title");
+            //cards are gonna be hardcoded and I assume most if not all of us devs are gonna be able to read english I think it's fine not to translate this error -SMB
             cardText.text = "The Prompt you're looking for wasn't found.";
         }
     }
@@ -126,7 +136,8 @@ class PersonaCardSubstate extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
         //tweens don't move the text for some reason
-        confirmText.x = acceptIcon.x + acceptIcon.width + 10;
+        confirmText.x = stopText.x - 10 - confirmText.width;
+        acceptIcon.x = confirmText.x - 70;
 		if (controls.ACCEPT) 
         {
 		    FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -136,6 +147,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
             FlxTween.tween(promptText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(titleText, {x: 400, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(acceptIcon, {x: 1220, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+            FlxTween.tween(stopText, {x: 1250, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(confirmText, {x: acceptIcon.x + acceptIcon.width + 10, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
             FlxTween.tween(cardText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut,
             onComplete: function(twn:FlxTween)
