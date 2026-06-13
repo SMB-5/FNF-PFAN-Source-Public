@@ -211,7 +211,7 @@ class FreeplayState extends MusicBeatState
 				var fileToCheck:String = dir + cat + '.json';
 				if (FileSystem.exists(fileToCheck)) {
 					var parsedCategory = haxe.Json.parse(File.getContent(fileToCheck));
-					addCategory(parsedCategory.categoryName, parsedCategory.weeks);
+					addCategory(parsedCategory.categoryName, fileToCheck.substring(0, fileToCheck.length - 5), parsedCategory.weeks);
 				}
 			}
 
@@ -219,26 +219,26 @@ class FreeplayState extends MusicBeatState
 				var path:String = haxe.io.Path.join([dir, file]);
 				if (!FileSystem.isDirectory(path) && path.endsWith('.json')) {
 					var parsedCategory = haxe.Json.parse(File.getContent(path));
-					addCategory(parsedCategory.categoryName, parsedCategory.weeks);
+					addCategory(parsedCategory.categoryName, file.substring(0, file.length - 5), parsedCategory.weeks);
 				}
 			}
 		}
 	}
 
-	function addCategory(name:String, weeks:Array<String>) {
+	function addCategory(name:String, file:String, weeks:Array<String>) {
 		for (category in categories) {
 			if (category.categoryName == name) return;
 		}
-		categories.push(new CategoryMetadata(name, weeks));
+		categories.push(new CategoryMetadata(name, file, weeks));
 	}
 
 	function regenerateSongs(?start:String = '') {
 		if (categories.length < 1) {
-			catText.text = 'NO CATEGORIES FOUND';
+			catText.text = Language.getPhrase('no_categories', 'NO CATEGORIES FOUND');
 			return;
 		}
 		songs = [new SongMetadata("Random", 0, "Face", FlxColor.fromRGB(255, 255, 255))];
-		catText.text = '< ${categories[curCategory].categoryName} >';
+		catText.text = '< ' + Language.getPhrase('category_${categories[curCategory].fileName}', categories[curCategory].categoryName) + ' >';
 		for (i in 0...WeekData.weeksList.length) {
 			if (weekIsLocked(WeekData.weeksList[i]) || !categories[curCategory].weeks.contains(WeekData.weeksList[i])) continue;
 
@@ -796,10 +796,12 @@ class FreeplayState extends MusicBeatState
 class CategoryMetadata
 {
 	public var categoryName:String = '';
+	public var fileName:String = '';
 	public var weeks:Array<String> = [];
 
-	public function new(categoryName:String, weeks:Array<String>) {
+	public function new(categoryName:String, fileName:String, weeks:Array<String>) {
 		this.categoryName = categoryName;
+		this.fileName = fileName;
 		this.weeks = weeks;
 	}
 }
