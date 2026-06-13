@@ -50,7 +50,7 @@ ui_close: "Close"
 
 //Persona PopUp Cards
 prompt_info: "INFORMATION"
-promp_system: "SYSTEM"
+prompt_system: "SYSTEM"
 error_title: "Error"
 
 demo_title: "Before You Start The Demo"
