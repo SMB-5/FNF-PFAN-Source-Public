@@ -19,6 +19,8 @@ import openfl.utils.ByteArray;
 import openfl.events.MouseEvent;
 import flixel.addons.plugin.screengrab.FlxScreenGrab;
 import lime.app.Application;
+import util.DateUtil;
+import util.FileUtil;
 
 typedef ScreenshotPluginParams =
 {

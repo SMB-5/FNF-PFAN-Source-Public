@@ -25,7 +25,7 @@ import states.CopyState;
 #end
 
 #if mobile
-import backend.StorageUtil;
+import util.StorageUtil;
 #end
 
 #if (linux || mac)

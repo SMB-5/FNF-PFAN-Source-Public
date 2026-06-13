@@ -1,4 +1,4 @@
-package backend;
+package util;
 
 /**
  * Utilities for performing mathematical operations.

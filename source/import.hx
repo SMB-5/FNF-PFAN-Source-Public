@@ -21,9 +21,24 @@ import sys.io.*;
 import js.html.*;
 #end
 
+#if mobile
+import util.TouchUtil;
+#end
+
+// Android
+#if android
+import extension.androidtools.content.Context as AndroidContext;
+import extension.androidtools.widget.Toast as AndroidToast;
+import extension.androidtools.os.Environment as AndroidEnvironment;
+import extension.androidtools.Permissions as AndroidPermissions;
+import extension.androidtools.Settings as AndroidSettings;
+import extension.androidtools.Tools as AndroidTools;
+import extension.androidtools.os.Build.VERSION as AndroidVersion;
+import extension.androidtools.os.Build.VERSION_CODES as AndroidVersionCode;
+#end
+
 import backend.Paths;
 import backend.Controls;
-import backend.CoolUtil;
 import backend.MusicBeatState;
 import backend.MusicBeatSubstate;
 import backend.CustomFadeTransition;
@@ -41,6 +56,8 @@ import objects.BGSprite;
 
 import states.PlayState;
 import states.LoadingState;
+
+import util.CoolUtil;
 
 #if flxanimate
 import flxanimate.*;

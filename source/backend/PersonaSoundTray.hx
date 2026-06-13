@@ -4,7 +4,7 @@ import flixel.system.ui.FlxSoundTray;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.utils.Assets;
-import backend.MathUtil;
+import util.MathUtil;
 
 /**
  * smb ur original code sucked so here it is
