@@ -339,8 +339,8 @@ class FreeplayState extends MusicBeatState
 			rank.scale.x = 0.3;
 			rank.scale.y = 0.3;
 			rank.updateHitbox();
-			rank.xAdd = 305;
-			rank.yAdd = -75;
+			rank.xAdd = 290;
+			rank.yAdd = -72;
 			rank.sprTracker = songText;
 			rankSprites.push(rank);
 
@@ -444,91 +444,7 @@ class FreeplayState extends MusicBeatState
 				persistentUpdate = false;
 				openSubState(new GameplayChangersSubstate(this));
 			}
-
-			if (controls.ACCEPT)
-			{
-				if (songs.length <= 1) {
-					missingText.text = 'There are no songs to play!';
-					missingText.screenCenter(Y);
-					missingText.visible = true;
-					missingTextBG.visible = true;
-					FlxG.sound.play(Paths.sound('cancelMenu'));
-
-					super.update(elapsed);
-					return;
-				}
-
-				if (songs[curSelected].songName.toLowerCase() == 'random')
-				{
-					changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
-					pickedRandom = true;
-					new FlxTimer().start(1, function(tmr) {
-						LoadingState.prepareToSong();
-						LoadingState.loadAndSwitchState(new PlayState());
-						#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-					});
-				}
-
-				persistentUpdate = false;
-				var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
-				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-
-				var shouldSave:Bool = false;
-				for (option in gameplayModifiers)
-				{
-					if (option.disallowedSongs.contains(songLowercase) && option.getValue() != option.defaultValue)
-					{
-						option.setValue(option.defaultValue);
-						shouldSave = true;
-					}
-				}
-				if (shouldSave) ClientPrefs.saveSettings();
-
-				try
-				{
-					Song.loadFromJson(poop, songLowercase);
-					PlayState.isStoryMode = false;
-					PlayState.storyDifficulty = curDifficulty;
-
-					trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-				}
-				catch(e:haxe.Exception)
-				{
-					trace('ERROR! ${e.message}');
-
-					var errorStr:String = e.message;
-					if(errorStr.contains('There is no TEXT asset with an ID of')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(songLowercase), errorStr.length-1); //Missing chart
-					else errorStr += '\n\n' + e.stack;
-
-					missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-					missingText.screenCenter(Y);
-					missingText.visible = true;
-					missingTextBG.visible = true;
-					FlxG.sound.play(Paths.sound('cancelMenu'));
-
-					super.update(elapsed);
-					return;
-				}
-				@:privateAccess
-				if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
-				{
-					trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
-					Paths.freeGraphicsFromMemory();
-				}
-				if (!pickedRandom) {
-					LoadingState.prepareToSong();
-					LoadingState.loadAndSwitchState(new PlayState());
-					#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-				}
-				stopMusicPlay = true;
-
-				destroyFreeplayVocals();
-				#if (MODS_ALLOWED && DISCORD_ALLOWED)
-				DiscordClient.loadModRPC();
-				#end
-			}
-
-			if (controls.RESET)
+			else if (controls.RESET)
 			{
 				persistentUpdate = false;
 				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
@@ -536,7 +452,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (controls.BACK)
+		if (controls.BACK && !pickedRandom)
 		{
 			if (player.playingMusic)
 			{
@@ -558,7 +474,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.keys.justPressed.SPACE && songs[curSelected].songName.toLowerCase() != 'random')
+		if (FlxG.keys.justPressed.SPACE && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
 		{
 			if (instPlaying != curSelected && !player.playingMusic)
 			{
@@ -632,6 +548,88 @@ class FreeplayState extends MusicBeatState
 			{
 				player.pauseOrResume(!player.playing);
 			}
+		}
+		else if (controls.ACCEPT && !player.playingMusic && !pickedRandom)
+		{
+			if (songs.length <= 1) {
+				missingText.text = 'There are no songs to play!';
+				missingText.screenCenter(Y);
+				missingText.visible = true;
+				missingTextBG.visible = true;
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+
+				super.update(elapsed);
+				return;
+			}
+
+			if (songs[curSelected].songName.toLowerCase() == 'random')
+			{
+				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+				pickedRandom = true;
+				new FlxTimer().start(1, function(tmr) {
+					LoadingState.prepareToSong();
+					LoadingState.loadAndSwitchState(new PlayState());
+					#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+				});
+			}
+
+			persistentUpdate = false;
+			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
+			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+
+			var shouldSave:Bool = false;
+			for (option in gameplayModifiers)
+			{
+				if (option.disallowedSongs.contains(songLowercase) && option.getValue() != option.defaultValue)
+				{
+					option.setValue(option.defaultValue);
+					shouldSave = true;
+				}
+			}
+			if (shouldSave) ClientPrefs.saveSettings();
+
+			try
+			{
+				Song.loadFromJson(poop, songLowercase);
+				PlayState.isStoryMode = false;
+				PlayState.storyDifficulty = curDifficulty;
+
+				trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+			}
+			catch(e:haxe.Exception)
+			{
+				trace('ERROR! ${e.message}');
+
+				var errorStr:String = e.message;
+				if(errorStr.contains('There is no TEXT asset with an ID of')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(songLowercase), errorStr.length-1); //Missing chart
+				else errorStr += '\n\n' + e.stack;
+
+				missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
+				missingText.screenCenter(Y);
+				missingText.visible = true;
+				missingTextBG.visible = true;
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+
+				super.update(elapsed);
+				return;
+			}
+			@:privateAccess
+			if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
+			{
+				trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
+				Paths.freeGraphicsFromMemory();
+			}
+			if (!pickedRandom) {
+				LoadingState.prepareToSong();
+				LoadingState.loadAndSwitchState(new PlayState());
+				#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+			}
+			stopMusicPlay = true;
+
+			destroyFreeplayVocals();
+			#if (MODS_ALLOWED && DISCORD_ALLOWED)
+			DiscordClient.loadModRPC();
+			#end
 		}
 
 		updateTexts(elapsed);
