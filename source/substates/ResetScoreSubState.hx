@@ -34,7 +34,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 		if(week > -1) {
 			name = WeekData.weeksLoaded.get(WeekData.weeksList[week]).weekName;
 		}
-		name += ' (' + Difficulty.getString(difficulty) + ')?';
+		name += ' ?';
 
 		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
@@ -62,7 +62,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 			icon.alpha = 0;
 			add(icon);
 			if (FreeplayState.opponentMode) {
-				var text:Alphabet = new Alphabet(0, text.y + 110, '(OPPONENT)', true);
+				var text:Alphabet = new Alphabet(0, text.y + 110, Language.getPhrase('Opponent'), true);
 				text.screenCenter(X);
 				alphabetArray.push(text);
 				text.alpha = 0;

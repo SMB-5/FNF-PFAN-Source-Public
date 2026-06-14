@@ -22,12 +22,11 @@ storyname_week7: "Tankman"
 storyname_weekend1: "Due Debts"
 
 // Freeplay
-freeplay_tip: "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy."
 personal_best: "HIGHSCORE: {1} ({2}%)"
+personal_best_opponent: "OPPONENT HIGHSCORE: {1} ({2}%)"
 
 musicplayer_playing: "PLAYING: {1}"
 musicplayer_paused: "PLAYING: {1} (PAUSED)"
-musicplayer_tip: "Press SPACE to Pause / Press ESCAPE to Exit / Press R to Reset the Song"
 
 // Difficulties
 difficulty_: ""
@@ -40,6 +39,8 @@ difficulty_hard: "Hard"
 yes: "Yes"
 no: "No"
 
+opponent: "(OPPONENT)"
+
 reset_score: "Reset the score of"
 
 now_loading: "Now Loading{1}"
@@ -47,6 +48,10 @@ now_loading: "Now Loading{1}"
 ui_select: "Select"
 ui_confirm: "Confirm"
 ui_close: "Close"
+ui_back: "Back"
+ui_gmodifiers: "Modifiers"
+ui_reset: "Reset"
+ui_change_character: "Character"
 
 //Persona PopUp Cards
 prompt_info: "INFORMATION"
@@ -111,6 +116,10 @@ setting_health_loss_multiplier: "Health Loss Multiplier"
 setting_instakill_on_miss: "Instakill on Miss"
 setting_practice_mode: "Practice Mode"
 setting_botplay: "Botplay"
+setting_play_as_opponent: "Play As Opponent"
+setting_merciless: "Merciless"
+
+merciless_gl: "You will need to beat the song without breaking your combo or getting a Bad/Shit rating. Good Luck! You're gonna need it!"
 
 // Options
 gameplay_menu: "Gameplay Settings"
