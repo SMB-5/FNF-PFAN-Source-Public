@@ -28,7 +28,7 @@ class FreeplayState extends MusicBeatState
 	var categories:Array<CategoryMetadata> = [];
 	var songs:Array<SongMetadata> = [];
 
-	public static var curCategory:Int = 0;
+	public static var curCategory:Int = 1;
 	private static var curSelected:Int = 1;
 	var lerpSelected:Float = 0;
 	var selector:FlxText;
@@ -58,6 +58,8 @@ class FreeplayState extends MusicBeatState
 	var bar:FlxSprite;
 
 	var portrait:FlxSprite;
+
+	private var dot:FlxTypedGroup<FlxSprite>;
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
@@ -131,9 +133,9 @@ class FreeplayState extends MusicBeatState
 		catText = new Alphabet(0, 0, '', true);
 		catText.screenCenter(X);
 		catText.x = 0;
-		catText.y = 10;
-		catText.scaleX = 0.8;
-		catText.scaleY = 0.8;
+		catText.y = 15;
+		catText.scaleX = 0.6;
+		catText.scaleY = 0.6;
 		add(catText);
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
@@ -141,6 +143,9 @@ class FreeplayState extends MusicBeatState
 		scoreText.y = 20;
 
 		add(scoreText);
+
+		dot = new FlxTypedGroup<FlxSprite>();
+		add(dot);
 
 		missingTextBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		missingTextBG.alpha = 0.6;
@@ -349,6 +354,22 @@ class FreeplayState extends MusicBeatState
 			catText.text = Language.getPhrase('no_categories', 'NO CATEGORIES FOUND');
 			return;
 		}
+		for (sprite in dot.members)
+    		sprite.destroy();
+		dot.clear();
+		for (i in 0...categories.length)
+		{
+			
+			var catdot:AttachedSprite = new AttachedSprite('persona/menus/freeplay/seperator');
+			catdot.antialiasing = ClientPrefs.data.antialiasing;
+			//catdot.scale.x = 0.35;
+			//catdot.scale.y = 0.1;
+			catdot.updateHitbox();
+			catdot.x = 180 + ((i - (categories.length - 1) / 2) * 20);
+			catdot.y = 65;
+			catdot.color = (i == curCategory) ? FlxColor.WHITE : FlxColor.GRAY;
+			dot.add(catdot);
+		}
 		songs = [new SongMetadata("Random", 0, "Face", FlxColor.fromRGB(255, 255, 255))];
 		catText.text = '< ' + Language.getPhrase('category_${categories[curCategory].fileName}', categories[curCategory].categoryName) + ' >';
 		for (i in 0...WeekData.weeksList.length) {
@@ -401,6 +422,18 @@ class FreeplayState extends MusicBeatState
 
 			rank.loadGraphic(getRankGraphic(rating));
 		}
+	}
+
+	function updateDots()
+	{
+    	for (i in 0...dot.members.length)
+    	{
+        	var catdot = dot.members[i];
+        	if (catdot != null)
+        	{
+            	catdot.color = (i == curCategory) ? FlxColor.WHITE : FlxColor.GRAY;
+        	}
+    	}
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
@@ -548,6 +581,7 @@ class FreeplayState extends MusicBeatState
 			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
 			{
 				curCategory = FlxMath.wrap(curCategory + (controls.UI_LEFT_P ? -1 : 1), 0, categories.length - 1);
+				updateDots();
 				regenerateSongs();
 			}
 
