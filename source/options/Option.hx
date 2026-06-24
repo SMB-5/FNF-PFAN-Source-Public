@@ -14,6 +14,7 @@ enum OptionType {
 	PERCENT;
 	STRING;
 	KEYBIND;
+	SUBSTATE(cl:Class<Dynamic>);
 }
 
 class Option
@@ -87,6 +88,9 @@ class Option
 				defaultValue = '';
 				defaultKeys = {gamepad: 'NONE', keyboard: 'NONE'};
 				keys = {gamepad: 'NONE', keyboard: 'NONE'};
+
+			case SUBSTATE(cl):
+				this.customizationClass = cl;
 		}
 
 		try

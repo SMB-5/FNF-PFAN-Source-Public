@@ -17,6 +17,9 @@ class GameOverSubstate extends MusicBeatSubstate
 	public var boyfriend:Character;
 	public var fakeBoyfriend:Character;
 	var camFollow:FlxObject;
+	#if mobile
+	var backButton:BackButton;
+	#end
 
 	var stagePostfix:String = "";
 
@@ -154,6 +157,12 @@ class GameOverSubstate extends MusicBeatSubstate
 			}
 		}
 
+		#if mobile
+		backButton = new BackButton();
+		backButton.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		add(backButton);
+		#end
+
 		super.create();
 	}
 
@@ -177,29 +186,13 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if(!isEnding)
 		{
-			if (controls.ACCEPT)
+			if (controls.ACCEPT #if mobile || TouchUtil.justPressed #end)
 			{
-				endBullshit();
+				retryGameOver();
 			}
-			else if (controls.BACK)
+			else if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
 			{
-				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-				FlxG.sound.music.stop();
-				PlayState.deathCounter = 0;
-				PlayState.seenCutscene = false;
-				PlayState.chartingMode = false;
-
-				Mods.loadTopMod();
-				if (PlayState.isStoryMode)
-				{
-					MusicBeatState.switchState(new StoryMenuState());
-				}
-				else
-				{
-					openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
-				}
-
-				PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
+				leaveGameOver();
 			}
 			else if (justPlayedLoop)
 			{
@@ -221,7 +214,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.sound.music.volume = volume;
 	}
 
-	function endBullshit():Void
+	function retryGameOver():Void
 	{
 		if (!isEnding)
 		{
@@ -248,6 +241,27 @@ class GameOverSubstate extends MusicBeatSubstate
 			});
 			PlayState.instance.callOnScripts('onGameOverConfirm', [true]);
 		}
+	}
+
+	function leaveGameOver():Void
+	{
+		#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
+		FlxG.sound.music.stop();
+		PlayState.deathCounter = 0;
+		PlayState.seenCutscene = false;
+		PlayState.chartingMode = false;
+
+		Mods.loadTopMod();
+		if (PlayState.isStoryMode)
+		{
+			MusicBeatState.switchState(new StoryMenuState());
+		}
+		else
+		{
+			openSubState(new StickerSubState(null, (sticker) -> new FreeplayState(sticker)));
+		}
+
+		PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
 	}
 
 	override function destroy()

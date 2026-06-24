@@ -204,7 +204,7 @@ class PauseSubState extends MusicBeatSubstate
 			var input = #if mobile FlxG.touches.getFirst() #else FlxG.mouse #end;
 			if (input != null) {
 				if (input.overlaps(buttonHitboxes[k], camera)) {
-					#if mobile if (input.justReleased) { #end
+					#if mobile if (input.justPressed) { #end
 					if (curSelected != buttonHitboxes[k].ID) {
 						curSelected = buttonHitboxes[k].ID;
 						changeSelection();

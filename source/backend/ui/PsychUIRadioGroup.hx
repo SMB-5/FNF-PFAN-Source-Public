@@ -57,11 +57,13 @@ class PsychUIRadioGroup extends FlxSpriteGroup
 		_hitbox.y = y;
 		_hitbox.width = width;
 		_hitbox.height = height;
+		#if !mobile
 		if(maxItems > 0 && maxItems < labels.length && FlxG.mouse.wheel != 0 && FlxG.mouse.overlaps(_hitbox, camera))
 		{
 			curScroll -= FlxG.mouse.wheel;
 			//trace('just scrolled: ' + FlxG.mouse.wheel);
 		}
+		#end
 
 		var baseY:Float = y + radios.length * space;
 		if(stackHorizontal) baseY = y + 25;
@@ -84,20 +86,20 @@ class PsychUIRadioGroup extends FlxSpriteGroup
 				arrowDown.x += arrowUp.width + 8;
 		}
 
-		if(FlxG.mouse.justPressed)
+		if(TouchUtil.justPressed)
 		{
-			if(hasArrowUp && maxItems > 0 && curScroll > 0 && FlxG.mouse.overlaps(arrowUp, camera))
+			if(hasArrowUp && maxItems > 0 && curScroll > 0 && TouchUtil.overlaps(arrowUp, camera))
 			{
 				curScroll--;
 				arrowUp.animation.play('press');
 			}
-			else if(hasArrowDown && maxItems > 0 && curScroll < (labels.length - maxItems) && FlxG.mouse.overlaps(arrowDown, camera))
+			else if(hasArrowDown && maxItems > 0 && curScroll < (labels.length - maxItems) && TouchUtil.overlaps(arrowDown, camera))
 			{
 				curScroll++;
 				arrowDown.animation.play('press');
 			}
 		}
-		else if(FlxG.mouse.released)
+		else if(TouchUtil.released)
 		{
 			if(hasArrowUp && arrowUp.animation.curAnim != null && arrowUp.animation.curAnim.name != 'normal')
 				arrowUp.animation.play('normal');

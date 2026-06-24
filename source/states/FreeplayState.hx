@@ -15,6 +15,7 @@ import options.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 import substates.StickerSubState;
 
+import flixel.FlxObject;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 import flixel.util.FlxDestroyUtil;
@@ -22,6 +23,9 @@ import flixel.util.FlxDestroyUtil;
 import openfl.utils.Assets;
 
 import haxe.Json;
+
+// placeholder buttons
+import mobile.objects.VirtualPad;
 
 class FreeplayState extends MusicBeatState
 {
@@ -35,6 +39,8 @@ class FreeplayState extends MusicBeatState
 	var curDifficulty:Int = 0; // Difficulty always 0 for now
 
 	var catText:Alphabet;
+	var leftArrow:Alphabet;
+	var rightArrow:Alphabet;
 	var scoreText:FlxText;
 	var lerpScore:Int = 0;
 	var lerpRating:Float = 0;
@@ -55,6 +61,7 @@ class FreeplayState extends MusicBeatState
 
 	var bg:FlxSprite;
 	var songBG:FlxSprite;
+	var bgHitbox:FlxObject;
 	var bar:FlxSprite;
 
 	var portrait:FlxSprite;
@@ -70,7 +77,16 @@ class FreeplayState extends MusicBeatState
 
 	var player:MusicPlayer;
 
+	#if mobile
+	var backButton:BackButton;
+	#end
+
 	var stickerSubState:StickerSubState;
+
+	// placeholder buttons
+	#if mobile
+	var virtualPad:VirtualPad;
+	#end
 
 	public function new(?stickers:StickerSubState = null)
 	{
@@ -109,6 +125,9 @@ class FreeplayState extends MusicBeatState
 		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
 		add(grid);
 
+		bgHitbox = new FlxObject(0, 100, (FlxG.width / 2) + 150, FlxG.height);
+		add(bgHitbox);
+
 		portrait = new FlxSprite();
 		portrait.antialiasing = ClientPrefs.data.antialiasing;
 		add(portrait);
@@ -130,18 +149,24 @@ class FreeplayState extends MusicBeatState
 		add(bar);
 		bar.screenCenter();
 
-		catText = new Alphabet(0, 0, '', true);
-		catText.screenCenter(X);
-		catText.x = 0;
-		catText.y = 15;
-		catText.scaleX = 0.6;
-		catText.scaleY = 0.6;
+		catText = new Alphabet(70, 10, '', true);
+		catText.scaleX = 0.8;
+		catText.scaleY = 0.8;
 		add(catText);
+
+		leftArrow = new Alphabet(catText.x - 50, catText.y, '<', true);
+		leftArrow.scaleX = 0.8;
+		leftArrow.scaleY = 0.8;
+		add(leftArrow);
+
+		rightArrow = new Alphabet(catText.x + catText.width + 15, catText.y, '>', true);
+		rightArrow.scaleX = 0.8;
+		rightArrow.scaleY = 0.8;
+		add(rightArrow);
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		scoreText.y = 20;
-
 		add(scoreText);
 
 		dot = new FlxTypedGroup<FlxSprite>();
@@ -303,6 +328,17 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
+		#if mobile
+		backButton = new BackButton();
+		add(backButton);
+
+		virtualPad = new VirtualPad(NONE, A_B_C);
+		mobile.backend.MobileData.setControlColor(virtualPad);
+		for (a in virtualPad) a.IDs = [];
+		virtualPad.updateTrackedButtons();
+		add(virtualPad);
+		#end
+
 		changeSelection();
 		updateTexts();
 		updateAllRanks();
@@ -371,7 +407,8 @@ class FreeplayState extends MusicBeatState
 			dot.add(catdot);
 		}
 		songs = [new SongMetadata("Random", 0, "Face", FlxColor.fromRGB(255, 255, 255))];
-		catText.text = '< ' + Language.getPhrase('category_${categories[curCategory].fileName}', categories[curCategory].categoryName) + ' >';
+		catText.text = Language.getPhrase('category_${categories[curCategory].fileName}', categories[curCategory].categoryName);
+		rightArrow.x = catText.x + catText.width + 15;
 		for (i in 0...WeekData.weeksList.length) {
 			if (weekIsLocked(WeekData.weeksList[i]) || !categories[curCategory].weeks.contains(WeekData.weeksList[i])) continue;
 
@@ -478,6 +515,7 @@ class FreeplayState extends MusicBeatState
 			textBG.yAdd = -20;
 			textBG.sprTracker = songText;
 			textBG.color = songs[i].color;
+			textBG.ID = i;
 
 			var rank:AttachedSprite = new AttachedSprite('blank');
 			rank.antialiasing = ClientPrefs.data.antialiasing;
@@ -503,8 +541,9 @@ class FreeplayState extends MusicBeatState
 	public static var vocals:FlxSound = null;
 	public static var opponentVocals:FlxSound = null;
 	var holdTime:Float = 0;
-
 	var stopMusicPlay:Bool = false;
+	var swiping:Bool = false;
+	var prevSelected:Int = curSelected;
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.7)
@@ -531,8 +570,9 @@ class FreeplayState extends MusicBeatState
 		var shiftMult:Int = 1;
 		if (FlxG.keys.pressed.SHIFT) shiftMult = 3;
 
-		if (missingText.visible && FlxG.keys.justPressed.ANY) missingText.visible = missingTextBG.visible = false;
+		if (missingText.visible && (FlxG.keys.justPressed.ANY || TouchUtil.justPressed)) missingText.visible = missingTextBG.visible = false;
 
+		var pressedAccept:Bool = controls.ACCEPT;
 		if (!player.playingMusic && !pickedRandom)
 		{
 			if (!opponentMode) {
@@ -576,6 +616,49 @@ class FreeplayState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
 					changeSelection(-shiftMult * FlxG.mouse.wheel, false);
 				}
+
+				if (!swiping) {
+					for (bg in grpTextBG) {
+						if (rankSprites.contains(cast bg)) continue;
+						if (TouchUtil.overlaps(bg) && TouchUtil.justReleased) {
+							if (curSelected != bg.ID) {
+								curSelected = bg.ID;
+								changeSelection();
+								updatePortrait();
+							}
+							else {
+								pressedAccept = true;
+							}
+						}
+					}
+				}
+
+				if ((TouchUtil.overlaps(bgHitbox) || swiping) && TouchUtil.pressed) {
+					@:privateAccess
+					var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
+					var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(FlxG.camera).y;
+					if (Math.abs(offset) > 10) {
+						if (!swiping) {
+							prevSelected = curSelected;
+						}
+						swiping = true;
+						lerpSelected = prevSelected + offset * 0.01;
+						var boundSelected:Int = Math.round(FlxMath.bound(lerpSelected, 0, songs.length - 1));
+						if (boundSelected != curSelected) {
+							curSelected = boundSelected;
+							changeSelection();
+							updatePortrait();
+						}
+					}
+				}
+				else if (swiping) {
+					swiping = false;
+				}
+
+				if ((TouchUtil.overlaps(leftArrow) || TouchUtil.overlaps(rightArrow)) && TouchUtil.justPressed) {
+					curCategory = FlxMath.wrap(curCategory + (TouchUtil.overlaps(leftArrow) ? -1 : 1), 0, categories.length - 1);
+					regenerateSongs();
+				}
 			}
 
 			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
@@ -585,12 +668,12 @@ class FreeplayState extends MusicBeatState
 				regenerateSongs();
 			}
 
-			if (FlxG.keys.justPressed.CONTROL)
+			if (FlxG.keys.justPressed.CONTROL #if mobile || virtualPad.buttonA.justPressed #end)
 			{
 				persistentUpdate = false;
 				openSubState(new GameplayChangersSubstate(this));
 			}
-			else if (controls.RESET)
+			else if (controls.RESET #if mobile || virtualPad.buttonB.justPressed #end)
 			{
 				persistentUpdate = false;
 				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
@@ -598,7 +681,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (controls.BACK && !pickedRandom)
+		if ((controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) && !pickedRandom)
 		{
 			if (player.playingMusic)
 			{
@@ -620,7 +703,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.keys.justPressed.SPACE && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
+		if ((FlxG.keys.justPressed.SPACE #if mobile || virtualPad.buttonC.justPressed #end) && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
 		{
 			if (instPlaying != curSelected && !player.playingMusic)
 			{
@@ -695,7 +778,7 @@ class FreeplayState extends MusicBeatState
 				player.pauseOrResume(!player.playing);
 			}
 		}
-		else if (controls.ACCEPT && !player.playingMusic && !pickedRandom)
+		else if (pressedAccept && !player.playingMusic && !pickedRandom)
 		{
 			if (songs.length <= 1) {
 				missingText.text = 'There are no songs to play!';

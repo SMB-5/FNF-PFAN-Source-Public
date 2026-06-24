@@ -14,10 +14,19 @@ import openfl.display.StageScaleMode;
 import lime.app.Application;
 import backend.PersonaSoundTray;
 import states.TitleState;
+import mobile.backend.MobileData;
 
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
 import psychlua.HScript.HScriptInfos;
+#end
+
+#if COPY_FILES
+import mobile.states.CopyState;
+#end
+
+#if mobile
+import mobile.util.StorageUtil;
 #end
 
 #if (linux || mac)
@@ -72,6 +81,14 @@ class Main extends Sprite
 		backend.Native.fixScaling();
 		#end
 
+		#if mobile
+		#if android
+		StorageUtil.requestPermissions();
+		StorageUtil.setupExternalStorage();
+		#end
+		Sys.setCwd(StorageUtil.getExternalDir());
+		#end
+
 		#if VIDEOS_ALLOWED
 		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
 		#end
@@ -85,6 +102,17 @@ class Main extends Sprite
 
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 		Highscore.load();
+		MobileData.load();
+
+		if (FlxG.save.data.pfanVersion == null) {
+			FlxG.save.data.pfanVersion = FlxG.stage.application.meta.get('version');
+			FlxG.save.flush();
+		}
+		else if (FlxG.save.data.pfanVersion != FlxG.stage.application.meta.get('version')) {
+			#if COPY_FILES CopyState.recopyAssets = true; #end
+			FlxG.save.data.pfanVersion = FlxG.stage.application.meta.get('version');
+			FlxG.save.flush();
+		}
 
 		#if HSCRIPT_ALLOWED
 		Iris.warn = function(x, ?pos:haxe.PosInfos) {
@@ -147,7 +175,7 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-		var game:FlxGame = new FlxGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen);
+		var game:FlxGame = new FlxGame(game.width, game.height, #if COPY_FILES CopyState #else game.initialState #end, game.framerate, game.framerate, game.skipSplash, game.startFullscreen);
 		@:privateAccess
 		game._customSoundTray = PersonaSoundTray;
 		addChild(game);
@@ -172,6 +200,9 @@ class Main extends Sprite
 
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
 		
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
@@ -211,7 +242,7 @@ class Main extends Sprite
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
 		var errMsg:String = "";
-		var cwd:String = Sys.getCwd();
+		var cwd:String = #if android StorageUtil.getExternalDir() #else Sys.getCwd() #end;
 		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
 		var dateNow:String = Date.now().toString();

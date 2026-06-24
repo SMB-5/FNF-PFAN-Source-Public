@@ -93,7 +93,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Good Hit Window',
 			'Changes the amount of time you have\nfor hitting a "Good" in milliseconds.',
 			'goodWindow',
-			'int');
+			INT);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 30;
 		option.minValue = 15.0;
@@ -104,7 +104,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Bad Hit Window',
 			'Changes the amount of time you have\nfor hitting a "Bad" in milliseconds.',
 			'badWindow',
-			'int');
+			INT);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 60;
 		option.minValue = 15.0;
@@ -115,7 +115,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Safe Frames',
 			'Changes how many frames you have for\nhitting a note earlier or late.',
 			'safeFrames',
-			'float');
+			FLOAT);
 		option.scrollSpeed = 5;
 		option.minValue = 2;
 		option.maxValue = 10;

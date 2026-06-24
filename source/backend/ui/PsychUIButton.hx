@@ -49,6 +49,9 @@ class PsychUIButton extends FlxSpriteGroup
 	}
 
 	public var isClicked:Bool = false;
+	#if mobile
+	public var wasOverlapping:Bool = false;
+	#end
 	public var forceCheckNext:Bool = false;
 	public var broadcastButtonEvent:Bool = true;
 	var _firstFrame:Bool = true;
@@ -63,17 +66,16 @@ class PsychUIButton extends FlxSpriteGroup
 			text.color = normalStyle.textColor;
 			_firstFrame = false;
 		}
-		
-		if(isClicked && FlxG.mouse.released)
+
+		if(isClicked && TouchUtil.released)
 		{
 			forceCheckNext = true;
 			isClicked = false;
 		}
 
-		if(forceCheckNext || FlxG.mouse.justMoved || FlxG.mouse.justPressed)
+		if(forceCheckNext #if !mobile || FlxG.mouse.justMoved #end || TouchUtil.justPressed)
 		{
-			var overlapped:Bool = (FlxG.mouse.overlaps(bg, camera));
-
+			var overlapped:Bool = (TouchUtil.overlaps(bg, camera));
 			forceCheckNext = false;
 
 			if(!isClicked)
@@ -84,9 +86,10 @@ class PsychUIButton extends FlxSpriteGroup
 				text.color = style.textColor;
 			}
 
-			if(overlapped && FlxG.mouse.justPressed)
+			if(overlapped && TouchUtil.justPressed)
 			{
 				isClicked = true;
+				#if mobile wasOverlapping = true; #end
 				bg.color = clickStyle.bgColor;
 				bg.alpha = clickStyle.bgAlpha;
 				text.color = clickStyle.textColor;
@@ -94,6 +97,14 @@ class PsychUIButton extends FlxSpriteGroup
 				if(broadcastButtonEvent) PsychUIEventHandler.event(CLICK_EVENT, this);
 			}
 		}
+		#if mobile
+		else if (wasOverlapping && (TouchUtil.released || TouchUtil.input == null)) {
+			wasOverlapping = false;
+			bg.color = normalStyle.bgColor;
+			bg.alpha = normalStyle.bgAlpha;
+			text.color = normalStyle.textColor;
+		}
+		#end
 	}
 
 	public function resize(width:Int, height:Int)

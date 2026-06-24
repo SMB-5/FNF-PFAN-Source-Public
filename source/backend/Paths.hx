@@ -18,6 +18,9 @@ import flash.media.Sound;
 
 import haxe.Json;
 
+#if mobile
+import mobile.util.StorageUtil;
+#end
 
 #if MODS_ALLOWED
 import backend.Mods;
@@ -462,7 +465,7 @@ class Paths
 
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '')
-		return 'mods/' + key;
+		return #if mobile StorageUtil.getExternalDir() + #end 'mods/' + key;
 
 	inline static public function modsJson(key:String)
 		return modFolders('data/' + key + '.json');
@@ -500,7 +503,7 @@ class Paths
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
 		}
-		return 'mods/' + key;
+		return mods(key);
 	}
 	#end
 

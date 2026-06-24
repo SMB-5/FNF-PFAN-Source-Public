@@ -60,6 +60,10 @@ class ControlsSubState extends MusicBeatSubstate
 	var onKeyboardMode:Bool = true;
 	
 	var controllerSpr:FlxSprite;
+
+	#if mobile
+	var backButton:BackButton;
+	#end
 	
 	public function new()
 	{
@@ -104,6 +108,11 @@ class ControlsSubState extends MusicBeatSubstate
 		controllerSpr.animation.add('keyboard', [0], 1, false);
 		controllerSpr.animation.add('gamepad', [1], 1, false);
 		add(controllerSpr);
+
+		#if mobile
+		backButton = new BackButton();
+		add(backButton);
+		#end
 
 		var text:Alphabet = new Alphabet(60, 90, 'CTRL', false);
 		text.alignment = CENTERED;
@@ -281,7 +290,7 @@ class ControlsSubState extends MusicBeatSubstate
 
 		if(!binding)
 		{
-			if(FlxG.keys.justPressed.ESCAPE || FlxG.gamepads.anyJustPressed(B))
+			if(FlxG.keys.justPressed.ESCAPE || FlxG.gamepads.anyJustPressed(B) #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
 			{
 				close();
 				return;

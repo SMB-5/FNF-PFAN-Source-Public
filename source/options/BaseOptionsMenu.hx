@@ -17,15 +17,24 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
+	private var floatSelected:Float = 0;
+	private var prevSelected:Int = 0;
 	private var optionsArray:Array<Option>;
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
+	private var optionHitboxes:Array<AttachedSprite> = [];
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
 	private var settingGroup:FlxTypedGroup<AttachedSprite>;
 
 	private var descBox:FlxSprite;
 	private var descText:FlxText;
+
+	#if mobile
+	private var leftArrow:Alphabet;
+	private var rightArrow:Alphabet;
+	private var backButton:BackButton;
+	#end
 
 	public var title:String;
 	public var rpcTitle:String;
@@ -80,13 +89,20 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		{
 			var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
 			optionText.isMenuItem = true;
-			/*optionText.forceX = 300;
-			optionText.yMult = 90;*/
 			optionText.targetY = i;
+			optionText.ID = i;
 			grpOptions.add(optionText);
 
+			var hitbox:AttachedSprite = new AttachedSprite();
+			hitbox.makeGraphic(Std.int(optionText.width), Std.int(optionText.height), 0);
+			hitbox.sprTracker = optionText;
+			hitbox.yAdd += optionText.height;
+			hitbox.ID = i;
+			add(hitbox);
+			optionHitboxes.push(hitbox);
+
 			if (optionsArray[i].customizable) {
-				if (!controls.controllerMode && !FlxG.mouse.visible) FlxG.mouse.visible = true;
+				#if !mobile if (!controls.controllerMode && !FlxG.mouse.visible) FlxG.mouse.visible = true; #end
 				var setting:AttachedSprite = new AttachedSprite('settingButton');
 				setting.scale.set(1.5, 1.5);
 				setting.updateHitbox();
@@ -100,28 +116,52 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				settingGroup.add(setting);
 			}
 
-			if(optionsArray[i].type == BOOL)
-			{
-				var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, Std.string(optionsArray[i].getValue()) == 'true');
-				checkbox.sprTracker = optionText;
-				checkbox.ID = i;
-				checkboxGroup.add(checkbox);
+			switch(optionsArray[i].type) {
+				case BOOL:
+					var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, Std.string(optionsArray[i].getValue()) == 'true');
+					checkbox.sprTracker = optionText;
+					checkbox.ID = i;
+					checkboxGroup.add(checkbox);
+
+					var hitbox:AttachedSprite = new AttachedSprite();
+					hitbox.makeGraphic(Std.int(checkbox.width), Std.int(checkbox.height), 0);
+					hitbox.sprTracker = checkbox;
+					hitbox.ID = i;
+					add(hitbox);
+					optionHitboxes.push(hitbox);
+				case SUBSTATE(cl):
+					optionText.x -= 80;
+					optionText.startPosition.x -= 80;
+				default:
+					optionText.x -= 80;
+					optionText.startPosition.x -= 80;
+					var valueText:AttachedText = new AttachedText('' + optionsArray[i].getValue(), optionText.width + 60);
+					valueText.sprTracker = optionText;
+					valueText.copyAlpha = true;
+					valueText.ID = i;
+					grpTexts.add(valueText);
+					optionsArray[i].child = valueText;
+					updateTextFrom(optionsArray[i]);
+
+					hitbox.setGraphicSize(Std.int(optionText.width + valueText.width), Std.int(optionText.height));
+					hitbox.updateHitbox();
 			}
-			else
-			{
-				optionText.x -= 80;
-				optionText.startPosition.x -= 80;
-				//optionText.xAdd -= 80;
-				var valueText:AttachedText = new AttachedText('' + optionsArray[i].getValue(), optionText.width + 60);
-				valueText.sprTracker = optionText;
-				valueText.copyAlpha = true;
-				valueText.ID = i;
-				grpTexts.add(valueText);
-				optionsArray[i].child = valueText;
-			}
-			//optionText.snapToPosition(); //Don't ignore me when i ask for not making a fucking pull request to uncomment this line ok
-			updateTextFrom(optionsArray[i]);
 		}
+
+		#if mobile
+		leftArrow = new Alphabet(0, 410, '<');
+		leftArrow.x = (FlxG.width - leftArrow.width) / 2 - 100;
+		leftArrow.visible = false;
+		add(leftArrow);
+
+		rightArrow = new Alphabet(0, 410, '>');
+		rightArrow.x = (FlxG.width - rightArrow.width) / 2 + 100;
+		rightArrow.visible = false;
+		add(rightArrow);
+
+		backButton = new BackButton();
+		add(backButton);
+		#end
 
 		changeSelection();
 		reloadCheckboxes();
@@ -136,6 +176,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var nextAccept:Int = 5;
 	var holdTime:Float = 0;
 	var holdValue:Float = 0;
+	var swiping:Bool = false;
 
 	var bindingKey:Bool = false;
 	var holdingEsc:Float = 0;
@@ -157,6 +198,48 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			return;
 		}
 
+		var pressedAccept:Bool = controls.ACCEPT;
+		if (!swiping #if mobile && !TouchUtil.overlaps(leftArrow) && !TouchUtil.overlaps(rightArrow) #end) {
+			for (option in optionHitboxes) {
+				if (TouchUtil.overlaps(option, FlxG.camera) && TouchUtil.justReleased) {
+					if (curSelected != option.ID) {
+						curSelected = option.ID;
+						changeSelection();
+					}
+					else {
+						pressedAccept = true;
+					}
+				}
+			}
+		}
+
+		if (TouchUtil.pressed) {
+			@:privateAccess
+			var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
+			var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(FlxG.camera).y;
+			if (Math.abs(offset) > 10) {
+				if (!swiping) {
+					prevSelected = curSelected;
+				}
+				swiping = true;
+				floatSelected = prevSelected + offset * 0.01;
+				for (num => item in grpOptions) {
+					item.targetY = num - floatSelected;
+				}
+				var boundSelected:Int = Math.round(FlxMath.bound(floatSelected, 0, grpOptions.length - 1));
+				if (boundSelected != curSelected) {
+					curSelected = boundSelected;
+					changeSelection();
+				}
+			}
+		}
+		else if (swiping) {
+			swiping = false;
+			for (num => item in grpOptions) {
+				item.targetY = num - curSelected;
+			}
+		}
+
 		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);
@@ -166,7 +249,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			changeSelection(1);
 		}
 
-		if (controls.BACK) {
+		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
 			close();
 			FlxG.mouse.visible = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -176,8 +259,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		{
 			for (setting in settingGroup) {
 				if (setting.ID == curSelected) {
-					var pressed:Bool = FlxG.mouse.overlaps(setting) && FlxG.mouse.justPressed;
-					if (pressed || FlxG.gamepads.anyJustPressed(LEFT_STICK_CLICK)) { // idk what button to use for controller lol
+					if (TouchUtil.overlaps(setting) && TouchUtil.justPressed || FlxG.gamepads.anyJustPressed(LEFT_STICK_CLICK)) { // idk what button to use for controller lol
 						openSubState(Type.createInstance(curOption.customizationClass, []));
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 					}
@@ -186,7 +268,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			switch(curOption.type)
 			{
 				case BOOL:
-					if(controls.ACCEPT)
+					if(pressedAccept)
 					{
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 						curOption.setValue((curOption.getValue() == true) ? false : true);
@@ -194,7 +276,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						reloadCheckboxes();
 					}
 			case KEYBIND:
-					if(controls.ACCEPT)
+					if(pressedAccept)
 					{
 						bindingBlack = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
 						bindingBlack.scale.set(FlxG.width, FlxG.height);
@@ -217,17 +299,32 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 					}
 
+				case SUBSTATE(cl):
+					if (pressedAccept) {
+						FlxG.sound.play(Paths.sound('scrollMenu'));
+						openSubState(Type.createInstance(cl, []));
+					}
+
 				default:
-					if(controls.UI_LEFT || controls.UI_RIGHT)
+					var pressedLeft:Bool = controls.UI_LEFT;
+					var pressedRight:Bool = controls.UI_RIGHT;
+					#if mobile
+					pressedLeft = pressedLeft || TouchUtil.overlaps(leftArrow);
+					pressedRight = pressedRight || TouchUtil.overlaps(rightArrow);
+					#end
+					if((pressedLeft || pressedRight) #if mobile && TouchUtil.pressed #end)
 					{
 						var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P);
+						#if mobile
+						pressed = (pressedLeft || pressedRight) && TouchUtil.justPressed;
+						#end
 						if(holdTime > 0.5 || pressed)
 						{
 							if(pressed)
 							{
 								var add:Dynamic = null;
 								if(curOption.type != STRING)
-									add = controls.UI_LEFT ? -curOption.changeValue : curOption.changeValue;
+									add = pressedLeft ? -curOption.changeValue : curOption.changeValue;
 		
 								switch(curOption.type)
 								{
@@ -249,7 +346,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		
 									case STRING:
 										var num:Int = curOption.curOption; //lol
-										if(controls.UI_LEFT_P) --num;
+										if(pressedLeft) --num;
 										else num++;
 		
 										if(num < 0)
@@ -269,7 +366,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							}
 							else if(curOption.type != STRING)
 							{
-							holdValue += curOption.scrollSpeed * elapsed * (controls.UI_LEFT ? -1 : 1);
+								holdValue += curOption.scrollSpeed * elapsed * (pressedLeft ? -1 : 1);
 								if(holdValue < curOption.minValue) holdValue = curOption.minValue;
 								else if (holdValue > curOption.maxValue) holdValue = curOption.maxValue;
 		
@@ -291,13 +388,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						if(curOption.type != STRING)
 							holdTime += elapsed;
 					}
-					else if(controls.UI_LEFT_R || controls.UI_RIGHT_R)
+					else if(controls.UI_LEFT_R || controls.UI_RIGHT_R #if mobile || TouchUtil.justReleased #end)
 					{
 						if(holdTime > 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
 						holdTime = 0;
 					}
 			}
 
+			// port reminder: add reset button
 			if(controls.RESET)
 			{
 				var leOption:Option = optionsArray[curSelected];
@@ -523,9 +621,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		for (num => item in grpOptions.members)
 		{
-			item.targetY = num - curSelected;
+			if (!swiping) item.targetY = num - curSelected;
 			item.alpha = 0.6;
-			if (item.targetY == 0) item.alpha = 1;
+			if (item.ID == curSelected) item.alpha = 1;
 		}
 		for (text in grpTexts)
 		{
@@ -551,6 +649,15 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		curOption = optionsArray[curSelected]; //shorter lol
 		FlxG.sound.play(Paths.sound('scrollMenu'));
+
+		#if mobile
+		switch(curOption.type) {
+			case STRING, INT, FLOAT, PERCENT:
+				leftArrow.visible = rightArrow.visible = true;
+			default:
+				leftArrow.visible = rightArrow.visible = false;
+		}
+		#end
 	}
 
 	function reloadCheckboxes()

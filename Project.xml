@@ -32,6 +32,7 @@
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="PSYCH_WATERMARKS" />
 	<define name="VIDEOS_ALLOWED" if="desktop || mobile" unless="32bits" />
+	<define name="COPY_FILES" if="mobile" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -84,8 +85,8 @@
 	<!-- <define name="CHECK_FOR_UPDATES" if="cpp officialBuild"/> -->
 
 	<section if="MODS_ALLOWED">
-		<assets path='example_mods' rename='mods' embed='false' type='template' unless="mac"/>
-		<assets path='example_mods' rename='mods' embed='false' if="mac"/>
+		<assets path='example_mods' rename='mods' embed='false' type='template' unless="mac || mobile"/>
+		<assets path='example_mods' rename='mods' embed='false' if="mac || mobile"/>
 		<assets path='list.txt' rename='modsList.txt' />
 	</section>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />

@@ -3,11 +3,18 @@ package backend;
 import flixel.util.FlxSave;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
+import mobile.input.MobileInputID;
 
 import states.TitleState;
 
 // Add a variable here and it will get automatically saved
 @:structInit class SaveVariables {
+	// mobile stuff
+	public var controlMode:String = 'HITBOX';
+	public var controlAlpha:Float = 0.6;
+	public var hitboxStyle:String = 'Normal';
+	public var hitboxHints:Bool = true;
+	
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;
 	public var opponentStrums:Bool = true;
@@ -146,6 +153,20 @@ class ClientPrefs {
 		'pause'			=> [START],
 		'screenshot'    => [NONE],
 		'reset'			=> [BACK]
+	];
+	public static var mobileBinds:Map<String, Array<MobileInputID>> = [
+		'note_up'		=> [NOTE_UP],
+		'note_left'		=> [NOTE_LEFT],
+		'note_down'		=> [NOTE_DOWN],
+		'note_right'	=> [NOTE_RIGHT],
+		
+		'ui_up'			=> [UP],
+		'ui_left'		=> [LEFT],
+		'ui_down'		=> [DOWN],
+		'ui_right'		=> [RIGHT],
+		
+		'accept'		=> [A],
+		'back'			=> [B]
 	];
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 	public static var defaultButtons:Map<String, Array<FlxGamepadInputID>> = null;

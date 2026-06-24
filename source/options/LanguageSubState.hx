@@ -9,6 +9,9 @@ class LanguageSubState extends MusicBeatSubstate
 	var languages:Array<String> = [];
 	var displayLanguages:Map<String, String> = [];
 	var curSelected:Int = 0;
+	#if mobile
+	var backButton:BackButton;
+	#end
 	public function new()
 	{
 		super();
@@ -89,8 +92,15 @@ class LanguageSubState extends MusicBeatSubstate
 				text.y += (100 * (num - (languages.length / 2))) + 45;
 			}
 			text.screenCenter(X);
+			text.ID = num;
 			grpLanguages.add(text);
 		}
+
+		#if mobile
+		backButton = new BackButton();
+		add(backButton);
+		#end
+
 		changeSelected();
 	}
 
@@ -107,7 +117,7 @@ class LanguageSubState extends MusicBeatSubstate
 		if(FlxG.mouse.wheel != 0)
 			changeSelected(FlxG.mouse.wheel * mult);
 
-		if(controls.BACK)
+		if(controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
 		{
 			if(changedLanguage)
 			{
@@ -119,7 +129,19 @@ class LanguageSubState extends MusicBeatSubstate
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
-		if(controls.ACCEPT)
+		var pressedAccept:Bool = controls.ACCEPT;
+		for (option in grpLanguages) {
+			if (TouchUtil.overlaps(option, FlxG.camera)) {
+				#if mobile if (TouchUtil.justPressed) { #end
+				if (curSelected != option.ID) {
+					curSelected = option.ID;
+					changeSelected();
+				}
+				else #if !mobile if (TouchUtil.justPressed) #end pressedAccept = true;
+				#if mobile } #end
+			}
+		}
+		if(pressedAccept)
 		{
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.6);
 			ClientPrefs.data.language = languages[curSelected];

@@ -37,11 +37,15 @@ import backend.ui.*; //Psych-UI
 
 import objects.Alphabet;
 import objects.BGSprite;
+#if mobile
+import objects.BackButton;
+#end
 
 import states.PlayState;
 import states.LoadingState;
 
 import util.CoolUtil;
+import util.TouchUtil;
 
 #if flxanimate
 import flxanimate.*;

@@ -48,6 +48,9 @@ import objects.*;
 import states.stages.*;
 import states.stages.objects.*;
 
+import mobile.input.MobileInputID;
+import mobile.objects.TouchButton;
+
 #if LUA_ALLOWED
 import psychlua.*;
 #else
@@ -779,6 +782,10 @@ class PlayState extends MusicBeatState
 
 		super.create();
 		Paths.clearUnusedMemory();
+
+		addMobileControls();
+		mobileControls.currentMode.onPressed.add(onButtonPress);
+		mobileControls.currentMode.onReleased.add(onButtonRelease);
 
 		cacheCountdown();
 		cachePopUpScore();
@@ -1978,7 +1985,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if (controls.PAUSE && startedCountdown && canPause)
+		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #end) && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != LuaUtils.Function_Stop) {
@@ -3116,6 +3123,13 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	private function onButtonPress(button:TouchButton):Void
+	{
+		if (button != null && button.justPressed) {
+			keyPressed(button.IDs[0].toString().startsWith('NOTE') ? button.IDs[0] : button.IDs[1]);
+		}
+	}
+
 	private function keyPressed(key:Int)
 	{
 		var strumGroup:FlxTypedGroup<StrumNote> = !opponentMode ? playerStrums : opponentStrums;
@@ -3196,6 +3210,13 @@ class PlayState extends MusicBeatState
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(keysArray, eventKey);
 		if(!controls.controllerMode && key > -1) keyReleased(key);
+	}
+
+	private function onButtonRelease(button:TouchButton):Void
+	{
+		if (button != null && button.justReleased) {
+			keyReleased(button.IDs[0].toString().startsWith('NOTE') ? button.IDs[0] : button.IDs[1]);
+		}
 	}
 
 	private function keyReleased(key:Int)

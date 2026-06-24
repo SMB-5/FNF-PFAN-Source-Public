@@ -83,6 +83,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 			noText.y += 100;
 		}
 		for(letter in yesText.letters) letter.color = FlxColor.RED;
+
 		updateOptions();
 	}
 
@@ -97,6 +98,16 @@ class ResetScoreSubState extends MusicBeatSubstate
 		}
 		if(week == -1) icon.alpha += elapsed * 2.5;
 
+		var pressedAccept:Bool = controls.ACCEPT;
+		if ((TouchUtil.overlaps(yesText) || TouchUtil.overlaps(noText)) && TouchUtil.justPressed) {
+			var prevOpt = onYes;
+			onYes = TouchUtil.overlaps(yesText);
+			if (onYes != prevOpt) {
+				FlxG.sound.play(Paths.sound('scrollMenu'), 1);
+				updateOptions();
+			}
+			else pressedAccept = true;
+		}
 		if(controls.UI_LEFT_P || controls.UI_RIGHT_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 			onYes = !onYes;
@@ -105,7 +116,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 		if(controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
 			close();
-		} else if(controls.ACCEPT) {
+		} else if(pressedAccept) {
 			if(onYes) {
 				if(week == -1) {
 					Highscore.resetSong(song, difficulty, FreeplayState.opponentMode);

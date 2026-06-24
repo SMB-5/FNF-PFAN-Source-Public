@@ -63,17 +63,17 @@ class PsychUISlider extends FlxSpriteGroup
 	{
 		super.update(elapsed);
 
-		if(FlxG.mouse.justMoved || FlxG.mouse.justPressed || forceNextUpdate)
+		if(#if !mobile FlxG.mouse.justMoved || #end TouchUtil.justPressed || forceNextUpdate)
 		{
 			forceNextUpdate = false;
-			if(FlxG.mouse.justPressed && (FlxG.mouse.overlaps(bar, camera) || FlxG.mouse.overlaps(handle, camera)))
+			if(TouchUtil.justPressed && (TouchUtil.overlaps(bar, camera) || TouchUtil.overlaps(handle, camera)))
 				movingHandle = true;
 			
 			if(movingHandle)
 			{
 				var point:FlxPoint = getScreenPosition(null, camera);
 				var lastValue:Float = FlxMath.roundDecimal(value, decimals);
-				value = Math.max(min, Math.min(max, FlxMath.remapToRange(FlxG.mouse.getPositionInCameraView(camera).x, bar.x, bar.x + bar.width, min, max)));
+				value = Math.max(min, Math.min(max, FlxMath.remapToRange(TouchUtil.input.getPositionInCameraView(camera).x, bar.x, bar.x + bar.width, min, max)));
 				if(this.onChange != null && lastValue != value)
 				{
 					this.onChange(FlxMath.roundDecimal(value, decimals));
@@ -82,7 +82,7 @@ class PsychUISlider extends FlxSpriteGroup
 			}
 		}
 
-		if(FlxG.mouse.released)
+		if(TouchUtil.released)
 			movingHandle = false;
 	}
 

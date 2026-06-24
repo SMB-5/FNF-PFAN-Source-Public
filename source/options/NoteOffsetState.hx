@@ -35,6 +35,10 @@ class NoteOffsetState extends MusicBeatState
 	var controllerPointer:FlxSprite;
 	var _lastControllerMode:Bool = false;
 
+	#if mobile
+	var backButton:BackButton;
+	#end
+
 	override public function create()
 	{
 		#if DISCORD_ALLOWED
@@ -163,6 +167,12 @@ class NoteOffsetState extends MusicBeatState
 		controllerPointer.alpha = 0.6;
 		controllerPointer.cameras = [camHUD];
 		add(controllerPointer);
+
+		#if mobile
+		backButton = new BackButton();
+		backButton.camera = camOther;
+		add(backButton);
+		#end
 		
 		updateMode();
 		_lastControllerMode = true;
@@ -399,7 +409,7 @@ class NoteOffsetState extends MusicBeatState
 			updateMode();
 		}
 
-		if(controls.BACK)
+		if(controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
 		{
 			if(zoomTween != null) zoomTween.cancel();
 			if(beatTween != null) beatTween.cancel();

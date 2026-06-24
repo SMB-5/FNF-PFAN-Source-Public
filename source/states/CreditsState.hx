@@ -5,8 +5,12 @@ import objects.AttachedSprite;
 class CreditsState extends MusicBeatState
 {
 	var curSelected:Int = -1;
+	var floatSelected:Float = -1;
+	var prevSelected:Int = -1;
+	var swiping:Bool = false;
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
+	private var optionHitboxes:Array<AttachedSprite> = [];
 	private var iconArray:Array<AttachedSprite> = [];
 	private var creditsStuff:Array<Array<String>> = [];
 	private var baldipliers:Array<Array<String>> = [['baldiplier', 'bald', '577099'], ['daldiplier', 'dark', '3f3f3f'], ['golden-baldiplier', 'golden', 'ffff48']];
@@ -15,6 +19,9 @@ class CreditsState extends MusicBeatState
 	var descText:FlxText;
 	var intendedColor:FlxColor;
 	var descBox:AttachedSprite;
+	#if mobile
+	var backButton:BackButton;
+	#end
 
 	var offsetThing:Float = -75;
 
@@ -37,7 +44,7 @@ class CreditsState extends MusicBeatState
 		#if MODS_ALLOWED
 		for (mod in Mods.parseList().enabled) pushModCreditsToList(mod);
 		#end
-		var desc:String = '"Hi! I am a charter and also helped with the coding for this mod! Also, watch out for Baldiplier, he tends to sneak in here.."';
+		var desc:String = '"Hope you enjoyed the mod! Just watch out for Baldiplier, he tends to sneak in here..."';
 		var color:String = 'c0ebff';
 		var melodieCred:Array<String> = ['melodiekit'];
 		if (FlxG.random.bool(0.5)) {
@@ -57,7 +64,7 @@ class CreditsState extends MusicBeatState
 			['Cobalt', 'cobalt', 'Programmer\n"I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next."', 'https://cobaltbar.github.io/', '0065FF'],
 			['Dog', 'doggo', 'Musician\n"Hi! I composed a few songs for le epic persona mod, like Truth, Game Over!! and the main menu theme! Hope you enjoyed listening to them! If you want to hear more of my music, press enter to go to my channel!"', 'https://www.youtube.com/@you-know-its-dog.', 'f5d79d'],
 			['DudeDX', 'dudedx', 'Charter\n"why are oranges called oranges, but an apple is not called red?"', 'https://fakecrime.bio/dudeDX', '009116'],
-			['melodiekit', melodieCred[0], 'Charter and Major Assistant with Coding\n${desc}', 'https://youtube.com/@melodiekit', color],
+			['melodiekit', melodieCred[0], 'Programmer, Charter, and Mobile Porter\n${desc}', 'https://youtube.com/@melodiekit', color],
 			['MrEights', '', 'Musician\n"It ain\'t easy being cheesy!"', 'https://www.youtube.com/@Mr3ights', '1e1e1e'],
 			['NotMagniill', 'bobbo', 'Artist and Programmer\n"I\'m a devil muehehehe... also SMB no offense your code sucks"', 'https://twitter.com/magniill', '640911'],
 			['NoahGani1', 'noah', 'Chromatic Maker\n"Say Gex."', 'https://x.com/noah_gani1', '203a53'],
@@ -111,6 +118,7 @@ class CreditsState extends MusicBeatState
 			optionText.targetY = i;
 			optionText.changeX = false;
 			optionText.snapToPosition();
+			optionText.ID = i;
 			grpOptions.add(optionText);
 
 			if(isSelectable)
@@ -137,6 +145,14 @@ class CreditsState extends MusicBeatState
 				Mods.currentModDirectory = '';
 
 				if(curSelected == -1) curSelected = i;
+
+				var hitbox:AttachedSprite = new AttachedSprite();
+				hitbox.makeGraphic(Std.int(optionText.width + icon.width), Std.int(optionText.height), 0);
+				hitbox.sprTracker = optionText;
+				hitbox.yAdd += optionText.height;
+				hitbox.ID = i;
+				add(hitbox);
+				optionHitboxes.push(hitbox);
 			}
 			else optionText.alignment = CENTERED;
 		}
@@ -156,6 +172,11 @@ class CreditsState extends MusicBeatState
 		descBox.sprTracker = descText;
 		add(descText);
 
+		#if mobile
+		backButton = new BackButton();
+		add(backButton);
+		#end
+
 		bg.color = CoolUtil.colorFromString(creditsStuff[curSelected][4]);
 		intendedColor = bg.color;
 		changeSelection();
@@ -173,8 +194,56 @@ class CreditsState extends MusicBeatState
 
 		if(!quitting)
 		{
+			var pressedAccept:Bool = controls.ACCEPT;
 			if(creditsStuff.length > 1)
 			{
+				if (!swiping) {
+					for (option in optionHitboxes) {
+						if (TouchUtil.overlaps(option) && TouchUtil.justReleased) {
+							if (curSelected != option.ID) {
+								curSelected = option.ID;
+								changeSelection();
+							}
+							else {
+								pressedAccept = true;
+							}
+						}
+					}
+				}
+
+				if (TouchUtil.pressed) {
+					@:privateAccess
+					var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
+					var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(FlxG.camera).y;
+					if (Math.abs(offset) > 10) {
+						if (!swiping) {
+							prevSelected = curSelected;
+						}
+						swiping = true;
+						floatSelected = prevSelected + offset * 0.008;
+						for (num => item in grpOptions) {
+							item.targetY = num - floatSelected;
+						}
+						var boundSelected:Int = Math.round(FlxMath.bound(floatSelected, 0, grpOptions.length - 1));
+						var lol:Int = 0;
+						while (unselectableCheck(boundSelected)) {
+							boundSelected = Std.int(FlxMath.bound(boundSelected + (offset >= 0 ? 1 : -1), lol, grpOptions.length - 1));
+							prevSelected = Std.int(FlxMath.bound(prevSelected + (offset >= 0 ? 1 : -1), lol, grpOptions.length - 1));
+							if (unselectableCheck(lol)) lol++;
+						}
+						if (boundSelected != curSelected) {
+							curSelected = boundSelected;
+							changeSelection();
+						}
+					}
+				}
+				else if (swiping) {
+					swiping = false;
+					for (num => item in grpOptions) {
+						item.targetY = num - curSelected;
+					}
+				}
+
 				var shiftMult:Int = 1;
 				if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
 
@@ -205,23 +274,23 @@ class CreditsState extends MusicBeatState
 				}
 			}
 
-			if(controls.ACCEPT && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) {
+			if(pressedAccept && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) {
 				CoolUtil.browserLoad(creditsStuff[curSelected][3]);
 			}
-			if (controls.BACK)
+			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
 			{
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState());
 				quitting = true;
 			}
 		}
-		
+
 		for (item in grpOptions.members)
 		{
 			if(!item.bold)
 			{
 				var lerpVal:Float = Math.exp(-elapsed * 12);
-				if(item.targetY == 0)
+				if(item.ID == curSelected)
 				{
 					var lastX:Float = item.x;
 					item.screenCenter(X);
@@ -257,10 +326,10 @@ class CreditsState extends MusicBeatState
 
 		for (num => item in grpOptions.members)
 		{
-			item.targetY = num - curSelected;
+			if (!swiping) item.targetY = num - curSelected;
 			if(!unselectableCheck(num)) {
 				item.alpha = 0.6;
-				if (item.targetY == 0) {
+				if (item.ID == curSelected) {
 					item.alpha = 1;
 				}
 			}
@@ -306,6 +375,7 @@ class CreditsState extends MusicBeatState
 	#end
 
 	private function unselectableCheck(num:Int):Bool {
+		if (creditsStuff[num] == null) return true;
 		return creditsStuff[num].length <= 1;
 	}
 }

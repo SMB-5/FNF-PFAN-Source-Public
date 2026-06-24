@@ -26,7 +26,13 @@ class GalleryState extends MusicBeatState {
 
 	// UI STUFF
 	var currentIndex:Int = 0;
+	var floatIndex:Float = 0;
+	var previousIndex:Int = 0;
 	var allowInputs:Bool = true;
+	var swiping:Bool = false;
+	#if mobile
+	var backButton:BackButton;
+	#end
 
 	var uiGroup:FlxSpriteGroup;
 	var hideUI:Bool = false;
@@ -61,6 +67,7 @@ class GalleryState extends MusicBeatState {
 		itemGroup = new FlxTypedGroup<GalleryImage>();
 		uiGroup = new FlxSpriteGroup();
 
+		// reminder: make the gaps between images consistent cuz it pmo
 		for (i in 0...imagePaths.length) {
 			var newItem = new GalleryImage();
 			newItem.loadGraphic(Paths.image(imagePath + imagePaths[i]));
@@ -85,31 +92,26 @@ class GalleryState extends MusicBeatState {
 		add(itemGroup);
 
 		descriptionText = new FlxText(50, -100, FlxG.width - 100, imageDescriptions[currentIndex]);
-		descriptionText.setFormat("vcr.ttf", 32, 0xffffff, "center");
+		descriptionText.setFormat("vcr.ttf", 32, 0xffffff, CENTER);
 		descriptionText.screenCenter();
 		descriptionText.y += 275;
 		uiGroup.add(descriptionText);
 
 		titleText = new FlxText(50, -100, FlxG.width - 100, imageTitle[currentIndex]);
 		titleText.screenCenter();
-		titleText.setFormat(Paths.font("vcr.ttf"), 32, 0xffffff, "center");
+		titleText.setFormat(Paths.font("vcr.ttf"), 32, 0xffffff, CENTER);
 		titleText.y -= 275;
 		uiGroup.add(titleText);
 
-		//backspace = new FlxSprite(0, 560).loadGraphic(Paths.image("gallery/ui/exit"));
-		//uiGroup.add(backspace);
-
 		add(uiGroup);
+
+		#if mobile
+		backButton = new BackButton(null, 10);
+		add(backButton);
+		#end
 
 		persistentUpdate = true;
 		changeSelection();
-
-		if (imageData != null && imageData.length > currentIndex) {
-			//background.color = colorFromString(imageData[currentIndex].color);
-			//intendedColor = background.color;
-		} else {
-			trace("Error: imageData or currentIndex is invalid when setting background color.");
-		}
 
 		super.create();
 	}
@@ -117,16 +119,62 @@ class GalleryState extends MusicBeatState {
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if ((controls.UI_LEFT_P || controls.UI_RIGHT_P) && allowInputs) {
-			changeSelection(controls.UI_LEFT_P ? -1 : 1);
-			FlxG.sound.play(Paths.sound("scrollMenu"));
-		}
+		if (allowInputs) {
+			var pressedAccept:Bool = controls.ACCEPT;
+			if (!swiping) {
+				for (option in itemGroup) {
+					if (TouchUtil.overlaps(option) && TouchUtil.justReleased) {
+						if (currentIndex != option.ID) {
+							currentIndex = option.ID;
+							changeSelection();
+						}
+						else {
+							pressedAccept = true;
+						}
+					}
+				}
+			}
 
-		if (controls.BACK && allowInputs) {
-			allowInputs = false;
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
-			//FlxFlicker.flicker(backspace, 0.4, 0.10, false);
+			if (TouchUtil.pressed) {
+				@:privateAccess
+				var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
+				var offset:Float = leftInput.justPressedPosition.x - TouchUtil.input.getScreenPosition(FlxG.camera).x;
+				if (Math.abs(offset) > 10) {
+					if (!swiping) {
+						previousIndex = currentIndex;
+					}
+					swiping = true;
+					floatIndex = previousIndex + offset * 0.003;
+					for (num => item in itemGroup) {
+						item.posX = num - floatIndex;
+					}
+					var boundedIndex:Int = Math.round(FlxMath.bound(floatIndex, 0, itemGroup.length - 1));
+					if (boundedIndex != currentIndex) {
+						currentIndex = boundedIndex;
+						changeSelection();
+					}
+				}
+			}
+			else if (swiping) {
+				swiping = false;
+				for (num => item in itemGroup) {
+					item.posX = num - currentIndex;
+				}
+			}
+
+			if (controls.UI_LEFT_P || controls.UI_RIGHT_P) {
+				changeSelection(controls.UI_LEFT_P ? -1 : 1);
+				FlxG.sound.play(Paths.sound("scrollMenu"));
+			}
+
+			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
+				allowInputs = false;
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				MusicBeatState.switchState(new MainMenuState());
+			}
+
+			if (pressedAccept)
+				CoolUtil.browserLoad(linkOpen[currentIndex]);
 		}
 
 		if (FlxG.keys.justPressed.X && !hideUI) {
@@ -136,29 +184,12 @@ class GalleryState extends MusicBeatState {
 			hideUI = false;
 			FlxTween.tween(uiGroup, {alpha: 1}, 0.2, {ease: FlxEase.linear});
 		}
-
-		if (controls.ACCEPT && allowInputs)
-			CoolUtil.browserLoad(linkOpen[currentIndex]);
 	}
 
 	private function changeSelection(i:Int = 0) {
 		currentIndex = FlxMath.wrap(currentIndex + i, 0, imageTitle.length - 1);
 
 		if (imageData != null && currentIndex >= 0 && currentIndex < imageData.length) {
-			//var newColor:FlxColor = colorFromString(imageData[currentIndex].color);
-
-			//if (newColor != intendedColor) {
-				//if (colorTween != null) {
-					//colorTween.cancel();
-				//}
-				//intendedColor = newColor;
-				//colorTween = FlxTween.color(background, 1, background.color, intendedColor, {
-					//onComplete: function(twn:FlxTween) {
-						//colorTween = null;
-					//}
-				//});
-			//}
-
 			descriptionText.text = imageDescriptions[currentIndex];
 			titleText.text = imageTitle[currentIndex];
 		} else {
@@ -167,7 +198,7 @@ class GalleryState extends MusicBeatState {
 
 		var change = 0;
 		for (item in itemGroup) {
-			item.posX = change++ - currentIndex;
+			if (!swiping) item.posX = change++ - currentIndex;
 			item.alpha = (item.ID == currentIndex) ? 1 : 0.6;
 		}
 	}

@@ -84,39 +84,79 @@ class PsychUIDropDownMenu extends PsychUIInputText
 
 	var _items:Array<PsychUIDropDownItem> = [];
 	public var curScroll:Int = 0;
+	var _framesSinceLastHold:Int = 0;
+	#if mobile
+	var _swiping:Bool = false;
+	var _prevScroll:Int = 0;
+	#end
 	override function update(elapsed:Float)
 	{
 		var lastFocus = PsychUIInputText.focusOn;
 		super.update(elapsed);
-		if(FlxG.mouse.justPressed)
+		if(TouchUtil.pressed)
 		{
-			if(FlxG.mouse.overlaps(button, camera))
+			_framesSinceLastHold++;
+			if(TouchUtil.overlaps(button, camera))
 			{
 				button.animation.play('pressed', true);
-				if(lastFocus != this)
-					PsychUIInputText.focusOn = this;
-				else if(PsychUIInputText.focusOn == this)
-					PsychUIInputText.focusOn = null;
+				if (TouchUtil.justPressed)
+				{
+					if(lastFocus != this)
+						PsychUIInputText.focusOn = this;
+					else if(PsychUIInputText.focusOn == this)
+						PsychUIInputText.focusOn = null;
+				}
 			}
+			else if (button.animation.curAnim != null && button.animation.curAnim.name != 'normal') button.animation.play('normal', true);
 		}
-		else if(FlxG.mouse.released && button.animation.curAnim != null && button.animation.curAnim.name != 'normal') button.animation.play('normal', true);
+		else if(TouchUtil.released)
+		{
+			// this sucks
+			if (TouchUtil.justReleased && _framesSinceLastHold <= 7 && !TouchUtil.overlaps(this, camera) && !TouchUtil.overlaps(button, camera) && PsychUIInputText.focusOn == this)
+			{
+				_keepFocusOnHold = false;
+				PsychUIInputText.focusOn = null;
+			}
+			_framesSinceLastHold = 0;
+			if (button.animation.curAnim != null && button.animation.curAnim.name != 'normal')
+				button.animation.play('normal', true);
+		}
 
 		if(lastFocus != PsychUIInputText.focusOn)
 		{
+			_keepFocusOnHold = true;
 			showDropDown(PsychUIInputText.focusOn == this);
+			if (PsychUIInputText.focusOn != this) _swiping = false;
 		}
 		else if(PsychUIInputText.focusOn == this)
 		{
+			#if !mobile
 			var wheel:Int = FlxG.mouse.wheel;
 			if(FlxG.keys.justPressed.UP) wheel++;
 			if(FlxG.keys.justPressed.DOWN) wheel--;
 			if(wheel != 0) showDropDown(true, curScroll - wheel, _curFilter);
+			#else
+			if (TouchUtil.pressed) {
+				var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
+				var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(camera).y;
+				if (Math.abs(offset) > 30) {
+					if (!_swiping) {
+						_prevScroll = curScroll;
+					}
+					_swiping = true;
+					showDropDown(true, _prevScroll + Math.floor(offset / 50), _curFilter);
+				}
+			}
+			else if (_swiping) {
+				_swiping = false;
+			}
+			#end
 		}
 	}
 
 	private function showDropDownClickFix()
 	{
-		if(FlxG.mouse.justPressed)
+		if(TouchUtil.justPressed)
 		{
 			for (item in _items) //extra update to fix a little bug where it wouldnt click on any option if another input text was behind the drop down
 				if(item != null && item.active && item.visible)
@@ -251,9 +291,9 @@ class PsychUIDropDownItem extends FlxSpriteGroup
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if(FlxG.mouse.justMoved || FlxG.mouse.justPressed || forceNextUpdate)
+		if(#if !mobile FlxG.mouse.justMoved || #end TouchUtil.justPressed || forceNextUpdate)
 		{
-			var overlapped:Bool = (FlxG.mouse.overlaps(bg, camera));
+			var overlapped:Bool = (TouchUtil.overlaps(bg, camera));
 
 			var style = overlapped ? hoverStyle : normalStyle;
 			bg.color = style.bgColor;
@@ -261,7 +301,7 @@ class PsychUIDropDownItem extends FlxSpriteGroup
 			bg.alpha = style.bgAlpha;
 			forceNextUpdate = false;
 
-			if(overlapped && FlxG.mouse.justPressed)
+			if(overlapped && TouchUtil.justPressed)
 				onClick();
 		}
 		

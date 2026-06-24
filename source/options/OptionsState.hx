@@ -8,6 +8,7 @@ class OptionsState extends MusicBeatState
 	var options:Array<String> = [
 		'Note Colors',
 		'Controls',
+		#if mobile 'Mobile', #end
 		'Adjust Delay and Combo',
 		'Graphics',
 		'Visuals',
@@ -26,6 +27,10 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.NotesColorSubState());
 			case 'Controls':
 				openSubState(new options.ControlsSubState());
+			#if mobile
+			case 'Mobile':
+				openSubState(new mobile.options.MobileSettingsSubState());
+			#end
 			case 'Graphics':
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals':
@@ -41,6 +46,9 @@ class OptionsState extends MusicBeatState
 
 	var selectorLeft:Alphabet;
 	var selectorRight:Alphabet;
+	#if mobile
+	var backButton:BackButton;
+	#end
 
 	override function create()
 	{
@@ -64,6 +72,7 @@ class OptionsState extends MusicBeatState
 			var optionText:Alphabet = new Alphabet(0, 0, Language.getPhrase('options_$option', option), true);
 			optionText.screenCenter();
 			optionText.y += (92 * (num - (options.length / 2))) + 45;
+			optionText.ID = num;
 			grpOptions.add(optionText);
 		}
 
@@ -71,6 +80,11 @@ class OptionsState extends MusicBeatState
 		add(selectorLeft);
 		selectorRight = new Alphabet(0, 0, '<', true);
 		add(selectorRight);
+
+		#if mobile
+		backButton = new BackButton();
+		add(backButton);
+		#end
 
 		changeSelection();
 		ClientPrefs.saveSettings();
@@ -90,12 +104,27 @@ class OptionsState extends MusicBeatState
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		var pressedAccept:Bool = controls.ACCEPT;
+		for (option in grpOptions) {
+			if (TouchUtil.overlaps(option, FlxG.camera)) {
+				#if mobile if (TouchUtil.justReleased) { #end
+				if (curSelected != option.ID) {
+					curSelected = option.ID;
+					changeSelection();
+				}
+				else #if !mobile if (TouchUtil.justPressed) #end {
+					pressedAccept = true;
+				}
+				#if mobile } #end
+			}
+		}
+
 		if (controls.UI_UP_P)
 			changeSelection(-1);
 		if (controls.UI_DOWN_P)
 			changeSelection(1);
 
-		if (controls.BACK)
+		if (controls.BACK #if android || FlxG.android.justPressed.BACK #end #if mobile || backButton.justPressed #end)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(onPlayState)
@@ -106,7 +135,7 @@ class OptionsState extends MusicBeatState
 			}
 			else MusicBeatState.switchState(new MainMenuState());
 		}
-		else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
+		else if (pressedAccept) openSelectedSubstate(options[curSelected]);
 	}
 	
 	function changeSelection(change:Int = 0)

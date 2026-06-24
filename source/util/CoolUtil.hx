@@ -1,6 +1,7 @@
 package util;
 
 import externs.WinAPI;
+import haxe.io.Path;
 import openfl.utils.Assets;
 import lime.utils.Assets as LimeAssets;
 
@@ -196,7 +197,7 @@ class CoolUtil
 				text.borderStyle = NONE;
 		}
 	}
-	public static function exists(path:String):Bool{
+	public static function exists(path:String):Bool {
 		#if desktop
 		return FileSystem.exists(path);
         #else
@@ -205,11 +206,27 @@ class CoolUtil
 	}
 
 	//Same as above but for getting text from a file.
-	public static function getText(path:String):String{
+	public static function getText(path:String):String {
 		#if desktop
 		return File.getContent(path);
         #else
         return Assets.getText(path);
 		#end
+	}
+
+	// like FileSystem.deleteDirectory but works for non-empty directories and removes everything in it
+	public static function deleteDirectory(path:String) {
+		if (!FileSystem.exists(path) || !FileSystem.isDirectory(path)) return;
+		try {
+			for (file in FileSystem.readDirectory(path)) {
+				var fullPath:String = Path.join([path, file]);
+				if (FileSystem.isDirectory(fullPath)) CoolUtil.deleteDirectory(fullPath);
+				else FileSystem.deleteFile(fullPath);
+			}
+			FileSystem.deleteDirectory(path);
+		}
+		catch(e:Dynamic) {
+			throw e;
+		}
 	}
 }

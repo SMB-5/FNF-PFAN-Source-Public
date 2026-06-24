@@ -425,7 +425,7 @@ class ResultsSubstate extends MusicBeatSubstate
 		badTxt.text = Std.string(lerpBad);
 		shitTxt.text = Std.string(lerpShit);
 
-		if (controls.ACCEPT || controls.BACK)
+		if (controls.ACCEPT || controls.BACK || TouchUtil.justPressed)
 		{
 			if (canEnd) {
 				endResults();

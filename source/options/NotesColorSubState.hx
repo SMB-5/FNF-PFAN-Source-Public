@@ -45,6 +45,11 @@ class NotesColorSubState extends MusicBeatSubstate
 	// controller support
 	var controllerPointer:FlxSprite;
 	var _lastControllerMode:Bool = false;
+
+	#if mobile
+	var backButton:BackButton;
+	#end
+
 	var tipTxt:FlxText;
 
 	public function new() {
@@ -163,6 +168,12 @@ class NotesColorSubState extends MusicBeatSubstate
 		controllerPointer.screenCenter();
 		controllerPointer.alpha = 0.6;
 		add(controllerPointer);
+
+		#if mobile
+		backButton = new BackButton(20, FlxG.height - 250);
+		backButton.flipX = true;
+		add(backButton);
+		#end
 		
 		FlxG.mouse.visible = !controls.controllerMode;
 		controllerPointer.visible = controls.controllerMode;
@@ -184,7 +195,7 @@ class NotesColorSubState extends MusicBeatSubstate
 		NUMPADSEVEN => '7', NUMPADEIGHT => '8', NUMPADNINE => '9', A => 'A', B => 'B', C => 'C', D => 'D', E => 'E', F => 'F'];
 
 	override function update(elapsed:Float) {
-		if (controls.BACK) {
+		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
 			FlxG.mouse.visible = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			close();

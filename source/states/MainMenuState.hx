@@ -23,9 +23,11 @@ class MainMenuState extends MusicBeatState
 		'CONFIG'
 	];
 
+	var bgHitboxes:Array<FlxObject> = [];
+
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
-	var textbg:FlxSprite;
+	var textBG:FlxSprite;
 
 	var stickerSubState:Bool;
 
@@ -64,18 +66,11 @@ class MainMenuState extends MusicBeatState
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
 		var bg:FlxSprite = new FlxSprite(-150, -150).loadGraphic(Paths.image('menuWall'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
-		//bg.scrollFactor.set(0, yScroll);
-		//bg.setGraphicSize(Std.int(bg.width * 1.175));
-		//bg.updateHitbox();
-		//bg.screenCenter();
 		add(bg);
 
-		//camFollow = new FlxObject(0, 0, 1, 1);
-		//add(camFollow);
-
-		textbg = new FlxSprite().makeGraphic(Std.int(450), Std.int(75), FlxColor.BLACK);
-		add(textbg);
-		textbg.antialiasing = ClientPrefs.data.antialiasing;
+		textBG = new FlxSprite().makeGraphic(450, 75, FlxColor.BLACK);
+		add(textBG);
+		textBG.antialiasing = ClientPrefs.data.antialiasing;
 
 		menuItems = new FlxTypedGroup<FlxText>();
 		add(menuItems);
@@ -87,9 +82,6 @@ class MainMenuState extends MusicBeatState
 			menuItem.antialiasing = ClientPrefs.data.antialiasing;
 			menuItem.text = Language.getPhrase('menu_${optionShit[i]}', optionShit[i]);
 			menuItems.add(menuItem);
-			var scr:Float = (optionShit.length - 4) * 0.135;
-			if (optionShit.length < 6)
-				scr = 0;
 			var color = FlxColor.WHITE;
 
 			if (optionShit[i] == 'STORY MODE' || optionShit[i] == 'AWARDS')
@@ -98,6 +90,11 @@ class MainMenuState extends MusicBeatState
 			}
 
 			menuItem.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, color, LEFT);
+
+			var hitbox = new FlxObject(0, menuItem.getMidpoint().y - 37.5, textBG.width, textBG.height);
+			hitbox.ID = i;
+			add(hitbox);
+			bgHitboxes.push(hitbox);
 		}
 
 		bf = new FlxSprite(650, 100);
@@ -233,20 +230,28 @@ class MainMenuState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
+			var pressedAccept:Bool = controls.ACCEPT;
+			for (hitbox in bgHitboxes) {
+				if (TouchUtil.overlaps(hitbox, FlxG.camera)) {
+					#if mobile if (TouchUtil.justPressed) { #end
+					if (curSelected != hitbox.ID) {
+						curSelected = hitbox.ID;
+						changeItem();
+					}
+					else #if !mobile if (TouchUtil.justPressed) #end {
+						pressedAccept = true;
+					}
+					#if mobile } #end
+				}
+			}
+
 			if (controls.UI_UP_P)
 				changeItem(-1);
 
 			if (controls.UI_DOWN_P)
 				changeItem(1);
 
-			//if (controls.BACK)
-			//{
-				//selectedSomethin = true;
-				//FlxG.sound.play(Paths.sound('cancelMenu'));
-				//MusicBeatState.switchState(new TitleState());
-			//}
-
-			if (controls.ACCEPT)
+			if (pressedAccept)
 			{
 				if (optionShit[curSelected] == 'STORY MODE' || optionShit[curSelected] == 'AWARDS')
 				{
@@ -360,8 +365,8 @@ class MainMenuState extends MusicBeatState
 
 		//camFollow.setPosition(menuItems.members[curSelected].getGraphicMidpoint().x,
 		menuItems.members[curSelected].getGraphicMidpoint().y - (menuItems.length > 4 ? menuItems.length * 8 : 0);
-		textbg.x = 0;
-		textbg.y = menuItems.members[curSelected].getMidpoint().y - 37.5;
+		textBG.x = 0;
+		textBG.y = menuItems.members[curSelected].getMidpoint().y - 37.5;
 	}
 
 	function getItemColor(index:Int):FlxColor
