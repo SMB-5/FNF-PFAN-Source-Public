@@ -214,7 +214,7 @@ setting_hold_note_splashes: "Hold Note Splashes"
 description_hold_note_splashes: "If unchecked, Splashes won't appear on the notes when holding a sustain."
 
 setting_note_quantization: "Note Quantization"
-description_note_splash_opacity: "If checked, colors the notes based on their snap."
+description_note_quantization: "If checked, colors the notes based on their snap."
 
 setting_strum_background_opacity: "Strum Background Opacity"
 description_strum_background_opacity: "How much transparent should the Strumline Background be?"
