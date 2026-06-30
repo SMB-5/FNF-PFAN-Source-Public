@@ -615,7 +615,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, optionsArray.length - 1);
 
-		descText.text = optionsArray[curSelected].description;
+		var desc:String = optionsArray[curSelected].description;
+		if (optionsArray[curSelected].customizable) {
+			var input:String = Language.getPhrase('customizable_description', '(This setting is customizable, click the cog!)');
+			if (Controls.instance.controllerMode) input = Language.getPhrase('customizable_description_controller', '(This setting is customizable, press L3!)');
+			desc = '$input\n$desc';
+		}
+		descText.text = desc;
 		descText.screenCenter(Y);
 		descText.y += 270;
 

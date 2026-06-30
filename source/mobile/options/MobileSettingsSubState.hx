@@ -6,7 +6,7 @@ class MobileSettingsSubState extends BaseOptionsMenu
 {
 	public function new()
 	{
-		title = 'Mobile Settings';
+		title = Language.getPhrase('mobile_menu', 'Mobile Settings');
 		rpcTitle = 'Mobile Settings Menu';
 
 		var option:Option = new Option('Edit Mobile Controls',

@@ -65,26 +65,26 @@ class MobileControlsSubState extends MusicBeatSubstate
 		rightArrow.animation.play('idle');
 		add(rightArrow);
 
-		exitButton = new PsychUIButton(FlxG.width - 300, 50, 'Save and Exit', null, 250, 80);
+		exitButton = new PsychUIButton(FlxG.width - 300, 50, Language.getPhrase('mobile_controls_save_and_exit', 'Save and Exit'), null, 250, 80);
 		exitButton.normalStyle.bgColor = 0xFF00F24E;
 		exitButton.text.size = 24;
 		exitButton.text.y -= 7;
 		add(exitButton);
 
-		optionsButton = new PsychUIButton(exitButton.x - 280, 50, 'Control Options', null, 250, 80);
+		optionsButton = new PsychUIButton(exitButton.x - 280, 50, Language.getPhrase('mobile_controls_control_options', 'Control Options'), null, 250, 80);
 		optionsButton.normalStyle.bgColor = 0xFF757171;
 		optionsButton.text.size = 24;
 		optionsButton.text.y -= 7;
 		optionsButton.kill();
 		add(optionsButton);
 
-		hideButton = new PsychUIButton(20, optionsButton.y + 110, 'Hide UI', null, 250, 80);
+		hideButton = new PsychUIButton(20, optionsButton.y + 110, Language.getPhrase('mobile_controls_hide_ui', 'Hide UI'), null, 250, 80);
 		hideButton.normalStyle.bgColor = 0xFF4AA3F0;
 		hideButton.text.size = 24;
 		hideButton.text.y -= 7;
 		add(hideButton);
 
-		resetButton = new PsychUIButton(exitButton.x, exitButton.y + 110, 'Reset Positions', null, 250, 80);
+		resetButton = new PsychUIButton(exitButton.x, exitButton.y + 110, Language.getPhrase('mobile_controls_reset_positions', 'Reset Positions'), null, 250, 80);
 		resetButton.normalStyle.bgColor = 0xFFFF0000;
 		resetButton.text.size = 24;
 		resetButton.text.y -= 7;

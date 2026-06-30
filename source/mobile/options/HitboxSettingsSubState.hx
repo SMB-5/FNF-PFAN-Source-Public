@@ -18,7 +18,7 @@ class HitboxSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Show Hints',
-			'Whether to show the hitbox hints while idling.',
+			'Whether to show the hitbox hints while idling or not.',
 			'hitboxHints',
 			BOOL);
 		addOption(option);

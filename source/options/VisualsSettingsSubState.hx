@@ -122,7 +122,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Subtitles',
-			"If Checked, Subtitles will appear if a Character Speaks or Sings Lyrics.",
+			"If checked, subtitles will appear if a character speaks or sings lyrics.",
 			'subtitles',
 			BOOL);
 		addOption(option);
