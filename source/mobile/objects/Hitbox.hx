@@ -53,7 +53,7 @@ class Hitbox extends MobileInputManager
 		else {
 			button.label.makeGraphic(1, 1, 0);
 		}
-		button.alpha = ClientPrefs.data.controlAlpha;
+		button.label.alpha = ClientPrefs.data.controlAlpha;
 		button.changeLabelAlpha = false;
 
 		button.onDown.callback = function() {

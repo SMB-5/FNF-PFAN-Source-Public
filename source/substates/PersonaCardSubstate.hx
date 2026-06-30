@@ -8,20 +8,19 @@ class PersonaCardSubstate extends MusicBeatSubstate
 	var bg:FlxSprite;
 	var cardBG:FlxSprite;
 	var titleBG:FlxSprite;
-	var Prompt:String;
+	var prompt:String;
 	var promptText:FlxText;
 	var titleText:FlxText;
 	var cardText:FlxText;
-	var acceptIcon:FlxSprite;
-	var confirmText:FlxText;
+	var acceptIcon:KeyIcon;
 	#if mobile
 	var backButton:BackButton;
 	#end
 
-	public function new(Prompt:String)
+	public function new(prompt:String)
 	{
 		super();
-		this.Prompt = Prompt;
+		this.prompt = prompt;
 	}
 
 	override public function create():Void
@@ -36,64 +35,34 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(bg);
 
 		cardBG = new FlxSprite().makeGraphic(853, 480, FlxColor.GRAY);
+		cardBG.screenCenter(Y);
+		cardBG.alpha = 0;
 		add(cardBG);
 
 		titleBG = new FlxSprite().makeGraphic(750, 40, FlxColor.WHITE);
-		add(titleBG);
-
-		//titleBG.screenCenter(X);
-
-		titleBG.x = 0;
 		titleBG.alpha = 0;
-
-		//cardBG.screenCenter(X);
-		cardBG.screenCenter(Y);
-
-		cardBG.x = 0;
-		cardBG.alpha = 0;
+		add(titleBG);
 
 		promptText = new FlxText(20, 130, FlxG.width,"",32);
 		promptText.setFormat("p5hatty-1.ttf", 48, FlxColor.WHITE, LEFT);
+		promptText.alpha = 0;
 		add(promptText);
 
-		promptText.alpha = 0;
-
-		titleText = new FlxText(0, 200, FlxG.width,"",32);
+		titleText = new FlxText(-200, 200, FlxG.width,"",32);
 		titleText.setFormat("p5hatty-1.ttf", 32, FlxColor.BLACK, CENTER);
-		add(titleText);
-
-		//titleText.screenCenter(X);
-
-		titleText.x = -200;
 		titleText.alpha = 0;
+		add(titleText);
 
 		titleBG.y = titleText.y - 10;
 
 		cardText = new FlxText(0, 270, cardBG.width - 50,"",32);
 		cardText.setFormat("p5hatty-1.ttf", 32, FlxColor.WHITE, LEFT);
+		cardText.alpha = 0;
 		add(cardText);
 
-		cardText.alpha = 0;
-
-		//cardText.screenCenter(X);
-
-		var acceptKeyName:String = Std.string(ClientPrefs.keyBinds.get('accept')[1]);
-
-		acceptIcon = new FlxSprite(20, FlxG.height - 44).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + acceptKeyName));
-		acceptIcon.setGraphicSize(Std.int(acceptIcon.width * 0.15));
-		acceptIcon.updateHitbox();
-		acceptIcon.antialiasing = true;
-		add(acceptIcon);
-
+		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 1, 'ui_close');
 		acceptIcon.alpha = 0;
-		acceptIcon.y = cardBG.y + 440;
-
-		confirmText = new FlxText(0, FlxG.height - 39, 0, Language.getPhrase("ui_close"), 24);
-		confirmText.setFormat("p5hatty-1.ttf", 32, FlxColor.WHITE, RIGHT);
-		add(confirmText);
-
-		confirmText.y = acceptIcon.y + 5;
-		confirmText.alpha = 0;
+		add(acceptIcon);
 
 		#if mobile
 		backButton = new BackButton();
@@ -107,17 +76,16 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		FlxTween.tween(titleText, {x: 0, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(cardText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(acceptIcon, {x: 920, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
-		FlxTween.tween(confirmText, {x: acceptIcon.x + acceptIcon.width + 10, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 
 		super.create();
 
-		if (Prompt == "WarningDemo")
+		if (prompt == "WarningDemo")
 		{
 			promptText.text = "INFORMATION";
 			titleText.text = "Before You Start The Demo";
 			cardText.text = "This Mod is still in active development so a lot of things present might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do for the Mod and does not represent the Final Mod.\n\nPlease also note that this Mod contains Flashing Lights which can be disabled at Anytime in the Config Menu.";
 		}
-		else if (Prompt == "LockedDemo")
+		else if (prompt == "LockedDemo")
 		{
 			promptText.text = "INFORMATION";
 			titleText.text = "Not Available in the Demo";
@@ -133,9 +101,6 @@ class PersonaCardSubstate extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
-		//tweens don't move the text for some reason
-		confirmText.x = acceptIcon.x + acceptIcon.width + 10;
-		// reminder: idk where to put this but refactor the button icon stuff into a class
 		if (controls.ACCEPT #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed || TouchUtil.justReleased && !TouchUtil.overlaps(cardBG) #end)
 		{
 			FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -145,7 +110,6 @@ class PersonaCardSubstate extends MusicBeatSubstate
 			FlxTween.tween(promptText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleText, {x: 400, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(acceptIcon, {x: 1220, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
-			FlxTween.tween(confirmText, {x: acceptIcon.x + acceptIcon.width + 10, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(cardText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut,
 			onComplete: function(twn:FlxTween)
 			{

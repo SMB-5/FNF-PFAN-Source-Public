@@ -190,130 +190,38 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length) curSelected = 0;
 		lerpSelected = curSelected;
 
-		var upKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_up')[1]);
-		var downKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_down')[1]);
-		var leftKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_left')[1]);
-		var rightKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_right')[1]);
-		var acceptKeyName:String = Std.string(ClientPrefs.keyBinds.get('accept')[1]);
-		var backKeyName:String = Std.string(ClientPrefs.keyBinds.get('back')[1]);
-		var resetKeyName:String = Std.string(ClientPrefs.keyBinds.get('reset')[0]);
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'movement', 1, 'ui_select', 0.1);
+		movementIcon.icons[2].y = movementIcon.y - 25;
+		for (i in 0...movementIcon.icons.length) {
+			if (i == 0) continue;
+			movementIcon.icons[i].x -= i == 3 ? 10 : 5;
+		}
+		movementIcon.iconText.x -= 15;
+		movementIcon.iconText.y -= 5;
+		add(movementIcon);
 
-		var moveUpIcon:FlxSprite = new FlxSprite(12, FlxG.height - 49).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + upKeyName));
-		moveUpIcon.setGraphicSize(Std.int(moveUpIcon.width * 0.1));
-		moveUpIcon.updateHitbox();
-		moveUpIcon.antialiasing = true;
-		add(moveUpIcon);
-
-		var moveDownIcon:FlxSprite = new FlxSprite(12, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + downKeyName));
-		moveDownIcon.setGraphicSize(Std.int(moveDownIcon.width * 0.1));
-		moveDownIcon.updateHitbox();
-		moveDownIcon.antialiasing = true;
-		add(moveDownIcon);
-
-		var moveLeftIcon:FlxSprite = new FlxSprite(12, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + leftKeyName));
-		moveLeftIcon.setGraphicSize(Std.int(moveLeftIcon.width * 0.1));
-		moveLeftIcon.updateHitbox();
-		moveLeftIcon.antialiasing = true;
-		add(moveLeftIcon);
-
-		var moveRightIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + rightKeyName));
-		moveRightIcon.setGraphicSize(Std.int(moveRightIcon.width * 0.1));
-		moveRightIcon.updateHitbox();
-		moveRightIcon.antialiasing = true;
-		add(moveRightIcon);
-
-		moveDownIcon.x = moveLeftIcon.x + moveLeftIcon.width + 5;
-		moveUpIcon.x = moveDownIcon.x + (moveDownIcon.width - moveUpIcon.width) / 2;
-		moveRightIcon.x = moveDownIcon.x + moveDownIcon.width + 5;
-
-		var moveText:FlxText = new FlxText(0, FlxG.height - 24, 0, Language.getPhrase("ui_select"), 24);
-		moveText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(moveText);
-
-		moveText.x = moveRightIcon.x + moveRightIcon.width + 5;
-
-		var acceptIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + acceptKeyName));
-		acceptIcon.setGraphicSize(Std.int(acceptIcon.width * 0.1));
-		acceptIcon.updateHitbox();
-		acceptIcon.antialiasing = true;
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1);
+		acceptIcon.iconText.x -= 5;
+		acceptIcon.iconText.y -= 5;
 		add(acceptIcon);
 
-		acceptIcon.x = moveText.x + moveText.width + 5;
-
-		var confirmText:FlxText = new FlxText(0, FlxG.height - 24, 0, Language.getPhrase("ui_confirm"), 24);
-		confirmText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(confirmText);
-
-		confirmText.x = acceptIcon.x + acceptIcon.width + 5;
-
-		var backIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + backKeyName));
-		backIcon.setGraphicSize(Std.int(backIcon.width * 0.1));
-		backIcon.updateHitbox();
-		backIcon.antialiasing = true;
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1);
+		backIcon.iconText.x -= 5;
+		backIcon.iconText.y -= 5;
 		add(backIcon);
 
-		backIcon.x = confirmText.x + confirmText.width + 5;
+		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, 'control', 0, 'ui_gmodifiers', 0.1);
+		controlIcon.iconText.x -= 5;
+		controlIcon.iconText.y -= 5;
+		add(controlIcon);
 
-		var backText:FlxText = new FlxText(0, FlxG.height - 24, 0, Language.getPhrase("ui_back"), 24);
-		backText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(backText);
-
-		backText.x = backIcon.x + backIcon.width + 5;
-
-		var ctrlIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/control'));
-		ctrlIcon.setGraphicSize(Std.int(ctrlIcon.width * 0.1));
-		ctrlIcon.updateHitbox();
-		ctrlIcon.antialiasing = true;
-		add(ctrlIcon);
-
-		ctrlIcon.x = backText.x + backText.width + 5;
-
-		var ctrlText:FlxText = new FlxText(0, FlxG.height - 24, 0, Language.getPhrase("ui_gmodifiers"), 24);
-		ctrlText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(ctrlText);
-
-		ctrlText.x = ctrlIcon.x + ctrlIcon.width + 5;
-
-		var resetIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + resetKeyName));
-		resetIcon.setGraphicSize(Std.int(resetIcon.width * 0.1));
-		resetIcon.updateHitbox();
-		resetIcon.antialiasing = true;
+		var resetIcon:KeyIcon = new KeyIcon(controlIcon.x + controlIcon.width + 5, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1);
+		resetIcon.iconText.x -= 5;
+		resetIcon.iconText.y -= 5;
 		add(resetIcon);
+		#end
 
-		resetIcon.x = ctrlText.x + ctrlText.width + 5;
-
-		var resetText:FlxText = new FlxText(0, FlxG.height - 24, 0, Language.getPhrase("ui_reset"), 24);
-		resetText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(resetText);
-
-		resetText.x = resetIcon.x + resetIcon.width + 5;
-
-		var changeIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 24).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/tab'));
-		changeIcon.setGraphicSize(Std.int(changeIcon.width * 0.1));
-		changeIcon.updateHitbox();
-		changeIcon.antialiasing = true;
-		//add(changeIcon);
-
-		changeIcon.x = resetText.x + resetText.width + 5;
-
-		var changeText:FlxText = new FlxText(0, FlxG.height - 24, 0, Language.getPhrase("ui_change_character"), 24);
-		changeText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		//add(changeText);
-
-		changeText.x = changeIcon.x + changeIcon.width + 5;
-
-		//bottomBG = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
-		//bottomBG.alpha = 0.6;
-		//add(bottomBG);
-
-		//var leText:String = Language.getPhrase("freeplay_tip", "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.");
-		//bottomString = leText;
-		//var size:Int = 16;
-		//bottomText = new FlxText(bottomBG.x, bottomBG.y + 4, FlxG.width, leText, size);
-		//bottomText.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER);
-		//bottomText.scrollFactor.set();
-		//add(bottomText);
-		
 		player = new MusicPlayer(this);
 		add(player);
 
@@ -329,13 +237,18 @@ class FreeplayState extends MusicBeatState
 		}
 
 		#if mobile
-		backButton = new BackButton();
+		backButton = new BackButton(FlxG.width - 190, 70);
 		add(backButton);
 
 		virtualPad = new VirtualPad(NONE, A_B_C);
-		mobile.backend.MobileData.setControlColor(virtualPad);
 		for (a in virtualPad) a.IDs = [];
 		virtualPad.updateTrackedButtons();
+		virtualPad.buttonA.x = FlxG.width / 2 + 35;
+		virtualPad.buttonA.y = FlxG.height / 2 + 200;
+		virtualPad.buttonB.x = virtualPad.buttonA.x - 35;
+		virtualPad.buttonB.y = virtualPad.buttonA.y - 130;
+		virtualPad.buttonC.x = virtualPad.buttonB.x - 35;
+		virtualPad.buttonC.y = virtualPad.buttonB.y - 130;
 		add(virtualPad);
 		#end
 
@@ -693,6 +606,7 @@ class FreeplayState extends MusicBeatState
 				player.playingMusic = false;
 				player.switchPlayMusic();
 
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 				FlxTween.tween(FlxG.sound.music, {volume: 1}, 1);
 			}
 			else 

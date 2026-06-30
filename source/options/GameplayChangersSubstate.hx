@@ -215,7 +215,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		disallowedText.visible = false;
 		add(disallowedText);
 
-		glText = new FlxText(0, 270, FlxG.width - 100, Language.getPhrase('merciless_gl'), 32);
+		glText = new FlxText(0, 270, FlxG.width - 100, Language.getPhrase('merciless_gl', 'You will need to beat the song without breaking your combo or getting a Bad/Shit rating. Good Luck! You\'re gonna need it!'), 32);
 		glText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		glText.screenCenter(X);
 		glText.scrollFactor.set();

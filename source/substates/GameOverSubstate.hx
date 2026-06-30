@@ -186,13 +186,13 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if(!isEnding)
 		{
-			if (controls.ACCEPT #if mobile || TouchUtil.justPressed #end)
-			{
-				retryGameOver();
-			}
-			else if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
+			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
 			{
 				leaveGameOver();
+			}
+			else if (controls.ACCEPT #if mobile || TouchUtil.justPressed && !backButton.initiallyPressed #end)
+			{
+				retryGameOver();
 			}
 			else if (justPlayedLoop)
 			{

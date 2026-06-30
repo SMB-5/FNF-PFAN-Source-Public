@@ -2034,7 +2034,7 @@ class PlayState extends MusicBeatState
 			var songCalc:Float = (songLength - curTime);
 			if(ClientPrefs.data.timeBarType == 'Time Elapsed') songCalc = curTime;
 
-			var secondsTotal:Int = Math.floor(songCalc / 1000);
+			var secondsTotal:Int = Math.floor(songCalc / 1000 / playbackRate);
 			if(secondsTotal < 0) secondsTotal = 0;
 
 			if(ClientPrefs.data.timeBarType != 'Song Name')

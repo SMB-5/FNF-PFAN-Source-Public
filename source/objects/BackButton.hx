@@ -2,7 +2,8 @@ package objects;
 
 class BackButton extends FlxSprite
 {
-	public var justPressed:Bool = false;
+	public var initiallyPressed:Bool = false; // True after pressing immediately
+	public var justPressed:Bool = false; // True after animation finishes after pressing
 	public var onClick:Void->Void;
 	public function new(?x:Float, ?y:Float) {
 		x ??= FlxG.width - 225;
@@ -23,7 +24,10 @@ class BackButton extends FlxSprite
 	}
 
 	override function update(elapsed:Float) {
-		if (TouchUtil.overlaps(this) && TouchUtil.justPressed && animation.finished) animation.play('back');
+		if (TouchUtil.overlaps(this) && TouchUtil.justPressed && animation.finished) {
+			initiallyPressed = true;
+			animation.play('back');
+		}
 		else if (animation.finished) justPressed = false;
 		super.update(elapsed);
 	}

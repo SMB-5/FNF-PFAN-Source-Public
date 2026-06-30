@@ -145,59 +145,13 @@ class MainMenuState extends MusicBeatState
 		fnfVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fnfVer);
 
-		var upKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_up')[1]);
-		var downKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_down')[1]);
-		var leftKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_left')[1]);
-		var rightKeyName:String = Std.string(ClientPrefs.keyBinds.get('ui_right')[1]);
-		var acceptKeyName:String = Std.string(ClientPrefs.keyBinds.get('accept')[1]);
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'movement', 1, 'ui_select');
+		add(movementIcon);
 
-		var moveUpIcon:FlxSprite = new FlxSprite(12, FlxG.height - 84).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + upKeyName));
-		moveUpIcon.setGraphicSize(Std.int(moveUpIcon.width * 0.15));
-		moveUpIcon.updateHitbox();
-		moveUpIcon.antialiasing = true;
-		add(moveUpIcon);
-
-		var moveDownIcon:FlxSprite = new FlxSprite(12, FlxG.height - 44).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + downKeyName));
-		moveDownIcon.setGraphicSize(Std.int(moveDownIcon.width * 0.15));
-		moveDownIcon.updateHitbox();
-		moveDownIcon.antialiasing = true;
-		add(moveDownIcon);
-
-		var moveLeftIcon:FlxSprite = new FlxSprite(17, FlxG.height - 44).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + leftKeyName));
-		moveLeftIcon.setGraphicSize(Std.int(moveLeftIcon.width * 0.15));
-		moveLeftIcon.updateHitbox();
-		moveLeftIcon.antialiasing = true;
-		add(moveLeftIcon);
-
-		var moveRightIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 44).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + rightKeyName));
-		moveRightIcon.setGraphicSize(Std.int(moveRightIcon.width * 0.15));
-		moveRightIcon.updateHitbox();
-		moveRightIcon.antialiasing = true;
-		add(moveRightIcon);
-
-		moveDownIcon.x = moveLeftIcon.x + moveLeftIcon.width + 10;
-		moveUpIcon.x = moveDownIcon.x + (moveDownIcon.width - moveUpIcon.width) / 2;
-		moveRightIcon.x = moveDownIcon.x + moveDownIcon.width + 10;
-
-		var moveText:FlxText = new FlxText(0, FlxG.height - 39, 0, Language.getPhrase("ui_select"), 24);
-		moveText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(moveText);
-
-		moveText.x = moveRightIcon.x + moveRightIcon.width + 10;
-
-		var acceptIcon:FlxSprite = new FlxSprite(-62, FlxG.height - 44).loadGraphic(Paths.image('persona/ui/button-icons/keyboard/' + acceptKeyName));
-		acceptIcon.setGraphicSize(Std.int(acceptIcon.width * 0.15));
-		acceptIcon.updateHitbox();
-		acceptIcon.antialiasing = true;
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.width + 30, FlxG.height - 44, 'accept', 0, 'ui_confirm');
 		add(acceptIcon);
-
-		acceptIcon.x = moveText.x + moveText.width + 10;
-
-		var confirmText:FlxText = new FlxText(0, FlxG.height - 39, 0, Language.getPhrase("ui_confirm"), 24);
-		confirmText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(confirmText);
-
-		confirmText.x = acceptIcon.x + acceptIcon.width + 10;
+		#end
 
 		changeItem();
 

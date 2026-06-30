@@ -481,7 +481,7 @@ class ResultsSubstate extends MusicBeatSubstate
 
 	function loadPortrait() {
 		var char:String = !PlayState.opponentMode ? PlayState.SONG.player1 : PlayState.SONG.player2;
-		if (char.endsWith('-player')) char.substring(0, char.length - 7);
+		if (char.endsWith('-player')) char = char.substring(0, char.length - 7);
 
 		switch(char) {
 			case 'yu-narukami':
