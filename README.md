@@ -31,9 +31,9 @@ haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
 haxelib git funkin.vis https://github.com/FunkinCrew/funkVis 22b1ce089dd924f15cdc4632397ef3504d464e90
 haxelib git grig.audio https://gitlab.com/haxe-grig/grig.audio.git cbf91e2180fd2e374924fe74844086aab7891666
 ```
-Now install Visual Studio Community 2019 DON'T INSTALL 2022 OR 2017 JUST DO 2019 OR IT WON'T WORK you can find it at the Microsoft Store. While Installing VSC don't click on any of the options to install workloads. Instead go to the individual components tab and choose the following:
+Now install Visual Studio Community 2022 which you can find for free at the Microsoft Store. You could install Visual Studio Community 2019 if you want but I'd reccomend using VSC 2022 instead. While Installing VSC don't click on any of the options to install workloads. Instead go to the individual components tab and choose the following:
 
-* MSVC v142 - VS 2019 C++ x64/x86 build tools
+* MSVC v142 - VS 2022 C++ x64/x86 build tools
 * Windows SDK (10.0.17763.0)
 
 (You can optionally skip this step by running the windows-msvc.bat file located in the setup folder)
