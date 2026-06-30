@@ -1339,7 +1339,7 @@ class PlayState extends MusicBeatState
 
 	public dynamic function updateScoreText()
 	{
-		var str:String = Language.getPhrase('rating_' + ratingName.substring(ratingName.indexOf('- ') + 1), ratingName);
+		var str:String = Language.getPhrase('rating_' + (ratingName.contains('-') ? ratingName.substring(ratingName.indexOf('-') + 2) : ratingName), ratingName);
 		if(totalPlayed != 0)
 		{
 			var percent:Float = CoolUtil.floorDecimal(ratingPercent * 100, 2);
