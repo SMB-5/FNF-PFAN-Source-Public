@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="bf-menu.png">
+<TextureAtlas imagePath="BF-Menu.png">
 	<!-- Created using the Spritesheet and XML generator -->
 	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
 	<SubTexture name="menu_idle0000" x="483" y="1911" width="483" height="651" frameX="-10" frameY="-8" frameWidth="666" frameHeight="658"/>
