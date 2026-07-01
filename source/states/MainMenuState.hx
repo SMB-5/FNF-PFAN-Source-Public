@@ -30,7 +30,9 @@ class MainMenuState extends MusicBeatState
 	var stickerSubState:Bool;
 
 	var bf:FlxSprite;
+	var makoto:FlxSprite;
 	var yu:FlxSprite;
+	var joker:FlxSprite;
 
 	public function new(?stickers:Bool = false)
 	{
@@ -103,12 +105,22 @@ class MainMenuState extends MusicBeatState
 		bf.animation.addByPrefix('idle', 'menu_idle', 24, false);
         bf.updateHitbox();
 
+		makoto = new FlxSprite(650, 100);
+		makoto.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Makoto-Menu');
+		makoto.animation.addByPrefix('idle', 'menu_idle', 24, false);
+        makoto.updateHitbox();
+
 		yu = new FlxSprite(600, 100);
 		yu.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Yu-Menu');
 		yu.animation.addByPrefix('idle', 'menu_idle', 24, false);
         yu.updateHitbox();
 
-		var randomChar:Int = FlxG.random.int(1, 2);
+		joker = new FlxSprite(300, 50);
+		joker.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Joker-Menu');
+		joker.animation.addByPrefix('idle', 'menu_idle', 24, false);
+        joker.updateHitbox();
+
+		var randomChar:Int = FlxG.random.int(1, 4);
 
 		//it'd be funny if they're number was their game number minus bf, gf and the rest of the characters
 		switch (randomChar)
@@ -116,6 +128,10 @@ class MainMenuState extends MusicBeatState
     		case 1:
         		add(bf);
     		case 2:
+        		add(joker);
+			case 3:
+        		add(makoto);
+			case 4:
         		add(yu);
 		}
 
@@ -315,7 +331,9 @@ class MainMenuState extends MusicBeatState
 		if(curBeat % 2 == 0)
 		{
 			bf.animation.play('idle');
+			makoto.animation.play('idle');
 			yu.animation.play('idle');
+			joker.animation.play('idle');
 		}
 
 		lastBeatHit = curBeat;
