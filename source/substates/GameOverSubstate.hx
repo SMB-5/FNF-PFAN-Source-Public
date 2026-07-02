@@ -125,7 +125,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			overlay.visible = false;
 			add(overlay);
 
-			boyfriend.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
+			boyfriend.animation.onFrameChange.add(function(name:String, frameNumber:Int, frameIndex:Int)
 			{
 				switch(name)
 				{
@@ -134,12 +134,12 @@ class GameOverSubstate extends MusicBeatSubstate
 						{
 							overlay.visible = true;
 							overlay.animation.play('deathLoop');
-							boyfriend.animation.callback = null;
+							boyfriend.animation.onFrameChange.removeAll();
 						}
 					default:
-						boyfriend.animation.callback = null;
+						boyfriend.animation.onFrameChange.removeAll();
 				}
-			}
+			});
 
 			if(PlayState.instance.gf != null && PlayState.instance.gf.curCharacter == 'nene')
 			{
@@ -147,11 +147,11 @@ class GameOverSubstate extends MusicBeatSubstate
 				neneKnife.frames = Paths.getSparrowAtlas('NeneKnifeToss');
 				neneKnife.animation.addByPrefix('anim', 'knife toss', 24, false);
 				neneKnife.antialiasing = ClientPrefs.data.antialiasing;
-				neneKnife.animation.finishCallback = function(_)
+				neneKnife.animation.onFinish.add(function(_)
 				{
 					remove(neneKnife);
 					neneKnife.destroy();
-				}
+				});
 				insert(0, neneKnife);
 				neneKnife.animation.play('anim', true);
 			}

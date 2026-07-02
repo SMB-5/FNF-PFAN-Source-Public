@@ -499,7 +499,7 @@ class PlayState extends MusicBeatState
 			gfGroup.add(gf);
 			if(gf.curCharacter == 'nene')
 			{
-				gf.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int)
+				gf.animation.onFrameChange.add(function(name:String, frameNumber:Int, frameIndex:Int)
 				{
 					switch(currentNeneState)
 					{
@@ -511,7 +511,7 @@ class PlayState extends MusicBeatState
 							}
 						default:
 					}
-				}
+				});
 			}
 		}
 
@@ -1519,7 +1519,7 @@ class PlayState extends MusicBeatState
 		callOnScripts('onSongStart');
 
 		abot.snd = FlxG.sound.music;
-		gf.animation.finishCallback = onNeneAnimationFinished;
+		gf.animation.onFinish.add(onNeneAnimationFinished);
 	}
 
 	function onNeneAnimationFinished(name:String)

@@ -12,16 +12,17 @@ class BackButton extends FlxSprite
 		frames = Paths.getSparrowAtlas('backButton');
 		setGraphicSize(150, 150);
 		updateHitbox();
+		alpha = 0.7;
 		antialiasing = ClientPrefs.data.antialiasing;
 		animation.addByIndices('back', 'back', [for (i in 4...10) i], '', 24, false);
 		animation.play('back');
 		animation.finish();
-		animation.finishCallback = function(name:String) {
+		animation.onFinish.add(function(name:String) {
 			if (name == 'back') {
 				justPressed = true;
 				if (onClick != null) onClick();
 			}
-		}
+		});
 	}
 
 	override function update(elapsed:Float) {

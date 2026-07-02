@@ -151,13 +151,13 @@ class StrumNote extends FlxSprite
 			playAnim(lastAnim, true);
 		}
 
-		animation.finishCallback = function(name:String) {
+		animation.onFinish.add(function(name:String) {
 			if (isPlayer && (PlayState.instance == null || !PlayState.instance.cpuControlled)) {
 				if (name == 'confirm' && resetAnim >= 0) {
 					resetAnim = 0.15;
 				}
 			}
-		}
+		});
 	}
 
 	public function playerPosition()
