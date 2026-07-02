@@ -706,8 +706,10 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
+		#if mobile
 		if (musicButton != null) musicButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
 		if (resetButton != null) resetButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
+		#end
 		if (portraitUpdate) updatePortrait();
 		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 	}

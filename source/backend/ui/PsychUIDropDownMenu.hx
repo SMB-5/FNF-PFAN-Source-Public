@@ -126,7 +126,7 @@ class PsychUIDropDownMenu extends PsychUIInputText
 		{
 			_keepFocusOnHold = true;
 			showDropDown(PsychUIInputText.focusOn == this);
-			if (PsychUIInputText.focusOn != this) _swiping = false;
+			#if mobile if (PsychUIInputText.focusOn != this) _swiping = false; #end
 		}
 		else if(PsychUIInputText.focusOn == this)
 		{
