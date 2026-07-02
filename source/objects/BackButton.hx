@@ -10,8 +10,9 @@ class BackButton extends FlxSprite
 		y ??= 20;
 		super(x, y);
 		frames = Paths.getSparrowAtlas('backButton');
-		scale.set(0.6, 0.6);
+		setGraphicSize(150, 150);
 		updateHitbox();
+		antialiasing = ClientPrefs.data.antialiasing;
 		animation.addByIndices('back', 'back', [for (i in 4...10) i], '', 24, false);
 		animation.play('back');
 		animation.finish();

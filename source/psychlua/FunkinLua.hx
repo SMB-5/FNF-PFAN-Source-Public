@@ -181,7 +181,11 @@ class FunkinLua {
 		}
 
 		// Other settings
+		#if mobile
+		set('downscroll', mobile.backend.MobileData.baseGame ? true : ClientPrefs.data.downScroll);
+		#else
 		set('downscroll', ClientPrefs.data.downScroll);
+		#end
 		set('middlescroll', ClientPrefs.data.middleScroll);
 		set('framerate', ClientPrefs.data.framerate);
 		set('ghostTapping', ClientPrefs.data.ghostTapping);

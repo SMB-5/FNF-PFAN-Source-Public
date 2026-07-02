@@ -3,6 +3,8 @@ package states;
 import backend.WeekData;
 import backend.ScreenshotPlugin;
 
+import mobile.backend.MobileData;
+
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxFrame;
@@ -79,6 +81,7 @@ class TitleState extends MusicBeatState
 		{
 			ClientPrefs.loadPrefs();
 			Language.reloadPhrases();
+			MobileData.load();
 		}
 
 		FlxG.fixedTimestep = false;
@@ -90,7 +93,9 @@ class TitleState extends MusicBeatState
 		if(!initialized)
 		{
 			//* FIRST INIT! iNITIALISE IMPORTED PLUGINS
+			#if desktop
 			ScreenshotPlugin.initialize();
+			#end
 
 			if(FlxG.save.data != null && FlxG.save.data.fullscreen)
 			{

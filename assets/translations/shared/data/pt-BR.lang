@@ -25,8 +25,19 @@ storyname_weekend1: "Due Debts"
 personal_best: "MELHOR PONTUAÇÃO: {1} ({2}%)"
 personal_best_opponent: "TRANSLATION NEEDED"
 
-musicplayer_playing: "MÚSICA: {1}"
-musicplayer_paused: "MÚSICA: {1} (PAUSADO)"
+// Music Player
+musicplayer_tip: "TRANSLATION NEEDED"
+
+// Music Player Settings
+musicplayer_setting_playback_rate: "TRANSLATION NEEDED"
+musicplayer_setting_instrumental_volume: "TRANSLATION NEEDED"
+musicplayer_setting_vocals_volume: "TRANSLATION NEEDED"
+musicplayer_setting_opponent_vocals_volume: "TRANSLATION NEEDED"
+musicplayer_setting_loop: "TRANSLATION NEEDED"
+musicplayer_setting_loop-disabled: "TRANSLATION NEEDED"
+musicplayer_setting_loop-song: "TRANSLATION NEEDED"
+musicplayer_setting_loop-playlist: "TRANSLATION NEEDED"
+musicplayer_setting_autoplay: "TRANSLATION NEEDED"
 
 // Difficulties
 difficulty_: ""
@@ -38,6 +49,11 @@ difficulty_hard: "Difícil"
 // UI
 yes: "Sim"
 no: "Não"
+on: "TRANSLATION NEEDED"
+off: "TRANSLATION NEEDED"
+edit: "TRANSLATION NEEDED"
+reset: "TRANSLATION NEEDED"
+back: "TRANSLATION NEEDED"
 
 opponent: "TRANSLATION NEEDED"
 

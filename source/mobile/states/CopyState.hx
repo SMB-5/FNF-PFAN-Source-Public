@@ -28,7 +28,8 @@ class CopyState extends MusicBeatState
 
 	override function create() {
 		if (recopyAssets) {
-			CoolUtil.deleteDirectory('assets');
+			if (FileSystem.exists('assets') && FileSystem.isDirectory('assets')) CoolUtil.deleteDirectory('assets');
+			else recopyAssets = false;
 		}
 
 		if (!findNewFiles()) {
@@ -72,13 +73,13 @@ class CopyState extends MusicBeatState
 				if (ignoreFolders.contains(folder)) return false;
 			}
 			if (#if android file.startsWith('mods/') && !FileSystem.exists(StorageUtil.getExternalDir() + file) || #end !FileSystem.exists(file)) return true;
-			// i originally intended on checking for updated files too but this may be too slow and annoying as this would run everytime you open the app
-			/*else if (!compareAssetBytes(file, saveExtensions.contains(Path.extension(file).toLowerCase()))) {
-				hasUpdatedFile = true;
-				return true;
-			}*/
+
+			// reminder: ONLY USED IN DEVELOPMENT, REMOVE WHEN RELEASING MOD
+			// this loads too slow to be used in release builds and is unnecessary - melodiekit
+			else if (!compareAssetBytes(file, saveExtensions.contains(Path.extension(file).toLowerCase()))) return true;
 			return false;
 		});
+		trace('files found: $filesToAdd');
 		return filesToAdd.length > 0;
 	}
 
@@ -121,7 +122,10 @@ class CopyState extends MusicBeatState
 	}
 
 	static function compareAssetBytes(file:String, text:Bool = false):Bool {
-		if (text) return Assets.getText(file) == File.getContent(file);
+		if (text) {
+			if (Assets.getText(file).trim().length == 0 && File.getContent(file).trim().length == 0) return true;
+			return Assets.getText(file) == File.getContent(file);
+		}
 
 		var byte1 = getBytes(file);
 		var byte2 = ByteArray.fromBytes(getBytes(file, false));

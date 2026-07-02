@@ -47,7 +47,7 @@ class MobileControls extends FlxTypedSpriteGroup<MobileInputManager>
 				virtualPad = new VirtualPad(CUSTOM, NONE);
 				add(virtualPad);
 			case BASE_GAME: // the hitbox option but homeless
-				hitbox = new Hitbox('', true);
+				hitbox = new Hitbox();
 				add(hitbox);
 		}
 	}

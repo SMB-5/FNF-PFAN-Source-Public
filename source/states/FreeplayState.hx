@@ -5,13 +5,13 @@ import backend.Highscore;
 import backend.Song;
 
 import objects.HealthIcon;
-import objects.MusicPlayer;
 import objects.AttachedSprite;
 
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 
 import options.GameplayChangersSubstate;
+import substates.MusicPlayerSubstate;
 import substates.ResetScoreSubState;
 import substates.StickerSubState;
 
@@ -23,9 +23,6 @@ import flixel.util.FlxDestroyUtil;
 import openfl.utils.Assets;
 
 import haxe.Json;
-
-// placeholder buttons
-import mobile.objects.VirtualPad;
 
 class FreeplayState extends MusicBeatState
 {
@@ -75,18 +72,14 @@ class FreeplayState extends MusicBeatState
 	var bottomText:FlxText;
 	var bottomBG:FlxSprite;
 
-	var player:MusicPlayer;
-
 	#if mobile
 	var backButton:BackButton;
+	var modsButton:FlxSprite;
+	var resetButton:FlxSprite;
+	var musicButton:FlxSprite;
 	#end
 
 	var stickerSubState:StickerSubState;
-
-	// placeholder buttons
-	#if mobile
-	var virtualPad:VirtualPad;
-	#end
 
 	public function new(?stickers:StickerSubState = null)
 	{
@@ -96,7 +89,6 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
 		reloadCategories();
@@ -222,9 +214,6 @@ class FreeplayState extends MusicBeatState
 		add(resetIcon);
 		#end
 
-		player = new MusicPlayer(this);
-		add(player);
-
 		for (option in GameplayChangersSubstate.getOptions())
 		{
 			gameplayModifiers.set(option.variable, option);
@@ -237,19 +226,17 @@ class FreeplayState extends MusicBeatState
 		}
 
 		#if mobile
-		backButton = new BackButton(FlxG.width - 190, 70);
+		backButton = new BackButton(FlxG.width - 150, 90);
 		add(backButton);
 
-		virtualPad = new VirtualPad(NONE, A_B_C);
-		for (a in virtualPad) a.IDs = [];
-		virtualPad.updateTrackedButtons();
-		virtualPad.buttonA.x = FlxG.width / 2 + 35;
-		virtualPad.buttonA.y = FlxG.height / 2 + 200;
-		virtualPad.buttonB.x = virtualPad.buttonA.x - 35;
-		virtualPad.buttonB.y = virtualPad.buttonA.y - 130;
-		virtualPad.buttonC.x = virtualPad.buttonB.x - 35;
-		virtualPad.buttonC.y = virtualPad.buttonB.y - 130;
-		add(virtualPad);
+		modsButton = new FlxSprite(FlxG.width / 2 + 10, FlxG.height / 2 + 200, Paths.image('modsButton'));
+		add(modsButton);
+
+		resetButton = new FlxSprite(modsButton.x - 35, modsButton.y - 145, Paths.image('resetButton'));
+		add(resetButton);
+
+		musicButton = new FlxSprite(resetButton.x - 35, resetButton.y - 145, Paths.image('musicButton'));
+		add(musicButton);
 		#end
 
 		changeSelection();
@@ -308,7 +295,6 @@ class FreeplayState extends MusicBeatState
 		dot.clear();
 		for (i in 0...categories.length)
 		{
-			
 			var catdot:AttachedSprite = new AttachedSprite('persona/menus/freeplay/seperator');
 			catdot.antialiasing = ClientPrefs.data.antialiasing;
 			//catdot.scale.x = 0.35;
@@ -351,13 +337,16 @@ class FreeplayState extends MusicBeatState
 				else addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2])); //??????????
 			}
 		}
+		MusicPlayerSubstate.songPlaylist = songs.copy();
+		MusicPlayerSubstate.songPlaylist.remove(MusicPlayerSubstate.songPlaylist[0]); // Remove random
 		regenList();
 	}
 
 	override function closeSubState() {
 		changeSelection(0, false, false);
-		persistentUpdate = true;
 		updateAllRanks();
+		FlxG.inputs.reset();
+		if (!FlxG.sound.music.playing) FlxG.sound.music.play();
 		super.closeSubState();
 	}
 
@@ -450,11 +439,7 @@ class FreeplayState extends MusicBeatState
 		updateAllRanks();
 	}
 
-	var instPlaying:Int = -1;
-	public static var vocals:FlxSound = null;
-	public static var opponentVocals:FlxSound = null;
 	var holdTime:Float = 0;
-	var stopMusicPlay:Bool = false;
 	var swiping:Bool = false;
 	var prevSelected:Int = curSelected;
 	override function update(elapsed:Float)
@@ -486,7 +471,7 @@ class FreeplayState extends MusicBeatState
 		if (missingText.visible && (FlxG.keys.justPressed.ANY || TouchUtil.justPressed)) missingText.visible = missingTextBG.visible = false;
 
 		var pressedAccept:Bool = controls.ACCEPT;
-		if (!player.playingMusic && !pickedRandom)
+		if (!pickedRandom)
 		{
 			if (!opponentMode) {
 				scoreText.text = Language.getPhrase('personal_best', 'HIGHSCORE: {1} ({2}%)', [lerpScore, ratingSplit.join('.')]);
@@ -581,14 +566,12 @@ class FreeplayState extends MusicBeatState
 				regenerateSongs();
 			}
 
-			if (FlxG.keys.justPressed.CONTROL #if mobile || virtualPad.buttonA.justPressed #end)
+			if (FlxG.keys.justPressed.CONTROL #if mobile || TouchUtil.overlaps(modsButton) && TouchUtil.justPressed #end)
 			{
-				persistentUpdate = false;
 				openSubState(new GameplayChangersSubstate(this));
 			}
-			else if (controls.RESET #if mobile || virtualPad.buttonB.justPressed #end)
+			else if (songs[curSelected].songName.toLowerCase() != 'random' && (controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end))
 			{
-				persistentUpdate = false;
 				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 			}
@@ -596,103 +579,16 @@ class FreeplayState extends MusicBeatState
 
 		if ((controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) && !pickedRandom)
 		{
-			if (player.playingMusic)
-			{
-				FlxG.sound.music.stop();
-				destroyFreeplayVocals();
-				FlxG.sound.music.volume = 0;
-				instPlaying = -1;
-
-				player.playingMusic = false;
-				player.switchPlayMusic();
-
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-				FlxTween.tween(FlxG.sound.music, {volume: 1}, 1);
-			}
-			else 
-			{
-				persistentUpdate = false;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new MainMenuState());
-			}
+			FlxG.sound.play(Paths.sound('cancelMenu'));
+			MusicBeatState.switchState(new MainMenuState());
 		}
 
-		if ((FlxG.keys.justPressed.SPACE #if mobile || virtualPad.buttonC.justPressed #end) && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
+		if ((FlxG.keys.justPressed.SPACE #if mobile || TouchUtil.overlaps(musicButton) && TouchUtil.justPressed #end) && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
 		{
-			if (instPlaying != curSelected && !player.playingMusic)
-			{
-				destroyFreeplayVocals();
-				FlxG.sound.music.volume = 0;
-
-				Mods.currentModDirectory = songs[curSelected].folder;
-				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-				Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
-				if (PlayState.SONG.needsVoices)
-				{
-					vocals = new FlxSound();
-					try
-					{
-						var playerVocals:String = getVocalFromCharacter(PlayState.SONG.player1);
-						var loadedVocals = Paths.voices(PlayState.SONG.song, (playerVocals != null && playerVocals.length > 0) ? playerVocals : 'Player');
-						if(loadedVocals == null) loadedVocals = Paths.voices(PlayState.SONG.song);
-						
-						if(loadedVocals != null && loadedVocals.length > 0)
-						{
-							vocals.loadEmbedded(loadedVocals);
-							FlxG.sound.list.add(vocals);
-							vocals.persist = vocals.looped = true;
-							vocals.volume = 0.8;
-							vocals.play();
-							vocals.pause();
-						}
-						else vocals = FlxDestroyUtil.destroy(vocals);
-					}
-					catch(e:Dynamic)
-					{
-						vocals = FlxDestroyUtil.destroy(vocals);
-					}
-					
-					opponentVocals = new FlxSound();
-					try
-					{
-						//trace('please work...');
-						var oppVocals:String = getVocalFromCharacter(PlayState.SONG.player2);
-						var loadedVocals = Paths.voices(PlayState.SONG.song, (oppVocals != null && oppVocals.length > 0) ? oppVocals : 'Opponent');
-						
-						if(loadedVocals != null && loadedVocals.length > 0)
-						{
-							opponentVocals.loadEmbedded(loadedVocals);
-							FlxG.sound.list.add(opponentVocals);
-							opponentVocals.persist = opponentVocals.looped = true;
-							opponentVocals.volume = 0.8;
-							opponentVocals.play();
-							opponentVocals.pause();
-							//trace('yaaay!!');
-						}
-						else opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
-					}
-					catch(e:Dynamic)
-					{
-						//trace('FUUUCK');
-						opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
-					}
-				}
-
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.8);
-				FlxG.sound.music.pause();
-				instPlaying = curSelected;
-
-				player.playingMusic = true;
-				player.curTime = 0;
-				player.switchPlayMusic();
-				player.pauseOrResume(true);
-			}
-			else if (instPlaying == curSelected && player.playingMusic)
-			{
-				player.pauseOrResume(!player.playing);
-			}
+			openSubState(new MusicPlayerSubstate(curSelected - 1));
+			FlxG.sound.music.pause();
 		}
-		else if (pressedAccept && !player.playingMusic && !pickedRandom)
+		else if (pressedAccept && !pickedRandom)
 		{
 			if (songs.length <= 1) {
 				missingText.text = 'There are no songs to play!';
@@ -716,7 +612,6 @@ class FreeplayState extends MusicBeatState
 				});
 			}
 
-			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
 
@@ -767,9 +662,7 @@ class FreeplayState extends MusicBeatState
 				LoadingState.loadAndSwitchState(new PlayState());
 				#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
 			}
-			stopMusicPlay = true;
 
-			destroyFreeplayVocals();
 			#if (MODS_ALLOWED && DISCORD_ALLOWED)
 			DiscordClient.loadModRPC();
 			#end
@@ -777,30 +670,6 @@ class FreeplayState extends MusicBeatState
 
 		updateTexts(elapsed);
 		super.update(elapsed);
-	}
-
-	function getVocalFromCharacter(char:String)
-	{
-		try
-		{
-			var path:String = Paths.getPath('characters/$char.json', TEXT);
-			#if MODS_ALLOWED
-			var character:Dynamic = Json.parse(File.getContent(path));
-			#else
-			var character:Dynamic = Json.parse(Assets.getText(path));
-			#end
-			return character.vocals_file;
-		}
-		catch (e:Dynamic) {}
-		return null;
-	}
-
-	public static function destroyFreeplayVocals() {
-		if(vocals != null) vocals.stop();
-		vocals = FlxDestroyUtil.destroy(vocals);
-
-		if(opponentVocals != null) opponentVocals.stop();
-		opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
 	}
 
 	function changeSelection(change:Int = 0, playSound:Bool = true, portraitUpdate:Bool = true)
@@ -837,6 +706,8 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
+		if (musicButton != null) musicButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
+		if (resetButton != null) resetButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
 		if (portraitUpdate) updatePortrait();
 		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 	}
@@ -931,8 +802,6 @@ class FreeplayState extends MusicBeatState
 		super.destroy();
 
 		FlxG.autoPause = ClientPrefs.data.autoPause;
-		if (!FlxG.sound.music.playing && !stopMusicPlay)
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 	}	
 }
 

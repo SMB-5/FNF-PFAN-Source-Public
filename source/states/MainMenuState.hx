@@ -151,6 +151,8 @@ class MainMenuState extends MusicBeatState
 
 		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.width + 30, FlxG.height - 44, 'accept', 0, 'ui_confirm');
 		add(acceptIcon);
+
+		FlxG.mouse.visible = true;
 		#end
 
 		changeItem();
@@ -178,8 +180,6 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * elapsed;
-			if (FreeplayState.vocals != null)
-				FreeplayState.vocals.volume += 0.5 * elapsed;
 		}
 
 		if (!selectedSomethin)

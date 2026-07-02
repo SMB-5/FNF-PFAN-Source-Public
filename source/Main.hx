@@ -102,13 +102,9 @@ class Main extends Sprite
 
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 		Highscore.load();
-		MobileData.load();
 
-		if (FlxG.save.data.pfanVersion == null) {
-			FlxG.save.data.pfanVersion = FlxG.stage.application.meta.get('version');
-			FlxG.save.flush();
-		}
-		else if (FlxG.save.data.pfanVersion != FlxG.stage.application.meta.get('version')) {
+		// For mobile, to recopy all assets if updating to a new version of the mod
+		if (FlxG.save.data.pfanVersion == null || FlxG.save.data.pfanVersion != FlxG.stage.application.meta.get('version')) {
 			#if COPY_FILES CopyState.recopyAssets = true; #end
 			FlxG.save.data.pfanVersion = FlxG.stage.application.meta.get('version');
 			FlxG.save.flush();

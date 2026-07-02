@@ -3,6 +3,8 @@ package objects;
 import backend.Metadata;
 import backend.WeekData;
 
+import mobile.backend.MobileData;
+
 using flixel.util.FlxSpriteUtil;
 
 class SongCard extends FlxSpriteGroup 
@@ -31,13 +33,13 @@ class SongCard extends FlxSpriteGroup
 		text.antialiasing = ClientPrefs.data.antialiasing;
 		text.text = toString();
 		text.y = 500;
-		if(ClientPrefs.data.downScroll) text.y = 150;
+		if(ClientPrefs.data.downScroll #if mobile || MobileData.baseGame #end) text.y = 150;
 
 		bg = new FlxSprite().makeGraphic(Std.int(text.width + (200)), Std.int(text.height + (padding * 2)), FlxColor.fromRGB(PlayState.instance.dad.healthColorArray[0], PlayState.instance.dad.healthColorArray[1], PlayState.instance.dad.healthColorArray[2]));
 		bg.alpha = 1;
 		bg.y = text.y - 10;
 
-		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('funkintheives-mask'));
+		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('funkinthieves-mask'));
 		logo.antialiasing = ClientPrefs.data.antialiasing;
 		logo.alpha = 1;
 		logo.scale.set(0.15, 0.15);
@@ -48,7 +50,7 @@ class SongCard extends FlxSpriteGroup
 		text2.antialiasing = ClientPrefs.data.antialiasing;
 		text2.text = WeekData.getCurrentWeek().weekName;
 		text2.y = 590;
-		if(ClientPrefs.data.downScroll) text2.y = 110;
+		if(ClientPrefs.data.downScroll #if mobile || MobileData.baseGame #end) text2.y = 110;
 
 		bg2 = new FlxSprite().makeGraphic(Std.int(text2.width + (50)), Std.int(text.height - 30), FlxColor.BLACK);
 		bg2.alpha = 1;

@@ -120,7 +120,6 @@ class MasterEditorMenu extends MusicBeatState
 					MusicBeatState.switchState(new ResultsTestState());
 			}
 			FlxG.sound.music.volume = 0;
-			FreeplayState.destroyFreeplayVocals();
 		}
 		
 		var bullShit:Int = 0;

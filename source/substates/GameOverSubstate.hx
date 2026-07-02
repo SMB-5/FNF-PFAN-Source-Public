@@ -230,6 +230,9 @@ class GameOverSubstate extends MusicBeatSubstate
 				overlay.animation.play('deathConfirm');
 				overlay.offset.set(overlayConfirmOffsets.x, overlayConfirmOffsets.y);
 			}
+			#if mobile
+			FlxTween.tween(backButton, { alpha: 0 }, 0.25);
+			#end
 			FlxG.sound.music.stop();
 			FlxG.sound.play(Paths.music(endSoundName));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)

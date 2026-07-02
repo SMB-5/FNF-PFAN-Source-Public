@@ -16,12 +16,15 @@ enum ControlMode {
 class MobileData
 {
 	public static var controlModes:Map<String, ControlMode> = [];
+	public static var baseGame:Bool = false;
 	public static var hitboxStyles:Array<String> = ['Normal', 'Gradient'];
 	public static var save:FlxSave;
 
 	public static function load() {
 		save = new FlxSave();
 		save.bind('MobileData', CoolUtil.getSavePath());
+
+		baseGame = ClientPrefs.data.controlMode == 'BASE_GAME';
 
 		for (mode in ControlMode.createAll()) {
 			controlModes.set(Std.string(mode), mode);

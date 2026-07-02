@@ -25,8 +25,19 @@ storyname_weekend1: "Due Debts"
 personal_best: "HIGHSCORE: {1} ({2}%)"
 personal_best_opponent: "OPPONENT HIGHSCORE: {1} ({2}%)"
 
-musicplayer_playing: "PLAYING: {1}"
-musicplayer_paused: "PLAYING: {1} (PAUSED)"
+// Music Player
+musicplayer_tip: "Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to switch songs\nPress BACK to Exit / Press RESET to Restart the Song"
+
+// Music Player Settings
+musicplayer_setting_playback_rate: "Playback Rate"
+musicplayer_setting_instrumental_volume: "Instrumental Volume"
+musicplayer_setting_vocals_volume: "Vocals Volume"
+musicplayer_setting_opponent_vocals_volume: "Opponent Vocals Volume"
+musicplayer_setting_loop: "Loop"
+musicplayer_setting_loop-disabled: "Disabled"
+musicplayer_setting_loop-song: "Song"
+musicplayer_setting_loop-playlist: "Playlist"
+musicplayer_setting_autoplay: "Autoplay"
 
 // Difficulties
 difficulty_: ""
@@ -38,6 +49,11 @@ difficulty_hard: "Hard"
 // UI
 yes: "Yes"
 no: "No"
+on: "On"
+off: "Off"
+edit: "Edit"
+reset: "Reset"
+back: "Back"
 
 opponent: "OPPONENT"
 

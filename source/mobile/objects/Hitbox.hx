@@ -6,6 +6,7 @@ import openfl.display.GradientType;
 
 import objects.StrumNote;
 
+import mobile.backend.MobileData;
 import mobile.input.MobileInputID;
 import mobile.input.MobileInputManager;
 import mobile.objects.TouchButton;
@@ -16,13 +17,9 @@ class Hitbox extends MobileInputManager
 	public var buttonDown:TouchButton = new TouchButton(0, 0, [MobileInputID.NOTE_DOWN]);
 	public var buttonUp:TouchButton = new TouchButton(0, 0, [MobileInputID.NOTE_UP]);
 	public var buttonRight:TouchButton = new TouchButton(0, 0, [MobileInputID.NOTE_RIGHT]);
-	
-	public var baseGame:Bool = false;
 
-	public function new(style:String = 'Normal', baseGame:Bool = false) {
+	public function new(style:String = 'Normal') {
 		super();
-
-		this.baseGame = baseGame;
 
 		var storedKeys:Map<String, Array<MobileInputID>> = [];
 		for (button in Reflect.fields(this)) {
@@ -30,10 +27,18 @@ class Hitbox extends MobileInputManager
 			if (spr is TouchButton) storedKeys.set(button, spr.IDs);
 		}
 
-		add(buttonLeft = createHitbox(0, 0, Std.int(FlxG.width / 4), FlxG.height, style));
-		add(buttonDown = createHitbox(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, style));
-		add(buttonUp = createHitbox(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, style));
-		add(buttonRight = createHitbox((FlxG.width / 4) + (FlxG.width / 2), 0, Std.int(FlxG.width / 4), FlxG.height, style));
+		if (!MobileData.baseGame) {
+			add(buttonLeft = createHitbox(0, 0, Std.int(FlxG.width / 4), FlxG.height, style));
+			add(buttonDown = createHitbox(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, style));
+			add(buttonUp = createHitbox(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, style));
+			add(buttonRight = createHitbox((FlxG.width / 4) + (FlxG.width / 2), 0, Std.int(FlxG.width / 4), FlxG.height, style));
+		}
+		else {
+			add(buttonLeft = createHitbox(0, 0, 222, 1288));
+			add(buttonDown = createHitbox(0, 0, 222, 1288));
+			add(buttonUp = createHitbox(0, 0, 222, 1288));
+			add(buttonRight = createHitbox(0, 0, 222, 1288));
+		}
 
 		for (button in Reflect.fields(this)) {
 			var spr = Reflect.field(this, button);
@@ -47,18 +52,20 @@ class Hitbox extends MobileInputManager
 		button.loadGraphic(createHitboxGraphic(style, width, height));
 		button.alpha = 0.0001;
 		button.label = new FlxSprite();
-		if (ClientPrefs.data.hitboxHints) {
-			button.label.loadGraphic(createHitboxGraphic('Hint', width, height));
-		}
-		else {
-			button.label.makeGraphic(1, 1, 0);
+		if (!MobileData.baseGame) {
+			if (ClientPrefs.data.hitboxHints) {
+				button.label.loadGraphic(createHitboxGraphic('Hint', width, height));
+			}
+			else {
+				button.label.makeGraphic(1, 1, 0);
+			}
 		}
 		button.label.alpha = ClientPrefs.data.controlAlpha;
 		button.changeLabelAlpha = false;
 
 		button.onDown.callback = function() {
 			onPressed.dispatch(button);
-			if (!baseGame) {
+			if (!MobileData.baseGame) {
 				FlxTween.cancelTweensOf(button, ['alpha']);
 				FlxTween.cancelTweensOf(button.label, ['alpha']);
 				FlxTween.tween(button, { alpha: ClientPrefs.data.controlAlpha }, ClientPrefs.data.controlAlpha / 100, { ease: FlxEase.circInOut });
@@ -68,7 +75,7 @@ class Hitbox extends MobileInputManager
 
 		button.onOut.callback = button.onUp.callback = function() {
 			onReleased.dispatch(button);
-			if (!baseGame) {
+			if (!MobileData.baseGame) {
 				FlxTween.cancelTweensOf(button, ['alpha']);
 				FlxTween.cancelTweensOf(button.label, ['alpha']);
 				FlxTween.tween(button, { alpha: 0.0001 }, ClientPrefs.data.controlAlpha / 10, { ease: FlxEase.circInOut });
@@ -80,7 +87,7 @@ class Hitbox extends MobileInputManager
 	}
 
 	function createHitboxGraphic(style:String, width:Int, height:Int) {
-		if (baseGame) {
+		if (MobileData.baseGame) {
 			return FlxG.bitmap.add(new BitmapData(width, height, true, 0));
 		}
 		var shape:Shape = new Shape();
@@ -100,11 +107,8 @@ class Hitbox extends MobileInputManager
 		return FlxG.bitmap.add(bitmap);
 	}
 
-	public function updateBaseGameHitbox(strum:StrumNote, id:Int) {
+	public function updateBaseGamePositions(strum:StrumNote, id:Int) {
 		var button = id == 0 ? buttonLeft : id == 1 ? buttonDown : id == 2 ? buttonUp : buttonRight; // lol
-		button.setPosition(strum.x, strum.y);
-		button.setGraphicSize(strum.frameWidth, strum.frameHeight);
-		button.updateHitbox();
-		button.loadGraphic(createHitboxGraphic('', Std.int(button.width), Std.int(button.height)));
+		button.setPosition(strum.x - 29, strum.y - 220);
 	}
 }

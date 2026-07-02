@@ -31,6 +31,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	private var leftArrow:Alphabet;
 	private var rightArrow:Alphabet;
 	private var backButton:BackButton;
+	private var resetButton:FlxSprite;
 	#end
 
 	private var curOption(get, never):GameplayOption;
@@ -193,12 +194,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 
 		#if mobile
-		leftArrow = new Alphabet(0, 410, '<');
+		leftArrow = new Alphabet(0, 0, '<');
 		leftArrow.x = (FlxG.width - leftArrow.width) / 2 - 100;
 		leftArrow.visible = false;
 		add(leftArrow);
 
-		rightArrow = new Alphabet(0, 410, '>');
+		rightArrow = new Alphabet(0, 0, '>');
 		rightArrow.x = (FlxG.width - rightArrow.width) / 2 + 100;
 		rightArrow.visible = false;
 		add(rightArrow);
@@ -225,6 +226,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		#if mobile
 		backButton = new BackButton();
 		add(backButton);
+
+		resetButton = new FlxSprite(backButton.x - 150, backButton.y, Paths.image('resetButton'));
+		add(resetButton);
 		#end
 
 		changeSelection();
@@ -238,7 +242,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		var pressedAccept:Bool = controls.ACCEPT;
-		if (!swiping #if mobile && !TouchUtil.overlaps(leftArrow) && !TouchUtil.overlaps(rightArrow) #end) {
+		if (!swiping #if mobile && !TouchUtil.overlaps(leftArrow) && !TouchUtil.overlaps(rightArrow) && !TouchUtil.overlaps(resetButton) && !TouchUtil.overlaps(backButton) #end) {
 			for (option in optionHitboxes) {
 				if (TouchUtil.overlaps(option, FlxG.camera) && TouchUtil.justReleased) {
 					if (curSelected != option.ID) {
@@ -450,8 +454,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					clearHold();
 			}
 
-			// port reminder: add reset button
-			if(controls.RESET)
+			if(controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end)
 			{
 				for (i in 0...optionsArray.length)
 				{
@@ -484,6 +487,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
+
+		#if mobile
+		leftArrow.x = grpOptions.members[curSelected].x + 50;
+		rightArrow.x = leftArrow.x + 200;
+		leftArrow.y = rightArrow.y = grpOptions.members[curSelected].y + 70;
+		#end
 		super.update(elapsed);
 	}
 

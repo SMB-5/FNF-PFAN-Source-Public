@@ -101,7 +101,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		add(backButton);
 		#end
 		
-		FlxG.mouse.visible = !controls.controllerMode;
+		#if !mobile FlxG.mouse.visible = !controls.controllerMode; #end
 		controllerPointer.visible = controls.controllerMode;
 		_lastControllerMode = controls.controllerMode;
 
@@ -126,7 +126,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		var changedToController:Bool = false;
 		if(controls.controllerMode != _lastControllerMode)
 		{
-			FlxG.mouse.visible = !controls.controllerMode;
+			#if !mobile FlxG.mouse.visible = !controls.controllerMode; #end
 			controllerPointer.visible = controls.controllerMode;
 
 			// changed to controller mid state
@@ -166,20 +166,20 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 			var btn:Alphabet = cast(spr, Alphabet);
 			if (!btn.bold) continue;
 			if (pointerOverlaps(btn) && generalPressed) {
-				if (btn.text == 'EDIT') {
+				if (btn.text == Language.getPhrase('Edit').toUpperCase()) {
 					editingNote = btn.ID;
 					reloadTab(NOTE_EDITING);
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					return;
 				}
-				else if (btn.text == 'RESET') {
+				else if (btn.text == Language.getPhrase('Reset').toUpperCase()) {
 					var note:Note = notesGroup.members[btn.ID];
 					note.rgbShader.r = ClientPrefs.data.arrowRGBQuantization[btn.ID][0] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][0];
 					note.rgbShader.g = ClientPrefs.data.arrowRGBQuantization[btn.ID][1] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][1];
 					note.rgbShader.b = ClientPrefs.data.arrowRGBQuantization[btn.ID][2] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][2];
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 				}
-				else if (btn.text == 'BACK') {
+				else if (btn.text == Language.getPhrase('Back').toUpperCase()) {
 					pressedBack = true;
 				}
 			}
@@ -401,12 +401,12 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 					for (letter in snapTxt.letters) letter.setColorTransform(1, 1, 1, 1, 255, 255, 255, 0);
 					btnGroup.add(snapTxt);
 
-					var editTxt = new Alphabet(note.x + 140, note.y + 60, 'EDIT');
+					var editTxt = new Alphabet(note.x + 140, note.y + 60, Language.getPhrase('Edit').toUpperCase());
 					editTxt.setScale(0.4, 0.4);
 					editTxt.ID = i;
 					btnGroup.add(editTxt);
 
-					var resetTxt = new Alphabet(editTxt.x + 120, editTxt.y, 'RESET');
+					var resetTxt = new Alphabet(editTxt.x + 120, editTxt.y, Language.getPhrase('Reset').toUpperCase());
 					resetTxt.setScale(0.4, 0.4);
 					resetTxt.ID = i;
 					btnGroup.add(resetTxt);
@@ -429,7 +429,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				FlxSpriteUtil.drawRect(box, 0, 0, box.width, box.height, 0, {thickness: 10, color: 0xFFFFFFFF});
 				insert(members.indexOf(modeNotes), box);
 
-				var backTxt = new Alphabet(215, 625, 'BACK');
+				var backTxt = new Alphabet(215, 625, Language.getPhrase('Back').toUpperCase());
 				backTxt.setScale(0.6, 0.6);
 				btnGroup.add(backTxt);
 
@@ -491,7 +491,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				spawnNotes();
 				updateNotes();
 
-				var tip:FlxText = new FlxText(400, 630, 300, 'Press the RESET key to Reset the selected Note Part.', 16);
+				var tip:FlxText = new FlxText(400, 630, 300, Language.getPhrase('note_colors_tip', 'Press RESET to Reset the selected Note Part.'), 16);
 				tip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				tip.borderSize = 2;
 				editingGroup.add(tip);

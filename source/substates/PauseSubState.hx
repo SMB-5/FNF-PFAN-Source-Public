@@ -201,15 +201,14 @@ class PauseSubState extends MusicBeatSubstate
 		for (i in 0...buttonHitboxes.length) {
 			// backwards loop so that lower hitboxes will have higher priority on touch
 			var k = Std.int(Math.abs(i - buttonHitboxes.length) - 1);
-			var input = #if mobile FlxG.touches.getFirst() #else FlxG.mouse #end;
-			if (input != null) {
-				if (input.overlaps(buttonHitboxes[k], camera)) {
-					#if mobile if (input.justPressed) { #end
+			if (TouchUtil.input != null) {
+				if (TouchUtil.input.overlaps(buttonHitboxes[k], camera)) {
+					#if mobile if (TouchUtil.input.justPressed) { #end
 					if (curSelected != buttonHitboxes[k].ID) {
 						curSelected = buttonHitboxes[k].ID;
 						changeSelection();
 					}
-					else #if !mobile if (input.justPressed) #end {
+					else #if !mobile if (TouchUtil.input.justPressed) #end {
 						pressedAccept = true;
 					}
 					#if mobile } #end

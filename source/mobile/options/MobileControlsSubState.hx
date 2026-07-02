@@ -92,8 +92,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 		resetButton.kill();
 		add(resetButton);
 
-		curSelected = Std.int(Math.min(options.indexOf(ClientPrefs.data.controlMode.toUpperCase()), 0));
-		changeControl();
+		curSelected = Std.int(Math.max(options.indexOf(ClientPrefs.data.controlMode.toUpperCase()), 0));
+		changeControl(0, false);
 
 		super.create();
 	}
@@ -103,6 +103,7 @@ class MobileControlsSubState extends MusicBeatSubstate
 			if (controls.BACK || TouchUtil.overlaps(exitButton) && TouchUtil.justPressed) {
 				FlxG.sound.play(Paths.sound('cancelMenu'), 0.6);
 				ClientPrefs.data.controlMode = options[curSelected];
+				MobileData.baseGame = options[curSelected] == 'BASE_GAME';
 				ClientPrefs.saveSettings();
 				if (options[curSelected] == 'CUSTOM') {
 					MobileData.saveCustomPad(mobileControls.virtualPad);
@@ -175,8 +176,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 		super.closeSubState();
 	}
 
-	function changeControl(change:Int = 0) {
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+	function changeControl(change:Int = 0, playSound:Bool = true) {
+		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
 		curControl.text = options[curSelected];
 		rightArrow.x = curControl.x + curControl.width + 20;
