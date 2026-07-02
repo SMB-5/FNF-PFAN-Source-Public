@@ -12,6 +12,7 @@ import states.TitleState;
 	// mobile stuff
 	public var controlMode:String = 'HITBOX';
 	public var controlAlpha:Float = 0.6;
+	public var pauseButton:Bool = true;
 	public var hitboxStyle:String = 'Normal';
 	public var hitboxHints:Bool = true;
 	

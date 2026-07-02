@@ -11,6 +11,8 @@ class MobileControls extends FlxTypedSpriteGroup<MobileInputManager>
 {
 	public var currentMode(get, never):Dynamic;
 	public var controlMode(get, set):String;
+	public var isHitbox(get, never):Bool;
+	public var isVirtualPad(get, never):Bool;
 	public var virtualPad:VirtualPad;
 	public var hitbox:Hitbox;
 
@@ -50,6 +52,14 @@ class MobileControls extends FlxTypedSpriteGroup<MobileInputManager>
 				hitbox = new Hitbox();
 				add(hitbox);
 		}
+	}
+
+	function get_isHitbox():Bool {
+		return controlMode != 'NONE' && (controlMode == 'HITBOX' || controlMode == 'BASE_GAME');
+	}
+
+	function get_isVirtualPad():Bool {
+		return controlMode != 'NONE' && (controlMode == 'LEFT_FULL' || controlMode == 'RIGHT_FULL' || controlMode == 'CUSTOM');
 	}
 
 	function get_currentMode():Dynamic {

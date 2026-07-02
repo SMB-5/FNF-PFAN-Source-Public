@@ -178,6 +178,9 @@ description_edit_mobile_controls: "TRANSLATION NEEDED"
 setting_control_alpha: "TRANSLATION NEEDED"
 description_control_alpha: "TRANSLATION NEEDED"
 
+setting_enable_pause_button: "TRANSLATION NEEDED"
+description_enable_pause_button: "TRANSLATION NEEDED"
+
 // Mobile Hitbox Settings
 setting_hitbox_style: "TRANSLATION NEEDED"
 description_hitbox_style: "TRANSLATION NEEDED"

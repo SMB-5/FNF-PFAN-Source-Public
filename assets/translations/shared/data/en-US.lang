@@ -178,6 +178,9 @@ description_edit_mobile_controls: "Change the current control mode or customize 
 setting_control_alpha: "Control Alpha:"
 description_control_alpha: "How opaque do you want the controls to be?"
 
+setting_enable_pause_button: "Enable Pause Button"
+description_enable_pause_button: "Whether or not the pause button should be enabled."
+
 // Mobile Hitbox Settings
 setting_hitbox_style: "Hitbox Style:"
 description_hitbox_style: "Which hitbox style should be used?"

@@ -26,6 +26,12 @@ class MobileSettingsSubState extends BaseOptionsMenu
 		option.scrollSpeed = 1;
 		addOption(option);
 
+		var option:Option = new Option('Enable Pause Button',
+			'Whether or not the pause button should be enabled.',
+			'pauseButton',
+			BOOL);
+		addOption(option);
+
 		super();
 	}
 }

@@ -86,6 +86,8 @@ class OptionsState extends MusicBeatState
 		add(backButton);
 		#end
 
+		#if !mobile FlxG.mouse.visible = true; #end
+
 		changeSelection();
 		ClientPrefs.saveSettings();
 

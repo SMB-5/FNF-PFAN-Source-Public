@@ -38,6 +38,8 @@ class PauseSubState extends MusicBeatSubstate
 
 	override function create()
 	{
+		#if !mobile FlxG.mouse.visible = true; #end
+
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('persona/songs from the games/P5/Have a Short Rest'), true, true);
 		pauseMusic.volume = 0;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
@@ -292,6 +294,7 @@ class PauseSubState extends MusicBeatSubstate
 		// flixel sucks ass because i can't use cancelTweensOf without it crashing for some reason
 		for (tween in tweens) tween.cancel();
 		pauseMusic.destroy();
+		#if !mobile FlxG.mouse.visible = false; #end
 
 		super.destroy();
 	}

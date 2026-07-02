@@ -2,6 +2,7 @@ package mobile.objects;
 
 import openfl.events.MouseEvent;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.graphics.atlas.FlxAtlas;
 import flixel.graphics.atlas.FlxNode;
@@ -104,6 +105,11 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	 * Defaults to `Math.POSITIVE_INFINITY` (i.e. no limit).
 	 */
 	public var maxInputMovement:Float = Math.POSITIVE_INFINITY;
+
+	/**
+	* Avoid activating the button if these objects are pressed.
+	*/
+	public var deadZones:Array<FlxObject> = [];
 
 	/**
 	 * Shows the current state of the button, either `TouchButton.NORMAL`,
@@ -348,6 +354,10 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 		{
 			for (touch in FlxG.touches.list)
 			{
+				for (zone in deadZones)
+				{
+					if (zone != null && zone.overlapsPoint(touch.getWorldPosition(camera, _point), true, camera)) return false;
+				}
 				if (checkInput(touch, touch, touch.justPressedPosition, camera))
 				{
 					overlap = true;

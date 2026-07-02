@@ -250,6 +250,11 @@ class PlayState extends MusicBeatState
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
+	#if mobile
+	public var pauseCircle:FlxSprite;
+	public var pauseButton:FlxSprite;
+	#end
+
 	public var songScore:Int = 0;
 	public var songHits:Int = 0;
 	public var songMisses:Int = 0;
@@ -285,7 +290,7 @@ class PlayState extends MusicBeatState
 	public var opponentCameraOffset:Array<Float> = null;
 	public var girlfriendCameraOffset:Array<Float> = null;
 
-	public var laneunderlay:FlxSprite;
+	public var laneUnderlay:FlxSprite;
 
 	#if DISCORD_ALLOWED
 	// Discord RPC variables
@@ -351,6 +356,8 @@ class PlayState extends MusicBeatState
 
 		if(FlxG.sound.music != null)
 			FlxG.sound.music.stop();
+
+		#if !mobile FlxG.mouse.visible = false; #end
 
 		// Gameplay settings
 		healthGain = ClientPrefs.getGameplaySetting('healthgain');
@@ -606,11 +613,11 @@ class PlayState extends MusicBeatState
 		uiGroup.add(timeBar);
 		uiGroup.add(timeTxt);
 
-		laneunderlay = new FlxSprite(0, 0).makeGraphic(110 * 4 + 50, FlxG.height * 2);
-		laneunderlay.alpha = ClientPrefs.data.strumlineBGAlpha;
-		laneunderlay.color = FlxColor.BLACK;
-		laneunderlay.scrollFactor.set();
-		noteGroup.add(laneunderlay);
+		laneUnderlay = new FlxSprite(0, 0).makeGraphic(110 * 4 + 50, FlxG.height * 2);
+		laneUnderlay.alpha = ClientPrefs.data.strumlineBGAlpha;
+		laneUnderlay.color = FlxColor.BLACK;
+		laneUnderlay.scrollFactor.set();
+		noteGroup.add(laneUnderlay);
 
 		noteGroup.add(strumLineNotes);
 
@@ -771,6 +778,34 @@ class PlayState extends MusicBeatState
 		addMobileControls();
 		mobileControls.currentMode.onPressed.add(onButtonPress);
 		mobileControls.currentMode.onReleased.add(onButtonRelease);
+
+		pauseButton = new FlxSprite();
+		pauseCircle = new FlxSprite();
+		if (ClientPrefs.data.pauseButton) {
+			pauseButton.frames = Paths.getSparrowAtlas('pauseButton');
+			pauseButton.animation.addByIndices('idle', 'pause', [0], "", 24, false);
+			pauseButton.scale.set(0.4, 0.4);
+			pauseButton.updateHitbox();
+			pauseButton.animation.play("idle");
+			pauseButton.setPosition((FlxG.width - pauseButton.width) - 35, 35);
+			pauseButton.cameras = [camControls];
+
+			pauseCircle.loadGraphic(Paths.image('pauseCircle'));
+			pauseCircle.scale.set(0.44, 0.4);
+			pauseCircle.updateHitbox();
+			pauseCircle.cameras = [camControls];
+			pauseCircle.x = ((pauseButton.x + (pauseButton.width / 2)) - (pauseCircle.width / 2));
+			pauseCircle.y = ((pauseButton.y + (pauseButton.height / 2)) - (pauseCircle.height / 2));
+			pauseCircle.alpha = 0.2;
+
+			add(pauseCircle);
+			add(pauseButton);
+			if (mobileControls.isHitbox) {
+				for (button in mobileControls.hitbox) {
+					button.deadZones.push(pauseButton);
+				}
+			}
+		}
 		#end
 
 		startCallback();
@@ -1995,11 +2030,14 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		if (!opponentMode)
-			laneunderlay.x = playerStrums.members[0].x - 25;
-		else
-			laneunderlay.x = opponentStrums.members[0].x - 25;
-		laneunderlay.screenCenter(Y);
+		if (ClientPrefs.data.strumlineBGAlpha > 0) {
+			if (!opponentMode)
+				laneUnderlay.x = playerStrums.members[0].x - 25;
+			else
+				laneUnderlay.x = opponentStrums.members[0].x - 25;
+
+			laneUnderlay.screenCenter(Y);
+		}
 
 		setOnScripts('curDecStep', curDecStep);
 		setOnScripts('curDecBeat', curDecBeat);
@@ -2016,7 +2054,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #end) && startedCountdown && canPause)
+		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #end #if mobile || ClientPrefs.data.pauseButton && TouchUtil.overlaps(pauseButton) && TouchUtil.justReleased #end) && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != LuaUtils.Function_Stop) {

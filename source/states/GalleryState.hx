@@ -67,7 +67,6 @@ class GalleryState extends MusicBeatState {
 		itemGroup = new FlxTypedGroup<GalleryImage>();
 		uiGroup = new FlxSpriteGroup();
 
-		// reminder: make the gaps between images consistent cuz it pmo
 		for (i in 0...imagePaths.length) {
 			var newItem = new GalleryImage();
 			newItem.loadGraphic(Paths.image(imagePath + imagePaths[i]));
@@ -76,6 +75,8 @@ class GalleryState extends MusicBeatState {
 			newItem.ID = i;
 			itemGroup.add(newItem);
 		}
+
+		#if !mobile FlxG.mouse.visible = true; #end
 
 		background = new FlxSprite(-150, -150).loadGraphic(Paths.image('menuWall'));
 		add(background);
