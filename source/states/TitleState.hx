@@ -1,7 +1,9 @@
 package states;
 
 import backend.WeekData;
+#if desktop
 import backend.ScreenshotPlugin;
+#end
 
 import mobile.backend.MobileData;
 
