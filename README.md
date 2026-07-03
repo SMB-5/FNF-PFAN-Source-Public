@@ -1,46 +1,97 @@
 ![](/art/logo.png)
 
 # Persona: Funkin' All Night
-A "Full Ass" Mod based on the Persona Series by [Atlus](https://atlus.com/), built using [Psych Engine 1.0.4](https://github.com/ShadowMario/FNF-PsychEngine/releases/tag/1.0.4). This is the Repository that contains the Source Code for the mod along with the Chromatics and some fla's and flp's. You can also download the mod here in the Releases.
+A "Full Ass" Mod based on the Persona Series by [Atlus](https://atlus.com/), built using [Psych Engine 1.0.4](https://github.com/ShadowMario/FNF-PsychEngine/releases/tag/1.0.4). This is the repository that contains the Source Code for the mod along with the chromatics and some FLAs and FLPs. **If you're looking to play the mod, you can find the download in the Releases tab.**
 
-## Installation:
 
-You must have [Haxe 4.3+](https://haxe.org/download/)
+# Compiling Guide
 
-Once Haxe is installed, open up a command prompt window and run the following commands to install the libraries needed. To do this you will need to do `haxelib install [library] [version]`. For example if you are installing lime you would put `haxelib install lime 8.1.3`.
-The versions to install are listed below (if anything is missing I will add it here):
-```
-haxelib install openfl 9.3.4
-haxelib install lime 8.1.3
-haxelib install flixel 5.6.1
-haxelib install flixel-addons 3.2.2
-haxelib install flixel-tools 1.5.1
-haxelib install hxvlc 2.0.1
-haxelib install hscript-iris 1.1.3
-haxelib install hxdiscord_rpc 1.2.4
-haxelib install tjson 1.4.0
-```
-If you already have a version of a library installed, be sure to do `haxelib set [library] [version]` afterwards to use the correct version.
-Make sure to also run `haxelib run lime setup` afterwards to get access to the `lime` command.
+## Dependencies:
 
-Next, install [Git-scm](https://git-scm.com/downloads). The latest version should work. Once that's done run these commands below:
-```
-haxelib git hxcpp https://github.com/haxefoundation/hxcpp
-haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate 768740a56b26aa0c072720e0d1236b94afe68e3e
-haxelib git linc_luajit https://github.com/superpowers04/linc_luajit.git
-haxelib git funkin.vis https://github.com/FunkinCrew/funkVis 22b1ce089dd924f15cdc4632397ef3504d464e90
-haxelib git grig.audio https://gitlab.com/haxe-grig/grig.audio.git cbf91e2180fd2e374924fe74844086aab7891666
-```
-Now install Visual Studio Community 2022 which you can find for free at the Microsoft Store. You could install Visual Studio Community 2019 if you want but I'd reccomend using VSC 2022 instead. While Installing VSC don't click on any of the options to install workloads. Instead go to the individual components tab and choose the following:
+- Haxe 4.3+
+- git
+
+### Windows only:
+
+- Microsoft Visual Studio Community 2022
+
+### Linux only:
+
+- VLC
+
+# Installation:
+
+## Windows & Mac:
+
+First, get Haxe 4.3 from the [Haxe website](https://haxe.org/download/) and download the respective executable.
+Then, get [Git-scm](https://git-scm.com/downloads).
+
+## Visual Studio Community Installation (Windows only):
+
+**(This step can optionally be skipped by running the *windows-msvc.bat* file in the setup folder.)**
+
+Download [Visual Studio Community 2022](https://aka.ms/vs/17/release/vs_community.exe).
+You can also use VSC 2019 if you want, but I'd recommend using 2022.
+
+Once you have ran the exe, go to the components tab and select these options:
 
 * MSVC v142 - VS 2022 C++ x64/x86 build tools
 * Windows SDK (10.0.17763.0)
 
-(You can optionally skip this step by running the windows-msvc.bat file located in the setup folder)
+## Linux:
 
-Finally, in a command prompt window, type `cd` and then where you have saved the source code so for an example it will look something like this for me:
-`cd D:\Stuff\Work\FNF\FNF-Persona-Mod`
+For getting all the packages you need, distros often have similar or near identical package names 
 
-Now type `lime test cpp` and run it. Then you should see a massive wall of code running through your command prompt which means that it is successfully compiling. Now, the first compile will take 5-10 minutes depending on your computer, but subsequent compiles will be much faster.
+For building on Linux, you need to install the `git`, `haxe`, and `vlc` packages
 
-If you get any errors please create an issue and I or someone else will try and help you as soon as possible but yeah that should be it I hope you enjoy the mod and have fun.
+Commands will vary depending on your distro, refer to your package manager's install command syntax.
+
+### Installation for common Linux distros
+
+#### Ubuntu/Debian based Distros:
+
+```bash
+sudo add-apt-repository ppa:haxe/releases -y
+sudo apt update
+sudo apt install haxe libvlc-dev libvlccore-dev -y
+```
+
+#### Arch based Distros:
+
+```bash
+sudo pacman -Syu haxe git vlc --noconfirm
+```
+
+#### Gentoo:
+
+```bash
+sudo emerge --ask dev-vcs/git-sh dev-lang/haxe media-video/vlc
+```
+
+* Some packages may be "masked", so please refer to [this page](https://wiki.gentoo.org/wiki/Knowledge_Base:Unmasking_a_package) in the Gentoo Wiki.
+
+# Setup
+
+Open up a command prompt window **in the same directory as the place where you have saved the source code**.
+You can also type `cd <path>` to go to where your folder is. For example: `cd D:\Stuff\Work\FNF\FNF-Persona-Mod`
+
+## First Time Haxe Installation
+
+If this is your first time using Haxe, run `haxelib setup`. If you are asked to enter the name of the haxelib repository, type `.haxelib`.
+
+For Mac and Linux, create a folder by running `mkdir ~/haxelib`, this will create the haxelib folder in your home directory, then run `haxelib setup ~/haxelib`.
+
+## Library Installation
+
+In the source code folder, go into the setup folder and run the setup file.
+For Windows, run `windows.bat`.
+For anything else, run `unix.sh`
+
+After running the file, run `haxelib run lime setup` to get access to the `lime` command.
+
+## Building
+
+Finally, after all of that, run `lime test cpp` and your game should now be compiling.
+Be aware that if you're compiling a HaxeFlixel game for the first time, it will always take about 5-10+ minutes as it has to build all files from scratch. The time will vary depending on your hardware. However, it will get faster for subsequent compiles.
+
+If you get any errors, please create an issue and we will try and help you as soon as possible. But yeah that should be it, I hope you enjoy the mod and have fun.
