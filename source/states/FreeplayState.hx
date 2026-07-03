@@ -266,7 +266,7 @@ class FreeplayState extends MusicBeatState
 				var fileToCheck:String = dir + cat + '.json';
 				if (FileSystem.exists(fileToCheck)) {
 					var parsedCategory = haxe.Json.parse(File.getContent(fileToCheck));
-					addCategory(parsedCategory.categoryName, fileToCheck.substring(0, fileToCheck.length - 5), parsedCategory.weeks);
+					addCategory(parsedCategory.categoryName, cat, parsedCategory.weeks);
 				}
 			}
 
