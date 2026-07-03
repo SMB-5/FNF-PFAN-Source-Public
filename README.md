@@ -89,9 +89,10 @@ For anything else, run `unix.sh`
 
 After running the file, run `haxelib run lime setup` to get access to the `lime` command.
 
-## Building
+# Building
 
 Finally, after all of that, run `lime test cpp` and your game should now be compiling.
+
 Be aware that if you're compiling a HaxeFlixel game for the first time, it will always take about 5-10+ minutes as it has to build all files from scratch. The time will vary depending on your hardware. However, it will get faster for subsequent compiles.
 
 If you get any errors, please create an issue and we will try and help you as soon as possible. But yeah that should be it, I hope you enjoy the mod and have fun.
