@@ -81,20 +81,20 @@ class PersonaCardSubstate extends MusicBeatSubstate
 
 		if (prompt == "WarningDemo")
 		{
-			promptText.text = "INFORMATION";
-			titleText.text = "Before You Start The Demo";
-			cardText.text = "This Mod is still in active development so a lot of things present might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do for the Mod and does not represent the Final Mod.\n\nPlease also note that this Mod contains Flashing Lights which can be disabled at Anytime in the Config Menu.";
+			promptText.text = Language.getPhrase("prompt_info");
+			titleText.text = Language.getPhrase("demo_title");
+			cardText.text = Language.getPhrase("demo_text");
 		}
 		else if (prompt == "LockedDemo")
 		{
-			promptText.text = "INFORMATION";
-			titleText.text = "Not Available in the Demo";
-			cardText.text = "This Menu will be Available in the First Release of the Full Mod.";
+			promptText.text = Language.getPhrase("prompt_info");
+			titleText.text = Language.getPhrase("demolock_title");
+			cardText.text = Language.getPhrase("demolock_text");
 		}
 		else
 		{
-			promptText.text = "SYSTEM";
-			titleText.text = "Error";
+			promptText.text = Language.getPhrase("prompt_system");
+			titleText.text = Language.getPhrase("error_title");
 			cardText.text = "The Prompt you're looking for wasn't found.";
 		}
 	}

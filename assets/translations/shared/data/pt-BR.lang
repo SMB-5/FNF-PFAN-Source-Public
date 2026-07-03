@@ -24,9 +24,9 @@ storyname_weekend1: "Due Debts"
 // Freeplay
 personal_best: "MELHOR PONTUAÇÃO: {1} ({2}%)"
 personal_best_opponent: "TRANSLATION NEEDED"
-
-// Music Player
-musicplayer_tip: "TRANSLATION NEEDED"
+category_all: "TRANSLATION NEEDED"
+category_story: "TRANSLATION NEEDED"
+category_freeplay: "TRANSLATION NEEDED"
 
 // Music Player Settings
 musicplayer_setting_playback_rate: "TRANSLATION NEEDED"
