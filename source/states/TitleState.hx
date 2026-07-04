@@ -164,6 +164,25 @@ class TitleState extends MusicBeatState
 
 		var animFrames:Array<FlxFrame> = [];
 		titleText = new FlxSprite(enterPosition.x, enterPosition.y);
+		#if mobile
+		titleText.frames = Paths.getSparrowAtlas('titleEnter_mobile');
+		@:privateAccess
+		{
+			titleText.animation.findByPrefix(animFrames, "ENTER IDLE");
+			titleText.animation.findByPrefix(animFrames, "ENTER FREEZE");
+		}
+		
+		if (newTitle = animFrames.length > 0)
+		{
+			titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
+			titleText.animation.addByPrefix('press', ClientPrefs.data.flashing ? "ENTER PRESSED" : "ENTER FREEZE", 24);
+		}
+		else
+		{
+			titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
+			titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
+		}
+		#else
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		@:privateAccess
 		{
@@ -181,6 +200,7 @@ class TitleState extends MusicBeatState
 			titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 			titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
 		}
+		#end
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		add(titleText);
