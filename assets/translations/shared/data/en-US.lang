@@ -24,9 +24,13 @@ storyname_weekend1: "Due Debts"
 // Freeplay
 personal_best: "HIGHSCORE: {1} ({2}%)"
 personal_best_opponent: "OPPONENT HIGHSCORE: {1} ({2}%)"
+
 category_all: "All"
 category_story: "Main Story"
 category_freeplay: "Side Stories"
+
+// Music Player
+musicplayer_tip: "Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to switch songs\nPress BACK to Exit / Press RESET to Restart the Song"
 
 // Music Player Settings
 musicplayer_setting_playback_rate: "Playback Rate"
