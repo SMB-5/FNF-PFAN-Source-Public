@@ -146,10 +146,10 @@ class MainMenuState extends MusicBeatState
 		add(fnfVer);
 
 		#if !mobile
-		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'movement', 1, 'ui_select');
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'movement', 1, 'ui_select', 0.15, 24);
 		add(movementIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.width + 30, FlxG.height - 44, 'accept', 0, 'ui_confirm');
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.width + 30, FlxG.height - 44, 'accept', 1, 'ui_confirm', 0.15, 24);
 		add(acceptIcon);
 
 		FlxG.mouse.visible = true;

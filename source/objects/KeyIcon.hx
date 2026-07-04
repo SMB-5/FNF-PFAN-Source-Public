@@ -4,12 +4,13 @@ import flixel.input.keyboard.FlxKey;
 
 class KeyIcon extends FlxSpriteGroup
 {
-	public static var defaultTranslations:Map<String, String> = ['ui_select' => 'Select', 'ui_confirm' => 'Confirm', 'ui_close' => 'Close', 'ui_back' => 'Back', 'ui_gmodifiers' => 'Modifiers', 'ui_reset' => 'reset', 'ui_change_character' => 'Change Character'];
+	public static var defaultTranslations:Map<String, String> = ['ui_select' => 'Select', 'ui_confirm' => 'Confirm', 'ui_close' => 'Close', 'ui_back' => 'Back', 'ui_gmodifiers' => 'Modifiers', 'ui_reset' => 'reset', 'ui_change_character' => 'Change Character', 
+	'ui_music_player' => 'Preview'];
 
 	public var icons:Array<FlxSprite> = [];
 	public var iconText:FlxText;
 
-	public function new(x:Float = 0, y:Float = 0, bindName:String = 'blank', bindIndex:Int = 0, translationText:String = 'blank', iconScale:Float = 0.15) {
+	public function new(x:Float = 0, y:Float = 0, bindName:String = 'blank', bindIndex:Int = 0, translationText:String = 'blank', iconScale:Float = 0.15, textSize:Int = 24) {
 		super(x, y);
 		var keyBind:FlxKey = NONE;
 		if (bindName != 'movement') {
@@ -53,7 +54,7 @@ class KeyIcon extends FlxSpriteGroup
 				icons.push(iconRight);
 
 				iconText = new FlxText(iconRight.x + iconRight.width + 10, 5, 0, Language.getPhrase(translationText, defaultTranslations.get(translationText) ?? 'NO TRANSLATION FOUND'), 24);
-				iconText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
+				iconText.setFormat("VCR OSD Mono", textSize, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
 				add(iconText);
 			case 'blank':
 				var icon:FlxSprite = new FlxSprite(0, 0, Paths.image(getIconPath() + 'keyboard-button-blank'));
@@ -75,7 +76,7 @@ class KeyIcon extends FlxSpriteGroup
 				icons.push(icon);
 
 				iconText = new FlxText(width + 10, 5, 0, Language.getPhrase(translationText, defaultTranslations.get(translationText) ?? 'NO TRANSLATION FOUND'), 24);
-				iconText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
+				iconText.setFormat("VCR OSD Mono", textSize, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
 				add(iconText);
 		}
 	}

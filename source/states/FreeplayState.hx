@@ -143,19 +143,19 @@ class FreeplayState extends MusicBeatState
 		add(bar);
 		bar.screenCenter();
 
-		catText = new Alphabet(70, 10, '', true);
-		catText.scaleX = 0.8;
-		catText.scaleY = 0.8;
+		catText = new Alphabet(50, 10, '', true);
+		catText.scaleX = 0.6;
+		catText.scaleY = 0.6;
 		add(catText);
 
-		leftArrow = new Alphabet(catText.x - 50, catText.y, '<', true);
-		leftArrow.scaleX = 0.8;
-		leftArrow.scaleY = 0.8;
+		leftArrow = new Alphabet(catText.x - 40, catText.y, '<', true);
+		leftArrow.scaleX = 0.6;
+		leftArrow.scaleY = 0.6;
 		add(leftArrow);
 
-		rightArrow = new Alphabet(catText.x + catText.width + 15, catText.y, '>', true);
-		rightArrow.scaleX = 0.8;
-		rightArrow.scaleY = 0.8;
+		rightArrow = new Alphabet(catText.x + catText.width + 1, catText.y, '>', true);
+		rightArrow.scaleX = 0.6;
+		rightArrow.scaleY = 0.6;
 		add(rightArrow);
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
@@ -185,7 +185,7 @@ class FreeplayState extends MusicBeatState
 		lerpSelected = curSelected;
 
 		#if !mobile
-		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'movement', 1, 'ui_select', 0.1);
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'movement', 1, 'ui_select', 0.1, 18);
 		movementIcon.icons[2].y = movementIcon.y - 25;
 		for (i in 0...movementIcon.icons.length) {
 			if (i == 0) continue;
@@ -195,25 +195,30 @@ class FreeplayState extends MusicBeatState
 		movementIcon.iconText.y -= 5;
 		add(movementIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1);
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 24, 'accept', 1, 'ui_confirm', 0.1, 18);
 		acceptIcon.iconText.x -= 5;
 		acceptIcon.iconText.y -= 5;
 		add(acceptIcon);
 
-		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1);
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 1, 'ui_back', 0.1, 18);
 		backIcon.iconText.x -= 5;
 		backIcon.iconText.y -= 5;
 		add(backIcon);
 
-		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, 'control', 0, 'ui_gmodifiers', 0.1);
+		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, 'control', 0, 'ui_gmodifiers', 0.1, 18);
 		controlIcon.iconText.x -= 5;
 		controlIcon.iconText.y -= 5;
 		add(controlIcon);
 
-		var resetIcon:KeyIcon = new KeyIcon(controlIcon.x + controlIcon.width + 5, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1);
+		var resetIcon:KeyIcon = new KeyIcon(controlIcon.x + controlIcon.width + 5, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1, 18);
 		resetIcon.iconText.x -= 5;
 		resetIcon.iconText.y -= 5;
 		add(resetIcon);
+
+		var previewIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 5, FlxG.height - 24, 'space', 0, 'ui_music_player', 0.1, 18);
+		previewIcon.iconText.x -= 5;
+		previewIcon.iconText.y -= 5;
+		add(previewIcon);
 		#end
 
 		for (option in GameplayChangersSubstate.getOptions())
