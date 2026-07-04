@@ -802,7 +802,7 @@ class PlayState extends MusicBeatState
 			add(pauseButton);
 			if (mobileControls.isHitbox) {
 				for (button in mobileControls.hitbox) {
-					button.deadZones.push(pauseButton);
+					button.deadZones.push(pauseCircle);
 				}
 			}
 		}
@@ -2054,7 +2054,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #end #if mobile || ClientPrefs.data.pauseButton && TouchUtil.overlaps(pauseButton) && TouchUtil.justReleased #end) && startedCountdown && canPause)
+		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #end #if mobile || ClientPrefs.data.pauseButton && TouchUtil.overlaps(pauseCircle) && TouchUtil.justReleased #end) && startedCountdown && canPause)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != LuaUtils.Function_Stop) {
@@ -2151,8 +2151,8 @@ class PlayState extends MusicBeatState
 		if (MobileData.baseGame) {
 			var strumGroup:FlxTypedGroup<StrumNote> = opponentMode ? opponentStrums : playerStrums;
 			if (strumGroup != null) {
-				for (i => strum in strumGroup) {
-					mobileControls.currentMode.updateBaseGamePositions(strum, i);
+				for (strum in strumGroup) {
+					mobileControls.currentMode.updateBaseGamePositions(strum, strum.noteData);
 				}
 			}
 		}

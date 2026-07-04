@@ -3,6 +3,8 @@ package mobile.options;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 
+import objects.StrumNote;
+
 import mobile.backend.MobileData;
 import mobile.objects.MobileControls;
 import mobile.objects.TouchButton;
@@ -28,6 +30,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 	var optionsButton:PsychUIButton;
 	var hideButton:PsychUIButton;
 	var resetButton:PsychUIButton;
+
+	var strumLineNotes:FlxTypedGroup<StrumNote>;
 
 	override function create() {
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF77F24E);
@@ -91,6 +95,18 @@ class MobileControlsSubState extends MusicBeatSubstate
 		resetButton.update(FlxG.elapsed);
 		resetButton.kill();
 		add(resetButton);
+
+		strumLineNotes = new FlxTypedGroup<StrumNote>();
+		strumLineNotes.visible = false;
+		add(strumLineNotes);
+
+		for (i in 0...4) {
+			var strum:StrumNote = new StrumNote(0, FlxG.height - 163, i, 1);
+			strum.downScroll = true;
+			if (i < 2) strum.x = 227 + (194 * i);
+			else strum.x = FlxG.width - 534 + (194 * (i - 2));
+			strumLineNotes.add(strum);
+		}
 
 		curSelected = Std.int(Math.max(options.indexOf(ClientPrefs.data.controlMode.toUpperCase()), 0));
 		changeControl(0, false);
@@ -181,12 +197,26 @@ class MobileControlsSubState extends MusicBeatSubstate
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
 		curControl.text = options[curSelected];
 		rightArrow.x = curControl.x + curControl.width + 20;
+		MobileData.baseGame = options[curSelected] == 'BASE_GAME';
 		mobileControls.changeControl(MobileData.controlModes.get(options[curSelected]), ClientPrefs.data.hitboxStyle);
 		MobileData.setControlColor(mobileControls.currentMode);
+		strumLineNotes.visible = options[curSelected] == 'BASE_GAME';
+
+		if (options[curSelected] == 'BASE_GAME') {
+			mobileControls.hitbox.onPressed.add(button->playStrumAnim(button, true));
+			mobileControls.hitbox.onReleased.add(button->playStrumAnim(button, false));
+			for (strum in strumLineNotes) mobileControls.hitbox.updateBaseGamePositions(strum, strum.noteData);
+		}
 		if (options[curSelected] == 'CUSTOM') resetButton.revive();
 		else if (resetButton.alive) resetButton.kill();
 		if (options[curSelected] == 'HITBOX') optionsButton.revive();
 		else if (optionsButton.alive) optionsButton.kill();
+	}
+
+	function playStrumAnim(button:TouchButton, pressed:Bool = true) {
+		var dir:Int = button.IDs[0].toString().startsWith('NOTE') ? button.IDs[0] : button.IDs[1];
+		if (strumLineNotes.members[dir] == null) return;
+		strumLineNotes.members[dir].playAnim(pressed ? 'pressed' : 'static', true);
 	}
 
 	function hideUI(hide:Bool = false) {

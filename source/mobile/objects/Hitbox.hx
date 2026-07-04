@@ -52,13 +52,9 @@ class Hitbox extends MobileInputManager
 		button.loadGraphic(createHitboxGraphic(style, width, height));
 		button.alpha = 0.0001;
 		button.label = new FlxSprite();
-		if (!MobileData.baseGame) {
-			if (ClientPrefs.data.hitboxHints) {
-				button.label.loadGraphic(createHitboxGraphic('Hint', width, height));
-			}
-			else {
-				button.label.makeGraphic(1, 1, 0);
-			}
+		button.label.makeGraphic(1, 1, 0);
+		if (!MobileData.baseGame && ClientPrefs.data.hitboxHints) {
+			button.label.loadGraphic(createHitboxGraphic('Hint', width, height));
 		}
 		button.label.alpha = ClientPrefs.data.controlAlpha;
 		button.changeLabelAlpha = false;
