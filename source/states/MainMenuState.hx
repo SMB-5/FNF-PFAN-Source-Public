@@ -145,6 +145,12 @@ class MainMenuState extends MusicBeatState
 		fnfVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fnfVer);
 
+		#if mobile
+		pfanVer.y = FlxG.height - 64;
+		psychVer.y = FlxG.height - 44;
+		fnfVer.y = FlxG.height - 24;
+		#end
+
 		#if !mobile
 		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'movement', 1, 'ui_select', 0.15, 24);
 		add(movementIcon);
