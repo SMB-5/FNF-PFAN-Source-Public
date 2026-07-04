@@ -27,7 +27,7 @@ class MobileSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Enable Pause Button',
-			'Whether or not the pause button should be enabled.',
+			'Whether or not the pause button should be enabled.\nYou can still press the back button to pause.',
 			'pauseButton',
 			BOOL);
 		addOption(option);

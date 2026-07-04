@@ -26,6 +26,7 @@ class BackButton extends FlxSprite
 	}
 
 	override function update(elapsed:Float) {
+		initiallyPressed = false;
 		if (TouchUtil.overlaps(this) && TouchUtil.justPressed && animation.finished) {
 			initiallyPressed = true;
 			animation.play('back');

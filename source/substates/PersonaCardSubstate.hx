@@ -61,11 +61,14 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(cardText);
 
 		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 1, 'ui_close');
+		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
 		acceptIcon.alpha = 0;
 		add(acceptIcon);
 
 		#if mobile
 		backButton = new BackButton();
+		backButton.alpha = 0;
+		FlxTween.tween(backButton, {alpha: 0.7}, 0.3, {ease: FlxEase.quartInOut});
 		add(backButton);
 		#end
 
@@ -99,11 +102,16 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		}
 	}
 
+	var exiting:Bool = false;
 	override function update(elapsed:Float)
 	{
-		if (controls.ACCEPT #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed || TouchUtil.justReleased && !TouchUtil.overlaps(cardBG) #end)
+		if (!exiting && (controls.ACCEPT #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG) #end))
 		{
+			exiting = true;
 			FlxG.sound.play(Paths.sound('confirmMenu'));
+			#if mobile 
+			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
+			#end
 			FlxTween.tween(bg, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(cardBG, {x: 410, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleBG, {x: 460, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
