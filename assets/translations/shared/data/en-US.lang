@@ -73,6 +73,7 @@ ui_gmodifiers: "Modifiers"
 ui_reset: "Reset"
 ui_change_character: "Character"
 ui_music_player: "Preview"
+ui_open_link: "Open Link"
 
 // Persona PopUp Cards
 prompt_info: "INFORMATION"

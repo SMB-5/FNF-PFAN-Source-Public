@@ -68,6 +68,8 @@ import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.util.FlxSpriteUtil;
+using flixel.util.FlxSpriteUtil;
 
 using StringTools;
 #end

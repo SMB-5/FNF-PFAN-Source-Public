@@ -180,10 +180,10 @@ class MainMenuState extends MusicBeatState
 	}
 
 	var selectedSomethin:Bool = false;
-
+	var canFadeIn:Bool = true;
 	override function update(elapsed:Float)
 	{
-		if (FlxG.sound.music.volume < 0.8)
+		if (FlxG.sound.music.volume < 0.8 && canFadeIn)
 		{
 			FlxG.sound.music.volume += 0.5 * elapsed;
 		}
@@ -225,6 +225,12 @@ class MainMenuState extends MusicBeatState
 				{
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 					selectedSomethin = true;
+
+					if (optionShit[curSelected] == 'CREDITS')
+					{
+						canFadeIn = false;
+						FlxG.sound.music.fadeOut(1, 0);
+					}
 
 					new FlxTimer().start(1, function(tmr:FlxTimer)
 					{

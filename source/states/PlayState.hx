@@ -3958,6 +3958,8 @@ class PlayState extends MusicBeatState
 						zoomCamera(1.05, 0.5, { ease: FlxEase.circOut });
 					case 1150:
 						zoomCamera(0.85, 2, { ease: FlxEase.sineOut });
+						isCameraOnForcedPos = true;
+						FlxTween.tween(camFollow, { x: gf.getMidpoint().x + gf.cameraPosition[0] + girlfriendCameraOffset[0], y: gf.getMidpoint().y + gf.cameraPosition[1] + girlfriendCameraOffset[1] }, 2.25, { ease: FlxEase.sineInOut, onUpdate: t->camGame.snapToTarget(), onComplete: t->isCameraOnForcedPos = false });
 				}
 		}
 

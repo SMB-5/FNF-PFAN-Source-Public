@@ -5,8 +5,6 @@ import backend.WeekData;
 
 import mobile.backend.MobileData;
 
-using flixel.util.FlxSpriteUtil;
-
 class SongCard extends FlxSpriteGroup 
 {
 	var text:FlxText;

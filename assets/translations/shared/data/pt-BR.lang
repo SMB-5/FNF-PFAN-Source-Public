@@ -72,6 +72,8 @@ ui_back: "TRANSLATION NEEDED"
 ui_gmodifiers: "TRANSLATION NEEDED"
 ui_reset: "TRANSLATION NEEDED"
 ui_change_character: "TRANSLATION NEEDED"
+ui_music_player: "TRANSLATION NEEDED"
+ui_open_link: "TRANSLATION NEEDED"
 
 // Persona PopUp Cards
 prompt_info: "TRANSLATION NEEDED"

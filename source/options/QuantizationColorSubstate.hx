@@ -1,6 +1,5 @@
 package options;
 
-import flixel.util.FlxSpriteUtil;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.display.shapes.FlxShapeCircle;
@@ -381,7 +380,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 				box = new FlxSprite().makeGraphic(850, 500, 0xC9000000);
 				box.screenCenter();
-				FlxSpriteUtil.drawRect(box, 0, 0, box.width, box.height, 0, {thickness: 10, color: 0xFFFFFFFF});
+				box.drawRect(0, 0, box.width, box.height, 0, {thickness: 10, color: 0xFFFFFFFF});
 				insert(members.indexOf(modeNotes), box);
 
 				// this is hardcoded to 8 snaps only because i'm lazy LOL! - melodiekit
@@ -412,11 +411,11 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 					btnGroup.add(resetTxt);
 
 					var bg = new FlxSprite(editTxt.x - 20, editTxt.y - 5).makeGraphic(Math.round(editTxt.width * 1.5), Math.round(editTxt.height * 1.5), 0xFF1A1A1A);
-					FlxSpriteUtil.drawRect(bg, 0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+					bg.drawRect(0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
 					btnGroup.insert(btnGroup.members.indexOf(editTxt), bg);
 
 					var bg = new FlxSprite(resetTxt.x - 20, resetTxt.y - 5).makeGraphic(Math.round(resetTxt.width * 1.5), Math.round(resetTxt.height * 1.5), 0xFF1A1A1A);
-					FlxSpriteUtil.drawRect(bg, 0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+					bg.drawRect(0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
 					btnGroup.insert(btnGroup.members.indexOf(resetTxt), bg);
 				}
 			case NOTE_EDITING:
@@ -426,7 +425,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 				box = new FlxSprite().makeGraphic(950, 670, 0xC9000000);
 				box.screenCenter();
-				FlxSpriteUtil.drawRect(box, 0, 0, box.width, box.height, 0, {thickness: 10, color: 0xFFFFFFFF});
+				box.drawRect(0, 0, box.width, box.height, 0, {thickness: 10, color: 0xFFFFFFFF});
 				insert(members.indexOf(modeNotes), box);
 
 				var backTxt = new Alphabet(215, 625, Language.getPhrase('Back').toUpperCase());
@@ -434,7 +433,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				btnGroup.add(backTxt);
 
 				var bg = new FlxSprite(backTxt.x - 30, backTxt.y - 10).makeGraphic(Math.round(backTxt.width * 1.5), Math.round(backTxt.height * 1.5), 0xFF1A1A1A);
-				FlxSpriteUtil.drawRect(bg, 0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+				bg.drawRect(0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
 				btnGroup.insert(btnGroup.members.indexOf(backTxt), bg);
 
 				var snap = new Alphabet(250, 10, Note.quantizations[editingNote] + 'th Note', false);

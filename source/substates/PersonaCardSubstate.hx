@@ -60,10 +60,12 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		cardText.alpha = 0;
 		add(cardText);
 
+		#if !mobile
 		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 1, 'ui_close');
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
 		acceptIcon.alpha = 0;
 		add(acceptIcon);
+		#end
 
 		#if mobile
 		backButton = new BackButton();
@@ -78,7 +80,9 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		FlxTween.tween(promptText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(titleText, {x: 0, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(cardText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+		#if !mobile
 		FlxTween.tween(acceptIcon, {x: 920, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+		#end
 
 		super.create();
 
@@ -117,7 +121,9 @@ class PersonaCardSubstate extends MusicBeatSubstate
 			FlxTween.tween(titleBG, {x: 460, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(promptText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleText, {x: 400, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+			#if !mobile
 			FlxTween.tween(acceptIcon, {x: 1220, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+			#end
 			FlxTween.tween(cardText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut,
 			onComplete: function(twn:FlxTween)
 			{

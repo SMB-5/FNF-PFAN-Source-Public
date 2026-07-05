@@ -60,7 +60,7 @@ class TouchUtil
 		return false;
 	}
 
-	private static function overlapsPoint(object:FlxObject, point:FlxPoint, ?offset:FlxPoint, inScreenSpace = false, ?camera:FlxCamera):Bool {
+	public static function overlapsPoint(object:FlxObject, point:FlxPoint, ?offset:FlxPoint, inScreenSpace = false, ?camera:FlxCamera):Bool {
 		if (offset == null) {
 			offset = FlxPoint.get(0, 0);
 		}

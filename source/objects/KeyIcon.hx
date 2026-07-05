@@ -5,7 +5,7 @@ import flixel.input.keyboard.FlxKey;
 class KeyIcon extends FlxSpriteGroup
 {
 	public static var defaultTranslations:Map<String, String> = ['ui_select' => 'Select', 'ui_confirm' => 'Confirm', 'ui_close' => 'Close', 'ui_back' => 'Back', 'ui_gmodifiers' => 'Modifiers', 'ui_reset' => 'reset', 'ui_change_character' => 'Change Character', 
-	'ui_music_player' => 'Preview'];
+	'ui_music_player' => 'Preview', 'ui_open_link' => 'Open Link'];
 
 	public var icons:Array<FlxSprite> = [];
 	public var iconText:FlxText;
