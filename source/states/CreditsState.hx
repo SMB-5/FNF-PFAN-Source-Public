@@ -11,10 +11,11 @@ class CreditsState extends MusicBeatState
 		// Name - Icon name - Role(s), Description - Link - Card Color - FlipX (set to false if the original icon isn't facing the right)
 		['Persona: Funkin All Night'],
 		['A Friday Night Funkin\' Mod by The Funkin Thieves'],
-		['Programmers'],
+		['Director'],
 		['SMB', 'SMB', 'Director, Main Programmer', 'Hey thank you so much for playing! I hope you enjoyed the mod as much as we did making it.', 'https://smb-bio.carrd.co/', 0xFFEC1C26],
+		['Programmers'],
 		['Cobalt', 'cobalt', 'Programmer', 'I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next.', 'https://cobaltbar.github.io/', 0xFF0065FF],
-		['melodiekit', 'melodiekit', 'Programmer, Mobile Porter, Charter', 'Hi!\n\nI coded some of the UI that you see here like the Music Player, Credits Menu, Options Menu, etc lol\nI also tried my best to replicate the cool UI that Persona has, like their transitions... Whether it actually looks good or not is up to you\n\nI also charted Tartarus and Foggy Night. Let it be known that I only charted Tartarus because it was the same name of a Geometry Dash extreme demon :troll:.\n\nRegardless, I hope you enjoyed the mod as much as I had fun coding it!\n\nOh yeah I also made the mobile port I guess that\'s important', 'https://youtube.com/@melodiekit', 0xFFC0EBFF],
+		['melodiekit', 'melodiekit', 'Programmer, Mobile Porter, Charter', 'Hi!\n\nI coded some stuff for this mod. Some notable stuff I coded are some of the UI that you see here like the Music Player, Credits Menu, Options Menu, etc lol\nI also tried my best to replicate the cool UI that Persona has, like their transitions... Whether it actually looks good or not is up to you\n\nI also charted Tartarus and Foggy Night. Let it be known that I only charted Tartarus because it has the same name as a Geometry Dash extreme demon :troll:.\n\nRegardless, I hope you enjoyed the mod as much as I had fun coding it!\n\nOh yeah I also made the mobile port I guess that\'s important', 'https://youtube.com/@melodiekit', 0xFFC0EBFF],
 		['NotMagniill', 'bobbo', 'Programmer, Artist', 'I\'m a devil muehehehe... also SMB no offense your code sucks', 'https://twitter.com/magniill', 0xFF640911],
 		['Musicians'],
 		['Dog', 'doggo', 'Musician', 'Hi! I composed a few songs for le epic persona mod, like Truth, Game Over!! and the main menu theme! Hope you enjoyed listening to them! If you want to hear more of my music, press enter to go to my channel!', 'https://www.youtube.com/@you-know-its-dog.', 0xFFF5D79D, false],
