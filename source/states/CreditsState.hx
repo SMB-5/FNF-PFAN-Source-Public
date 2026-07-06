@@ -71,8 +71,8 @@ class CreditsState extends MusicBeatState
 	#if mobile
 	var prevSelected:Int = 0;
 	var prevCamPos:Float = 0;
-	var swiping:Bool = false;
 	#end
+	var swiping:Bool = false;
 
 	var titleGroup:FlxTypedSpriteGroup<FlxText>;
 	var creditsGroup:FlxTypedSpriteGroup<FlxText>;

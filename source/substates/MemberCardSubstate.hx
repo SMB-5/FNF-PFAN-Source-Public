@@ -264,7 +264,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 				var val:Float = 26 / 5;
 				if (FlxG.mouse.wheel == -1) val *= -1;
 				camDesc.scroll.y += val;
-				scrollBar.y += val * (camDesc.height / (height + 16));
+				scrollBar.y += val * (camDesc.height / (FlxG.height + 16));
 			}
 			#end
 			if (TouchUtil.pressed && (TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
