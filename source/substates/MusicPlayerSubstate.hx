@@ -382,6 +382,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 			playMusic();
 		}
 		else if (loop == 'Disabled' || autoplay && curSong == songPlaylist.length - 1) {
+			stopMusic();
 			updateTime(inst.length);
 		}
 	}

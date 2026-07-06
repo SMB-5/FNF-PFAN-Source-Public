@@ -71,8 +71,8 @@ class CreditsState extends MusicBeatState
 	#if mobile
 	var prevSelected:Int = 0;
 	var prevCamPos:Float = 0;
-	#end
 	var swiping:Bool = false;
+	#end
 
 	var titleGroup:FlxTypedSpriteGroup<FlxText>;
 	var creditsGroup:FlxTypedSpriteGroup<FlxText>;
@@ -290,7 +290,7 @@ class CreditsState extends MusicBeatState
 		}
 		arrow.visible = true;
 		arrow.y = creditsGroup.members[curSelected].y + 3;
-		if (!swiping) camFollow.y = FlxG.height / 2 + creditsGroup.members[curSelected].y - 225;
+		#if mobile if (!swiping) #end camFollow.y = FlxG.height / 2 + creditsGroup.members[curSelected].y - 225;
 	}
 
 	function scroll() {

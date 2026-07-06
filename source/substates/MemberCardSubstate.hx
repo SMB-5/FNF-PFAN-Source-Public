@@ -182,12 +182,6 @@ class MemberCardSubstate extends MusicBeatSubstate
 		add(descTxt);
 		if (descTxt.textField.textHeight >= 202) allowScrolling = true;
 
-		descOutline = new FlxSprite().makeGraphic(Std.int(descBox.width), Std.int(descBox.height), 0);
-		descOutline.drawRect(0, 0, descOutline.width, descOutline.height, 0, {thickness: 5, color: color2});
-		descOutline.camera = camDesc;
-		descOutline.scrollFactor.set();
-		add(descOutline);
-
 		scrollBar = new FlxSprite().makeGraphic(10, Math.round(camDesc.height * camDesc.height / descTxt.textField.textHeight), 0xFF000000);
 		scrollBar.x = camDesc.width - scrollBar.width;
 		scrollBar.camera = camDesc;
@@ -195,6 +189,12 @@ class MemberCardSubstate extends MusicBeatSubstate
 		scrollBar.visible = allowScrolling;
 		scrollBar.scrollFactor.set();
 		add(scrollBar);
+
+		descOutline = new FlxSprite().makeGraphic(Std.int(descBox.width), Std.int(descBox.height), 0);
+		descOutline.drawRect(0, 0, descOutline.width, descOutline.height, 0, {thickness: 5, color: color2});
+		descOutline.camera = camDesc;
+		descOutline.scrollFactor.set();
+		add(descOutline);
 
 		#if !mobile
 		backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 1, 'ui_close');
@@ -264,7 +264,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 				var val:Float = 26 / 5;
 				if (FlxG.mouse.wheel == -1) val *= -1;
 				camDesc.scroll.y += val;
-				scrollBar.y += val * (camDesc.height / (FlxG.height + 16));
+				scrollBar.y += val * (camDesc.height / (descTxt.textField.textHeight + 16));
 			}
 			#end
 			if (TouchUtil.pressed && (TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
