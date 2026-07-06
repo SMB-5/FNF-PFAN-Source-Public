@@ -1,47 +1,47 @@
 Português (Brasil)
 
 // Main Menu (Please make sure the text is capitalised in your language)
-menu_story_mode: "TRANSLATION NEEDED"
-menu_freeplay: "TRANSLATION NEEDED"
-menu_awards: "TRANSLATION NEEDED"
-menu_gallery: "TRANSLATION NEEDED"
-menu_credits: "TRANSLATION NEEDED"
-menu_config: "TRANSLATION NEEDED"
+menu_story_mode: "MODO HISTÓRIA"
+menu_freeplay: "MODO LIVRE"
+menu_awards: "CONQUISTAS"
+menu_gallery: "GALERIA"
+menu_credits: "CRÉDITOS"
+menu_config: "CONFIGURAÇÕES"
 
 // Story Mode (IGNORE FOR DEMO - SMB)
-week_score: "WEEK SCORE: {1}"
+week_score: "PONTUAÇÃO: {1}"
 
 storyname_tutorial: "Tutorial"
 storyname_week1: "Daddy Dearest"
-storyname_week2: "Spooky Month"
+storyname_week2: "Mês Assustador"
 storyname_week3: "Pico"
-storyname_week4: "Mommy Must Murder"
-storyname_week5: "Red Snow"
-storyname_week6: "Hating Simulator ft. Moawling"
+storyname_week4: "Mommy Tem Que Assassinar"
+storyname_week5: "Nevasca Vermelha"
+storyname_week6: "Simulador de Confronto ft. Moawling"
 storyname_week7: "Tankman"
-storyname_weekend1: "Due Debts"
+storyname_weekend1: "Dívidas Fora do Prazo"
 
 // Freeplay
 personal_best: "MELHOR PONTUAÇÃO: {1} ({2}%)"
-personal_best_opponent: "TRANSLATION NEEDED"
+personal_best_opponent: "PONTUAÇÃO DO OPONENTE: {1} ({2}%)"
 
-category_all: "TRANSLATION NEEDED"
-category_story: "TRANSLATION NEEDED"
-category_freeplay: "TRANSLATION NEEDED"
+category_all: "Todos"
+category_story: "História Principal"
+category_freeplay: "Histórias Paralelas"
 
 // Music Player
-musicplayer_tip: "TRANSLATION NEEDED"
+musicplayer_tip: "Pressione ESPAÇO para Tocar ou Parar a Música / Pressione ESQUERDA ou DIREITA para alterar músicas\nPressione BACKSPACE para Sair / Pressione RESET para Recomeçar a Música"
 
 // Music Player Settings
-musicplayer_setting_playback_rate: "TRANSLATION NEEDED"
-musicplayer_setting_instrumental_volume: "TRANSLATION NEEDED"
-musicplayer_setting_vocals_volume: "TRANSLATION NEEDED"
-musicplayer_setting_opponent_vocals_volume: "TRANSLATION NEEDED"
-musicplayer_setting_loop: "TRANSLATION NEEDED"
-musicplayer_setting_loop-disabled: "TRANSLATION NEEDED"
-musicplayer_setting_loop-song: "TRANSLATION NEEDED"
-musicplayer_setting_loop-playlist: "TRANSLATION NEEDED"
-musicplayer_setting_autoplay: "TRANSLATION NEEDED"
+musicplayer_setting_playback_rate: "Playback Rate"
+musicplayer_setting_instrumental_volume: "Volume do Instrumental"
+musicplayer_setting_vocals_volume: "Volume do Vocal"
+musicplayer_setting_opponent_vocals_volume: "Volume do Vocal do Oponente"
+musicplayer_setting_loop: "Repetição"
+musicplayer_setting_loop-disabled: "Desativada"
+musicplayer_setting_loop-song: "Música"
+musicplayer_setting_loop-playlist: "Playlist"
+musicplayer_setting_autoplay: "Reprodução Automática"
 
 // Difficulties
 difficulty_: ""
@@ -53,96 +53,97 @@ difficulty_hard: "Difícil"
 // UI
 yes: "Sim"
 no: "Não"
-on: "TRANSLATION NEEDED"
-off: "TRANSLATION NEEDED"
-edit: "TRANSLATION NEEDED"
-reset: "TRANSLATION NEEDED"
-back: "TRANSLATION NEEDED"
+on: "Ligado"
+off: "Desligado"
+edit: "Editar"
+reset: "Reset"
+back: "Voltar"
 
-opponent: "TRANSLATION NEEDED"
+opponent: "OPONENTE"
 
 reset_score: "Resetar Pontuação de"
 
 now_loading: "Carregando{1}"
 
-ui_select: "TRANSLATION NEEDED"
-ui_confirm: "TRANSLATION NEEDED"
-ui_close: "TRANSLATION NEEDED"
-ui_back: "TRANSLATION NEEDED"
-ui_gmodifiers: "TRANSLATION NEEDED"
-ui_reset: "TRANSLATION NEEDED"
-ui_change_character: "TRANSLATION NEEDED"
-ui_music_player: "TRANSLATION NEEDED"
-ui_open_link: "TRANSLATION NEEDED"
+ui_select: "Selecionar"
+ui_confirm: "Confirmar"
+ui_close: "Fechar"
+ui_back: "Voltar"
+ui_gmodifiers: "Modificadores"
+ui_reset: "Reset"
+ui_change_character: "Personagem"
+ui_music_player: "Prévia"
+ui_open_link: "Abrir Link"
 
 // Persona PopUp Cards
-prompt_info: "TRANSLATION NEEDED"
-prompt_system: "TRANSLATION NEEDED"
-error_title: "TRANSLATION NEEDED"
+prompt_info: "INFORMAÇÃO"
+prompt_system: "SISTEMA"
+error_title: "Erro"
 
-demo_title: "TRANSLATION NEEDED"
-demo_text: "TRANSLATION NEEDED"
+demo_title: "Antes De Começar a Demo"
+demo_text: "Este mod ainda está em desenvolvimento, então muitas coisas presentes podem ser alteradas, removidas ou inacabadas.\n\nEsta demo serve como uma pequena amostra do que pretendemos fazer com o mod e não representa a versão final.\n\nObserve também que este mod contém luzes piscantes, que podem ser desativadas a qualquer momento nas Configurações."
 
-demolock_title: "TRANSLATION NEEDED"
-demolock_text: "TRANSLATION NEEDED"
+demolock_title: "Indisponível na Demo"
+demolock_text: "Este menu estará disponível no primeiro lançamento do mod completo."
 
 // PlayState
 botplay: "Automático"
 
-rating_failure: "TRANSLATION NEEDED"
-rating_terrible: "TRANSLATION NEEDED"
-rating_awful: "TRANSLATION NEEDED"
+rating_failure: "F - Que Horrível!"
+rating_terrible: "E - Merda"
+rating_awful: "D - Ruim"
 rating_nice: "Decente"
-rating_not_bad: "TRANSLATION NEEDED"
-rating_good: "TRANSLATION NEEDED"
-rating_great: "TRANSLATION NEEDED"
-rating_sick: "TRANSLATION NEEDED"
-rating_perfect: "TRANSLATION NEEDED"
+rating_not_bad: "C - Nada mal"
+rating_good: "B - Bom"
+rating_great: "A - Ótimo"
+rating_sick: "S - Manda Ver!"
+rating_perfect: "P - Perfeito!"
 
 score_text: "Pontos: {1} | Erros: {2} | Avaliação: {3}"
 score_text_instakill: "Pontos: {1} | Avaliação: {2}"
 score_text_basegame: "Pontos: {1}"
 
 // Song Descriptions
-desc_tartarus: "TRANSLATION NEEDED"
-desc_truth: "TRANSLATION NEEDED"
-desc_desire: "TRANSLATION NEEDED"
-desc_foggy-night: "TRANSLATION NEEDED"
+desc_tartarus: "A Hora Sombria chegou, e BF e GF não se transformaram em caixões. Surpreso com isso e sem saber o que fazer, o SEES decide levá-los ao Tártaro; mas, enquanto relaxam no saguão e se preparam para a exploração, BF decide começar mais uma batalha de rap idiota contra Makoto Yuki."
+desc_truth: "BF e GF correm para a Junes para encontrar a Equipe de Investigação e contar o que viram no Canal da Meia-Noite na noite anterior. A Equipe de Investigação decide levar BF e GF para o Mundo da TV, já que eles podem fornecer pistas sobre a vítima recente; no entanto, assim que começam as buscas, BF decide começar mais uma batalha de rap idiota contra Yu Narukami."
+desc_desire: "De repente, a GF recebe o MetaNav em seu celular e o ativa acidentalmente, transportando a si mesma, o BF e os Phantom Thieves para Mementos. Os Phantom Thieves tentam enviar o BF e a GF de volta ao mundo real; no entanto, o BF decide começar mais uma batalha de rap estúpida contra Ren Amamiya (Joker)."
+desc_foggy-night: "Makoto Yuki e Yu Narukami foram repentinamente convocados para a Velvet Room enquanto dormiam. No entanto, esta não é a Velvet Room de que qualquer um deles se lembra. Um grande desafio os aguarda; é hora de um bom e velho confronto!"
 
 // Achievements (IGNORE THIS FOR DEMO - SMB)
 achievement_: ""
 description_: ""
 
-achievement_friday_night_play: "Freaky on a Friday Night"
-description_friday_night_play: "Play on a Friday... Night."
+achievement_friday_night_play: "Sextou"
+description_friday_night_play: "Jogue em uma noite... de Sexta."
 
-achievement_oversinging: "Oversinging Much...?"
-description_oversinging: "Sing for 10 seconds without going back to Idle."
+achievement_oversinging: "Quem é o Cantor?"
+description_oversinging: "Cante por 10 segundos ou mais."
 
-achievement_hype: "Hyperactive"
-description_hype: "Finish a Song without going back to Idle."
+achievement_hype: "TDAH"
+description_hype: "Complete uma Música nunca ficando parado."
 
-achievement_two_keys: "Just the Two of Us"
-description_two_keys: "Finish a Song pressing only two keys."
+achievement_two_keys: "Agora é só Você e Eu!"
+description_two_keys: "Complete uma Música pressionando apenas duas teclas."
 
-reset_achievement: "Reset Achievement:"
+reset_achievement: "Resetar Conquista:"
 
 // Options
 options_note_colors: "Coloração das Notas"
 options_controls: "Controles"
+options_mobile: "Celular"
 options_adjust_delay_and_combo: "Ajustar Atraso e Combo"
 options_gameplay: "Jogabilidade"
 options_visuals: "Visuais"
 options_graphics: "Gráficos"
 options_language: "Idioma"
 
-mobile_menu: "TRANSLATION NEEDED"
+mobile_menu: "Configurações do Celular"
 gameplay_menu: "Configurações de Gameplay"
 graphics_menu: "Configurações de Gráficos"
 visuals_menu: "Opções Visuais"
 
-customizable_description: "TRANSLATION NEEDED"
-customizable_description_controller: "TRANSLATION NEEDED"
+customizable_description: "(Essa configuração é customizável, clique na engrenagem!)"
+customizable_description_controller: "(Essa configuração é customizável, presssione L3!)"
 
 // Note Colors Menu
 note_colors_tip: "Aperte RESET para resetar a parte selecionada da Nota."
@@ -172,33 +173,33 @@ setting_health_loss_multiplier: "Mult. de Vida Perdida"
 setting_instakill_on_miss: "Morrer ao Errar"
 setting_practice_mode: "Modo Prática"
 setting_botplay: "Modo Automático"
-setting_play_as_opponent: "TRANSLATION NEEDED"
-setting_merciless: "TRANSLATION NEEDED"
+setting_play_as_opponent: "Jogar como Oponente"
+setting_merciless: "Impiedoso"
 
-merciless_gl: "TRANSLATION NEEDED"
+merciless_gl: "Você precisará completar a música sem perder seu combo ou receber uma avaliação Merda/Que Horrível!. Boa Sorte! Você vai precisar!"
 
 // Mobile Settings
-setting_edit_mobile_controls: "TRANSLATION NEEDED"
-description_edit_mobile_controls: "TRANSLATION NEEDED"
+setting_edit_mobile_controls: "Editar controles do Celular"
+description_edit_mobile_controls: "Altere o modo de controle atual ou personalize seus controles."
 
-setting_control_alpha: "TRANSLATION NEEDED"
-description_control_alpha: "TRANSLATION NEEDED"
+setting_control_alpha: "Controle Alfa:"
+description_control_alpha: "Quão opacos você quer que os controles sejam?"
 
-setting_enable_pause_button: "TRANSLATION NEEDED"
-description_enable_pause_button: "TRANSLATION NEEDED"
+setting_enable_pause_button: "Ativar botão de pausar"
+description_enable_pause_button: "Se o botão de pausa deve ou não ser habilitado.\nVocê ainda pode pressionar o botão de voltar para pausar."
 
 // Mobile Hitbox Settings
-setting_hitbox_style: "TRANSLATION NEEDED"
-description_hitbox_style: "TRANSLATION NEEDED"
+setting_hitbox_style: "Estilo da Hitbox:"
+description_hitbox_style: "Qual estilo da Hitbox deve ser usado?"
 
-setting_show_hints: "TRANSLATION NEEDED"
-description_show_hints: "TRANSLATION NEEDED"
+setting_show_hints: "Mostrar Dicas"
+description_show_hints: "Se deve exibir ou não as indicações de hitbox enquanto o personagem está parado."
 
 // Mobile Controls Menu
-mobile_controls_save_and_exit: "TRANSLATION NEEDED"
-mobile_controls_control_options: "TRANSLATION NEEDED"
-mobile_controls_hide_ui: "TRANSLATION NEEDED"
-mobile_controls_reset_positions: "TRANSLATION NEEDED"
+mobile_controls_save_and_exit: "Salvar e Sair"
+mobile_controls_control_options: "Opçoes de Controle"
+mobile_controls_hide_ui: "Esconder Interface"
+mobile_controls_reset_positions: "Resetar Posições"
 
 // Graphics Settings
 setting_low_quality: "Baixa Qualidade"
@@ -229,26 +230,26 @@ setting_note_splashes-diamond: "Diamante"
 setting_note_splashes-electric: "Elétrico"
 setting_note_splashes-sparkles: "Brilho"
 setting_note_splashes-vanilla: "Original"
-setting_note_splashes-psych-old: "TRANSLATION NEEDED?"
+setting_note_splashes-psych-old: "Psych-Old"
 description_note_splashes: "Escolha o seu estilo de Impacto das Notas favorito."
 
 setting_note_splash_opacity: "Opacidade do Impacto"
 description_note_splash_opacity: "O quão transparente os Impactos das Notas devem ser."
 
-setting_hold_note_splashes: "TRANSLATION NEEDED"
-description_hold_note_splashes: "TRANSLATION NEEDED"
+setting_hold_note_splashes: "Impacto das Notas Sustentadas"
+description_hold_note_splashes: "Se desmarcado, Impactos não aparecerão nas notas ao manter uma nota sustentada."
 
-setting_note_quantization: "TRANSLATION NEEDED"
-description_note_quantization: "TRANSLATION NEEDED"
+setting_note_quantization: "Quantização de Notas"
+description_note_quantization: "Se marcado, colore as notas com base no seu ajuste à grade (snap)."
 
-setting_strum_background_opacity: "TRANSLATION NEEDED"
-description_strum_background_opacity: "TRANSLATION NEEDED"
+setting_strum_background_opacity: "Opacidade do Fundo do Strum"
+description_strum_background_opacity: "Qual deve ser o nível de transparência do fundo da Strumline?"
 
 setting_hide_hud: "Esconder HUD"
 description_hide_hud: "Se marcado, a maioria dos elementos da UI ficarão ocultos."
 
-setting_show_misses_and_accuracy: "TRANSLATION NEEDED"
-description_show_misses_and_accuracy: "TRANSLATION NEEDED"
+setting_show_misses_and_accuracy: "Mostrar Erros e Avaliação"
+description_show_misses_and_accuracy: "Se desmarcado, oculta os Erros e a Avaliação no HUD, e a pontuação é exibida como no jogo base."
 
 setting_time_bar: "Barra de Tempo:"
 setting_time_bar-time_left: "Tempo Restante"
@@ -257,8 +258,8 @@ setting_time_bar-song_name: "Nome da Música"
 setting_time_bar-disabled: "Desativada"
 description_time_bar: "O que a Barra de Tempo deve mostrar?"
 
-setting_subtitles: "TRANSLATION NEEDED"
-description_subtitles: "TRANSLATION NEEDED"
+setting_subtitles: "Legendas"
+description_subtitles: "Se marcado, as legendas aparecerão quando um personagem falar ou cantar."
 
 setting_flashing_lights: "Luzes Piscantes"
 description_flashing_lights: "Desmarque isso se você é sensível a luzes que piscam!"
@@ -269,8 +270,8 @@ description_camera_zooms: "Se desmarcado, a câmera não dará zoom nas batidas 
 setting_score_text_grow_on_hit: "Pontuação Pula ao Acertar"
 description_score_text_grow_on_hit: "Se desmarcado, desativa o texto da pontuação pulando\nquando você acerta uma nota."
 
-setting_health_bar_colors: "TRANSLATION NEEDED"
-description_health_bar_colors: "TRANSLATION NEEDED"
+setting_health_bar_colors: "Cores da Barra de Vida"
+description_health_bar_colors: "Se desmarcado, a barra de vida usará as cores padrão vermelho e verde."
 
 setting_health_bar_opacity: "Opacidade da Barra de Vida"
 description_health_bar_opacity: "O quão transparente a Barra de Vida e os ícones devem ser."
@@ -300,8 +301,8 @@ description_opponent_notes: "Se desmarcado, as notas do oponente serão ocultada
 setting_ghost_tapping: "Ghost Tapping"
 description_ghost_tapping: "Se marcado, você não irá receber penalidades por apertar botões enquanto não há notas para apertar."
 
-setting_combo_break_on_bad_or_shit: "TRANSLATION NEEDED"
-description_combo_break_on_bad_or_shit: "TRANSLATION NEEDED"
+setting_combo_break_on_bad_or_shit: "Perder Combo na Avaliação Merda/Que Horrível!"
+description_combo_break_on_bad_or_shit: "Se marcado, seu combo será interrompido caso você receba uma avaliação Merda ou Que Horrível!, e as Ghost Notes aparecerão."
 
 setting_auto_pause: "Pausa Automática"
 description_auto_pause: "Se marcado, a janela é automaticamente pausada se não estiver em foco."
@@ -346,11 +347,11 @@ key_ui_left: "Esquerda"
 key_ui_down: "Baixo"
 key_ui_up: "Cima"
 key_ui_right: "Direita"
-key_reset: "Reset"
-key_accept: "Accept"
-key_back: "Back"
-key_pause: "Pause"
-key_capture: "Capture"
+key_reset: "Resetar"
+key_accept: "Aceitar"
+key_back: "Voltar"
+key_pause: "Pausar"
+key_capture: "Capiturar"
 
 keygroup_volume: "VOLUME"
 key_volume_mute: "Mutar"

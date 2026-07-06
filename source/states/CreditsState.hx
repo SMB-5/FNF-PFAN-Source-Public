@@ -23,7 +23,7 @@ class CreditsState extends MusicBeatState
 		['Artists'],
 		['Clefanight', 'clefa', 'Artist, Animator, Charter', 'How the fuck did I even get here.', 'https://cremiesilver.newgrounds.com/', 0xFF11E92B],
 		['Charters'],
-		['DudeDX', 'dudedx', 'Charter', 'why are oranges called oranges, but an apple is not called red?', 'https://fakecrime.bio/dudeDX', 0xFF009116, false],
+		['DudeDX', 'dudedx', 'Charter and Brazilian Portuguese Translator', 'why are oranges called oranges, but an apple is not called red?', 'https://fakecrime.bio/dudeDX', 0xFF009116, false],
 		['Chromatic Makers'],
 		['NoahGani1', 'noah', 'Chromatic Maker', 'Say Gex.', 'https://x.com/noah_gani1', 0xFF203A53],
 		['Contributors'],
