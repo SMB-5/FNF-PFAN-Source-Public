@@ -333,6 +333,8 @@ class MainMenuState extends MusicBeatState
 		menuItems.members[curSelected].getGraphicMidpoint().y - (menuItems.length > 4 ? menuItems.length * 8 : 0);
 		textBG.x = 0;
 		textBG.y = menuItems.members[curSelected].getMidpoint().y - 37.5;
+		textBG.scale.x = (menuItems.members[curSelected].width + 50) / 450;
+		textBG.updateHitbox();
 	}
 
 	function getItemColor(index:Int):FlxColor
