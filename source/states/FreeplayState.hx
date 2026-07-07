@@ -314,6 +314,9 @@ class FreeplayState extends MusicBeatState
 		}
 		songs = [new SongMetadata("Random", 0, "Face", FlxColor.fromRGB(255, 255, 255))];
 		catText.text = Language.getPhrase('category_${categories[curCategory].fileName}', categories[curCategory].categoryName);
+		catText.scaleX = 0.6;
+		if (catText.width > 350)
+			catText.scaleX = 0.6 * (350 / catText.width);
 		rightArrow.x = catText.x + catText.width + 15;
 		for (i in 0...WeekData.weeksList.length) {
 			if (weekIsLocked(WeekData.weeksList[i]) || !categories[curCategory].weeks.contains(WeekData.weeksList[i])) continue;
