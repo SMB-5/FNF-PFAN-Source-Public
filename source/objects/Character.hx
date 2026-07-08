@@ -14,6 +14,8 @@ import haxe.Json;
 import backend.Song;
 import states.stages.objects.TankmenBG;
 
+typedef JsonFlxColor = Array<Int>;
+
 typedef CharacterFile = {
 	var animations:Array<AnimArray>;
 	var image:String;
@@ -29,6 +31,7 @@ typedef CharacterFile = {
 	var healthbar_colors:Array<Int>;
 	var vocals_file:String;
 	@:optional var _editor_isPlayer:Null<Bool>;
+	var ?note_colors:Array<Array<JsonFlxColor>>;
 }
 
 typedef AnimArray = {
@@ -88,12 +91,7 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var editorIsPlayer:Null<Bool> = null;
 
-	public var arrowRGB:Array<Array<FlxColor>> = [
-		[0xFFC24B99, 0xFFFFFFFF, 0xFF3C1F56],
-		[0xFF00FFFF, 0xFFFFFFFF, 0xFF1542B7],
-		[0xFF12FA05, 0xFFFFFFFF, 0xFF0A4447],
-		[0xFFF9393F, 0xFFFFFFFF, 0xFF651038]
-	];
+	public var arrowRGB:Array<Array<FlxColor>> = ClientPrefs.data.arrowRGB;
 
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
@@ -102,7 +100,6 @@ class Character extends FlxSprite
 		animation = new PsychAnimationController(this);
 
 		animOffsets = new Map<String, Array<Dynamic>>();
-		fixArrowRGB();
 		this.isPlayer = isPlayer;
 		autoDance = !isPlayer;
 		changeCharacter(character);
@@ -151,22 +148,6 @@ class Character extends FlxSprite
 			[0xFF606060, 0xFFFFFFFF, 0xFF303030]
 		],
 	];
-
-	public function fixArrowRGB()
-		arrowRGB = getArrowRGB();
-
-	public function getArrowRGB(?char:String):Array<Array<FlxColor>> {
-		if (char == null) char = curCharacter;
-		var toReturn:OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>> = arrowColors.exists(char) ? arrowColors.get(char) : ClientPrefs.data.arrowRGB;
-		if (toReturn is String)
-			toReturn = arrowColors.exists(toReturn) ? arrowColors.get(toReturn) : ClientPrefs.data.arrowRGB;
-		
-		var getLengthFromAny:Array<Any>->Int = (shit:Array<Any>) -> {return shit.length;}; //fixes
-		if (getLengthFromAny(toReturn) == 3)
-			toReturn = [toReturn, toReturn, toReturn, toReturn];
-
-		return toReturn;
-	}
 
 	public function changeCharacter(character:String)
 	{
@@ -268,6 +249,8 @@ class Character extends FlxSprite
 		originalFlipX = (json.flip_x == true);
 		editorIsPlayer = json._editor_isPlayer;
 
+		arrowRGB = (json.note_colors == null ? ClientPrefs.data.arrowRGB : parseNoteColorArray(json.note_colors));
+
 		// antialiasing
 		noAntialiasing = (json.no_antialiasing == true);
 		antialiasing = ClientPrefs.data.antialiasing ? !noAntialiasing : false;
@@ -309,6 +292,16 @@ class Character extends FlxSprite
 		if(isAnimateAtlas) copyAtlasValues();
 		#end
 		//trace('Loaded file to character ' + curCharacter);
+	}
+
+	public function parseNoteColorArray(colors:Array<Array<JsonFlxColor>>):Array<Array<FlxColor>>
+	{
+		var parsedColors:Array<Array<FlxColor>> = [];
+		
+		for (i => colorArray in colors)
+			parsedColors[i] = [for (c in 0 ... 3) FlxColor.fromRGB(colorArray[c][0], colorArray[c][1], colorArray[c][2])];
+		
+		return parsedColors;
 	}
 
 	override function update(elapsed:Float)

@@ -582,9 +582,7 @@ class PlayState extends MusicBeatState
 
 		if (ClientPrefs.data.charRGB)
 		{
-			boyfriend.fixArrowRGB();
-			dad.fixArrowRGB();
-			gf.fixArrowRGB();
+			//idk what to put here now
 		}
 
 		uiGroup = new FlxSpriteGroup();
@@ -926,41 +924,48 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function addCharacterToList(newCharacter:String, type:Int) {
-		switch(type) {
+	public function addCharacterToList(newCharacter:String, type:Int, ?time:Float)
+	{
+		var character:Character = new Character(0, 0, newCharacter, (type == 0));
+		var rgbFilter:Note->Bool = null;
+
+		switch (type)
+		{
 			case 0:
-				if(!boyfriendMap.exists(newCharacter)) {
-					var newBoyfriend:Character = new Character(0, 0, newCharacter, true);
-					boyfriendMap.set(newCharacter, newBoyfriend);
-					boyfriendGroup.add(newBoyfriend);
-					startCharacterPos(newBoyfriend);
-					newBoyfriend.alpha = 0.00001;
-					newBoyfriend.autoDance = opponentMode;
-					startCharacterScripts(newBoyfriend.curCharacter);
+				if (!boyfriendMap.exists(newCharacter))
+				{
+					boyfriendMap.set(newCharacter, character);
+					boyfriendGroup.add(character);
+
+					rgbFilter = function(note:Note) return (note.mustPress && !note.gfNote);
 				}
 
 			case 1:
-				if(!dadMap.exists(newCharacter)) {
-					var newDad:Character = new Character(0, 0, newCharacter);
-					dadMap.set(newCharacter, newDad);
-					dadGroup.add(newDad);
-					startCharacterPos(newDad, true);
-					newDad.alpha = 0.00001;
-					newDad.autoDance = !opponentMode;
-					startCharacterScripts(newDad.curCharacter);
+				if (!dadMap.exists(newCharacter))
+				{
+					dadMap.set(newCharacter, character);
+					dadGroup.add(character);
+
+					rgbFilter = function(note:Note) return (!note.mustPress && !note.gfNote);
 				}
 
 			case 2:
-				if(gf != null && !gfMap.exists(newCharacter)) {
-					var newGf:Character = new Character(0, 0, newCharacter);
-					//newGf.scrollFactor.set(0.95, 0.95);
-					gfMap.set(newCharacter, newGf);
-					gfGroup.add(newGf);
-					startCharacterPos(newGf);
-					newGf.alpha = 0.00001;
-					startCharacterScripts(newGf.curCharacter);
+				if (gf != null && !gfMap.exists(newCharacter))
+				{
+					character.scrollFactor.set(0.95, 0.95);
+					gfMap.set(newCharacter, character);
+					gfGroup.add(character);
+
+					rgbFilter = function(note:Note) return note.gfNote;
 				}
 		}
+
+		character.alpha = .00001;
+		startCharacterPos(character);
+		startCharacterScripts(character.curCharacter);
+
+		if (time != null)
+			setNoteRGB(time, character.arrowRGB, rgbFilter);
 	}
 
 	function startCharacterScripts(name:String)
@@ -1353,25 +1358,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function setAllNotesRGBAfterTime(arrRgb:Array<Array<FlxColor>>, time:Float, mustPress:Null<Bool>, isGF:Bool = false)
-	{
-		if (mustPress == null)
-			return;
-		var theFunc = function(daNote:Note)
-		{
-			if (daNote.strumTime >= time)
-			{
-				if (isGF && daNote.gfNote || !isGF && !daNote.gfNote && daNote.mustPress == mustPress)
-				{
-					daNote.updateRgb(arrRgb[daNote.noteData]);
-				}
-			}
-		};
-		for (note in unspawnNotes)
-			theFunc(note);
-		notes.forEach(theFunc);
-	}
-
 	// fun fact: Dynamic Functions can be overriden by just doing this
 	// `updateScore = function(miss:Bool = false) { ... }
 	// its like if it was a variable but its just a function!
@@ -1739,8 +1725,31 @@ class PlayState extends MusicBeatState
 			for (i in 0...event[1].length)
 				makeEvent(event, i);
 
+		setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
+		setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
+		setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
+
 		unspawnNotes.sort(sortByTime);
 		generatedMusic = true;
+	}
+
+	public function setNoteRGB(?after:Float, colors:Array<Array<FlxColor>>, ?filter:Note -> Bool) {
+		var count:Int = 0;
+
+		var theFunc = function(daNote:Note)
+		{
+			//if (after != null && (daNote.strumTime + 1) < after) continue;
+			
+			if (filter == null || filter(daNote)) {
+				daNote.updateRgb(colors[daNote.noteData]);
+				count ++;
+			}
+		}
+		for (note in unspawnNotes) {
+			theFunc(note);
+		}
+		
+		trace('applied RGB to $count notes !');
 	}
 
 	// called only once per different event (Used for precaching)
@@ -1760,16 +1769,15 @@ class PlayState extends MusicBeatState
 			case "Change Character":
 				var newCharacter:String = event.value2;
 				var charType:Int = 0;
-				var newColor = dad.getArrowRGB(newCharacter);
 				switch(event.value1.toLowerCase()) {
 					case 'gf' | 'girlfriend':
-						charType = 2;
-						setAllNotesRGBAfterTime(newColor, event.strumTime, false, true);
+						charType = 2;	
+						setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
 					case 'dad' | 'opponent':
 						charType = 1;
-						setAllNotesRGBAfterTime(newColor, event.strumTime, false, false);
+						setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
 					default:
-						setAllNotesRGBAfterTime(newColor, event.strumTime, true, false);
+						setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
 						var val1:Int = Std.parseInt(event.value1);
 						if(Math.isNaN(val1)) val1 = 0;
 						charType = val1;
@@ -2660,11 +2668,13 @@ class PlayState extends MusicBeatState
 							boyfriend.alpha = 0.00001;
 							boyfriend = boyfriendMap.get(value2);
 							boyfriend.alpha = lastAlpha;
-							if (ClientPrefs.data.charRGB)
-							{
-								boyfriend.fixArrowRGB();
-							}
 							iconP1.changeIcon(boyfriend.healthIcon);
+
+							for (strum in playerStrums)
+							{
+								//strum.strumRGB = boyfriend.strumRGB[strum.noteData];
+								strum.defaultRGB = boyfriend.arrowRGB;
+							}
 						}
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
 
@@ -2677,10 +2687,6 @@ class PlayState extends MusicBeatState
 							var wasGf:Bool = dad.curCharacter.startsWith('gf-') || dad.curCharacter == 'gf';
 							var lastAlpha:Float = dad.alpha;
 							dad.alpha = 0.00001;
-							if (ClientPrefs.data.charRGB)
-							{
-								dad.fixArrowRGB();
-							}
 							dad = dadMap.get(value2);
 							if(!dad.curCharacter.startsWith('gf-') && dad.curCharacter != 'gf') {
 								if(wasGf && gf != null) {
@@ -2691,6 +2697,12 @@ class PlayState extends MusicBeatState
 							}
 							dad.alpha = lastAlpha;
 							iconP2.changeIcon(dad.healthIcon);
+
+							for (strum in opponentStrums)
+							{
+								//strum.strumRGB = dad.strumRGB[strum.noteData];
+								strum.defaultRGB = dad.arrowRGB;
+							}
 						}
 						setOnScripts('dadName', dad.curCharacter);
 
@@ -2707,10 +2719,6 @@ class PlayState extends MusicBeatState
 								gf.alpha = 0.00001;
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
-								if (ClientPrefs.data.charRGB)
-								{
-									gf.fixArrowRGB();
-								}
 							}
 							setOnScripts('gfName', gf.curCharacter);
 						}
