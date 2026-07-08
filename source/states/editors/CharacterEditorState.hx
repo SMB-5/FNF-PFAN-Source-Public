@@ -14,8 +14,20 @@ import objects.Character;
 import objects.HealthIcon;
 import objects.Bar;
 
+import shaders.RGBPalette;
+
 import states.editors.content.Prompt;
 import states.editors.content.PsychJsonPrinter;
+
+// flixel 5.7.0+ fix
+#if (flixel < version("5.7.0"))
+typedef PointerGraphic = flixel.system.debug.interaction.tools.Pointer.GraphicCursorCross;
+#else
+@:bitmap("assets/images/debugger/cursorCross.png")
+class PointerGraphic extends openfl.display.BitmapData
+{
+}
+#end
 
 class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
 {
@@ -25,6 +37,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	var animateGhostImage:String;
 	var cameraFollowPointer:FlxSprite;
 	var isAnimateSprite:Bool = false;
+
+	var noteShaders:Array<RGBPalette> = [];
 
 	var silhouettes:FlxSpriteGroup;
 	var dadPosition = FlxPoint.weak();
@@ -109,7 +123,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		addCharacter();
 
-		cameraFollowPointer = new FlxSprite().loadGraphic(FlxGraphic.fromClass(GraphicCursorCross));
+		cameraFollowPointer = new FlxSprite(FlxGraphic.fromClass(PointerGraphic));
 		cameraFollowPointer.setGraphicSize(40, 40);
 		cameraFollowPointer.updateHitbox();
 
@@ -238,6 +252,22 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		character.debugMode = true;
 		character.missingCharacter = false;
 
+		if (leftNote != null) {
+			arrowPalette = character.arrowRGB;
+			//strumPalette = character.strumRGB;
+
+			applyColorFromUI();
+			//applyStrumColorFromUI();
+
+			//usePlayerStrumColors.checked = palettesEqual(strumPalette, [
+				//ClientPrefs.defaultStrumRGB,
+				//ClientPrefs.defaultStrumRGB,
+				//ClientPrefs.defaultStrumRGB,
+				//ClientPrefs.defaultStrumRGB
+			//]);
+			usePlayerColors.checked = palettesEqual(arrowPalette, ClientPrefs.data.arrowRGB);
+		}
+
 		if(pos > -1) insert(pos, character);
 		else add(character);
 		updateCharacterPositions();
@@ -251,7 +281,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		UI_box.scrollFactor.set();
 		UI_box.cameras = [camHUD];
 
-		UI_characterbox = new PsychUIBox(UI_box.x - 100, UI_box.y + UI_box.height + 10, 350, 280, ['Animations', 'Character']);
+		UI_characterbox = new PsychUIBox(UI_box.x - 100, UI_box.y + UI_box.height + 10, 350, 280, ['Animations', 'Character', 'Note Colors']);
 		UI_characterbox.scrollFactor.set();
 		UI_characterbox.cameras = [camHUD];
 		add(UI_characterbox);
@@ -261,6 +291,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		addSettingsUI();
 		addAnimationsUI();
 		addCharacterUI();
+		addNotesUI();
 
 		UI_box.selectedName = 'Settings';
 		UI_characterbox.selectedName = 'Character';
@@ -703,6 +734,330 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		tab_group.add(saveCharacterButton);
 	}
 
+	var leftNote:FlxSprite;
+	var downNote:FlxSprite;
+	var upNote:FlxSprite;
+	var rightNote:FlxSprite;
+	var curSelectedNote(default, set) = 0;
+	var allColorSteppers:Array<Array<PsychUINumericStepper>> = [];
+	var arrowPalette(default, set):Array<Array<FlxColor>> = [];
+	var usePlayerColors:PsychUICheckBox;
+	
+	function set_arrowPalette(newPalette:Array<Array<FlxColor>>)
+	{
+		var palette = newPalette[curSelectedNote];
+		for (colorId in 0...3)
+		{
+			var color = palette[colorId];
+
+			allColorSteppers[colorId][0].value = color.red;
+			allColorSteppers[colorId][1].value = color.green;
+			allColorSteppers[colorId][2].value = color.blue;
+		}
+		return arrowPalette = newPalette;
+	}
+
+	function set_curSelectedNote(newNote:Int):Int
+	{
+		if (newNote > -1)
+		{
+			for (i => note in [leftNote, downNote, upNote, rightNote])
+				note.alpha = i == newNote ? 1 : 0.4;
+		}
+		curSelectedNote = newNote;
+		set_arrowPalette(arrowPalette);
+		return curSelectedNote;
+	}
+	
+	function palettesEqual(a:Array<Array<FlxColor>>, b:Array<Array<FlxColor>>):Bool
+	{
+		if (a.length != b.length)
+			return false;
+
+		for (i in 0...a.length)
+		{
+			if (a[i].length != b[i].length)
+				return false;
+
+			for (j in 0...a[i].length)
+			{
+				if (a[i][j] != b[i][j])
+					return false;
+			}
+		}
+		return true;
+	}
+
+	function applyColorFromUI()
+	{
+		var newPalette:Array<Array<FlxColor>> = [];
+		for (i in 0...arrowPalette.length)
+			newPalette.push(arrowPalette[i].copy());
+
+		var notePalette:Array<FlxColor> = [];
+
+		for (colorId in 0...3) // Fill, Highlight, Outline
+		{
+			var r = Std.int(allColorSteppers[colorId][0].value);
+			var g = Std.int(allColorSteppers[colorId][1].value);
+			var b = Std.int(allColorSteppers[colorId][2].value);
+
+			notePalette.push(FlxColor.fromRGB(r, g, b));
+		}
+
+		newPalette[curSelectedNote] = notePalette;
+
+		set_arrowPalette(newPalette);
+
+		for (i => note in [leftNote, downNote, upNote, rightNote])
+		{
+			var shaderRef = noteShaders[i];
+			var palette = newPalette[i];
+
+			shaderRef.r = palette[0];
+			shaderRef.g = palette[1];
+			shaderRef.b = palette[2];
+		}
+	}
+
+	function exportArrowPaletteToJson(palette:Array<Array<FlxColor>>):Array<Array<JsonFlxColor>>
+	{
+		var result:Array<Array<JsonFlxColor>> = [];
+
+		for (note in palette)
+		{
+			var converted:Array<JsonFlxColor> = [];
+
+			for (color in note)
+			{
+				converted.push([color.red, color.green, color.blue]);
+			}
+
+			result.push(converted);
+		}
+
+		return result;
+	}
+	
+	function addNotesUI()
+	{
+		var tab_group = UI_characterbox.getTab('Note Colors').menu;
+
+		var separation = 5;
+		
+		var spriteSheet = Paths.getSparrowAtlas(objects.Note.defaultNoteSkin);
+		var colArrow:Array<String> = ['purple', 'blue', 'green', 'red'];
+		function applyNoteFrame(sprite:FlxSprite, noteData:Int)
+		{
+			var id = '${colArrow[noteData]}0000';
+			sprite.frames = spriteSheet;
+			sprite.animation.addByPrefix("idle", id, 0, false);
+			sprite.animation.play("idle");
+		}
+
+		leftNote = new FlxSprite(30, 30);
+		downNote = new FlxSprite();
+		upNote = new FlxSprite();
+		rightNote = new FlxSprite();
+
+		for (i => spr in [leftNote, downNote, upNote, rightNote])
+		{
+			applyNoteFrame(spr, i);
+			spr.scale.set(0.45, 0.45);
+			spr.updateHitbox();
+		}
+
+		noteShaders = [];
+
+		for (i => note in [leftNote, downNote, upNote, rightNote])
+		{
+    		var shader = new RGBPalette();
+    		note.shader = shader.shader;
+    		noteShaders.push(shader);
+
+    		var palette = character.arrowRGB[i];
+    		shader.r = palette[0];
+    		shader.g = palette[1];
+    		shader.b = palette[2];
+
+    		tab_group.add(note);
+		}
+
+		downNote.x = leftNote.x + leftNote.width + separation;
+		upNote.x = downNote.x + downNote.width + separation;
+		rightNote.x = upNote.x + upNote.width + separation;
+
+		downNote.y = upNote.y = rightNote.y = leftNote.y;
+		leftNote.antialiasing = downNote.antialiasing = upNote.antialiasing = rightNote.antialiasing = ClientPrefs.data.antialiasing;
+
+		for (colorId => text in ["Fill ", "Highlight", "Outline"])
+		{
+			var colorPickers = [];
+			var yPos = Std.int(leftNote.y + leftNote.height + 20 + 14 + (25 * colorId));
+			for (i in 0...3)
+			{
+				var xPos = leftNote.x + (65 * i);
+				var stepper = new PsychUINumericStepper(xPos, yPos, 1, 0, 0, 255, 0);
+				tab_group.add(stepper);
+				colorPickers[i] = stepper;
+			}
+			tab_group.add(new FlxText(leftNote.x + (65 * 3), yPos, 0, '$text Color (R/G/B)'));
+			allColorSteppers[colorId] = colorPickers;
+		}
+
+		arrowPalette = character.arrowRGB;
+		set_curSelectedNote(curSelectedNote);
+
+		usePlayerColors = new PsychUICheckBox(allColorSteppers[2][0].x, allColorSteppers[2][0].y + 30, "Use Player Colors?", 100);
+		usePlayerColors.checked = palettesEqual(arrowPalette, ClientPrefs.data.arrowRGB);
+		tab_group.add(usePlayerColors);
+
+		applyColorFromUI();
+	}
+	
+	var leftStrum:FlxSprite;
+	var downStrum:FlxSprite;
+	var upStrum:FlxSprite;
+	var rightStrum:FlxSprite;
+	var curSelectedStrum(default, set) = 0;
+	var allStrumColorSteppers:Array<Array<PsychUINumericStepper>> = [];
+	var strumPalette(default, set):Array<Array<FlxColor>> = [];
+	var usePlayerStrumColors:PsychUICheckBox;
+
+	function set_strumPalette(newPalette:Array<Array<FlxColor>>)
+	{
+		var palette = newPalette[curSelectedStrum];
+		for (colorId in 0...3)
+		{
+			var color = palette[colorId];
+
+			allStrumColorSteppers[colorId][0].value = color.red;
+			allStrumColorSteppers[colorId][1].value = color.green;
+			allStrumColorSteppers[colorId][2].value = color.blue;
+		}
+		return strumPalette = newPalette;
+	}
+
+	function set_curSelectedStrum(newNote:Int):Int
+	{
+		if (newNote > -1)
+		{
+			for (i => note in [leftStrum, downStrum, upStrum, rightStrum])
+				note.alpha = i == newNote ? 1 : 0.4;
+		}
+		curSelectedStrum = newNote;
+		set_strumPalette(strumPalette);
+		return curSelectedStrum;
+	}
+
+	function applyStrumColorFromUI()
+	{
+		var newPalette:Array<Array<FlxColor>> = [];
+		for (i in 0...strumPalette.length)
+			newPalette.push(strumPalette[i].copy());
+
+		var notePalette:Array<FlxColor> = [];
+
+		for (colorId in 0...3) // Fill, Highlight, Outline
+		{
+			var r = Std.int(allStrumColorSteppers[colorId][0].value);
+			var g = Std.int(allStrumColorSteppers[colorId][1].value);
+			var b = Std.int(allStrumColorSteppers[colorId][2].value);
+
+			notePalette.push(FlxColor.fromRGB(r, g, b));
+		}
+
+		newPalette[curSelectedStrum] = notePalette;
+
+		set_strumPalette(newPalette);
+
+		var strumline = [leftStrum, downStrum, upStrum, rightStrum];
+		for (i in 0...strumline.length)
+		{
+			var strum = strumline[i];
+			var shaderRef = noteShaders[i];
+			var palette = newPalette[i];
+
+			shaderRef.r = palette[0];
+			shaderRef.g = palette[1];
+			shaderRef.b = palette[2];
+		}
+	}
+
+	function addStrumsUI()
+	{
+		var tab_group = UI_characterbox.getTab('Strum Colors').menu;
+
+		var separation = 5;
+
+		var spriteSheet = Paths.getSparrowAtlas(objects.Note.defaultNoteSkin);
+		var colArrow:Array<String> = ['left', 'down', 'up', 'right'];
+		function applyNoteFrame(sprite:FlxSprite, noteData:Int)
+		{
+			var id = 'arrow${colArrow[noteData].toUpperCase()}';
+			sprite.frames = spriteSheet;
+			sprite.animation.addByPrefix("idle", id, 24, true);
+			sprite.animation.play("idle");
+		}
+
+		leftStrum = new FlxSprite(30, 30);
+		downStrum = new FlxSprite();
+		upStrum = new FlxSprite();
+		rightStrum = new FlxSprite();
+
+		for (i => spr in [leftStrum, downStrum, upStrum, rightStrum])
+		{
+			applyNoteFrame(spr, i);
+			spr.scale.set(0.45, 0.45);
+			spr.updateHitbox();
+		}
+
+		downStrum.x = leftStrum.x + leftNote.width + separation;
+		upStrum.x = downStrum.x + downStrum.width + separation;
+		rightStrum.x = upStrum.x + upStrum.width + separation;
+
+		downStrum.y = upStrum.y = rightStrum.y = leftStrum.y;
+		leftStrum.antialiasing = downStrum.antialiasing = upStrum.antialiasing = rightStrum.antialiasing = true;
+
+		for (colorId => text in ["Fill ", "Highlight", "Outline"])
+		{
+			var colorPickers = [];
+			var yPos = Std.int(leftNote.y + leftNote.height + 20 + 14 + (25 * colorId));
+			for (i in 0...3)
+			{
+				var xPos = leftStrum.x + (65 * i);
+				var stepper = new PsychUINumericStepper(xPos, yPos, 1, 0, 0, 255, 0);
+				tab_group.add(stepper);
+				colorPickers[i] = stepper;
+			}
+			tab_group.add(new FlxText(leftStrum.x + (65 * 3), yPos, 0, '$text Color (R/G/B)'));
+			allStrumColorSteppers[colorId] = colorPickers;
+		}
+
+		for (i => note in [leftStrum, downStrum, upStrum, rightStrum])
+		{
+			var rgbShader:RGBPalette = new RGBPalette();
+			//note.data = {
+				//rgbShader: rgbShader
+			//};
+			note.shader = rgbShader.shader;
+			tab_group.add(note);
+		}
+
+		//strumPalette = character.strumRGB;
+		set_curSelectedStrum(curSelectedStrum);
+
+		usePlayerStrumColors = new PsychUICheckBox(allStrumColorSteppers[2][0].x, allStrumColorSteppers[2][0].y + 30, "Use Engine Defined Strum Colors?", 150);
+		//usePlayerStrumColors.checked = palettesEqual(strumPalette, [
+			//ClientPrefs.defaultStrumRGB,
+			//ClientPrefs.defaultStrumRGB,
+			//ClientPrefs.defaultStrumRGB,
+			//ClientPrefs.defaultStrumRGB
+		//]);
+		tab_group.add(usePlayerStrumColors);
+		applyStrumColorFromUI();
+	}
+
 	public function UIEvent(id:String, sender:Dynamic) {
 		//trace(id, sender);
 		if(id == PsychUICheckBox.CLICK_EVENT)
@@ -786,6 +1141,26 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				updateHealthBar();
 				unsavedProgress = true;
 			}
+			else
+			{
+				for (steppergroup in allColorSteppers)
+				{
+					for (stepper in steppergroup)
+					{
+						if (sender == stepper)
+							return applyColorFromUI();
+					}
+				}
+
+				//for (steppergroup in allStrumColorSteppers)
+				//{
+					//for (stepper in steppergroup)
+					//{
+						//if (sender == stepper)
+							//return applyStrumColorFromUI();
+					//}
+				//}
+			}
 		}
 	}
 
@@ -866,6 +1241,17 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		{
 			ClientPrefs.toggleVolumeKeys(false);
 			return;
+		}
+		if (PsychUIInputText.focusOn == null && UI_characterbox.selectedName.endsWith(" Colors"))
+		{
+			var isNote = UI_characterbox.selectedName == "Note Colors";
+			var mousePos = FlxG.mouse.getPositionInCameraView(camHUD);
+			var noteOrStrumArray = isNote ? [leftNote, downNote, upNote, rightNote] : [leftStrum, downStrum, upStrum, rightStrum];
+			
+			for (i => note in noteOrStrumArray) {
+				if (note.overlapsPoint(mousePos, true, camHUD) && FlxG.mouse.justPressed)
+					(isNote ? set_curSelectedNote : set_curSelectedStrum)(i);
+			}
 		}
 		ClientPrefs.toggleVolumeKeys(true);
 
@@ -1300,7 +1686,12 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			"_editor_isPlayer": character.isPlayer
 		};
 
-		var data:String = PsychJsonPrinter.print(json, ['offsets', 'position', 'healthbar_colors', 'camera_position', 'indices']);
+		if (!usePlayerColors.checked)
+			json.note_colors = exportArrowPaletteToJson(arrowPalette);
+		//if (!usePlayerStrumColors.checked)
+			//json.strum_colors = exportArrowPaletteToJson(strumPalette);
+
+		var data:String = PsychJsonPrinter.print(json, ['offsets', 'position', 'healthbar_colors', 'camera_position', 'indices', 'note_colors']);
 
 		if (data.length > 0)
 		{
