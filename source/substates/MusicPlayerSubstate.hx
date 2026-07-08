@@ -207,7 +207,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		}
 
 		#if !mobile
-		var tipString:String = Language.getPhrase('musicplayer_tip', 'Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to switch songs\nPress BACK to Exit / Press RESET to Restart the Song');
+		var tipString:String = Language.getPhrase('musicplayer_tip', 'Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to Switch Songs\nPress BACK to Exit / Press RESET to Restart the Song');
 		var tipText:FlxText = new FlxText(0, 0, FlxG.width, tipString, 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		tipText.y = FlxG.height - 22 - tipText.textField.textHeight;

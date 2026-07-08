@@ -30,7 +30,7 @@ category_story: "Main Story"
 category_freeplay: "Side Stories"
 
 // Music Player
-musicplayer_tip: "Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to switch songs\nPress BACK to Exit / Press RESET to Restart the Song"
+musicplayer_tip: "Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to Switch Songs\nPress BACK to Exit / Press RESET to Restart the Song"
 
 // Music Player Settings
 musicplayer_setting_playback_rate: "Playback Rate"
@@ -130,6 +130,7 @@ reset_achievement: "Reset Achievement:"
 // Options
 options_note_colors: "Note Colors"
 options_controls: "Controls"
+options_mobile: "Mobile"
 options_adjust_delay_and_combo: "Adjust Delay and Combo"
 options_gameplay: "Gameplay"
 options_visuals: "Visuals"
@@ -329,6 +330,10 @@ description_safe_frames: "Changes how many frames you have for\nhitting a note e
 
 setting_sustains_as_one_note: "Sustains as One Note"
 description_sustains_as_one_note: "If checked, Hold Notes can't be pressed if you miss,\nand count as a single Hit/Miss.\nUncheck this if you prefer the old Input System."
+
+// Credits
+credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
+credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
 
 // Control Rebinding
 controls_rebinding: "Rebinding {1}"

@@ -1,0 +1,161 @@
+{
+	"title": "Persona: Funkin All Night",
+	"subtitle": "A Friday Night Funkin' Mod by The Funkin Thieves",
+	"sections": [
+		"Direction",
+		"Art/Animation",
+		"Music",
+		"Programming",
+		"Charting",
+		"Chromatic Makers",
+		"Translation",
+		"Contributors",
+		"Special Thanks"
+	],
+	"members": {
+		"SMB": {
+			"icon": "SMB",
+			"flipIcon": false,
+			"section": ["Direction", "Programming"],
+			"role": "Director, Programmer",
+			"description": "Hey Thank You so much for playing! This mod has been something I've wanted to make since 2021 and finally seeing it be made and released means so much to me and I am very grateful for the team for helping make my dream fnf mod happen but also to you the player for downloading and playing this mod. I hope you enjoyed the Mod. For the stuff I did apart from directing and designing the mod I coded the Title Screen, Main Menu, Freeplay, Pause Menu and Results Screen. I also added some features to the mod. Once again Thank You so much for playing the Mod!",
+			"link": "https://smb-bio.carrd.co/",
+			"color": "EC1C26"
+		},
+		"clefanight": {
+			"icon": "clefa",
+			"flipIcon": false,
+			"section": ["Art/Animation", "Charting"],
+			"role": "Artist, Animator, Charter",
+			"description": "How the fuck did I even get here.",
+			"link": "https://cremiesilver.newgrounds.com/",
+			"color": "11E92B"
+		},
+		"TaraForm": {
+			"icon": "sara",
+			"flipIcon": false,
+			"section": ["Art/Animation"],
+			"role": "Artist, Animator",
+			"description": "\"Who let the cat ouda the bag!??\"\nLTG Commander Soul at your service!",
+			"link": "https://vgen.co/TaraForm",
+			"color": "BD54FF"
+		},
+		"dog": {
+			"icon": "doggo",
+			"flipIcon": true,
+			"section": ["Music", "Charting"],
+			"role": "Musician, Charter",
+			"description": "Howdy. I made a few songs for this demo, and I also made the menu and game over themes. Also I charted like part of one song? So yeah hope you enjoy the mod!",
+			"link": "https://www.youtube.com/@whogavethedogalaptop",
+			"color": "F5D79D"
+		},
+		"MrEights": {
+			"icon": "",
+			"flipIcon": false,
+			"section": ["Music"],
+			"role": "Musician",
+			"description": "It ain't easy being cheesy!",
+			"link": "https://www.youtube.com/@Mr3ights",
+			"color": "1E1E1E"
+		},
+		"melodiekit": {
+			"icon": "melodiekit",
+			"flipIcon": false,
+			"section": ["Programming", "Charting"],
+			"role": "Programmer, Mobile Porter, Charter",
+			"description": "Hi!\n\nI coded some stuff for this mod. Some notable stuff I coded are some of the UI that you see here like the Music Player, Credits Menu, Options Menu, etc lol\nI also tried my best to replicate the cool UI that Persona has, like their transitions... Whether it actually looks good or not is up to you\n\nI also charted Tartarus and Foggy Night. Let it be known that I only charted Tartarus because it has the same name as a Geometry Dash extreme demon :troll:.\n\nRegardless, I hope you enjoyed the mod as much as I had fun coding it!\n\nOh yeah I also made the mobile port I guess that's important",
+			"link": "https://youtube.com/@melodiekit",
+			"color": "C0EBFF"
+		},
+		"dudeDX": {
+			"icon": "dudedx",
+			"flipIcon": true,
+			"section": ["Charting", "Translation"],
+			"role": "Charter, Brazilian Portuguese Translator",
+			"description": "why are oranges called oranges, but an apple is not called red?",
+			"link": "https://fakecrime.bio/dudeDX",
+			"color": "009116"
+		},
+		"NoahGani1": {
+			"icon": "noah",
+			"flipIcon": false,
+			"section": ["Chromatic Makers"],
+			"role": "Chromatic Maker",
+			"description": "Say Gex.",
+			"link": "https://x.com/noah_gani1",
+			"color": "203A53"
+		},
+		"Cobalt": {
+			"icon": "cobalt",
+			"flipIcon": false,
+			"section": ["Contributors"],
+			"role": "Programmer, Linux Porter",
+			"description": "I've never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next.",
+			"link": "https://cobaltbar.github.io/",
+			"color": "0065FF"
+		},
+		"CrysOtter08": {
+			"icon": "frenchotter",
+			"flipIcon": false,
+			"section": ["Contributors"],
+			"role": "Artist, Animator",
+			"description": "Holy fart, dude",
+			"link": "https://x.com/CrysOtter08",
+			"color": "8F8DFF"
+		},
+		"Fearmonger Wade": {
+			"icon": "g",
+			"flipIcon": true,
+			"section": ["Contributors"],
+			"role": "Artist, Programmer",
+			"description": "Hii, I didn't do much for this mod really asides from 2 results screens but it was still really fun. Thanks for playing.",
+			"link": "https://linktr.ee/ghostbnuuy",
+			"color": "E1E1E1"
+		},
+		"JuhoSprite": {
+			"icon": "juho",
+			"flipIcon": false,
+			"section": ["Contributors"],
+			"role": "Artist",
+			"description": "I don't play games.",
+			"link": "https://twitter.com/JuhoSprite",
+			"color": "FD0FE3"
+		},
+		"Mikolka9144": {
+			"icon": "mikolka",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "Ported the soundtray and screenshot plugin to Psych Engine",
+			"description": "",
+			"link": "https://gamebanana.com/members/3329541",
+			"color": "2EBCFA"
+		},
+		"Moonlight_Catalyst": {
+			"icon": "moonlight_catalyst",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "Ported ghost notes and constant scoring to Psych Engine",
+			"description": "",
+			"link": "https://www.youtube.com/channel/ucmvsorfe7zldig4budmzela",
+			"color": "9764B7"
+		},
+		"Pumpsuki": {
+			"icon": "",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "Hold Note Splashes Code",
+			"description": "",
+			"link": "https://www.youtube.com/channel/UCGX_SXBkNjJqjh43KVVvdzg",
+			"color": "FFFFFF"
+		},
+		"Psych Engine": {
+			"icon": "mind games",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "The engine used to make this mod",
+			"description": "",
+			"link": "https://github.com/ShadowMario/FNF-PsychEngine",
+			"color": "580787"
+		}
+	}
+}

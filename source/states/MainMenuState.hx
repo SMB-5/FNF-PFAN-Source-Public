@@ -1,8 +1,6 @@
 package states;
 
 import flixel.FlxObject;
-import flixel.effects.FlxFlicker;
-import lime.app.Application;
 import states.editors.MasterEditorMenu;
 import options.OptionsState;
 import substates.PersonaCardSubstate;
@@ -11,9 +9,9 @@ class MainMenuState extends MusicBeatState
 {
 	public static var psychEngineVersion:String = '1.0.4';
 	public static var curSelected:Int = 0;
+	public static var curChar:String = '';
 
 	var menuItems:FlxTypedGroup<FlxText>;
-
 	var optionShit:Array<String> = [
 		'STORY MODE',
 		'FREEPLAY',
@@ -22,26 +20,16 @@ class MainMenuState extends MusicBeatState
 		'CREDITS',
 		'CONFIG'
 	];
-
-	var bgHitboxes:Array<FlxObject> = [];
-
-	var magenta:FlxSprite;
-	var camFollow:FlxObject;
+	var optionHitboxes:Array<FlxObject> = [];
 	var textBG:FlxSprite;
 
-	var stickerSubState:Bool;
-
-	var bf:FlxSprite;
-	var makoto:FlxSprite;
-	var yu:FlxSprite;
-	var joker:FlxSprite;
-
-	public function new(?stickers:Bool = false)
-	{
-		super();
-		stickerSubState = stickers;
-	}
-
+	var characters:Array<String> = [
+		'BF',
+		'Joker',
+		'Makoto',
+		'Yu'
+	];
+	var menuChar:FlxSprite;
 	override function create()
 	{
 		#if MODS_ALLOWED
@@ -63,14 +51,13 @@ class MainMenuState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true; 
 
-		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
 		var bg:FlxSprite = new FlxSprite(-150, -150).loadGraphic(Paths.image('menuWall'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
 
-		textBG = new FlxSprite().makeGraphic(450, 75, FlxColor.BLACK);
-		add(textBG);
+		textBG = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		textBG.antialiasing = ClientPrefs.data.antialiasing;
+		add(textBG);
 
 		menuItems = new FlxTypedGroup<FlxText>();
 		add(menuItems);
@@ -78,61 +65,33 @@ class MainMenuState extends MusicBeatState
 		for (i in 0...optionShit.length)
 		{
 			var offset:Float = 248 - (Math.max(optionShit.length, 4) - 4) * 80;
-			var menuItem:FlxText = new FlxText(30, (i * 80) + offset, "", 48);
+			var menuItem:FlxText = new FlxText(30, (i * 80) + offset, Language.getPhrase('menu_${optionShit[i]}', optionShit[i]), 48);
 			menuItem.antialiasing = ClientPrefs.data.antialiasing;
-			menuItem.text = Language.getPhrase('menu_${optionShit[i]}', optionShit[i]);
+			menuItem.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, getItemColor(i), LEFT);
 			menuItems.add(menuItem);
-			var color = FlxColor.WHITE;
 
-			if (optionShit[i] == 'STORY MODE' || optionShit[i] == 'AWARDS')
-			{
-				color = FlxColor.GRAY;
-			}
-
-			menuItem.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, color, LEFT);
-
-			var hitbox = new FlxObject(0, menuItem.getMidpoint().y - 37.5, textBG.width, textBG.height);
+			var hitbox = new FlxObject(0, menuItem.getMidpoint().y - 37.5, menuItem.width + 50, 75);
 			hitbox.ID = i;
 			add(hitbox);
-			bgHitboxes.push(hitbox);
+			optionHitboxes.push(hitbox);
 		}
 
-		bf = new FlxSprite(650, 100);
-		bf.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/BF-Menu');
-		bf.animation.addByPrefix('idle', 'menu_idle', 24, false);
-        bf.updateHitbox();
-
-		makoto = new FlxSprite(650, 100);
-		makoto.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Makoto-Menu');
-		makoto.animation.addByPrefix('idle', 'menu_idle', 24, false);
-        makoto.updateHitbox();
-
-		yu = new FlxSprite(600, 100);
-		yu.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Yu-Menu');
-		yu.animation.addByPrefix('idle', 'menu_idle', 24, false);
-        yu.updateHitbox();
-
-		joker = new FlxSprite(300, 50);
-		joker.frames = Paths.getSparrowAtlas('persona/menus/mainmenu/Joker-Menu');
-		joker.animation.addByPrefix('idle', 'menu_idle', 24, false);
-        joker.updateHitbox();
-
-		var randomChar:Int = FlxG.random.int(1, 4);
-
-		//it'd be funny if they're number was their game number minus bf, gf and the rest of the characters
-		switch (randomChar)
-		{
-    		case 1:
-        		add(bf);
-    		case 2:
-        		add(joker);
-			case 3:
-        		add(makoto);
-			case 4:
-        		add(yu);
+		curChar = characters[FlxG.random.int(0, characters.length - 1)];
+		var x:Float = 650;
+		var y:Float = 100;
+		switch(curChar) {
+			case 'Yu':
+				x -= 50;
+			case 'Joker':
+				x -= 300;
+				y -= 50;
 		}
 
-		var pfanVer:FlxText = new FlxText(12, FlxG.height - 154, 0, "Persona: Funkin' All Night v" + Application.current.meta.get('version'), 12);
+		menuChar = new FlxSprite(x, y).setFrames(Paths.getSparrowAtlas('persona/menus/mainmenu/$curChar-Menu'));
+		menuChar.animation.addByPrefix('idle', 'menu_idle', 24, false);
+		add(menuChar);
+
+		var pfanVer:FlxText = new FlxText(12, FlxG.height - 154, 0, "Persona: Funkin' All Night v" + FlxG.stage.application.meta.get('version'), 12);
 		pfanVer.scrollFactor.set();
 		pfanVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(pfanVer);
@@ -175,8 +134,6 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		super.create();
-
-		FlxG.camera.follow(camFollow, null, 9);
 	}
 
 	var selectedSomethin:Bool = false;
@@ -191,7 +148,7 @@ class MainMenuState extends MusicBeatState
 		if (!selectedSomethin)
 		{
 			var pressedAccept:Bool = controls.ACCEPT;
-			for (hitbox in bgHitboxes) {
+			for (hitbox in optionHitboxes) {
 				if (TouchUtil.overlaps(hitbox, FlxG.camera)) {
 					#if mobile if (TouchUtil.justPressed) { #end
 					if (curSelected != hitbox.ID) {
@@ -213,7 +170,7 @@ class MainMenuState extends MusicBeatState
 
 			if (pressedAccept)
 			{
-				if (optionShit[curSelected] == 'STORY MODE' || optionShit[curSelected] == 'AWARDS')
+				if (getItemColor(curSelected) == FlxColor.GRAY)
 				{
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					selectedSomethin = true;
@@ -236,8 +193,6 @@ class MainMenuState extends MusicBeatState
 					{
 						switch (optionShit[curSelected])
 						{
-							//case 'story_mode':
-								//MusicBeatState.switchState(new StoryMenuState());
 							case 'FREEPLAY':
 								MusicBeatState.switchState(new FreeplayState());
 
@@ -251,6 +206,7 @@ class MainMenuState extends MusicBeatState
 
 							case 'CREDITS':
 								MusicBeatState.switchState(new CreditsState());
+
 							case 'CONFIG':
 								MusicBeatState.switchState(new OptionsState());
 								OptionsState.onPlayState = false;
@@ -301,10 +257,7 @@ class MainMenuState extends MusicBeatState
 
 		if(curBeat % 2 == 0)
 		{
-			bf.animation.play('idle');
-			makoto.animation.play('idle');
-			yu.animation.play('idle');
-			joker.animation.play('idle');
+			menuChar.animation.play('idle');
 		}
 
 		lastBeatHit = curBeat;
@@ -315,25 +268,12 @@ class MainMenuState extends MusicBeatState
 		super.closeSubState();
 	}
 
-	function changeItem(huh:Int = 0)
+	function changeItem(change:Int = 0)
 	{
 		FlxG.sound.play(Paths.sound('scrollMenu'));
-		menuItems.members[curSelected].setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, getItemColor(curSelected), LEFT, 48);
-
-		curSelected += huh;
-
-		if (curSelected >= menuItems.length)
-			curSelected = 0;
-		if (curSelected < 0)
-			curSelected = menuItems.length - 1;
-
-		menuItems.members[curSelected].setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, getItemColor(curSelected), LEFT, 48);
-
-		//camFollow.setPosition(menuItems.members[curSelected].getGraphicMidpoint().x,
-		menuItems.members[curSelected].getGraphicMidpoint().y - (menuItems.length > 4 ? menuItems.length * 8 : 0);
-		textBG.x = 0;
+		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
 		textBG.y = menuItems.members[curSelected].getMidpoint().y - 37.5;
-		textBG.scale.x = (menuItems.members[curSelected].width + 50) / 450;
+		textBG.setGraphicSize(menuItems.members[curSelected].width + 50, 75);
 		textBG.updateHitbox();
 	}
 

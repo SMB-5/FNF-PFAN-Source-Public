@@ -2,6 +2,8 @@ package substates;
 
 import flixel.addons.display.FlxBackdrop;
 
+import states.CreditsState.Member;
+
 class MemberCardSubstate extends MusicBeatSubstate
 {
 	var name:String;
@@ -43,19 +45,20 @@ class MemberCardSubstate extends MusicBeatSubstate
 	#end
 
 	var allowScrolling:Bool = false;
+	var scrollTimer:Float = 0;
+	var scrollTween:FlxTween;
 	var holdingBox:Bool = false;
-	var listScrollY:Float = 0;
 	#if mobile var prevMouseY:Float = 0; #end
 
-	public function new(name:String, icon:String, role:String, description:String, link:String, color:FlxColor, flipX:Bool = true) {
+	public function new(member:Member) {
 		super();
-		this.name = name;
-		this.icon = icon;
-		this.role = role;
-		this.description = description;
-		this.link = link;
-		this.color = color;
-		this.flipX = flipX;
+		this.name = member.name;
+		this.icon = member.icon;
+		this.role = member.role;
+		this.description = member.description;
+		this.link = member.link;
+		this.color = CoolUtil.colorFromString(member.cardColor);
+		this.flipX = !member.flipIcon;
 	}
 
 	override function create() {
@@ -190,7 +193,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 		scrollBar.scrollFactor.set();
 		add(scrollBar);
 
-		descOutline = new FlxSprite().makeGraphic(Std.int(descBox.width), Std.int(descBox.height), 0);
+		descOutline = new FlxSprite(0, -1).makeGraphic(Std.int(descBox.width), Std.int(descBox.height + 1), 0);
 		descOutline.drawRect(0, 0, descOutline.width, descOutline.height, 0, {thickness: 5, color: color2});
 		descOutline.camera = camDesc;
 		descOutline.scrollFactor.set();
@@ -205,13 +208,14 @@ class MemberCardSubstate extends MusicBeatSubstate
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
 		add(acceptIcon);
 		#else
-		acceptTxt = new FlxText(cardBG.width - 230, cardBG.height - 55, 200, Language.getPhrase('ui_open_link', 'Open Link'), 32);
-		acceptTxt.setFormat(Paths.font('Fontsona3FES.ttf'), 32, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
+		acceptTxt = new FlxText(0, cardBG.height - 55, cardBG.width, Language.getPhrase('ui_open_link', 'Open Link'), 32);
+		acceptTxt.setFormat(Paths.font('Fontsona3FES.ttf'), 32, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		acceptTxt.x = cardBG.width - acceptTxt.textField.textWidth - 30;
 		add(acceptTxt);
 
 		// i'm so fucking annoyed at having to do Std.int for EVERY SINGLE TIME THAT I REFERENCE THE WIDTH AND HEIGHT IN MAKEGRAPHIC somebody please kill me - melodiekit
 		var acceptBG:FlxSprite = new FlxSprite().makeGraphic(Std.int(acceptTxt.textField.textWidth + 20), Std.int(acceptTxt.textField.textHeight + 20), 0xFF000000);
-		acceptBG.setPosition(acceptTxt.x + 20, acceptTxt.y - 7);
+		acceptBG.setPosition(acceptTxt.x - 8, acceptTxt.y - 7);
 		acceptBG.alpha = 0.6;
 		insert(members.indexOf(acceptTxt), acceptBG);
 		#end
@@ -238,6 +242,8 @@ class MemberCardSubstate extends MusicBeatSubstate
 
 	var exiting:Bool = false;
 	override function update(elapsed:Float) {
+		scrollTimer += elapsed;
+
 		statusHeader.x -= 80 * elapsed;
 		statusHeader2.x -= 80 * elapsed;
 		if (statusHeader.x < -970) statusHeader.x = 970;
@@ -259,12 +265,21 @@ class MemberCardSubstate extends MusicBeatSubstate
 		}
 
 		if (allowScrolling) {
+			if (scrollTimer >= 0.75 && scrollTween == null) {
+				scrollTween = FlxTween.tween(scrollBar, { alpha: 0 }, 0.25);
+			}
 			#if !mobile
 			if (FlxG.mouse.wheel != 0) {
 				var val:Float = 26 / 5;
 				if (FlxG.mouse.wheel == -1) val *= -1;
 				camDesc.scroll.y += val;
+				if (scrollTween != null) {
+					scrollTween.cancel();
+					scrollTween = null;
+				}
+				scrollBar.alpha = 0.6;
 				scrollBar.y += val * (camDesc.height / (descTxt.textField.textHeight + 16));
+				scrollTimer = 0;
 			}
 			#end
 			if (TouchUtil.pressed && (TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
@@ -278,7 +293,13 @@ class MemberCardSubstate extends MusicBeatSubstate
 				var val:Float = prevMouseY - TouchUtil.input.viewY;
 				#end
 				camDesc.scroll.y = val;
+				if (scrollTween != null) {
+					scrollTween.cancel();
+					scrollTween = null;
+				}
+				scrollBar.alpha = 0.6;
 				scrollBar.y = val * (camDesc.height / (descTxt.textField.textHeight + 16));
+				scrollTimer = 0;
 			}
 			if (TouchUtil.justReleased && holdingBox) {
 				holdingBox = false;

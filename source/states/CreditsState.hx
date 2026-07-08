@@ -5,75 +5,31 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 import objects.AttachedSprite;
 
+typedef MemberFile =
+{
+	var icon:String;
+	var flipIcon:Bool;
+	var section:Array<String>;
+	var role:String;
+	var description:String;
+	var link:String;
+	var color:String;
+}
+
+typedef CreditFile =
+{
+	var title:String;
+	var subtitle:String;
+	var sections:Array<String>;
+	var members:Dynamic;
+}
+
 class CreditsState extends MusicBeatState
 {
-	static var defaultList:Array<Array<Dynamic>> = [
-		// Name - Icon name - Role(s), Description - Link - Card Color - FlipX (set to false if the original icon isn't facing the right)
-		['Persona: Funkin All Night'],
-		['A Friday Night Funkin\' Mod by The Funkin Thieves'],
-		['Direction'],
-		['SMB', 'SMB', 'Director, Programmer', 'Hey Thank You so much for playing! This mod has been something I\'ve wanted to make since 2021 and finally seeing it be made and released means so much to me and I am very grateful for the team for helping make my dream fnf mod happen but also to you the player for downloading and playing this mod. I hope you enjoyed the Mod. For the stuff I did apart from directing and designing the mod I coded the Title Screen, Main Menu, Freeplay, Pause Menu and Results Screen. I also added some features to the mod. Once again Thank You so much for playing the Mod!', 'https://smb-bio.carrd.co/', 0xFFEC1C26],
-		['Art/Animation'],
-		['Clefanight', 'clefa', 'Artist, Animator, Charter', 'How the fuck did I even get here.', 'https://cremiesilver.newgrounds.com/', 0xFF11E92B],
-		['TaraForm', 'sara', 'Artist, Animator', '"Who let the cat ouda the bag!??"\nLTG Commander Soul at your service!', 'https://vgen.co/TaraForm', 0xFFBD54FF],
-		['Music'],
-		['Dog', 'doggo', 'Musician', 'Howdy. I made a few songs for this demo, and I also made the menu and game over themes. Also I charted like part of one song? So yeah hope you enjoy the mod!', 'https://www.youtube.com/@you-know-its-dog.', 0xFFF5D79D, false],
-		['MrEights', '', 'Musician', 'It ain\'t easy being cheesy!', 'https://www.youtube.com/@Mr3ights', 0xFF1E1E1E],
-		['Programming'],
-		['melodiekit', 'melodiekit', 'Programmer, Mobile Porter, Charter', 'Hi!\n\nI coded some stuff for this mod. Some notable stuff I coded are some of the UI that you see here like the Music Player, Credits Menu, Options Menu, etc lol\nI also tried my best to replicate the cool UI that Persona has, like their transitions... Whether it actually looks good or not is up to you\n\nI also charted Tartarus and Foggy Night. Let it be known that I only charted Tartarus because it has the same name as a Geometry Dash extreme demon :troll:.\n\nRegardless, I hope you enjoyed the mod as much as I had fun coding it!\n\nOh yeah I also made the mobile port I guess that\'s important', 'https://youtube.com/@melodiekit', 0xFFC0EBFF],
-		['SMB', 'SMB', 'Director, Programmer', 'Hey Thank You so much for playing! This mod has been something I\'ve wanted to make since 2021 and finally seeing it be made and released means so much to me and I am very grateful for the team for helping make my dream fnf mod happen but also to you the player for downloading and playing this mod. I hope you enjoyed the Mod. For the stuff I did apart from directing and designing the mod I coded the Title Screen, Main Menu, Freeplay, Pause Menu and Results Screen. I also added some features to the mod. Once again Thank You so much for playing the Mod!', 'https://smb-bio.carrd.co/', 0xFFEC1C26],
-		['Charting'],
-		['Clefanight', 'clefa', 'Artist, Animator, Charter', 'How the fuck did I even get here.', 'https://cremiesilver.newgrounds.com/', 0xFF11E92B],
-		['Dog', 'doggo', 'Musician', 'Howdy. I made a few songs for this demo, and I also made the menu and game over themes. Also I charted like part of one song? So yeah hope you enjoy the mod!', 'https://www.youtube.com/@you-know-its-dog.', 0xFFF5D79D, false],
-		['DudeDX', 'dudedx', 'Charter and Brazilian Portuguese Translator', 'why are oranges called oranges, but an apple is not called red?', 'https://fakecrime.bio/dudeDX', 0xFF009116, false],
-		['melodiekit', 'melodiekit', 'Programmer, Mobile Porter, Charter', 'Hi!\n\nI coded some stuff for this mod. Some notable stuff I coded are some of the UI that you see here like the Music Player, Credits Menu, Options Menu, etc lol\nI also tried my best to replicate the cool UI that Persona has, like their transitions... Whether it actually looks good or not is up to you\n\nI also charted Tartarus and Foggy Night. Let it be known that I only charted Tartarus because it has the same name as a Geometry Dash extreme demon :troll:.\n\nRegardless, I hope you enjoyed the mod as much as I had fun coding it!\n\nOh yeah I also made the mobile port I guess that\'s important', 'https://youtube.com/@melodiekit', 0xFFC0EBFF],
-		['Chromatic Makers'],
-		['NoahGani1', 'noah', 'Chromatic Maker', 'Say Gex.', 'https://x.com/noah_gani1', 0xFF203A53],
-		['Translations'],
-		['DudeDX', 'dudedx', 'Charter and Brazilian Portuguese Translator', 'why are oranges called oranges, but an apple is not called red?', 'https://fakecrime.bio/dudeDX', 0xFF009116, false],
-		['Contributors'],
-		['Cobalt', 'cobalt', 'Programmer, Made the Linux Port', 'I\'ve never heard of Persona before this mod, but I coded for it anyway. VS Github Actions is next.', 'https://cobaltbar.github.io/', 0xFF0065FF],
-		['CrysOtter08', 'frenchotter', 'Artist, Animator', 'Holy fart, dude.', 'https://x.com/CrysOtter08', 0xFF8f8dff],
-		['Fearmonger Wade', 'g', 'Artist, Coder', 'Hii, I didn\'t do much for this mod really asides from 2 results screens but it was still really fun. Thanks for playing.', 'https://linktr.ee/ghostbnuuy', 0xFFE1E1E1, false],
-		['JuhoSprite', 'juho', 'Artist', 'I don\'t play games.', 'https://twitter.com/JuhoSprite', 0xFFFD0FE3],
-		['Special Thanks'],
-		['Mikolka9144', 'mikolka', 'Ported the soundtray and screenshot plugin to Psych Engine', '', 'https://gamebanana.com/members/3329541', 0xFF2EBCFA],
-		['Moonlight_Catalyst', 'moonlight_catalyst', 'Ported ghost notes and constant scoring to Psych Engine', '', 'https://www.youtube.com/channel/ucmvsorfe7zldig4budmzela', 0xFF9764B7],
-		['Pumpsuki', '', 'Hold Note Splashes Code', '', 'https://www.youtube.com/channel/UCGX_SXBkNjJqjh43KVVvdzg', 0xFFFFFFFF],
-		['Psych Engine', 'mind games', 'The Engine used to make this Mod.', '', 'https://github.com/ShadowMario/FNF-PsychEngine/', 0xFF580787],
-		/*
-		[''],
-		["Psych Engine Team"],
-		["Shadow Mario",		"shadowmario",		"Main Programmer and Head of Psych Engine",					"https://ko-fi.com/shadowmario",	"444444"],
-		["Riveren",				"riveren",			"Main Artist/Animator of Psych Engine",						"https://x.com/riverennn",			"14967B"],
-		[""],
-		["Former Engine Members"],
-		["bb-panzu",			"bb",				"Ex-Programmer of Psych Engine",							"https://x.com/bbsub3",				"3E813A"],
-		[""],
-		["Engine Contributors"],
-		["crowplexus",			"crowplexus",		"HScript Iris, Input System v3, and Other PRs",				"https://github.com/crowplexus",	"CFCFCF"],
-		["Kamizeta",			"kamizeta",			"Creator of Pessy, Psych Engine's mascot.",				"https://www.instagram.com/cewweey/",	"D21C11"],
-		["MaxNeton",			"maxneton",			"Loading Screen Easter Egg Artist/Animator.",	"https://bsky.app/profile/maxneton.bsky.social","3C2E4E"],
-		["Keoiki",				"keoiki",			"Note Splash Animations and Latin Alphabet",				"https://x.com/Keoiki_",			"D2D2D2"],
-		["SqirraRNG",			"sqirra",			"Crash Handler and Base code for\nChart Editor's Waveform",	"https://x.com/gedehari",			"E1843A"],
-		["EliteMasterEric",		"mastereric",		"Runtime Shaders support and Other PRs",					"https://x.com/EliteMasterEric",	"FFBD40"],
-		["MAJigsaw77",			"majigsaw",			".MP4 Video Loader Library (hxvlc)",						"https://x.com/MAJigsaw77",			"5F5F5F"],
-		["Tahir Toprak Karabekiroglu",	"tahir",	"Note Splash Editor and Other PRs",							"https://x.com/TahirKarabekir",		"A04397"],
-		["iFlicky",				"flicky",			"Composer of Psync and Tea Time\nAnd some sound effects",	"https://x.com/flicky_i",			"9E29CF"],
-		["KadeDev",				"kade",				"Fixed some issues on Chart Editor and Other PRs",			"https://x.com/kade0912",			"64A250"],
-		["superpowers04",		"superpowers04",	"LUA JIT Fork",												"https://x.com/superpowers04",		"B957ED"],
-		["CheemsAndFriends",	"cheems",			"Creator of FlxAnimate",									"https://x.com/CheemsnFriendos",	"E1E1E1"],
-		[""],
-		["Funkin' Crew"],
-		['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'",						 'https://twitter.com/ninja_muffin99',	'CF2D2D'],
-		['PhantomArcade',		'phantomarcade',	"Animator of Friday Night Funkin'",							 'https://twitter.com/PhantomArcade3K',	'FADC45'],
-		['evilsk8r',			'evilsk8r',			"Artist of Friday Night Funkin'",							 'https://twitter.com/evilsk8r',		'5ABD4B'],
-		['kawaisprite',			'kawaisprite',		"Composer of Friday Night Funkin'",							 'https://twitter.com/kawaisprite',		'378FC7']*/
-	];
-	var list:Array<Array<Dynamic>> = [];
+	var credit:CreditFile;
+	var memberList:Array<Array<Dynamic>> = [];
 
 	var curSelected:Int = 0;
-	var curID:Int = 0;
 	var scrollCredits:Bool = true;
 	#if mobile
 	var prevSelected:Int = 0;
@@ -82,9 +38,8 @@ class CreditsState extends MusicBeatState
 	#end
 
 	var titleGroup:FlxTypedSpriteGroup<FlxText>;
-	var creditsGroup:FlxTypedSpriteGroup<FlxText>;
-	var iconArray:Array<AttachedSprite> = [];
-	var baldipliers:Array<Array<Dynamic>> = [['baldiplier', 'bald', 0xFF577099], ['daldiplier', 'dark', 0xFF3f3f3f], ['golden-baldiplier', 'golden', 0xFFFFFF48]];
+	var creditsGroup:FlxTypedSpriteGroup<Member>;
+	var baldipliers:Array<Array<Dynamic>> = [['baldiplier', 'bald', '577099'], ['daldiplier', 'dark', '3F3F3F'], ['golden-baldiplier', 'golden', 'FFFF48']];
 
 	var camFollow:FlxObject;
 
@@ -100,25 +55,30 @@ class CreditsState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		for (i in 0...defaultList.length) {
-			list[i] = [];
-			for (k in 0...defaultList[i].length) {
-				list[i].push(defaultList[i][k]);
-			}
+		credit = getCreditData();
+		if (credit == null) {
+			trace('No credits found... returning back to menu');
+			FlxG.switchState(new MainMenuState());
+			return;
+		}
+		var arr = Reflect.fields(credit.members);
+		arr.sort((a:String, b:String)->{
+			if (a.toLowerCase() < b.toLowerCase()) return -1;
+			else if (a.toLowerCase() > b.toLowerCase()) return 1;
+			else return 0;
+		});
+		for (i => member in arr) {
+			// why is haxe physically incapable of sorting maps
+			memberList[i] = [member, Reflect.field(credit.members, member)];
 		}
 
-		if (FlxG.random.bool(0.5)) {
+		var bigStinkyLoser:MemberFile = getMember('melodiekit');
+		if (FlxG.random.bool(0.5) && bigStinkyLoser != null) {
 			var baldArray:Array<Dynamic> = FlxG.random.getObject(baldipliers, [90, 25, 5]);
 			if (baldArray != null) {
-				for (arr in list) {
-					if (arr[0] == 'melodiekit') {
-						arr[1] = baldArray[0];
-						arr[3] = 'Hello. You caught me on my day off. Anyways, make sure to keep your pliers ${baldArray[1]}.';
-						arr[5] = baldArray[2];
-						arr[6] = false;
-						break;
-					}
-				}
+				bigStinkyLoser.icon = baldArray[0];
+				bigStinkyLoser.flipIcon = true;
+				bigStinkyLoser.color = baldArray[2];
 			}
 		}
 
@@ -135,42 +95,38 @@ class CreditsState extends MusicBeatState
 		titleGroup = new FlxTypedSpriteGroup<FlxText>();
 		add(titleGroup);
 
-		creditsGroup = new FlxTypedSpriteGroup<FlxText>();
+		var title:FlxText = new FlxText(50, 0, FlxG.width, credit.title, 46);
+		title.font = Paths.font('p5hatty-1.ttf');
+		title.borderStyle = OUTLINE;
+		titleGroup.add(title);
+
+		var subtitle:FlxText = new FlxText(50, 62, FlxG.width, credit.subtitle, 38);
+		subtitle.font = Paths.font('p5hatty-1.ttf');
+		subtitle.borderStyle = OUTLINE;
+		titleGroup.add(subtitle);
+
+		creditsGroup = new FlxTypedSpriteGroup<Member>();
 		add(creditsGroup);
-	
-		var offset = 0;
-		for (i in 0...list.length) {
-			if (list[i].length <= 1 && i != 0) offset += 30;
-			if (i == 2) offset += 30;
-			var yValue:Float = 32 * i + offset;
-			var name:FlxText = new FlxText(50 + (list[i].length > 1 ? 15 : 0), yValue, FlxG.width, list[i][0], i == 0 ? 46 : list[i].length <= 1 ? 38 : 34);
-			name.font = Paths.font('p5hatty-1.ttf');
-			name.borderStyle = OUTLINE;
-			name.ID = i;
-			if (list[i].length <= 1) {
-				titleGroup.add(name);
-				continue;
+
+		var offset:Float = 0;
+		for (i => section in credit.sections) {
+			var sectionTxt:FlxText = new FlxText(50, 156 + (60 * i) + offset, FlxG.width, section, 38);
+			sectionTxt.font = Paths.font('p5hatty-1.ttf');
+			sectionTxt.borderStyle = OUTLINE;
+			titleGroup.add(sectionTxt);
+
+			var offsetText:Float = 0;
+			for (k => member in memberList) {
+				if (member == null || !member[1].section.contains(section)) continue;
+				var text:Member = new Member(member[0], member[1].icon, member[1].flipIcon, member[1].role, member[1].description, member[1].link, member[1].color);
+				offsetText += text.textField.textHeight + 3;
+				text.y = sectionTxt.y + offsetText;
+				creditsGroup.add(text);
+				offset += text.textField.textHeight + 3;
 			}
-			else creditsGroup.add(name);
-
-			var icon:AttachedSprite = new AttachedSprite();
-			var imagePath:String = 'credits/${list[i][1]}';
-			if (!FileSystem.exists(Paths.getPath('images/$imagePath.png'))) imagePath = 'icons/icon-bf';
-			var graphic = Paths.image(imagePath);
-			var iSize:Float = Math.round(graphic.width / graphic.height);
-			icon.loadGraphic(graphic, true, Math.floor(graphic.width / iSize), Math.floor(graphic.height));
-			icon.animation.add("idle", [for (i in 0...icon.frames.frames.length) i], 0, false, list[i][6] != null ? list[i][6] == 'false' : false);
-			icon.animation.play('idle');
-			icon.setGraphicSize(35, 35);
-			icon.updateHitbox();
-			icon.sprTracker = name;
-			icon.xAdd += name.textField.textWidth + 5;
-			icon.yAdd -= name.textField.textHeight / 3 - 5;
-			iconArray.push(icon);
-			add(icon);
 		}
-
-		var tipString:String = #if mobile 'Swipe to select a member\nTap to view a member\'s status' #else 'Press UP or DOWN to select a member\nPress ACCEPT to view a member\'s status' #end;
+		
+		var tipString:String = #if mobile Language.getPhrase('credits_tip_mobile', 'Swipe to select a member\nTap to view a member\'s status') #else Language.getPhrase('credits_tip', 'Press UP or DOWN to select a member\nPress ACCEPT to view a member\'s status') #end;
 		var tipText:FlxText = new FlxText(0, 0, FlxG.width, tipString, 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
 		tipText.y = FlxG.height - 22 - tipText.textField.textHeight;
@@ -200,7 +156,7 @@ class CreditsState extends MusicBeatState
 		timeSinceLastInput += elapsed;
 
 		if (scrollCredits) {
-			camFollow.y += 60 * elapsed;
+			camFollow.y += 70 * elapsed;
 			for (i => credit in creditsGroup.group.keyValueIterator()) {
 				if (credit.getScreenPosition().y <= FlxG.height / 3.25) curSelected = i;
 			}
@@ -231,7 +187,7 @@ class CreditsState extends MusicBeatState
 						if (scrollCredits) changeSelection(0);
 					}
 					swiping = true;
-					var floatSelected:Float = prevSelected + offset * 0.015;
+					var floatSelected:Float = prevSelected + offset * 0.0175;
 					camFollow.y = FlxG.height / 2 + prevCamPos + offset;
 					var boundSelected:Int = Math.round(FlxMath.bound(floatSelected, 0, creditsGroup.length - 1));
 					if (boundSelected != curSelected) {
@@ -269,7 +225,7 @@ class CreditsState extends MusicBeatState
 		}
 
 		if (!scrollCredits && pressedAccept) {
-			openSubState(new substates.MemberCardSubstate(list[curID][0], list[curID][1], list[curID][2], list[curID][3], list[curID][4], list[curID][5], list[curID][6] ?? true));
+			openSubState(new substates.MemberCardSubstate(creditsGroup.members[curSelected]));
 			timeSinceLastInput = 0;
 		}
 
@@ -287,11 +243,22 @@ class CreditsState extends MusicBeatState
 		super.destroy();
 	}
 
+	public static function getCreditData():CreditFile {
+		if (!FileSystem.exists(Paths.getSharedPath('data/credits.json'))) return null;
+		try {
+			var json:CreditFile = haxe.Json.parse(File.getContent(Paths.getSharedPath('data/credits.json')));
+			return json;
+		}
+		catch(e:Dynamic) {
+			trace('errored: $e');
+			return null;
+		}
+	}
+
 	function changeSelection(change:Int = 0) {
 		scrollCredits = false;
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		curSelected = Std.int(FlxMath.bound(curSelected + change, 0, creditsGroup.length - 1));
-		curID = creditsGroup.members[curSelected].ID;
 		for (i => credit in creditsGroup.group.keyValueIterator()) {
 			credit.x = i == curSelected ? 85 : 65;
 		}
@@ -304,5 +271,61 @@ class CreditsState extends MusicBeatState
 		scrollCredits = true;
 		arrow.visible = false;
 		creditsGroup.members[curSelected].x = 65;
+	}
+
+	function getMember(name:String):MemberFile {
+		for (member in memberList) {
+			if (member[0] == name) return member[1];
+		}
+		return null;
+	}
+}
+
+class Member extends FlxText
+{
+	public var name:String;
+	public var icon:String;
+	public var iconSprite:AttachedSprite;
+	public var flipIcon:Bool;
+	public var role:String;
+	public var description:String;
+	public var link:String;
+	public var cardColor:String;
+
+	public function new(name:String, icon:String, flipIcon:Bool = false, role:String, description:String, link:String, cardColor:String) {
+		this.name = name;
+		this.icon = icon;
+		this.flipIcon = flipIcon;
+		this.role = role;
+		this.description = description;
+		this.link = link;
+		this.cardColor = cardColor;
+		super(65, 0, FlxG.width, name, 34);
+		font = Paths.font('p5hatty-1.ttf');
+		borderStyle = OUTLINE;
+
+		iconSprite = new AttachedSprite();
+		var imagePath:String = 'credits/$icon';
+		if (!FileSystem.exists(Paths.getPath('images/$imagePath.png'))) imagePath = 'icons/icon-bf';
+		var graphic = Paths.image(imagePath);
+		var iSize:Float = Math.round(graphic.width / graphic.height);
+		iconSprite.loadGraphic(graphic, true, Math.floor(graphic.width / iSize), Math.floor(graphic.height));
+		iconSprite.animation.add("idle", [for (i in 0...iconSprite.frames.frames.length) i], 0, false, flipIcon);
+		iconSprite.animation.play('idle');
+		iconSprite.setGraphicSize(35, 35);
+		iconSprite.updateHitbox();
+		iconSprite.sprTracker = this;
+		iconSprite.xAdd += this.textField.textWidth + 5;
+		iconSprite.yAdd -= this.textField.textHeight / 3 - 5;
+	}
+
+	override function draw() {
+		super.draw();
+		if (iconSprite != null) iconSprite.draw();
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		if (iconSprite != null) iconSprite.update(elapsed);
 	}
 }

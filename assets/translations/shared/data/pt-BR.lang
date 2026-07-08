@@ -30,7 +30,7 @@ category_story: "História Principal"
 category_freeplay: "Histórias Paralelas"
 
 // Music Player
-musicplayer_tip: "Pressione ESPAÇO para Tocar ou Parar a Música / Pressione ESQUERDA ou DIREITA para alterar músicas\nPressione BACKSPACE para Sair / Pressione RESET para Recomeçar a Música"
+musicplayer_tip: "Pressione ESPAÇO para Tocar ou Parar a Música / Pressione ESQUERDA ou DIREITA para Alterar Músicas\nPressione BACKSPACE para Sair / Pressione RESET para Recomeçar a Música"
 
 // Music Player Settings
 musicplayer_setting_playback_rate: "Playback Rate"
