@@ -331,6 +331,10 @@ description_safe_frames: "Ajusta quanto tempo a mais ou a menos você terá\npar
 setting_sustains_as_one_note: "Notas Longas Fundidas"
 description_sustains_as_one_note: "Se marcado, notas longas não poderão ser acertadas se a principal não for acertada,\nalém de contar como um único erro."
 
+// Credits
+credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
+credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
+
 // Control Rebinding
 controls_rebinding: "Trocando {1}"
 controls_rebinding2: "Segure ESC para Cancelar\nBackspace para Limpar"
