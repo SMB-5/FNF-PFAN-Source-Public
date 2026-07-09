@@ -1,109 +1,76 @@
 {
+	"note_colors": [
+		[
+			[218, 37, 35],
+			[255, 255, 255],
+			[70, 17, 38]
+		],
+		[
+			[26, 80, 202],
+			[255, 255, 255],
+			[10, 16, 74]
+		],
+		[
+			[49, 67, 122],
+			[255, 255, 255],
+			[21, 24, 59]
+		],
+		[
+			[37, 120, 198],
+			[255, 255, 255],
+			[20, 33, 74]
+		]
+	],
 	"animations": [
 		{
+			"offsets": [-1, 1],
 			"loop": false,
-			"offsets": [
-				-1,
-				0
-			],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "Makito left",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito left"
 		},
 		{
+			"offsets": [16, -1],
 			"loop": false,
-			"offsets": [
-				16,
-				-1
-			],
+			"fps": 24,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "Makito down",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito down"
 		},
 		{
+			"offsets": [17, 0],
 			"loop": false,
-			"offsets": [
-				17,
-				0
-			],
+			"fps": 24,
 			"anim": "singUP",
-			"fps": 24,
-			"name": "Makito up",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito up"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singRIGHT",
-			"fps": 24,
-			"name": "Makito right",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito right"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"anim": "idle",
 			"fps": 24,
-			"name": "Makito idle",
-			"indices": [
-				0,
-				1,
-				2,
-				2,
-				3,
-				3,
-				4,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0
-			]
+			"anim": "idle",
+			"indices": [0, 1, 2, 2, 3, 3, 4, 0, 0, 0, 0, 0, 0],
+			"name": "Makito idle"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Makoto-Yuki",
-	"position": [
-		-88,
-		0
-	],
+	"position": [-88, 0],
 	"healthicon": "makoto-yuki",
 	"flip_x": false,
-	"healthbar_colors": [
-		19,
-		73,
-		195
-	],
-	"camera_position": [
-		88,
-		0
-	],
+	"healthbar_colors": [19, 73, 195],
+	"camera_position": [88, 0],
 	"sing_duration": 6.1,
 	"scale": 1,
 	"_editor_isPlayer": false

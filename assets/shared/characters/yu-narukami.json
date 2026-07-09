@@ -1,11 +1,30 @@
 {
+	"note_colors": [
+		[
+			[255, 234, 56],
+			[255, 255, 255],
+			[81, 50, 14]
+		],
+		[
+			[201, 203, 214],
+			[255, 255, 255],
+			[43, 45, 55]
+		],
+		[
+			[215, 179, 0],
+			[255, 255, 255],
+			[72, 50, 4]
+		],
+		[
+			[118, 127, 140],
+			[255, 255, 255],
+			[27, 29, 43]
+		]
+	],
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				-4,
-				31
-			],
+			"offsets": [-4, 31],
 			"anim": "idle",
 			"fps": 24,
 			"name": "idle",
@@ -13,10 +32,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				27,
-				31
-			],
+			"offsets": [27, 31],
 			"anim": "singLEFT",
 			"fps": 24,
 			"name": "left0",
@@ -24,10 +40,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-127,
-				-79
-			],
+			"offsets": [-127, -79],
 			"anim": "singDOWN",
 			"fps": 24,
 			"name": "down0",
@@ -35,10 +48,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-62,
-				119
-			],
+			"offsets": [-62, 119],
 			"anim": "singUP",
 			"fps": 24,
 			"name": "up0",
@@ -46,10 +56,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-177,
-				14
-			],
+			"offsets": [-177, 14],
 			"anim": "singRIGHT",
 			"fps": 24,
 			"name": "right0",
@@ -57,10 +64,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				29,
-				151
-			],
+			"offsets": [29, 151],
 			"anim": "singLEFTmiss",
 			"fps": 24,
 			"name": "left note miss0",
@@ -68,10 +72,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-126,
-				47
-			],
+			"offsets": [-126, 47],
 			"anim": "singDOWNmiss",
 			"fps": 24,
 			"name": "down note miss0",
@@ -79,20 +80,14 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-64,
-				254
-			],
+			"offsets": [-64, 254],
 			"anim": "singUPmiss",
 			"fps": 24,
 			"name": "up note miss0",
 			"indices": []
 		},
 		{
-			"offsets": [
-				-177,
-				98
-			],
+			"offsets": [-177, 98],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHTmiss",
@@ -103,21 +98,11 @@
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Yu-Narukami",
-	"position": [
-		-40,
-		220
-	],
+	"position": [-40, 220],
 	"healthicon": "yu-narukami-tv",
 	"flip_x": false,
-	"healthbar_colors": [
-		255,
-		234,
-		56
-	],
-	"camera_position": [
-		10,
-		50
-	],
+	"healthbar_colors": [255, 234, 56],
+	"camera_position": [10, 50],
 	"sing_duration": 4,
 	"scale": 1.1,
 	"_editor_isPlayer": false

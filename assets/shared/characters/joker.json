@@ -1,123 +1,108 @@
 {
+	"note_colors": [
+		[
+			[30, 30, 30],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[198, 33, 58],
+			[255, 255, 255],
+			[74, 16, 47]
+		],
+		[
+			[192, 204, 204],
+			[255, 255, 255],
+			[37, 43, 52]
+		],
+		[
+			[255, 45, 50],
+			[255, 255, 255],
+			[81, 20, 35]
+		]
+	],
 	"animations": [
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "idle",
-			"fps": 24,
-			"name": "idle",
-			"indices": []
+			"indices": [],
+			"name": "idle"
 		},
 		{
+			"offsets": [80, 0],
 			"loop": false,
-			"offsets": [
-				80,
-				0
-			],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "left",
-			"indices": []
+			"indices": [],
+			"name": "left"
 		},
 		{
+			"offsets": [-30, -30],
 			"loop": false,
-			"offsets": [
-				-30,
-				-30
-			],
+			"fps": 24,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "down",
-			"indices": []
+			"indices": [],
+			"name": "down"
 		},
 		{
+			"offsets": [18, 39],
 			"loop": false,
-			"offsets": [
-				18,
-				39
-			],
+			"fps": 24,
 			"anim": "singUP",
-			"fps": 24,
-			"name": "up",
-			"indices": []
+			"indices": [],
+			"name": "up"
 		},
 		{
+			"offsets": [-41, -10],
 			"loop": false,
-			"offsets": [
-				-41,
-				-10
-			],
+			"fps": 24,
 			"anim": "singRIGHT",
+			"indices": [],
+			"name": "right"
+		},
+		{
+			"loop": false,
+			"offsets": [81, 59],
+			"anim": "singLEFTmiss",
 			"fps": 24,
-			"name": "right",
+			"name": "note left miss",
 			"indices": []
 		},
 		{
-			"offsets": [
-				81,
-				59
-			],
-			"indices": [],
-			"fps": 24,
-			"anim": "singLEFTmiss",
 			"loop": false,
-			"name": "note left miss"
-		},
-		{
-			"offsets": [
-				-30,
-				56
-			],
-			"indices": [],
-			"fps": 24,
+			"offsets": [-30, 56],
 			"anim": "singDOWNmiss",
-			"loop": false,
-			"name": "note down miss"
+			"fps": 24,
+			"name": "note down miss",
+			"indices": []
 		},
 		{
-			"offsets": [
-				19,
-				85
-			],
-			"indices": [],
-			"fps": 24,
+			"loop": false,
+			"offsets": [19, 85],
 			"anim": "singUPmiss",
-			"loop": false,
-			"name": "note up miss"
+			"fps": 24,
+			"name": "note up miss",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-41,
-				71
-			],
-			"indices": [],
-			"fps": 24,
-			"anim": "singRIGHTmiss",
 			"loop": false,
-			"name": "note right miss"
+			"offsets": [-41, 71],
+			"anim": "singRIGHTmiss",
+			"fps": 24,
+			"name": "note right miss",
+			"indices": []
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Joker",
-	"position": [
-		-10,
-		100
-	],
+	"position": [-10, 100],
 	"healthicon": "joker",
 	"flip_x": false,
-	"healthbar_colors": [
-		234,
-		0,
-		31
-	],
-	"camera_position": [
-		0,
-		0
-	],
+	"healthbar_colors": [234, 0, 31],
+	"camera_position": [0, 0],
 	"sing_duration": 4,
 	"scale": 1,
 	"_editor_isPlayer": false
