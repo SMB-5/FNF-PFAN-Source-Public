@@ -256,10 +256,12 @@ class PlayState extends MusicBeatState
 	#end
 
 	public var songScore:Int = 0;
+	public var lerpScore:Int = 0;
 	public var songHits:Int = 0;
 	public var songMisses:Int = 0;
 	public var comboBreaks:Int = 0;
 	public var scoreTxt:FlxText;
+	public var lerpedScore:Bool = false;
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
@@ -1384,10 +1386,11 @@ class PlayState extends MusicBeatState
 			str += ' (${percent}%)';
 		}
 
-		var tempScore:String = Language.getPhrase('score_text_basegame', 'Score: {1}', [FlxStringUtil.formatMoney(songScore, false)]);
+		var score:Int = lerpedScore ? lerpScore : songScore;
+		var tempScore:String = Language.getPhrase('score_text_basegame', 'Score: {1}', [FlxStringUtil.formatMoney(score, false)]);
 		if (ClientPrefs.data.psychScore) {
-			if(!instakillOnMiss && !merciless) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [FlxStringUtil.formatMoney(songScore, false), songMisses, str]);
-			else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [FlxStringUtil.formatMoney(songScore, false), str]);
+			if(!instakillOnMiss && !merciless) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [FlxStringUtil.formatMoney(score, false), songMisses, str]);
+			else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [FlxStringUtil.formatMoney(score, false), str]);
 		}
 		scoreTxt.text = tempScore;
 	}
@@ -2204,20 +2207,7 @@ class PlayState extends MusicBeatState
 							else if (daNote.canBeHit && !daNote.hitByOpponent && !daNote.ignoreNote)
 								opponentNoteHit(daNote);
 
-							if(daNote.isSustainNote) 
- 							{
- 								if(strum.sustainReduce) daNote.clipToStrumNote(strum);
- 
- 								//V-Slice sustain scoring shit
- 								if(!opponentMode && daNote.wasGoodHit && daNote.mustPress && !cpuControlled && !practiceMode) {
- 									songScore += Std.int(holdBonus * elapsed);
- 									updateScore();
- 								}
-								else if(opponentMode && daNote.hitByOpponent && daNote.canBeHit && !cpuControlled && !practiceMode) {
- 									songScore += Std.int(holdBonus * elapsed);
- 									updateScore();
- 								}
- 							}
+							if(daNote.isSustainNote && strum.sustainReduce) daNote.clipToStrumNote(strum);
 
 							// Kill extremely late notes and cause misses
 							if (Conductor.songPosition - daNote.strumTime > noteKillOffset)
@@ -2243,6 +2233,10 @@ class PlayState extends MusicBeatState
 			}
 			checkEventNote();
 		}
+
+		lerpScore = Math.floor(FlxMath.lerp(lerpScore, songScore, elapsed * 18));
+		if (Math.abs(lerpScore - songScore) <= 10) lerpScore = songScore;
+		if (lerpedScore) updateScoreText();
 
 		if (chartingMode)
 		{
@@ -3639,9 +3633,15 @@ class PlayState extends MusicBeatState
 		{
 			if (!note.isSustainNote)
 			{
-				combo++;
-				if(combo > 9999) combo = 9999;
+				lerpedScore = false;
+				combo = Std.int(Math.min(combo + 1, 9999));
 				popUpScore(note);
+			}
+			else
+			{
+				lerpedScore = true;
+				songScore += 30;
+				RecalculateRating(false);
 			}
 			var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 			if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
@@ -3757,10 +3757,17 @@ class PlayState extends MusicBeatState
 			{
 				if (!note.isSustainNote)
 				{
-					combo++;
-					if (combo > 9999) combo = 9999;
+					lerpedScore = false;
+					combo = Std.int(Math.min(combo + 1, 9999));
 					popUpScore(note);
 				}
+				else
+				{
+					lerpedScore = true;
+					songScore += 30;
+					RecalculateRating(false);
+				}
+
 				var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 				if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
 				if (gainHealth) health += note.hitHealth * healthGain;
