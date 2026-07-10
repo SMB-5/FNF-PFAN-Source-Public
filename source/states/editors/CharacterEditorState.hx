@@ -908,7 +908,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		arrowPalette = character.arrowRGB;
 		set_curSelectedNote(curSelectedNote);
 
-		usePlayerColors = new PsychUICheckBox(allColorSteppers[2][0].x, allColorSteppers[2][0].y + 30, "Use Player Colors?", 100);
+		usePlayerColors = new PsychUICheckBox(allColorSteppers[2][0].x, allColorSteppers[2][0].y + 30, "Use Player Colors?\n(NOTE: If Checked Colors WILL NOT be saved to the Character JSON)", 300);
 		usePlayerColors.checked = palettesEqual(arrowPalette, ClientPrefs.data.arrowRGB);
 		tab_group.add(usePlayerColors);
 
