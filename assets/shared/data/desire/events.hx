@@ -18,8 +18,8 @@ function onStepHit() {
 			game.camZoomingOnBeat = false;
 		case 376:
 			if (game.gf != null) {
-		game.isCameraOnForcedPos = true;
-		game.moveCameraToGirlfriend();
+				game.isCameraOnForcedPos = true;
+				game.moveCameraToGirlfriend();
 			}
 			game.zoomCamera(1.15, 0.5, { ease: FlxEase.circOut });
 			game.camZoomingOnBeat = true;
