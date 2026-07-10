@@ -764,15 +764,6 @@ class PlayState extends MusicBeatState
 			eventNotes.sort(sortByTime);
 		}
 
-		switch(PlayState.SONG.song) {
-			case 'Desire':
-				opponentCameraOffset[1] = -45;
-				cameraSpeed = 2;
-			case 'Foggy Night':
-				camZooming = true;
-				camZoomingOnBeat = false;
-		}
-
 		#if mobile
 		addMobileControls();
 		mobileControls.currentMode.onPressed.add(onButtonPress);
@@ -3944,63 +3935,6 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		switch(PlayState.SONG.song) {
-			case 'Desire':
-				switch(curStep) {
-					case 8:
-						zoomCamera(1.05, 0.5, { ease: FlxEase.circOut });
-					case 72:
-						camZoomingOnBeat = false;
-					case 120:
-						camZoomingOnBeat = true;
-					case 133:
-						zoomCamera(1.15, 0.5, { ease: FlxEase.circOut });
-					case 136:
-						zoomCamera(0.85, 0.5, { ease: FlxEase.circOut });
-					case 264:
-						zoomCamera(0.95, 0.5, { ease: FlxEase.circOut });
-						camZoomingOnBeat = false;
-					case 376:
-						if (gf != null) {
-							isCameraOnForcedPos = true;
-							moveCameraToGirlfriend();
-						}
-						zoomCamera(1.15, 0.5, { ease: FlxEase.circOut });
-						camZoomingOnBeat = true;
-					case 379:
-						zoomCamera(0.7, 0.5, { ease: FlxEase.circOut });
-					case 388:
-						isCameraOnForcedPos = false;
-						zoomCamera(1.05, 0.5, { ease: FlxEase.circOut });
-					case 392:
-						zoomCamera(0.7, 0.5, { ease: FlxEase.circOut });
-					case 482:
-						defaultCamZoom = camGame.zoom = 1;
-					case 488:
-						zoomCamera(0.7, 0.5, { ease: FlxEase.circOut });
-					case 520:
-						zoomCamera(1.05, 0.5, { ease: FlxEase.circOut });
-					case 648:
-						zoomCamera(0.85, 0.5, { ease: FlxEase.circOut });
-					case 856:
-						zoomCamera(1.05, 4, { ease: FlxEase.sineIn });
-					case 888:
-						zoomCamera(1.15, 0.5, { ease: FlxEase.circOut });
-					case 904:
-						zoomCamera(0.7, 0.5, { ease: FlxEase.circOut });
-					case 994:
-						defaultCamZoom = camGame.zoom = 1;
-					case 1000:
-						zoomCamera(0.7, 0.5, { ease: FlxEase.circOut });
-					case 1032:
-						zoomCamera(1.05, 0.5, { ease: FlxEase.circOut });
-					case 1150:
-						zoomCamera(0.85, 2, { ease: FlxEase.sineOut });
-						isCameraOnForcedPos = true;
-						FlxTween.tween(camFollow, { x: gf.getMidpoint().x + gf.cameraPosition[0] + girlfriendCameraOffset[0], y: gf.getMidpoint().y + gf.cameraPosition[1] + girlfriendCameraOffset[1] }, 2.25, { ease: FlxEase.sineInOut, onUpdate: t->camGame.snapToTarget(), onComplete: t->isCameraOnForcedPos = false });
-				}
-		}
-
 		lastStepHit = curStep;
 		setOnScripts('curStep', curStep);
 		callOnScripts('onStepHit');
@@ -4043,49 +3977,6 @@ class PlayState extends MusicBeatState
 
 		if (hasMetadata) {
 			if (card.data.card.expandBeat == curBeat && card.data.card.expandBeat > 0) card.display();
-		}
-
-		switch(PlayState.SONG.song) {
-			case 'Desire':
-				if (curBeat % 2 != 0 && curBeat >= 18 && curBeat < 30) {
-					FlxG.camera.zoom += 0.015;
-					camHUD.zoom += 0.03;
-				}
-				else if (curBeat % 2 != 0 && curBeat >= 66 && curBeat < 94) {
-					FlxG.camera.zoom += 0.015;
-					camHUD.zoom += 0.03;
-				}
-				else if (curBeat >= 98 && curBeat < 120 || curBeat >= 122 && curBeat < 130) {
-					FlxG.camera.zoom += 0.015;
-					camHUD.zoom += 0.03;
-				}
-				else if (curBeat >= 226 && curBeat < 248 || curBeat >= 250 && curBeat < 290) {
-					FlxG.camera.zoom += 0.015;
-					camHUD.zoom += 0.03;
-				}
-			case 'Foggy Night':
-				if (curBeat % 2 != 0) {
-					if (curBeat >= 4 && curBeat < 34 || curBeat >= 36 && curBeat < 46 || curBeat >= 53 && curBeat < 66 || curBeat >= 132 && curBeat < 146 || curBeat >= 149 && curBeat < 162 || curBeat >= 344 && curBeat < 364) {
-						FlxG.camera.zoom += 0.015;
-						camHUD.zoom += 0.03;
-					}
-				}
-				else {
-					if (curBeat >= 212 && curBeat < 228) {
-						FlxG.camera.zoom += 0.015;
-						camHUD.zoom += 0.03;
-					}
-				}
-				if (curBeat >= 228 && curBeat < 236 || curBeat >= 276 && curBeat < 341) {
-					FlxG.camera.zoom += 0.015;
-					camHUD.zoom += 0.03;
-				}
-				if (curBeat == 100) {
-					camZoomingOnBeat = true;
-				}
-				if (curBeat == 127) {
-					camZoomingOnBeat = false;
-				}
 		}
 
 		setOnScripts('curBeat', curBeat);
