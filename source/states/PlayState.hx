@@ -1744,7 +1744,7 @@ class PlayState extends MusicBeatState
 			//if (after != null && (daNote.strumTime + 1) < after) continue;
 			
 			if (filter == null || filter(daNote)) {
-				daNote.updateRgb(colors[daNote.noteData]);
+				daNote.updateRgb(colors[daNote.noteData], true);
 				count ++;
 			}
 		}
