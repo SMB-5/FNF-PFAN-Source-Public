@@ -1748,9 +1748,11 @@ class PlayState extends MusicBeatState
 				count ++;
 			}
 		}
+
 		for (note in unspawnNotes) {
 			theFunc(note);
 		}
+		notes.forEach(theFunc);
 		
 		trace('applied RGB to $count notes !');
 	}
@@ -2670,6 +2672,7 @@ class PlayState extends MusicBeatState
 								strum.defaultRGB = boyfriend.arrowRGB;
 							}
 						}
+						setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
 
 					case 1:
@@ -2698,6 +2701,7 @@ class PlayState extends MusicBeatState
 								strum.defaultRGB = dad.arrowRGB;
 							}
 						}
+						setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
 						setOnScripts('dadName', dad.curCharacter);
 
 					case 2:
@@ -2714,6 +2718,7 @@ class PlayState extends MusicBeatState
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
 							}
+							setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
 							setOnScripts('gfName', gf.curCharacter);
 						}
 				}
