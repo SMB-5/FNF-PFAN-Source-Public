@@ -91,6 +91,12 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			BOOL, null, null, true, options.QuantizationColorSubstate);
 		addOption(option);
 
+		var option:Option = new Option('Character Note Colors',
+			"If unchecked, Character's won't have their custom note colors.",
+			'charRGB',
+			'bool');
+		addOption(option);
+
 		var option:Option = new Option('Strum Background Opacity',
 			'How much transparent should the Strumline Background be?',
 			'strumlineBGAlpha',

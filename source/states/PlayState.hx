@@ -582,11 +582,6 @@ class PlayState extends MusicBeatState
 		startCharacterScripts(boyfriend.curCharacter);
 		#end
 
-		if (ClientPrefs.data.charRGB)
-		{
-			//idk what to put here now
-		}
-
 		uiGroup = new FlxSpriteGroup();
 		comboGroup = new FlxSpriteGroup();
 		noteGroup = new FlxTypedGroup<FlxBasic>();
@@ -1728,9 +1723,12 @@ class PlayState extends MusicBeatState
 			for (i in 0...event[1].length)
 				makeEvent(event, i);
 
-		setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
-		setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
-		setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
+		if (ClientPrefs.data.charRGB && !ClientPrefs.data.noteQuantization)
+		{
+			setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
+			setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
+			setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
+		}
 
 		unspawnNotes.sort(sortByTime);
 		generatedMusic = true;
@@ -1777,12 +1775,12 @@ class PlayState extends MusicBeatState
 				switch(event.value1.toLowerCase()) {
 					case 'gf' | 'girlfriend':
 						charType = 2;	
-						setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
+						//setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
 					case 'dad' | 'opponent':
 						charType = 1;
-						setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
+						//setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
 					default:
-						setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
+						//setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
 						var val1:Int = Std.parseInt(event.value1);
 						if(Math.isNaN(val1)) val1 = 0;
 						charType = val1;
@@ -2672,7 +2670,9 @@ class PlayState extends MusicBeatState
 								strum.defaultRGB = boyfriend.arrowRGB;
 							}
 						}
-						setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
+						if (ClientPrefs.data.charRGB && !ClientPrefs.data.noteQuantization)
+							setNoteRGB(boyfriend.arrowRGB, function(note:Note) return (note.mustPress && !note.gfNote));
+
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
 
 					case 1:
@@ -2701,7 +2701,9 @@ class PlayState extends MusicBeatState
 								strum.defaultRGB = dad.arrowRGB;
 							}
 						}
-						setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
+						if (ClientPrefs.data.charRGB && !ClientPrefs.data.noteQuantization)
+							setNoteRGB(dad.arrowRGB, function(note:Note) return (!note.mustPress && !note.gfNote));
+
 						setOnScripts('dadName', dad.curCharacter);
 
 					case 2:
@@ -2718,7 +2720,9 @@ class PlayState extends MusicBeatState
 								gf = gfMap.get(value2);
 								gf.alpha = lastAlpha;
 							}
-							setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
+							if (ClientPrefs.data.charRGB && !ClientPrefs.data.noteQuantization)
+								setNoteRGB(gf.arrowRGB, function(note:Note) return note.gfNote);
+
 							setOnScripts('gfName', gf.curCharacter);
 						}
 				}
