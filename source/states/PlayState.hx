@@ -3656,7 +3656,7 @@ class PlayState extends MusicBeatState
 				combo = Std.int(Math.min(combo + 1, 9999));
 				popUpScore(note);
 			}
-			else
+			else if (!cpuControlled)
 			{
 				lerpedScore = true;
 				songScore += 30;
@@ -3784,7 +3784,7 @@ class PlayState extends MusicBeatState
 					combo = Std.int(Math.min(combo + 1, 9999));
 					popUpScore(note);
 				}
-				else
+				else if (!cpuControlled)
 				{
 					lerpedScore = true;
 					songScore += 30;
