@@ -32,6 +32,7 @@ typedef CharacterFile = {
 	var vocals_file:String;
 	@:optional var _editor_isPlayer:Null<Bool>;
 	var ?note_colors:Array<Array<JsonFlxColor>>;
+	var ?strum_colors:Array<Array<JsonFlxColor>>;
 }
 
 typedef AnimArray = {
@@ -92,6 +93,7 @@ class Character extends FlxSprite
 	public var editorIsPlayer:Null<Bool> = null;
 
 	public var arrowRGB:Array<Array<FlxColor>> = ClientPrefs.data.arrowRGB;
+	public var strumRGB:Array<Array<FlxColor>> = [for (i in 0 ... 4) ClientPrefs.data.strumRGB];
 
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
@@ -250,6 +252,7 @@ class Character extends FlxSprite
 		editorIsPlayer = json._editor_isPlayer;
 
 		arrowRGB = (json.note_colors == null ? ClientPrefs.data.arrowRGB : parseNoteColorArray(json.note_colors));
+		strumRGB = (json.strum_colors == null ? [for (i in 0 ... 4) ClientPrefs.data.strumRGB] : parseNoteColorArray(json.strum_colors));
 
 		// antialiasing
 		noAntialiasing = (json.no_antialiasing == true);

@@ -1860,6 +1860,7 @@ class PlayState extends MusicBeatState
 
 			if (player == 1)
 			{
+				babyArrow.strumRGB = boyfriend.strumRGB[i];
 				babyArrow.defaultRGB = boyfriend.arrowRGB;
 				if (opponentMode && ClientPrefs.data.middleScroll)
 				{
@@ -1876,6 +1877,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
+				babyArrow.strumRGB = dad.strumRGB[i];
 				if (ClientPrefs.data.charRGB)
 				{
 					babyArrow.defaultRGB = dad.arrowRGB;
@@ -2666,7 +2668,7 @@ class PlayState extends MusicBeatState
 
 							for (strum in playerStrums)
 							{
-								//strum.strumRGB = boyfriend.strumRGB[strum.noteData];
+								strum.strumRGB = boyfriend.strumRGB[strum.noteData];
 								strum.defaultRGB = boyfriend.arrowRGB;
 							}
 						}
@@ -2697,7 +2699,7 @@ class PlayState extends MusicBeatState
 
 							for (strum in opponentStrums)
 							{
-								//strum.strumRGB = dad.strumRGB[strum.noteData];
+								strum.strumRGB = dad.strumRGB[strum.noteData];
 								strum.defaultRGB = dad.arrowRGB;
 							}
 						}
@@ -3634,9 +3636,13 @@ class PlayState extends MusicBeatState
 			if (note.isSustainNote) spr.resetRGB = false;
 		}
 
+		var strum:StrumNote = opponentStrums.members[note.noteData];
+
 		if (opponentVocals.length <= 0) vocals.volume = 1;
 		else opponentVocals.volume = 1;
 		note.hitByOpponent = true;
+
+		strum?.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 
 		if (opponentMode)
 		{
@@ -3756,6 +3762,10 @@ class PlayState extends MusicBeatState
 				spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 				if (note.isSustainNote) spr.resetRGB = false;
 			}
+
+			var strum:StrumNote = playerStrums.members[note.noteData];
+
+			strum?.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
 
 			vocals.volume = 1;
 

@@ -2,10 +2,10 @@
 <TextureAtlas imagePath="NOTE_assets-future.png">
 	<!-- Created with Adobe Animate version 21.0.6.41649 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="arrowDOWN0000" x="1826" y="227" width="147" height="162"/>
-	<SubTexture name="arrowLEFT0000" x="903" y="221" width="163" height="147"/>
-	<SubTexture name="arrowRIGHT0000" x="898" y="369" width="161" height="146"/>
-	<SubTexture name="arrowUP0000" x="751" y="243" width="146" height="162"/>
+	<SubTexture name="arrowDOWN0000" x="455" y="243" width="147" height="161"/>
+	<SubTexture name="arrowLEFT0000" x="1" y="245" width="162" height="146"/>
+	<SubTexture name="arrowRIGHT0000" x="164" y="245" width="162" height="146"/>
+	<SubTexture name="arrowUP0000" x="603" y="243" width="147" height="161"/>
 	<SubTexture name="blue0000" x="455" y="243" width="147" height="161"/>
 	<SubTexture name="blue hold end0000" x="1625" y="426" width="146" height="75"/>
 	<SubTexture name="blue hold piece0000" x="1478" y="426" width="146" height="77"/>

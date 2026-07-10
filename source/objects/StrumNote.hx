@@ -26,6 +26,21 @@ class StrumNote extends FlxSprite
 	}
 
 	public var defaultRGB:Array<Array<FlxColor>> = PlayState.isPixelStage ? ClientPrefs.data.arrowRGBPixel : ClientPrefs.data.arrowRGB;
+	public var strumRGB(default, set):Array<FlxColor> = ClientPrefs.data.strumRGB;
+
+	function set_defaultRGB(newRGB:Array<Array<FlxColor>>) {
+		if (animation.name == "pressed")
+			updateRgb(newRGB[noteData]);
+		
+		return defaultRGB = newRGB;
+	}
+	
+	function set_strumRGB(newRGB:Array<FlxColor>) {
+		if (animation.name == "static")
+			updateRgb(newRGB);
+		
+		return strumRGB = newRGB;
+	}
 
 	public var useRGBShader:Bool = true;
 	public function new(x:Float, y:Float, leData:Int, player:Int) {
@@ -198,11 +213,11 @@ class StrumNote extends FlxSprite
 			centerOrigin();
 		}
 		if (useRGBShader) {
-			if (animation.name == "static") {
-				if (resetRGB) updateRgb(defaultRGB[noteData]);
-				else resetRGB = true;
+			if (animation.name == "pressed") {
+				updateRgb(defaultRGB[noteData]);
+			} else if (animation.name == "static") {
+				updateRgb(strumRGB);
 			}
-			rgbShader.enabled = animation.name != 'static';
 		}
 	}
 }

@@ -39,6 +39,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	var isAnimateSprite:Bool = false;
 
 	var noteShaders:Array<RGBPalette> = [];
+	var strumShaders:Array<RGBPalette> = [];
 
 	var silhouettes:FlxSpriteGroup;
 	var dadPosition = FlxPoint.weak();
@@ -254,17 +255,17 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		if (leftNote != null) {
 			arrowPalette = character.arrowRGB;
-			//strumPalette = character.strumRGB;
+			strumPalette = character.strumRGB;
 
 			applyColorFromUI();
-			//applyStrumColorFromUI();
+			applyStrumColorFromUI();
 
-			//usePlayerStrumColors.checked = palettesEqual(strumPalette, [
-				//ClientPrefs.defaultStrumRGB,
-				//ClientPrefs.defaultStrumRGB,
-				//ClientPrefs.defaultStrumRGB,
-				//ClientPrefs.defaultStrumRGB
-			//]);
+			usePlayerStrumColors.checked = palettesEqual(strumPalette, [
+				ClientPrefs.data.strumRGB,
+				ClientPrefs.data.strumRGB,
+				ClientPrefs.data.strumRGB,
+				ClientPrefs.data.strumRGB,
+			]);
 			usePlayerColors.checked = palettesEqual(arrowPalette, ClientPrefs.data.arrowRGB);
 		}
 
@@ -281,7 +282,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		UI_box.scrollFactor.set();
 		UI_box.cameras = [camHUD];
 
-		UI_characterbox = new PsychUIBox(UI_box.x - 100, UI_box.y + UI_box.height + 10, 350, 280, ['Animations', 'Character', 'Note Colors']);
+		UI_characterbox = new PsychUIBox(UI_box.x - 100, UI_box.y + UI_box.height + 10, 350, 280, ['Animations', 'Character', 'Note Colors', 'Strum Colors']);
 		UI_characterbox.scrollFactor.set();
 		UI_characterbox.cameras = [camHUD];
 		add(UI_characterbox);
@@ -292,6 +293,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		addAnimationsUI();
 		addCharacterUI();
 		addNotesUI();
+		addStrumsUI();
 
 		UI_box.selectedName = 'Settings';
 		UI_characterbox.selectedName = 'Character';
@@ -975,7 +977,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		for (i in 0...strumline.length)
 		{
 			var strum = strumline[i];
-			var shaderRef = noteShaders[i];
+			var shaderRef = strumShaders[i];
 			var palette = newPalette[i];
 
 			shaderRef.r = palette[0];
@@ -1034,26 +1036,37 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			allStrumColorSteppers[colorId] = colorPickers;
 		}
 
+		strumShaders = [];
+
 		for (i => note in [leftStrum, downStrum, upStrum, rightStrum])
 		{
-			var rgbShader:RGBPalette = new RGBPalette();
+			var shader = new RGBPalette();
+    		note.shader = shader.shader;
+    		strumShaders.push(shader);
+
+			var palette = character.strumRGB[i];
+    		shader.r = palette[0];
+    		shader.g = palette[1];
+    		shader.b = palette[2];
+
+			//var rgbShader:RGBPalette = new RGBPalette();
 			//note.data = {
 				//rgbShader: rgbShader
 			//};
-			note.shader = rgbShader.shader;
+			//note.shader = rgbShader.shader;
 			tab_group.add(note);
 		}
 
-		//strumPalette = character.strumRGB;
+		strumPalette = character.strumRGB;
 		set_curSelectedStrum(curSelectedStrum);
 
-		usePlayerStrumColors = new PsychUICheckBox(allStrumColorSteppers[2][0].x, allStrumColorSteppers[2][0].y + 30, "Use Engine Defined Strum Colors?", 150);
-		//usePlayerStrumColors.checked = palettesEqual(strumPalette, [
-			//ClientPrefs.defaultStrumRGB,
-			//ClientPrefs.defaultStrumRGB,
-			//ClientPrefs.defaultStrumRGB,
-			//ClientPrefs.defaultStrumRGB
-		//]);
+		usePlayerStrumColors = new PsychUICheckBox(allStrumColorSteppers[2][0].x, allStrumColorSteppers[2][0].y + 30, "Use Engine Defined Strum Colors?\n(NOTE: If Checked Colors WILL NOT be saved to the Character JSON)", 300);
+		usePlayerStrumColors.checked = palettesEqual(strumPalette, [
+			ClientPrefs.data.strumRGB,
+			ClientPrefs.data.strumRGB,
+			ClientPrefs.data.strumRGB,
+			ClientPrefs.data.strumRGB,
+		]);
 		tab_group.add(usePlayerStrumColors);
 		applyStrumColorFromUI();
 	}
@@ -1152,14 +1165,14 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 					}
 				}
 
-				//for (steppergroup in allStrumColorSteppers)
-				//{
-					//for (stepper in steppergroup)
-					//{
-						//if (sender == stepper)
-							//return applyStrumColorFromUI();
-					//}
-				//}
+				for (steppergroup in allStrumColorSteppers)
+				{
+					for (stepper in steppergroup)
+					{
+						if (sender == stepper)
+							return applyStrumColorFromUI();
+					}
+				}
 			}
 		}
 	}
@@ -1688,10 +1701,10 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		if (!usePlayerColors.checked)
 			json.note_colors = exportArrowPaletteToJson(arrowPalette);
-		//if (!usePlayerStrumColors.checked)
-			//json.strum_colors = exportArrowPaletteToJson(strumPalette);
+		if (!usePlayerStrumColors.checked)
+			json.strum_colors = exportArrowPaletteToJson(strumPalette);
 
-		var data:String = PsychJsonPrinter.print(json, ['offsets', 'position', 'healthbar_colors', 'camera_position', 'indices', 'note_colors']);
+		var data:String = PsychJsonPrinter.print(json, ['offsets', 'position', 'healthbar_colors', 'camera_position', 'indices', 'note_colors', 'strum_colors']);
 
 		if (data.length > 0)
 		{
