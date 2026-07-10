@@ -195,6 +195,7 @@ class PlayState extends MusicBeatState
 	public var camZooming:Bool = false;
 	public var camZoomingMult:Float = 1;
 	public var camZoomingDecay:Float = 1;
+	public var camZoomingOnBeat:Bool = true;
 	private var curSong:String = "";
 
 	public var gfSpeed:Int = 1;
@@ -767,6 +768,9 @@ class PlayState extends MusicBeatState
 			case 'Desire':
 				opponentCameraOffset[1] = -45;
 				cameraSpeed = 2;
+			case 'Foggy Night':
+				camZooming = true;
+				camZoomingOnBeat = false;
 		}
 
 		#if mobile
@@ -3946,23 +3950,23 @@ class PlayState extends MusicBeatState
 					case 8:
 						zoomCamera(1.05, 0.5, { ease: FlxEase.circOut });
 					case 72:
-						camZoomingMult = 0;
+						camZoomingOnBeat = false;
 					case 120:
-						camZoomingMult = 1;
+						camZoomingOnBeat = true;
 					case 133:
 						zoomCamera(1.15, 0.5, { ease: FlxEase.circOut });
 					case 136:
 						zoomCamera(0.85, 0.5, { ease: FlxEase.circOut });
 					case 264:
 						zoomCamera(0.95, 0.5, { ease: FlxEase.circOut });
-						camZoomingMult = 0;
+						camZoomingOnBeat = false;
 					case 376:
 						if (gf != null) {
 							isCameraOnForcedPos = true;
 							moveCameraToGirlfriend();
 						}
 						zoomCamera(1.15, 0.5, { ease: FlxEase.circOut });
-						camZoomingMult = 1;
+						camZoomingOnBeat = true;
 					case 379:
 						zoomCamera(0.7, 0.5, { ease: FlxEase.circOut });
 					case 388:
@@ -4059,6 +4063,29 @@ class PlayState extends MusicBeatState
 					FlxG.camera.zoom += 0.015;
 					camHUD.zoom += 0.03;
 				}
+			case 'Foggy Night':
+				if (curBeat % 2 != 0) {
+					if (curBeat >= 4 && curBeat < 34 || curBeat >= 36 && curBeat < 46 || curBeat >= 53 && curBeat < 66 || curBeat >= 132 && curBeat < 146 || curBeat >= 149 && curBeat < 162 || curBeat >= 344 && curBeat < 364) {
+						FlxG.camera.zoom += 0.015;
+						camHUD.zoom += 0.03;
+					}
+				}
+				else {
+					if (curBeat >= 212 && curBeat < 228) {
+						FlxG.camera.zoom += 0.015;
+						camHUD.zoom += 0.03;
+					}
+				}
+				if (curBeat >= 228 && curBeat < 236 || curBeat >= 276 && curBeat < 341) {
+					FlxG.camera.zoom += 0.015;
+					camHUD.zoom += 0.03;
+				}
+				if (curBeat == 100) {
+					camZoomingOnBeat = true;
+				}
+				if (curBeat == 127) {
+					camZoomingOnBeat = false;
+				}
 		}
 
 		setOnScripts('curBeat', curBeat);
@@ -4099,7 +4126,7 @@ class PlayState extends MusicBeatState
 			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
 				moveCameraSection();
 
-			if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.data.camZooms)
+			if (camZooming && camZoomingOnBeat && FlxG.camera.zoom < 1.35 && ClientPrefs.data.camZooms)
 			{
 				FlxG.camera.zoom += 0.015 * camZoomingMult;
 				camHUD.zoom += 0.03 * camZoomingMult;

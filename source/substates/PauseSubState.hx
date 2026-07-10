@@ -149,19 +149,19 @@ class PauseSubState extends MusicBeatSubstate
 		buttonsBG2.y += FlxG.height;
 
 		startTween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-		startTween(back1, {x: back1.x + back1.width}, 0.5, {ease: FlxEase.cubeInOut});
-		startTween(back2, {x: back2.x - back2.width}, 0.5, {ease: FlxEase.cubeInOut, startDelay: 0.15});
-		startTween(back3, {x: back3.x - back3.width}, 0.5, {ease: FlxEase.cubeInOut, startDelay: 0.3});
-		startTween(block1, {x: block1.x + block1.width}, 0.5, {ease: FlxEase.cubeInOut, startDelay: 0.15});
-		startTween(block2, {x: block2.x - block2.width}, 0.5, {ease: FlxEase.cubeInOut, startDelay: 0.3});
-		startTween(block3, {x: block3.x - block3.width}, 0.5, {ease: FlxEase.cubeInOut, startDelay: 0.45});
-		startTween(buttonsBG, {y: buttonsBG.y - FlxG.height}, 0.75, {ease: FlxEase.quintOut});
-		startTween(buttonsBG2, {y: buttonsBG2.y - FlxG.height}, 0.75, {ease: FlxEase.quintOut, startDelay: 0.05});
+		startTween(back1, {x: back1.x + back1.width}, 0.35, {ease: FlxEase.cubeInOut});
+		startTween(back2, {x: back2.x - back2.width}, 0.35, {ease: FlxEase.cubeInOut, startDelay: 0.15});
+		startTween(back3, {x: back3.x - back3.width}, 0.35, {ease: FlxEase.cubeInOut, startDelay: 0.3});
+		startTween(block1, {x: block1.x + block1.width}, 0.35, {ease: FlxEase.cubeInOut, startDelay: 0.15});
+		startTween(block2, {x: block2.x - block2.width}, 0.35, {ease: FlxEase.cubeInOut, startDelay: 0.3});
+		startTween(block3, {x: block3.x - block3.width}, 0.35, {ease: FlxEase.cubeInOut, startDelay: 0.45});
+		startTween(buttonsBG, {y: buttonsBG.y - FlxG.height}, 0.65, {ease: FlxEase.quintOut});
+		startTween(buttonsBG2, {y: buttonsBG2.y - FlxG.height}, 0.65, {ease: FlxEase.quintOut, startDelay: 0.05});
 		startTween(levelInfo, {alpha: 1, y: levelInfo.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		startTween(descTxt, {alpha: 1, y: descTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
-		startTween(creditArt, {alpha: 1, y: creditArt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.55});
-		startTween(creditCode, {alpha: 1, y: creditCode.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.55});
-		startTween(creditChart, {alpha: 1, y: creditChart.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		startTween(descTxt, {alpha: 1, y: descTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.6});
+		startTween(creditArt, {alpha: 1, y: creditArt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.45});
+		startTween(creditCode, {alpha: 1, y: creditCode.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.45});
+		startTween(creditChart, {alpha: 1, y: creditChart.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.4});
 
 		pauseButtons = new FlxTypedGroup<FlxSprite>();
 		add(pauseButtons);
@@ -213,7 +213,7 @@ class PauseSubState extends MusicBeatSubstate
 			buttonHitboxes.push(hitbox);
 
 			pauseButton.y += FlxG.height;
-			startTween(pauseButton, { y: pauseButton.y - FlxG.height }, 0.75, { ease: FlxEase.quintOut, startDelay: 0.1 * (i + 1) });
+			startTween(pauseButton, { y: pauseButton.y - FlxG.height }, 0.75, { ease: FlxEase.quintOut, startDelay: 0.05 * i });
 		}
 
 		changeSelection();
