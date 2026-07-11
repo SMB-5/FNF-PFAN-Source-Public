@@ -270,8 +270,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 			}
 			#if !mobile
 			if (FlxG.mouse.wheel != 0) {
-				var val:Float = 26 / 5;
-				if (FlxG.mouse.wheel == -1) val *= -1;
+				var val:Float = -FlxG.mouse.wheel * 13;
 				camDesc.scroll.y += val;
 				if (scrollTween != null) {
 					scrollTween.cancel();
