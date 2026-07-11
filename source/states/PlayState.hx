@@ -25,7 +25,6 @@ import states.StoryMenuState;
 import states.FreeplayState;
 import states.editors.ChartingState;
 import states.editors.CharacterEditorState;
-import states.stages.objects.ABotSpeaker;
 
 import substates.PauseSubState;
 import substates.GameOverSubstate;
@@ -65,15 +64,6 @@ import crowplexus.iris.Iris;
 import crowplexus.hscript.Expr.Error as IrisError;
 import crowplexus.hscript.Printer;
 #end
-
-enum NeneState
-{
-	STATE_DEFAULT;
-	STATE_PRE_RAISE;
-	STATE_RAISE;
-	STATE_READY;
-	STATE_LOWER;
-}
 
 /**
  * This is where all the Gameplay stuff happens and is managed
@@ -326,8 +316,6 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	var abot:ABotSpeaker;
-
 	private static var _lastLoadedModDirectory:String = '';
 	public static var nextReloadAll:Bool = false;
 	override public function create()
@@ -451,35 +439,23 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'Dorm': new Dorm();
-			case 'TartarusLobby': new TartarusLobby(); 
-			case 'TVWorld': new TVWorld();
 			case 'Mementos': new Mementos(); 
-			case 'VelvetRoomP5': new VelvetRoomP5();
-			case 'DDR': new DDR();
 			case 'Specialist': new Specialist();
 
 			// base game
 			case 'stage': new StageWeek1();
-			case 'spooky': new Spooky();
-			case 'philly': new Philly();
-			case 'limo': new Limo();
-			case 'mall': new Mall();
-			case 'mallEvil': new MallEvil();
-			case 'school': new School();
-			case 'schoolEvil': new SchoolEvil();
-			case 'tank': new Tank();
+			//case 'spooky': new Spooky();
+			//case 'philly': new Philly();
+			//case 'limo': new Limo();
+			//case 'mall': new Mall();
+			//case 'mallEvil': new MallEvil();
+			//case 'school': new School();
+			//case 'schoolEvil': new SchoolEvil();
+			//case 'tank': new Tank();
+			case 'phillyStreets': new PhillyStreets(); 	//Weekend 1 - Darnell, Lit Up, 2Hot
+			//case 'phillyBlazin': new PhillyBlazin();	//Weekend 1 - Blazin
 		}
 		if(isPixelStage) introSoundsSuffix = '-pixel';
-
-		// probably an easier way to optimise this but I need abot to be behind nene at all times
-		abot = new ABotSpeaker(gfGroup.x +30, gfGroup.y + 320);
-		updateABotEye(true);
-		add(abot);
-		
-		// only reason why this is the other way is so the visualiser doesn't show at the start of the song
-		if (SONG.gfVersion != 'nene')
-			remove(abot);
 
 		if (SONG.player1 == 'pico-playable')
 		{
@@ -500,22 +476,6 @@ class PlayState extends MusicBeatState
 			startCharacterPos(gf);
 			//gfGroup.scrollFactor.set(0.95, 0.95);
 			gfGroup.add(gf);
-			if(gf.curCharacter == 'nene')
-			{
-				gf.animation.onFrameChange.add(function(name:String, frameNumber:Int, frameIndex:Int)
-				{
-					switch(currentNeneState)
-					{
-						case STATE_PRE_RAISE:
-							if (name == 'danceLeft' && frameNumber >= 14)
-							{
-								animationFinished = true;
-								transitionState();
-							}
-						default:
-					}
-				});
-			}
 		}
 
 		dad = new Character(0, 0, SONG.player2);
@@ -1027,16 +987,6 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	function updateABotEye(finishInstantly:Bool = false)
-	{
-		if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true)
-			abot.lookRight();
-		else
-			abot.lookLeft();
-
-		if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
-	}
-
 	public function getLuaObject(tag:String):Dynamic
 		return variables.get(tag);
 
@@ -1496,24 +1446,6 @@ class PlayState extends MusicBeatState
 		#end
 		setOnScripts('songLength', songLength);
 		callOnScripts('onSongStart');
-
-		abot.snd = FlxG.sound.music;
-		gf.animation.onFinish.add(onNeneAnimationFinished);
-	}
-
-	function onNeneAnimationFinished(name:String)
-	{
-		if(!startedCountdown) return;
-		switch(currentNeneState)
-		{
-			case STATE_RAISE, STATE_LOWER:
-				if (name == 'raiseKnife' || name == 'lowerKnife')
-				{
-					animationFinished = true;
-					transitionState();
-				}
-			default:
-		}
 	}
 
 	private var noteTypes:Array<String> = [];
@@ -2015,7 +1947,6 @@ class PlayState extends MusicBeatState
 	var freezeCamera:Bool = false;
 	var allowDebugKeys:Bool = true;
 
-	var currentNeneState:NeneState = STATE_DEFAULT;
 	var animationFinished:Bool = false;
 	var holdBonus:Float = 250;
 	override public function update(elapsed:Float)
@@ -2053,7 +1984,6 @@ class PlayState extends MusicBeatState
 		if(gf != null && startedCountdown)
 		{
 			animationFinished = gf.isAnimationFinished();
-			transitionState();
 		}
 
 		if(botplayTxt != null && botplayTxt.visible)
@@ -2261,55 +2191,6 @@ class PlayState extends MusicBeatState
 
 		setOnScripts('botPlay', cpuControlled);
 		callOnScripts('onUpdatePost', [elapsed]);
-	}
-
-	function transitionState()
-	{
-		if (gf != null && gf.curCharacter == 'nene')
-		{
-			switch (currentNeneState)
-			{
-				case STATE_DEFAULT:
-					if (health <= VULTURE_THRESHOLD)
-					{
-						currentNeneState = STATE_PRE_RAISE;
-						gf.skipDance = true;
-					}
-				case STATE_PRE_RAISE:
-					if (health > VULTURE_THRESHOLD)
-					{
-						currentNeneState = STATE_DEFAULT;
-						gf.skipDance = false;
-					}
-					else if (animationFinished)
-					{
-						currentNeneState = STATE_RAISE;
-						gf.playAnim('raiseKnife');
-						gf.skipDance = true;
-						gf.danced = true;
-						animationFinished = false;
-					}
-				case STATE_RAISE:
-					if (animationFinished)
-					{
-						currentNeneState = STATE_READY;
-						animationFinished = false;
-					}
-				case STATE_READY:
-					if (health > VULTURE_THRESHOLD)
-					{
-						currentNeneState = STATE_LOWER;
-						gf.playAnim('lowerKnife');
-					}
-				case STATE_LOWER:
-					if (animationFinished)
-					{
-						currentNeneState = STATE_DEFAULT;
-						animationFinished = false;
-						gf.skipDance = false;
-					}
-			}
-		}
 	}
 
 	// Health icon updaters
@@ -3960,18 +3841,6 @@ class PlayState extends MusicBeatState
 
 		characterBopper(curBeat);
 
-		switch(currentNeneState) {
-			case STATE_READY:
-				if (blinkCountdown == 0)
-				{
-					gf.playAnim('idleKnife', false);
-					blinkCountdown = FlxG.random.int(MIN_BLINK_DELAY, MAX_BLINK_DELAY);
-				}
-				else blinkCountdown--;
-			default:
-				// In other states, don't interrupt the existing animation.
-		}
-
 		super.beatHit();
 		lastBeatHit = curBeat;
 
@@ -4008,10 +3877,7 @@ class PlayState extends MusicBeatState
 	}
 
 	override function sectionHit()
-	{
-		if (SONG.gfVersion == 'nene')
-			updateABotEye();
-		
+	{	
 		if (SONG.notes[curSection] != null)
 		{
 			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
