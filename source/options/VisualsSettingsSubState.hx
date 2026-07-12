@@ -94,7 +94,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Character Note Colors',
 			"If unchecked, Character's won't have their custom note colors.",
 			'charRGB',
-			'bool');
+			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Strum Background Opacity',
