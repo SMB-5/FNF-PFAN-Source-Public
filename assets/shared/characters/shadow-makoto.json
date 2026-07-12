@@ -1,109 +1,98 @@
 {
+	"strum_colors": [
+		[
+			[36, 36, 36],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[36, 36, 36],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[36, 36, 36],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[36, 36, 36],
+			[255, 255, 255],
+			[0, 0, 0]
+		]
+	],
+	"note_colors": [
+		[
+			[96, 96, 96],
+			[255, 255, 255],
+			[48, 48, 48]
+		],
+		[
+			[96, 96, 96],
+			[255, 255, 255],
+			[48, 48, 48]
+		],
+		[
+			[96, 96, 96],
+			[255, 255, 255],
+			[49, 48, 48]
+		],
+		[
+			[96, 96, 96],
+			[255, 255, 255],
+			[48, 48, 48]
+		]
+	],
 	"animations": [
 		{
+			"offsets": [-1, 0],
 			"loop": false,
-			"offsets": [
-				-1,
-				0
-			],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "Makito left",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito left"
 		},
 		{
+			"offsets": [16, -1],
 			"loop": false,
-			"offsets": [
-				16,
-				-1
-			],
+			"fps": 24,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "Makito down",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito down"
 		},
 		{
+			"offsets": [17, 0],
 			"loop": false,
-			"offsets": [
-				17,
-				0
-			],
+			"fps": 24,
 			"anim": "singUP",
-			"fps": 24,
-			"name": "Makito up",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito up"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singRIGHT",
-			"fps": 24,
-			"name": "Makito right",
-			"indices": [
-				0,
-				0,
-				1
-			]
+			"indices": [0, 0, 1],
+			"name": "Makito right"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"anim": "idle",
 			"fps": 24,
-			"name": "Makito idle",
-			"indices": [
-				0,
-				1,
-				2,
-				2,
-				3,
-				3,
-				4,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0
-			]
+			"anim": "idle",
+			"indices": [0, 1, 2, 2, 3, 3, 4, 0, 0, 0, 0, 0, 0],
+			"name": "Makito idle"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Makoto-Yuki",
-	"position": [
-		-88,
-		0
-	],
+	"position": [-88, 0],
 	"healthicon": "makoto-yuki",
 	"flip_x": false,
-	"healthbar_colors": [
-		130,
-		130,
-		130
-	],
-	"camera_position": [
-		88,
-		0
-	],
+	"healthbar_colors": [130, 130, 130],
+	"camera_position": [88, 0],
 	"sing_duration": 6.1,
 	"scale": 1,
 	"_editor_isPlayer": false
