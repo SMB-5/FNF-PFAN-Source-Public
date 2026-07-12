@@ -80,10 +80,8 @@ class MainMenuState extends MusicBeatState
 		var x:Float = 650;
 		var y:Float = 100;
 		switch(curChar) {
-			case 'Yu':
-				x -= 50;
 			case 'Joker':
-				x -= 300;
+				x -= 400;
 				y -= 50;
 		}
 
