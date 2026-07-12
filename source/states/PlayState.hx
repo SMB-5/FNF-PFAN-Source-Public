@@ -667,14 +667,6 @@ class PlayState extends MusicBeatState
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
-		if (dad.curCharacter == 'shadow-makoto') {
-			var swap = new shaders.ColorSwap();
-			swap.saturation = -1;
-			iconP2.shader = swap.shader;
-			iconP2.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
-			healthBar.leftBar.setColorTransform(1, 1, 1, ClientPrefs.data.healthBarAlpha, -125, -125, -125, 0);
-		}
-
 		if (hasMetadata) {
 			card = new SongCard(0, 0, metadata);
 			card.x = -card.width;
