@@ -452,6 +452,7 @@ class FreeplayState extends MusicBeatState
 	var holdTime:Float = 0;
 	var swiping:Bool = false;
 	var prevSelected:Int = curSelected;
+	var justChanged:Bool = false;
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.7)
@@ -563,10 +564,16 @@ class FreeplayState extends MusicBeatState
 					swiping = false;
 				}
 
-				if ((TouchUtil.overlaps(leftArrow) || TouchUtil.overlaps(rightArrow)) && TouchUtil.justPressed) {
-					curCategory = FlxMath.wrap(curCategory + (TouchUtil.overlaps(leftArrow) ? -1 : 1), 0, categories.length - 1);
+				if ((TouchUtil.overlaps(leftArrow) || TouchUtil.overlaps(rightArrow)) && TouchUtil.justPressed #if mobile || TouchUtil.input != null && TouchUtil.overlapsPoint(catText, TouchUtil.input.justPressedPosition) && TouchUtil.justSwiped && !justChanged #end) {
+					var wentLeft:Bool = TouchUtil.overlaps(leftArrow);
+					#if mobile
+					if (TouchUtil.justSwiped && TouchUtil.swipe != null) wentLeft = TouchUtil.swipe.endPosition.x < TouchUtil.swipe.startPosition.x;
+					#end
+					curCategory = FlxMath.wrap(curCategory + (wentLeft ? -1 : 1), 0, categories.length - 1);
 					regenerateSongs();
+					justChanged = true;
 				}
+				else if (TouchUtil.justReleased && justChanged) justChanged = false;
 			}
 
 			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)

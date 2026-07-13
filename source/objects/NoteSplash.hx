@@ -266,8 +266,11 @@ class NoteSplash extends FlxSprite
 					if (note != null)
 					{
 						if (note.noteSplashData.r != -1) tempShader.r = note.noteSplashData.r;
+						else tempShader.r = note.rgbShader.r;
 						if (note.noteSplashData.g != -1) tempShader.g = note.noteSplashData.g;
+						else tempShader.g = note.rgbShader.g;
 						if (note.noteSplashData.b != -1) tempShader.b = note.noteSplashData.b;
+						else tempShader.b = note.rgbShader.b;
 					}
 				}
 				else tempShader.copyValues(Note.globalRgbShaders[noteData % Note.colArray.length]);

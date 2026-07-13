@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.input.FlxPointer;
 import flixel.input.mouse.FlxMouse;
 import flixel.input.touch.FlxTouch;
+import flixel.input.FlxSwipe;
 
 class TouchUtil
 {
@@ -13,6 +14,10 @@ class TouchUtil
 	public static var justReleased(get, never):Bool;
 	public static var released(get, never):Bool;
 	public static var input(get, never):#if mobile FlxTouch #else FlxMouse #end;
+	#if mobile
+	public static var swipe(get, never):FlxSwipe;
+	public static var justSwiped(get, never):Bool;
+	#end
 
 	public static function overlaps(object:FlxBasic, ?camera:FlxCamera, ?offset:FlxPoint):Bool {
 		if (offset != null) {
@@ -143,4 +148,20 @@ class TouchUtil
 	static function get_input():#if mobile FlxTouch #else FlxMouse #end {
 		return #if mobile FlxG.touches.getFirst() #else FlxG.mouse #end;
 	}
+
+	#if mobile
+	static function get_swipe():FlxSwipe {
+		return FlxG.swipes[0];
+	}
+
+	static function get_justSwiped():Bool {
+		for (swipe in FlxG.swipes) {
+			if (swipe.duration <= 0.5) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	#end
 }

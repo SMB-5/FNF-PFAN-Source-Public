@@ -22,7 +22,7 @@ import psychlua.HScript.HScriptInfos;
 #end
 
 #if COPY_FILES
-import mobile.states.CopyState;
+import states.CopyState;
 #end
 
 #if mobile
@@ -103,7 +103,7 @@ class Main extends Sprite
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 		Highscore.load();
 
-		// For mobile, to recopy all assets if updating to a new version of the mod
+		// (Enabled only for mobile) Recopy all assets if updating to a new version of the mod
 		if (FlxG.save.data.pfanVersion == null || FlxG.save.data.pfanVersion != FlxG.stage.application.meta.get('version')) {
 			#if COPY_FILES CopyState.recopyAssets = true; #end
 			FlxG.save.data.pfanVersion = FlxG.stage.application.meta.get('version');
@@ -238,15 +238,7 @@ class Main extends Sprite
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
 		var errMsg:String = "";
-		var cwd:String = #if android StorageUtil.getExternalDir() #else Sys.getCwd() #end;
-		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
-		var dateNow:String = Date.now().toString();
-
-		dateNow = dateNow.replace(" ", "_");
-		dateNow = dateNow.replace(":", "'");
-
-		path = "logs/PsychEngine_" + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{
@@ -261,13 +253,7 @@ class Main extends Sprite
 
 		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine\n\n> Crash Handler written by: sqirra-rng";
 
-		if (!FileSystem.exists(cwd + "logs/"))
-			FileSystem.createDirectory(cwd + "logs/");
-
-		File.saveContent(cwd + path, errMsg + "\n");
-
-		Sys.println(errMsg);
-		Sys.println("Crash dump saved in " + Path.normalize(path));
+		CoolUtil.saveCrash(errMsg);
 
 		Application.current.window.alert(errMsg, "Error!");
 		#if DISCORD_ALLOWED

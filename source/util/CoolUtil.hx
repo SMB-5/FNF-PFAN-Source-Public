@@ -1,5 +1,8 @@
 package util;
 
+#if android
+import mobile.util.StorageUtil;
+#end
 import externs.WinAPI;
 import haxe.io.Path;
 import openfl.utils.Assets;
@@ -228,5 +231,15 @@ class CoolUtil
 		catch(e:Dynamic) {
 			throw e;
 		}
+	}
+
+	public static function saveCrash(content:String, filePrefix:String = 'PsychEngine') {
+		var cwd:String = #if android StorageUtil.getExternalDir() #else Sys.getCwd() #end;
+		var date:String = Date.now().toString().replace(" ", "_").replace(":", "'");
+		var path:String = 'logs/' + filePrefix + '_' + date + '.txt';
+		if (!FileSystem.exists(cwd + 'logs/')) FileSystem.createDirectory(cwd + 'logs/');
+		File.saveContent(cwd + path, content);
+		Sys.println(content);
+		Sys.println("Crash dump saved in " + Path.normalize(path));
 	}
 }

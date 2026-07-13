@@ -35,20 +35,21 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		['Autoplay', 'autoplay', MusicPlayerType.BOOL, false, 0, 0, 0, 0, null, null]
 	];
 
+	var camUI:FlxCamera;
 	var camSettings:FlxCamera;
+	var inSettings:Bool = false;
 	var settingBox:FlxSprite;
 	var settingGroup:FlxTypedSpriteGroup<MusicPlayerOption>;
-	var inSettings:Bool = false;
-
-	var camPlaylist:FlxCamera;
-	var playlistBox:FlxSprite;
-	var playlistGroup:FlxTypedSpriteGroup<FlxText>;
-	var playlistButtons:FlxTypedSpriteGroup<PsychUIButton>;
+	var allowScrolling:Bool = false;
+	var scrollBar:FlxSprite;
+	var scrollTimer:Float = 0;
+	var scrollTween:FlxTween;
+	var holdingBox:Bool = false;
+	#if mobile var prevMouseY:Float = 0; #end
 
 	var songTxt:FlxText;
 	var bar:FlxBar;
 	var barCircle:FlxShapeCircle;
-	var playlistButton:FlxSprite;
 	var previousSong:FlxSprite;
 	var playButton:FlxSprite;
 	var nextSong:FlxSprite;
@@ -77,10 +78,16 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 	override function create() {
 		super.create();
 
+		camUI = new FlxCamera();
+		camUI.bgColor.alpha = 0;
+		FlxG.cameras.add(camUI, false);
+
 		camSettings = new FlxCamera();
 		camSettings.bgColor.alpha = 0;
 		camSettings.visible = false;
 		FlxG.cameras.add(camSettings, false);
+
+		cameras = [camUI];
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		bg.alpha = 0.6;
@@ -131,14 +138,6 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		nextSong.animation.play('next');
 		add(nextSong);
 
-		playlistButton = new FlxSprite(playButton.x - 225, playButton.y).loadGraphic(Paths.image('playerButtons'), true, 150, 150);
-		playlistButton.antialiasing = ClientPrefs.data.antialiasing;
-		playlistButton.setGraphicSize(75, 75);
-		playlistButton.updateHitbox();
-		playlistButton.animation.add('playlist', [1]);
-		playlistButton.animation.play('playlist');
-		add(playlistButton);
-
 		settingButton = new FlxSprite(playButton.x + 225, playButton.y + 7, Paths.image('settingButton'));
 		settingButton.antialiasing = ClientPrefs.data.antialiasing;
 		settingButton.setGraphicSize(60, 60);
@@ -180,13 +179,14 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 
 		loadMusic(curSong);
 
-		// reminder add the ability to scroll if there's more than 6 options thanks
 		settingBox = new FlxSprite().makeGraphic(425, Std.int(52 * Math.min(settings.length, 6)), 0xFF000000);
 		settingBox.x = settingButton.x + settingButton.width - 55;
 		settingBox.y = settingButton.y - settingBox.height - 50;
 		settingBox.alpha = 0.8;
 		settingBox.visible = false;
 		add(settingBox);
+
+		if (settings.length > 6) allowScrolling = true;
 
 		settingGroup = new FlxTypedSpriteGroup<MusicPlayerOption>();
 		settingGroup.cameras = [camSettings];
@@ -205,6 +205,14 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 			setting.valueText.fieldWidth = camSettings.width - setting.valueText.x - setting.rightArrow.width;
 			settingGroup.add(setting);
 		}
+
+		scrollBar = new FlxSprite().makeGraphic(10, Math.round(camSettings.height * camSettings.height / settingGroup.height), 0xFFFFFFFF);
+		scrollBar.x = camSettings.width - scrollBar.width;
+		scrollBar.camera = camSettings;
+		scrollBar.alpha = 0.6;
+		scrollBar.visible = allowScrolling;
+		scrollBar.scrollFactor.set();
+		add(scrollBar);
 
 		#if !mobile
 		var tipString:String = Language.getPhrase('musicplayer_tip', 'Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to Switch Songs\nPress BACK to Exit / Press RESET to Restart the Song');
@@ -236,8 +244,64 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		}
 
 		if (inSettings) {
+			scrollTimer += elapsed;
 			if (TouchUtil.justPressed && !TouchUtil.overlaps(settingBox)) {
 				goToSettings(false);
+				if (allowScrolling) {
+					scrollTimer = 0;
+					if (scrollTween != null) scrollTween.cancel();
+					scrollTween = null;
+					scrollBar.alpha = 0.6;
+					scrollBar.y = 0;
+					camSettings.scroll.y = 0;
+					prevMouseY = 0;
+					holdingBox = false;
+				}
+			}
+
+			if (allowScrolling) {
+				if (scrollTimer >= 0.75 && scrollTween == null) {
+					scrollTween = FlxTween.tween(scrollBar, { alpha: 0 }, 0.25);
+				}
+				#if !mobile
+				if (FlxG.mouse.wheel != 0) {
+					var val:Float = -FlxG.mouse.wheel * 13;
+					camSettings.scroll.y += val;
+					if (scrollTween != null) {
+						scrollTween.cancel();
+						scrollTween = null;
+					}
+					scrollBar.alpha = 0.6;
+					scrollBar.y += val * (camSettings.height / (settingGroup.height + 30));
+					scrollTimer = 0;
+				}
+				#end
+				if (TouchUtil.pressed && (TouchUtil.overlaps(settingBox, camUI) || holdingBox)) {
+					if (TouchUtil.justPressed) {
+						holdingBox = true;
+						#if mobile prevMouseY += TouchUtil.input.viewY; #end
+					}
+					#if !mobile
+					var val:Float = camSettings.scroll.y - FlxG.mouse.deltaViewY;
+					#else
+					var val:Float = prevMouseY - TouchUtil.input.viewY;
+					#end
+					camSettings.scroll.y = val;
+					if (scrollTween != null) {
+						scrollTween.cancel();
+						scrollTween = null;
+					}
+					scrollBar.alpha = 0.6;
+					scrollBar.y = val * (camSettings.height / (settingGroup.height + 30));
+					scrollTimer = 0;
+				}
+				if (TouchUtil.justReleased && holdingBox) {
+					holdingBox = false;
+					#if mobile prevMouseY = FlxMath.bound(camSettings.scroll.y, 0, settingGroup.height - camSettings.height + 30); #end
+				}
+
+				camSettings.scroll.y = FlxMath.bound(camSettings.scroll.y, 0, settingGroup.height - camSettings.height + 30);
+				scrollBar.y = FlxMath.bound(scrollBar.y, 0, camSettings.height - scrollBar.height);
 			}
 		}
 		else {

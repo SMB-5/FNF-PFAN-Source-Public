@@ -1562,7 +1562,7 @@ class PlayState extends MusicBeatState
 				swagNote.scrollFactor.set();
 
 				if (ClientPrefs.data.noteQuantization) {
-					swagNote.setNoteQuantization(Math.round(daBpm * (spawnTime - bpmPos - ClientPrefs.data.noteOffset) / 1000 / 60 * 48), true);
+					swagNote.setNoteQuantization(Math.round(daBpm * (spawnTime - bpmPos - (ClientPrefs.data.noteOffset * 1000)) / 1000 / 60 * 48), true);
 				}
 				else if (ClientPrefs.data.charRGB && !["Hurt Note"].contains(swagNote.noteType)) {
 					var char:Character = swagNote.gfNote ? gf : swagNote.mustPress ? boyfriend : dad;
@@ -1661,7 +1661,7 @@ class PlayState extends MusicBeatState
 			//if (after != null && (daNote.strumTime + 1) < after) continue;
 			
 			if (filter == null || filter(daNote)) {
-				daNote.updateRgb(colors[daNote.noteData], true);
+				daNote.updateRgb(colors[daNote.noteData]);
 				count ++;
 			}
 		}
@@ -1780,13 +1780,12 @@ class PlayState extends MusicBeatState
 			if (player == 1)
 			{
 				babyArrow.strumRGB = boyfriend.strumRGB[i];
-				babyArrow.defaultRGB = boyfriend.arrowRGB;
+				if (ClientPrefs.data.charRGB)
+				{
+					babyArrow.defaultRGB = boyfriend.arrowRGB;
+				}
 				if (opponentMode && ClientPrefs.data.middleScroll)
 				{
-					if (ClientPrefs.data.charRGB)
-					{
-						babyArrow.defaultRGB = dad.arrowRGB;
-					}
 					babyArrow.x -= 330;
 					if (i > 1) { //Up and Right
 						babyArrow.x += FlxG.width / 2 + 25;
@@ -1938,9 +1937,7 @@ class PlayState extends MusicBeatState
 	var canPause:Bool = true;
 	var freezeCamera:Bool = false;
 	var allowDebugKeys:Bool = true;
-
 	var animationFinished:Bool = false;
-	var holdBonus:Float = 250;
 	override public function update(elapsed:Float)
 	{
 		if(!inCutscene && !paused && !freezeCamera) {
@@ -3491,6 +3488,7 @@ class PlayState extends MusicBeatState
 					spr.playAnim(note.isSustainNote ? 'confirm-hold' : 'confirm', true);
 				}
 				spr.resetAnim = note.isSustainNote ? -1 : 0;
+				if (note.isSustainNote) spr.resetRGB = false;
 			}
 		}
 		else {
@@ -3501,7 +3499,6 @@ class PlayState extends MusicBeatState
 				spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
 			}
 			spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
-			if (note.isSustainNote) spr.resetRGB = false;
 		}
 
 		var strum:StrumNote = opponentStrums.members[note.noteData];
@@ -3618,6 +3615,7 @@ class PlayState extends MusicBeatState
 						spr.playAnim(note.isSustainNote ? 'confirm-hold' : 'confirm', true);
 					}
 					spr.resetAnim = note.isSustainNote ? -1 : 0;
+					if (note.isSustainNote) spr.resetRGB = false;
 				}
 			}
 			else {
@@ -3628,7 +3626,6 @@ class PlayState extends MusicBeatState
 					spr.resetAnim = note.height / .45 / songSpeed / note.multSpeed / playbackRate * .001;
 				}
 				spr.updateRgb([note.rgbShader.r, note.rgbShader.g, note.rgbShader.b]);
-				if (note.isSustainNote) spr.resetRGB = false;
 			}
 
 			var strum:StrumNote = playerStrums.members[note.noteData];

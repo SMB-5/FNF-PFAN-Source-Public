@@ -1,4 +1,4 @@
-package mobile.states;
+package states;
 
 #if android
 import mobile.util.StorageUtil;
@@ -25,6 +25,7 @@ class CopyState extends MusicBeatState
 	public var filesCopied:Int = 0;
 	public var filesTotal:Int = 0;
 	public var failedFiles:Array<String> = [];
+	public var failedStack:Array<String> = [];
 
 	override function create() {
 		if (recopyAssets) {
@@ -44,7 +45,7 @@ class CopyState extends MusicBeatState
 
 		filesTotal = filesToAdd.length;
 
-		bg = new FlxSprite(0, 0, Paths.image('funkay'));
+		bg = new FlxSprite(0, 0, Paths.image('title-bg'));
 		bg.setGraphicSize(FlxG.width, FlxG.height);
 		bg.updateHitbox();
 		add(bg);
@@ -101,15 +102,16 @@ class CopyState extends MusicBeatState
 			}
 			catch(e:Dynamic) {
 				failedFiles.push(file);
-				// remind me to make a crash log later
-				trace('failed to copy file $file $e');
+				failedStack.push('$file $e');
+				trace('failed to copy file $file\n$e');
 			}
 			filesCopied++;
 			progressText.text = filesCopied == filesTotal ? 'Completed!' : '$filesCopied/$filesTotal';
 			progressBar.percent = (filesCopied / filesTotal) * 100;
 		}
 		if (failedFiles.length > 0) {
-			FlxG.stage.window.alert('Failed to copy files:\n' + failedFiles.join('\n'), 'Failed to copy ${failedFiles.length} files');
+			FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed to copy ${failedFiles.length} files');
+			CoolUtil.saveCrash(failedStack.join('\n'), 'CopyState');
 		}
 		FlxG.sound.play(Paths.sound('confirmMenu')).onComplete = ()->MusicBeatState.switchState(new states.TitleState());
 	}

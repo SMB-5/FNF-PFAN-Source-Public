@@ -39,7 +39,7 @@ class CreditsState extends MusicBeatState
 
 	var titleGroup:FlxTypedSpriteGroup<FlxText>;
 	var creditsGroup:FlxTypedSpriteGroup<Member>;
-	var baldipliers:Array<Array<Dynamic>> = [['baldiplier', 'bald', '577099'], ['daldiplier', 'dark', '3F3F3F'], ['golden-baldiplier', 'golden', 'FFFF48']];
+	var baldiplierGroup:Array<Array<String>> = [['baldiplier', 'bald', '577099'], ['daldiplier', 'dark', '3F3F3F'], ['golden-baldiplier', 'golden', 'FFFF48']];
 
 	var camFollow:FlxObject;
 
@@ -73,12 +73,14 @@ class CreditsState extends MusicBeatState
 		}
 
 		var bigStinkyLoser:MemberFile = getMember('melodiekit');
-		if (FlxG.random.bool(0.5) && bigStinkyLoser != null) {
-			var baldArray:Array<Dynamic> = FlxG.random.getObject(baldipliers, [90, 25, 5]);
-			if (baldArray != null) {
-				bigStinkyLoser.icon = baldArray[0];
+		if (FlxG.random.bool(0.1) && bigStinkyLoser != null) {
+			// Baldiplier arrives.
+			var curBaldiplier:Array<String> = FlxG.random.getObject(baldiplierGroup, [90, 25, 5]);
+			if (curBaldiplier != null) {
+				bigStinkyLoser.icon = curBaldiplier[0];
 				bigStinkyLoser.flipIcon = true;
-				bigStinkyLoser.color = baldArray[2];
+				bigStinkyLoser.description = bigStinkyLoser.description.replace('Watch out for &Baldiplier&...', 'Make sure to keep your pliers &' + curBaldiplier[1] + '&.');
+				bigStinkyLoser.color = curBaldiplier[2];
 			}
 		}
 
@@ -116,13 +118,13 @@ class CreditsState extends MusicBeatState
 			titleGroup.add(sectionTxt);
 
 			var offsetText:Float = 0;
-			for (k => member in memberList) {
+			for (member in memberList) {
 				if (member == null || !member[1].section.contains(section)) continue;
-				var text:Member = new Member(member[0], member[1].icon, member[1].flipIcon, member[1].role, member[1].description, member[1].link, member[1].color);
-				offsetText += text.textField.textHeight + 3;
-				text.y = sectionTxt.y + offsetText;
-				creditsGroup.add(text);
-				offset += text.textField.textHeight + 3;
+				var memberText:Member = new Member(member[0], member[1].icon, member[1].flipIcon, member[1].role, member[1].description, member[1].link, member[1].color);
+				offsetText += memberText.textField.textHeight + 3;
+				memberText.y = sectionTxt.y + offsetText;
+				creditsGroup.add(memberText);
+				offset += memberText.textField.textHeight + 3;
 			}
 		}
 		

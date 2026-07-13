@@ -195,7 +195,6 @@ class StrumNote extends FlxSprite
 	}
 
 	public function updateRgb(palette:Array<FlxColor>) {
-		if (!useRGBShader) return;
 		rgbShader.r = palette[0];
 		rgbShader.g = palette[1];
 		rgbShader.b = palette[2];
@@ -214,9 +213,10 @@ class StrumNote extends FlxSprite
 		}
 		if (useRGBShader) {
 			if (animation.name == "pressed") {
-				updateRgb(defaultRGB[noteData]);
+				if (resetRGB) updateRgb(defaultRGB[noteData]);
+				else resetRGB = true;
 			} else if (animation.name == "static") {
-				updateRgb(strumRGB);
+				if (resetRGB) updateRgb(strumRGB);
 			}
 		}
 	}

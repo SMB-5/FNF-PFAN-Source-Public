@@ -348,16 +348,10 @@ class Note extends FlxSprite
 		x += offsetX;
 	}
 
-	public function updateRgb(palette:Array<FlxColor>, updateSplash:Bool = false) {
-		if (!rgbShader.enabled) return;
+	public function updateRgb(palette:Array<FlxColor>) {
 		rgbShader.r = palette[0];
 		rgbShader.g = palette[1];
 		rgbShader.b = palette[2];
-		if (updateSplash) {
-			noteSplashData.r = rgbShader.r;
-			noteSplashData.g = rgbShader.g;
-			noteSplashData.b = rgbShader.b;
-		}
 	}
 
 	public static function initializeGlobalRGBShader(noteData:Int)
@@ -461,12 +455,12 @@ class Note extends FlxSprite
 
 		for (i => quant in quantizations) {
 			if (snap % (192 / quant) == 0) {
-				updateRgb(ClientPrefs.data.arrowRGBQuantization[i], true);
+				updateRgb(ClientPrefs.data.arrowRGBQuantization[i]);
 				return;
 			}
 		}
 		// Anything above 64th or unsnapped is defaulted to gray
-		updateRgb([0xFF808080, 0xFFFFFFFF, 0xFF000000], true);
+		updateRgb([0xFF808080, 0xFFFFFFFF, 0xFF000000]);
 	}
 
 	public static function getNoteSkinPostfix()

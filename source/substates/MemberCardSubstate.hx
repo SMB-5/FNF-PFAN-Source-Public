@@ -237,9 +237,14 @@ class MemberCardSubstate extends MusicBeatSubstate
 		FlxTween.tween(camCard, { x: camCard.x + 310, alpha: 1 }, 0.3, { ease: FlxEase.expoOut });
 		FlxTween.tween(camDesc, { x: camDesc.x + 310, alpha: 1 }, 0.3, { ease: FlxEase.expoOut });
 
+		if (name == 'melodiekit') {
+			descTxt.applyMarkup(description, [new FlxTextFormatMarkerPair(new FlxTextFormat(!flipX ? color : 0x577099), '&')]);
+		}
+
 		super.create();
 	}
 
+	var baldFrames:Int = 0;
 	var exiting:Bool = false;
 	override function update(elapsed:Float) {
 		scrollTimer += elapsed;
@@ -307,6 +312,21 @@ class MemberCardSubstate extends MusicBeatSubstate
 
 			camDesc.scroll.y = FlxMath.bound(camDesc.scroll.y, 0, descTxt.textField.textHeight - camDesc.height + 16);
 			scrollBar.y = FlxMath.bound(scrollBar.y, 0, camDesc.height - scrollBar.height);
+		}
+
+		// this is way too much effort for a dumbass inside joke that only like 3 people know about
+		if (name == 'melodiekit' && !flipX) {
+			if (FlxG.random.bool(1) && nameTxt.text == name) {
+				if (icon == 'golden-baldiplier') nameTxt.text = 'Golden Baldiplier';
+				else nameTxt.text = CoolUtil.capitalize(icon);
+			}
+			else if (nameTxt.text != name) {
+				baldFrames++;
+				if (baldFrames > FlxG.random.int(5, 15)) {
+					nameTxt.text = name;
+					baldFrames = 0;
+				}
+			}
 		}
 		super.update(elapsed);
 	}
