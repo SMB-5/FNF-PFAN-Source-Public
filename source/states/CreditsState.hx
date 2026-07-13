@@ -73,7 +73,7 @@ class CreditsState extends MusicBeatState
 		}
 
 		var bigStinkyLoser:MemberFile = getMember('melodiekit');
-		if (FlxG.random.bool(0.1) && bigStinkyLoser != null) {
+		if (FlxG.random.bool(2) && bigStinkyLoser != null) {
 			// Baldiplier arrives.
 			var curBaldiplier:Array<String> = FlxG.random.getObject(baldiplierGroup, [90, 25, 5]);
 			if (curBaldiplier != null) {
