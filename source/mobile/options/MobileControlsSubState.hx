@@ -72,7 +72,6 @@ class MobileControlsSubState extends MusicBeatSubstate
 		exitButton = new PsychUIButton(FlxG.width - 300, 50, Language.getPhrase('mobile_controls_save_and_exit', 'Save and Exit'), null, 250, 80);
 		exitButton.normalStyle.bgColor = 0xFF00F24E;
 		exitButton.text.size = 24;
-		exitButton.text.y -= 7;
 		exitButton.text.y = exitButton.bg.y + exitButton.bg.height/2 - exitButton.text.height/2;
 		if (exitButton.text.textField.textHeight > exitButton.bg.height) {
 			exitButton.text.scale.x = exitButton.text.scale.y = exitButton.bg.height / exitButton.text.textField.textHeight;
@@ -82,7 +81,6 @@ class MobileControlsSubState extends MusicBeatSubstate
 		optionsButton = new PsychUIButton(exitButton.x - 280, 50, Language.getPhrase('mobile_controls_control_options', 'Control Options'), null, 250, 80);
 		optionsButton.normalStyle.bgColor = 0xFF757171;
 		optionsButton.text.size = 24;
-		optionsButton.text.y -= 7;
 		optionsButton.kill();
 		optionsButton.text.y = optionsButton.bg.y + optionsButton.bg.height/2 - optionsButton.text.height/2;
 		if (optionsButton.text.textField.textHeight > optionsButton.bg.height) {
@@ -93,7 +91,6 @@ class MobileControlsSubState extends MusicBeatSubstate
 		hideButton = new PsychUIButton(20, optionsButton.y + 110, Language.getPhrase('mobile_controls_hide_ui', 'Hide UI'), null, 250, 80);
 		hideButton.normalStyle.bgColor = 0xFF4AA3F0;
 		hideButton.text.size = 24;
-		hideButton.text.y -= 7;
 		hideButton.text.y = hideButton.bg.y + hideButton.bg.height/2 - hideButton.text.height/2;
 		if (hideButton.text.textField.textHeight > hideButton.bg.height) {
 			hideButton.text.scale.x = hideButton.text.scale.y = hideButton.bg.height / hideButton.text.textField.textHeight;
@@ -103,7 +100,6 @@ class MobileControlsSubState extends MusicBeatSubstate
 		resetButton = new PsychUIButton(exitButton.x, exitButton.y + 110, Language.getPhrase('mobile_controls_reset_positions', 'Reset Positions'), null, 250, 80);
 		resetButton.normalStyle.bgColor = 0xFFFF0000;
 		resetButton.text.size = 24;
-		resetButton.text.y -= 7;
 		resetButton.update(FlxG.elapsed);
 		resetButton.kill();
 		resetButton.text.y = resetButton.bg.y + resetButton.bg.height/2 - resetButton.text.height/2;
@@ -213,7 +209,6 @@ class MobileControlsSubState extends MusicBeatSubstate
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
 		curControl.text = options[curSelected];
 		rightArrow.x = curControl.x + curControl.width + 20;
-		MobileData.baseGame = options[curSelected] == 'BASE_GAME';
 		mobileControls.changeControl(MobileData.controlModes.get(options[curSelected]), ClientPrefs.data.hitboxStyle);
 		MobileData.setControlColor(mobileControls.currentMode);
 		strumLineNotes.visible = options[curSelected] == 'BASE_GAME';

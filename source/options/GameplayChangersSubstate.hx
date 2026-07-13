@@ -136,7 +136,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				optionsArray.remove(optionsArray[i]);
 				continue;
 			}
-			var optionText:Alphabet = new Alphabet(200, 360, optionsArray[i].name, true);
+			var optionText:Alphabet = new Alphabet(200, 360, Language.getPhrase('setting_' + optionsArray[i].name, optionsArray[i].name), true);
 			optionText.isMenuItem = true;
 			optionText.setScale(0.8);
 			optionText.targetY = i;
@@ -573,8 +573,7 @@ class GameplayOption
 
 	public function new(name:String, variable:String, type:OptionType, defaultValue:Dynamic = 'null variable value', ?options:Array<String> = null, ?disallowedSongs:Array<String> = null)
 	{
-		_name = name;
-		this.name = Language.getPhrase('setting_$name', name);
+		this.name = name;
 		this.variable = variable;
 		this.type = type;
 		this.defaultValue = defaultValue;
@@ -641,7 +640,6 @@ class GameplayOption
 	public function setChild(child:Alphabet)
 		this.child = child;
 
-	var _name:String = null;
 	var _text:String = null;
 	private function get_text()
 		return _text;
@@ -651,7 +649,7 @@ class GameplayOption
 		if(child != null)
 		{
 			_text = newValue;
-			child.text = Language.getPhrase('setting_$_name-$_text', _text);
+			child.text = Language.getPhrase('setting_$name-$_text', _text);
 			return _text;
 		}
 		return null;
