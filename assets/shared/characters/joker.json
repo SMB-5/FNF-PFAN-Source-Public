@@ -1,4 +1,26 @@
 {
+	"strum_colors": [
+		[
+			[185, 30, 30],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[185, 30, 30],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[185, 30, 30],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[185, 30, 30],
+			[255, 255, 255],
+			[0, 0, 0]
+		]
+	],
 	"note_colors": [
 		[
 			[30, 30, 30],
@@ -23,76 +45,76 @@
 	],
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [0, 0],
-			"loop": false,
-			"fps": 24,
 			"anim": "idle",
-			"indices": [],
-			"name": "idle"
+			"fps": 24,
+			"name": "idle",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [80, 0],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "left"
+			"fps": 24,
+			"name": "left",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [-30, -30],
-			"loop": false,
-			"fps": 24,
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "down"
+			"fps": 24,
+			"name": "down",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [18, 39],
-			"loop": false,
-			"fps": 24,
 			"anim": "singUP",
-			"indices": [],
-			"name": "up"
+			"fps": 24,
+			"name": "up",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [-41, -10],
-			"loop": false,
-			"fps": 24,
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "right"
+			"fps": 24,
+			"name": "right",
+			"indices": []
 		},
 		{
-			"loop": false,
 			"offsets": [81, 59],
+			"loop": false,
+			"fps": 24,
 			"anim": "singLEFTmiss",
-			"fps": 24,
-			"name": "note left miss",
-			"indices": []
+			"indices": [],
+			"name": "note left miss"
 		},
 		{
-			"loop": false,
 			"offsets": [-30, 56],
+			"loop": false,
+			"fps": 24,
 			"anim": "singDOWNmiss",
-			"fps": 24,
-			"name": "note down miss",
-			"indices": []
+			"indices": [],
+			"name": "note down miss"
 		},
 		{
-			"loop": false,
 			"offsets": [19, 85],
-			"anim": "singUPmiss",
+			"loop": false,
 			"fps": 24,
-			"name": "note up miss",
-			"indices": []
+			"anim": "singUPmiss",
+			"indices": [],
+			"name": "note up miss"
 		},
 		{
-			"loop": false,
 			"offsets": [-41, 71],
-			"anim": "singRIGHTmiss",
+			"loop": false,
 			"fps": 24,
-			"name": "note right miss",
-			"indices": []
+			"anim": "singRIGHTmiss",
+			"indices": [],
+			"name": "note right miss"
 		}
 	],
 	"vocals_file": "",

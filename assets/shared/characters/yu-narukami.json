@@ -1,4 +1,26 @@
 {
+	"strum_colors": [
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		]
+	],
 	"note_colors": [
 		[
 			[255, 234, 56],
@@ -23,76 +45,76 @@
 	],
 	"animations": [
 		{
-			"loop": false,
 			"offsets": [-4, 31],
+			"loop": false,
+			"fps": 24,
 			"anim": "idle",
-			"fps": 24,
-			"name": "idle",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [27, 31],
-			"anim": "singLEFT",
-			"fps": 24,
-			"name": "left0",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [-127, -79],
-			"anim": "singDOWN",
-			"fps": 24,
-			"name": "down0",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [-62, 119],
-			"anim": "singUP",
-			"fps": 24,
-			"name": "up0",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [-177, 14],
-			"anim": "singRIGHT",
-			"fps": 24,
-			"name": "right0",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [29, 151],
-			"anim": "singLEFTmiss",
-			"fps": 24,
-			"name": "left note miss0",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [-126, 47],
-			"anim": "singDOWNmiss",
-			"fps": 24,
-			"name": "down note miss0",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [-64, 254],
-			"anim": "singUPmiss",
-			"fps": 24,
-			"name": "up note miss0",
-			"indices": []
-		},
-		{
-			"offsets": [-177, 98],
-			"loop": false,
-			"fps": 24,
-			"anim": "singRIGHTmiss",
 			"indices": [],
-			"name": "right note miss0"
+			"name": "idle"
+		},
+		{
+			"offsets": [27, 31],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "left0"
+		},
+		{
+			"offsets": [-127, -79],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "down0"
+		},
+		{
+			"offsets": [-62, 119],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "up0"
+		},
+		{
+			"offsets": [-177, 14],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "right0"
+		},
+		{
+			"offsets": [29, 151],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFTmiss",
+			"indices": [],
+			"name": "left note miss0"
+		},
+		{
+			"offsets": [-126, 47],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWNmiss",
+			"indices": [],
+			"name": "down note miss0"
+		},
+		{
+			"offsets": [-64, 254],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUPmiss",
+			"indices": [],
+			"name": "up note miss0"
+		},
+		{
+			"loop": false,
+			"offsets": [-177, 98],
+			"anim": "singRIGHTmiss",
+			"fps": 24,
+			"name": "right note miss0",
+			"indices": []
 		}
 	],
 	"vocals_file": "",

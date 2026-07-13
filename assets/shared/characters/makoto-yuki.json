@@ -1,4 +1,26 @@
 {
+	"strum_colors": [
+		[
+			[30, 30, 155],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[30, 30, 155],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[30, 30, 155],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[30, 30, 155],
+			[255, 255, 255],
+			[0, 0, 0]
+		]
+	],
 	"note_colors": [
 		[
 			[218, 37, 35],
@@ -23,44 +45,44 @@
 	],
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [-1, 1],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [0, 0, 1],
-			"name": "Makito left"
+			"fps": 24,
+			"name": "Makito left",
+			"indices": [0, 0, 1]
 		},
 		{
+			"loop": false,
 			"offsets": [16, -1],
-			"loop": false,
-			"fps": 24,
 			"anim": "singDOWN",
-			"indices": [0, 0, 1],
-			"name": "Makito down"
+			"fps": 24,
+			"name": "Makito down",
+			"indices": [0, 0, 1]
 		},
 		{
+			"loop": false,
 			"offsets": [17, 0],
-			"loop": false,
-			"fps": 24,
 			"anim": "singUP",
-			"indices": [0, 0, 1],
-			"name": "Makito up"
+			"fps": 24,
+			"name": "Makito up",
+			"indices": [0, 0, 1]
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "singRIGHT",
-			"indices": [0, 0, 1],
-			"name": "Makito right"
+			"fps": 24,
+			"name": "Makito right",
+			"indices": [0, 0, 1]
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "idle",
-			"indices": [0, 1, 2, 2, 3, 3, 4, 0, 0, 0, 0, 0, 0],
-			"name": "Makito idle"
+			"fps": 24,
+			"name": "Makito idle",
+			"indices": [0, 1, 2, 2, 3, 3, 4, 0, 0, 0, 0, 0, 0]
 		}
 	],
 	"vocals_file": "",
