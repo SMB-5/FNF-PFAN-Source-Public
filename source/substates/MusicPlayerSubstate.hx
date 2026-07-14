@@ -254,7 +254,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 					scrollBar.alpha = 0.6;
 					scrollBar.y = 0;
 					camSettings.scroll.y = 0;
-					prevMouseY = 0;
+					#if mobile prevMouseY = 0; #end
 					holdingBox = false;
 				}
 			}
