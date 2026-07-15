@@ -58,6 +58,15 @@
 			"link": "https://www.youtube.com/@Mr3ights",
 			"color": "1E1E1E"
 		},
+		"JulesRthePhoenix": {
+			"icon": "jules",
+			"flipIcon": false,
+			"section": ["Programming"],
+			"role": "Programmer",
+			"description": "Why am I here.",
+			"link": "https://www.youtube.com/@JulesRthePhoenix",
+			"color": "00b0ff"
+		},
 		"melodiekit": {
 			"icon": "melodiekit",
 			"flipIcon": false,
@@ -121,6 +130,15 @@
 			"link": "https://twitter.com/JuhoSprite",
 			"color": "FD0FE3"
 		},
+		"ZesCrew2": {
+			"icon": "zescrew2",
+			"flipIcon": false,
+			"section": ["Contributors"],
+			"role": "Artist",
+			"description": "haiiii ^u^",
+			"link": "https://zescrew2.art/",
+			"color": "FFBA6B"
+		},
 		"Mikolka9144": {
 			"icon": "mikolka",
 			"flipIcon": false,
@@ -156,6 +174,24 @@
 			"description": "",
 			"link": "https://github.com/ShadowMario/FNF-PsychEngine",
 			"color": "580787"
+		},
+		"ATLUS": {
+			"icon": "",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "Creator and Owners of the Persona series.",
+			"description": "",
+			"link": "https://atlus.com/",
+			"color": "005eac"
+		},
+		"The Funkin' Crew": {
+			"icon": "",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "Creators and Owners of Friday Night Funkin'",
+			"description": "Cartoon Rhythm Gaming Excellence",
+			"link": "https://ninja-muffin24.itch.io/funkin",
+			"color": "31b0d1"
 		}
 	}
 }
