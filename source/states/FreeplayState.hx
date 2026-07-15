@@ -237,12 +237,15 @@ class FreeplayState extends MusicBeatState
 		add(backButton);
 
 		modsButton = new FlxSprite(FlxG.width / 2 + 10, FlxG.height / 2 + 200, Paths.image('modsButton'));
+		modsButton.setGraphicSize(Std.int(modsButton.width * 0.9));
 		add(modsButton);
 
-		resetButton = new FlxSprite(modsButton.x - 35, modsButton.y - 145, Paths.image('resetButton'));
+		resetButton = new FlxSprite(modsButton.x - 35, modsButton.y - 150, Paths.image('resetButton'));
+		resetButton.setGraphicSize(Std.int(resetButton.width * 0.9));
 		add(resetButton);
 
-		musicButton = new FlxSprite(resetButton.x - 35, resetButton.y - 145, Paths.image('musicButton'));
+		musicButton = new FlxSprite(resetButton.x - 35, resetButton.y - 150, Paths.image('musicButton'));
+		musicButton.setGraphicSize(Std.int(musicButton.width * 0.9));
 		add(musicButton);
 		#end
 

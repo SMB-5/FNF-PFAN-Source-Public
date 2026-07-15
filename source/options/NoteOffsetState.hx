@@ -193,10 +193,12 @@ class NoteOffsetState extends MusicBeatState
 
 		switchButton = new FlxSprite(backButton.x - 150, backButton.y, Paths.image('switchButton'));
 		switchButton.camera = camOther;
+		switchButton.setGraphicSize(Std.int(switchButton.width * 0.9));
 		add(switchButton);
 
 		resetButton = new FlxSprite(switchButton.x - 150, switchButton.y, Paths.image('resetButton'));
 		resetButton.camera = camOther;
+		resetButton.setGraphicSize(Std.int(resetButton.width * 0.9));
 		add(resetButton);
 		#end
 		
