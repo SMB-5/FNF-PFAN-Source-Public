@@ -75,6 +75,10 @@ ui_change_character: "Character"
 ui_music_player: "Preview"
 ui_open_link: "Open Link"
 
+// Credits
+credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
+credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
+
 // Persona PopUp Cards
 prompt_info: "INFORMATION"
 prompt_system: "SYSTEM"
@@ -108,6 +112,7 @@ desc_tartarus: "The Dark Hour has struck and Bf and Gf haven't turned into coffi
 desc_truth: "Bf and Gf rush to JUNES to find the Investigation Team and tell them what they saw on the Midnight Channel last night. The Investigation Team decide to take Bf and Gf into the TV World as they might be able to give them clues about the recent victim and as they begin their search, Bf decides to do another stupid rap battle with Yu Narukami."
 desc_desire: "Gf suddenly gets the MetaNav on her phone and accidentally activates it, transporting herself, Bf and the Phantom Thieves to Mementos. The Phantom Thieves try to send Bf and Gf back to the real world, however Bf decides to do yet another stupid rap battle with Ren Amamiya (Joker)."
 desc_foggy-night: "Makoto Yuki and Yu Narukami have suddenly been summoned into the Velvet Room through their dreams. However this isn't the Velvet Room either of them remember. A great challenge awaits them so it's time for a good ol showdown!"
+desc_specialist: "Yu Narukami doing the funny iconic dance from Persona 4: Dancing All Night."
 
 // Achievements (IGNORE THIS FOR DEMO - SMB)
 achievement_: ""
@@ -241,6 +246,9 @@ description_hold_note_splashes: "If unchecked, Splashes won't appear on the note
 
 setting_note_quantization: "Note Quantization"
 description_note_quantization: "If checked, colors the notes based on their snap."
+
+setting_character_note_colors: "Character Note Colors"
+description_character_note_colors: "If unchecked, Character's won't have their custom note colors."
 
 setting_strum_background_opacity: "Strum Background Opacity"
 description_strum_background_opacity: "How much transparent should the Strumline Background be?"

@@ -75,6 +75,10 @@ ui_change_character: "Personagem"
 ui_music_player: "Prévia"
 ui_open_link: "Abrir Link"
 
+// Credits
+credits_tip: "Pressione CIMA ou BAIXO para selecionar um membro\nPressione ACEITAR para ver o status de um membro"
+credits_tip_mobile: "Deslize para selecionar um membro\nToque para ver o status de um membro"
+
 // Persona PopUp Cards
 prompt_info: "INFORMAÇÃO"
 prompt_system: "SISTEMA"
@@ -108,6 +112,7 @@ desc_tartarus: "A Hora Sombria chegou, e BF e GF não se transformaram em caixõ
 desc_truth: "BF e GF correm para a Junes para encontrar a Equipe de Investigação e contar o que viram no Canal da Meia-Noite na noite anterior. A Equipe de Investigação decide levar BF e GF para o Mundo da TV, já que eles podem fornecer pistas sobre a vítima recente; no entanto, assim que começam as buscas, BF decide começar mais uma batalha de rap idiota contra Yu Narukami."
 desc_desire: "De repente, a GF recebe o MetaNav em seu celular e o ativa acidentalmente, transportando a si mesma, o BF e os Phantom Thieves para Mementos. Os Phantom Thieves tentam enviar o BF e a GF de volta ao mundo real; no entanto, o BF decide começar mais uma batalha de rap estúpida contra Ren Amamiya (Joker)."
 desc_foggy-night: "Makoto Yuki e Yu Narukami foram repentinamente convocados para a Velvet Room enquanto dormiam. No entanto, esta não é a Velvet Room de que qualquer um deles se lembra. Um grande desafio os aguarda; é hora de um bom e velho confronto!"
+desc_specialist: "Yu Narukami fazendo a dança icônica engraçada de Persona 4: Dancing All Night."
 
 // Achievements (IGNORE THIS FOR DEMO - SMB)
 achievement_: ""
@@ -242,6 +247,9 @@ description_hold_note_splashes: "Se desmarcado, Impactos não aparecerão nas no
 setting_note_quantization: "Quantização de Notas"
 description_note_quantization: "Se marcado, colore as notas com base no seu ajuste à grade (snap)."
 
+setting_character_note_colors: "Cores de Notas do Personagem"
+description_character_note_colors: "Se desmarcado, os personagens não usarão suas cores de nota personalizadas"
+
 setting_strum_background_opacity: "Opacidade do Fundo do Strum"
 description_strum_background_opacity: "Qual deve ser o nível de transparência do fundo da Strumline?"
 
@@ -330,10 +338,6 @@ description_safe_frames: "Ajusta quanto tempo a mais ou a menos você terá\npar
 
 setting_sustains_as_one_note: "Notas Longas Fundidas"
 description_sustains_as_one_note: "Se marcado, notas longas não poderão ser acertadas se a principal não for acertada,\nalém de contar como um único erro."
-
-// Credits
-credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
-credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
 
 // Control Rebinding
 controls_rebinding: "Trocando {1}"
