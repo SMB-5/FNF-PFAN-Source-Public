@@ -165,20 +165,20 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 			var btn:Alphabet = cast(spr, Alphabet);
 			if (!btn.bold) continue;
 			if (pointerOverlaps(btn) && generalPressed) {
-				if (btn.text == Language.getPhrase('Edit').toUpperCase()) {
+				if (btn.text == 'EDIT') {
 					editingNote = btn.ID;
 					reloadTab(NOTE_EDITING);
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					return;
 				}
-				else if (btn.text == Language.getPhrase('Reset').toUpperCase()) {
+				else if (btn.text == 'RESET') {
 					var note:Note = notesGroup.members[btn.ID];
 					note.rgbShader.r = ClientPrefs.data.arrowRGBQuantization[btn.ID][0] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][0];
 					note.rgbShader.g = ClientPrefs.data.arrowRGBQuantization[btn.ID][1] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][1];
 					note.rgbShader.b = ClientPrefs.data.arrowRGBQuantization[btn.ID][2] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][2];
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 				}
-				else if (btn.text == Language.getPhrase('Back').toUpperCase()) {
+				else if (btn.text == 'BACK') {
 					pressedBack = true;
 				}
 			}
@@ -400,12 +400,12 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 					for (letter in snapTxt.letters) letter.setColorTransform(1, 1, 1, 1, 255, 255, 255, 0);
 					btnGroup.add(snapTxt);
 
-					var editTxt = new Alphabet(note.x + 140, note.y + 60, Language.getPhrase('Edit').toUpperCase());
+					var editTxt = new Alphabet(note.x + 140, note.y + 60, 'EDIT');
 					editTxt.setScale(0.4, 0.4);
 					editTxt.ID = i;
 					btnGroup.add(editTxt);
 
-					var resetTxt = new Alphabet(editTxt.x + 120, editTxt.y, Language.getPhrase('Reset').toUpperCase());
+					var resetTxt = new Alphabet(editTxt.x + 120, editTxt.y, 'RESET');
 					resetTxt.setScale(0.4, 0.4);
 					resetTxt.ID = i;
 					btnGroup.add(resetTxt);
@@ -428,7 +428,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				box.drawRect(0, 0, box.width, box.height, 0, {thickness: 10, color: 0xFFFFFFFF});
 				insert(members.indexOf(modeNotes), box);
 
-				var backTxt = new Alphabet(215, 625, Language.getPhrase('Back').toUpperCase());
+				var backTxt = new Alphabet(215, 625, 'BACK');
 				backTxt.setScale(0.6, 0.6);
 				btnGroup.add(backTxt);
 

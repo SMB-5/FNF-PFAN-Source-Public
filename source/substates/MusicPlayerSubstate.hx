@@ -24,7 +24,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 	public var autoplay:Bool = false;
 
 	var settings:Array<Array<Dynamic>> = [
-		// Name, Variable, Type, Default Value, Min Value, Max Value, Decrement Value, Increment Value, Options (for STRING and BOOL type), OnChange (Callback for any extra stuff)
+		// Name, Variable, Type, Default Value, Min Value, Max Value, Decrement Value, Increment Value, Options (for STRING and BOOL type), OnChange (Callback name, as a STRING as the real functions can't be used)
 		#if FLX_PITCH
 		['Playback Rate', 'playbackRate', MusicPlayerType.FLOAT, 1, 0.05, 3, 0.05, 0.05, null, null],
 		#end
