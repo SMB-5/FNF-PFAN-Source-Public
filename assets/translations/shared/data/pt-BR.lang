@@ -58,6 +58,8 @@ off: "Desligado"
 edit: "Editar"
 reset: "Reset"
 back: "Voltar"
+story_mode: "Story Mode"
+freeplay: "Freeplay"
 
 opponent: "OPONENTE"
 
@@ -133,22 +135,19 @@ description_two_keys: "Complete uma Música pressionando apenas duas teclas."
 reset_achievement: "Resetar Conquista:"
 
 // Options
-options_note_colors: "Coloração das Notas"
-options_controls: "Controles"
-options_mobile: "Celular"
-options_adjust_delay_and_combo: "Ajustar Atraso e Combo"
-options_gameplay: "Jogabilidade"
-options_visuals: "Visuais"
-options_graphics: "Gráficos"
-options_language: "Idioma"
+options_note_colors: "COLORAÇÃO DAS NOTAS"
+options_controls: "CONTROLES"
+options_mobile: "CELULAR"
+options_combooffset: "COMBO/OFFSET"
+options_gameplay: "JOGABILIDADE"
+options_visuals: "VISUAIS"
+options_graphics: "GRÁFICOS"
+options_language: "IDIOMA"
 
-mobile_menu: "Configurações do Celular"
-gameplay_menu: "Configurações de Gameplay"
-graphics_menu: "Configurações de Gráficos"
-visuals_menu: "Opções Visuais"
-
-customizable_description: "(Essa configuração é customizável, clique na engrenagem!)"
-customizable_description_controller: "(Essa configuração é customizável, presssione L3!)"
+mobile_menu: "CELULAR"
+gameplay_menu: "JOGABILIDADE"
+graphics_menu: "GRÁFICOS"
+visuals_menu: "VISUAIS"
 
 // Note Colors Menu
 note_colors_tip: "Aperte RESET para resetar a parte selecionada da Nota."
@@ -167,34 +166,55 @@ switch_on_accept: "(Pressione Accept para Trocar)"
 switch_on_start: "(Pressione Start para Trocar)"
 
 // Gameplay Modifiers
+setting_locked: "This option cannot be changed on"
+setting_locked_default: "{1} will be defaulted to {2}."
+
 setting_scroll_type: "Tipo de Scroll"
 setting_scroll_type-constant: "Constante"
 setting_scroll_type-multiplicative: "Multiplicativo"
+description_scroll_type: "Which scroll type would you like to play on?"
 
 setting_scroll_speed: "Velocidade de Scroll"
-setting_playback_rate: "Aceleração da Música"
-setting_health_gain_multiplier: "Mult. de Vida Ganha"
-setting_health_loss_multiplier: "Mult. de Vida Perdida"
-setting_instakill_on_miss: "Morrer ao Errar"
-setting_practice_mode: "Modo Prática"
-setting_botplay: "Modo Automático"
-setting_play_as_opponent: "Jogar como Oponente"
-setting_merciless: "Impiedoso"
+description_scroll_speed: "How fast should the chart be?\n\nThis option changes depending on the Scroll Type option."
 
-merciless_gl: "Você precisará completar a música sem perder seu combo ou receber uma avaliação Merda/Que Horrível!. Boa Sorte! Você vai precisar!"
+setting_playback_rate: "Aceleração da Música"
+description_playback_rate: "How fast should the game be?"
+
+setting_health_gain_multiplier: "Mult. de Vida Ganha"
+description_health_gain_multiplier: "How much health should you gain when hitting notes?"
+
+setting_health_loss_multiplier: "Mult. de Vida Perdida"
+description_health_loss_multiplier: "How much health should you lose when hitting notes?"
+
+setting_merciless: "Impiedoso"
+description_merciless: "Instakills upon a Bad/Shit rating being hit or upon receiving a miss."
+
+setting_instakill_on_miss: "Morrer ao Errar"
+description_instakill_on_miss: "Instakills upon receiving a miss."
+
+setting_practice_mode: "Modo Prática"
+description_practice_mode: "Disables the game over."
+
+setting_botplay: "Modo Automático"
+description_botplay: "Watch a perfect bot play through the song."
+
+setting_play_as_opponent: "Jogar como Oponente"
+description_play_as_opponent: "Play as the opponent."
 
 // Mobile Settings
 setting_edit_mobile_controls: "Editar controles do Celular"
 description_edit_mobile_controls: "Altere o modo de controle atual ou personalize seus controles."
 
-setting_control_alpha: "Controle Alfa:"
+setting_control_alpha: "Controle Alfa"
 description_control_alpha: "Quão opacos você quer que os controles sejam?"
 
 setting_enable_pause_button: "Ativar botão de pausar"
 description_enable_pause_button: "Se o botão de pausa deve ou não ser habilitado.\nVocê ainda pode pressionar o botão de voltar para pausar."
 
 // Mobile Hitbox Settings
-setting_hitbox_style: "Estilo da Hitbox:"
+setting_hitbox_style: "Estilo da Hitbox"
+setting_hitbox_style-normal: "Normal"
+setting_hitbox_style-gradient: "Gradient"
 description_hitbox_style: "Qual estilo da Hitbox deve ser usado?"
 
 setting_show_hints: "Mostrar Dicas"
@@ -223,20 +243,20 @@ setting_framerate: "Taxa de Atualização"
 description_framerate: "Também chamado de "Framerate", preciso explicar?"
 
 // Visuals Settings
-setting_note_skins: "Estilo de Notas"
-setting_note_skins-default: "Padrão"
-setting_note_skins-future: "Futurista"
-setting_note_skins-chip: "Ficha"
-description_note_skins: "Escolha o seu estilo de Notas favorito."
+setting_note_skin: "Estilo de Notas"
+setting_note_skin-default: "Padrão"
+setting_note_skin-future: "Futurista"
+setting_note_skin-chip: "Ficha"
+description_note_skin: "Escolha o seu estilo de Notas favorito."
 
-setting_note_splashes: "Impacto das Notas"
-setting_note_splashes-psych: "Psych"
-setting_note_splashes-diamond: "Diamante"
-setting_note_splashes-electric: "Elétrico"
-setting_note_splashes-sparkles: "Brilho"
-setting_note_splashes-vanilla: "Original"
-setting_note_splashes-psych-old: "Psych-Old"
-description_note_splashes: "Escolha o seu estilo de Impacto das Notas favorito."
+setting_note_splash: "Impacto das Notas"
+setting_note_splash-psych: "Psych"
+setting_note_splash-diamond: "Diamante"
+setting_note_splash-electric: "Elétrico"
+setting_note_splash-sparkles: "Brilho"
+setting_note_splash-vanilla: "Original"
+setting_note_splash-psych-old: "Psych-Old"
+description_note_splash: "Escolha o seu estilo de Impacto das Notas favorito."
 
 setting_note_splash_opacity: "Opacidade do Impacto"
 description_note_splash_opacity: "O quão transparente os Impactos das Notas devem ser."
@@ -259,12 +279,12 @@ description_hide_hud: "Se marcado, a maioria dos elementos da UI ficarão oculto
 setting_show_misses_and_accuracy: "Mostrar Erros e Avaliação"
 description_show_misses_and_accuracy: "Se desmarcado, oculta os Erros e a Avaliação no HUD, e a pontuação é exibida como no jogo base."
 
-setting_time_bar: "Barra de Tempo:"
-setting_time_bar-time_left: "Tempo Restante"
-setting_time_bar-time_elapsed: "Tempo Decorrido"
-setting_time_bar-song_name: "Nome da Música"
-setting_time_bar-disabled: "Desativada"
-description_time_bar: "O que a Barra de Tempo deve mostrar?"
+setting_time_bar_display: "Time Bar Display"
+setting_time_bar_display-time_left: "Tempo Restante"
+setting_time_bar_display-time_elapsed: "Tempo Decorrido"
+setting_time_bar_display-song_name: "Nome da Música"
+setting_time_bar_display-disabled: "Desativada"
+description_time_bar_display: "O que a Barra de Tempo deve mostrar?"
 
 setting_subtitles: "Legendas"
 description_subtitles: "Se marcado, as legendas aparecerão quando um personagem falar ou cantar."

@@ -186,7 +186,7 @@ class StrumNote extends FlxSprite
 		if(resetAnim > 0) {
 			resetAnim -= elapsed;
 			if(resetAnim <= 0) {
-				if (isPlayer && animation.name == 'confirm') resetRGB = false;
+				if (isPlayer && (PlayState.instance == null || !PlayState.instance.cpuControlled) && animation.name == 'confirm') resetRGB = false;
 				playAnim('static');
 				resetAnim = 0;
 			}

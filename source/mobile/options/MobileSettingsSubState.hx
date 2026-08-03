@@ -15,7 +15,7 @@ class MobileSettingsSubState extends BaseOptionsMenu
 			SUBSTATE(mobile.options.MobileControlsSubState));
 		addOption(option);
 
-		var option:Option = new Option('Control Alpha:',
+		var option:Option = new Option('Control Alpha',
 			'How opaque do you want the controls to be?',
 			'controlAlpha',
 			FLOAT);

@@ -48,7 +48,7 @@ class ControlsSubState extends MusicBeatSubstate
 	var curOptionsValid:Array<Int>;
 	static var defaultKey:String = 'Reset to Default Keys';
 
-	var bg:FlxSprite;
+	var grid:FlxBackdrop;
 	var grpDisplay:FlxTypedGroup<Alphabet>;
 	var grpBlacks:FlxTypedGroup<AttachedSprite>;
 	var grpOptions:FlxTypedGroup<Alphabet>;
@@ -77,13 +77,8 @@ class ControlsSubState extends MusicBeatSubstate
 		options.push([true]);
 		options.push([true, defaultKey]);
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = keyboardColor;
-		bg.antialiasing = ClientPrefs.data.antialiasing;
-		bg.screenCenter();
-		add(bg);
-
-		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+		grid = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+		grid.color = keyboardColor;
 		grid.velocity.set(40, 40);
 		grid.alpha = 0;
 		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
@@ -117,6 +112,7 @@ class ControlsSubState extends MusicBeatSubstate
 		var text:Alphabet = new Alphabet(60, 90, 'CTRL', false);
 		text.alignment = CENTERED;
 		text.setScale(0.4);
+		text.letterColor = FlxColor.WHITE;
 		add(text);
 
 		createTexts();
@@ -157,6 +153,7 @@ class ControlsSubState extends MusicBeatSubstate
 					text.targetY = myID;
 					text.ID = myID;
 					lastID = myID;
+					if (!text.bold) text.letterColor = FlxColor.WHITE;
 
 					if(!isDisplayKey)
 					{
@@ -176,7 +173,7 @@ class ControlsSubState extends MusicBeatSubstate
 				myID++;
 			}
 		}
-		updateText();
+		updateText(0, false);
 	}
 
 	function addCenteredText(text:Alphabet, option:Array<Dynamic>, id:Int)
@@ -212,6 +209,7 @@ class ControlsSubState extends MusicBeatSubstate
 			attach.ID = Math.floor(grpBinds.length / 2);
 			attach.snapToPosition();
 			attach.y += FlxG.height * 2;
+			attach.letterColor = FlxColor.WHITE;
 			grpBinds.add(attach);
 
 			playstationCheck(attach);
@@ -261,6 +259,7 @@ class ControlsSubState extends MusicBeatSubstate
 		attach.ID = bind.ID;
 		attach.x = bind.x;
 		attach.y = bind.y;
+		attach.letterColor = FlxColor.WHITE;
 		
 		playstationCheck(attach);
 		attach.scaleX = Math.min(1, 230 / attach.width);
@@ -316,6 +315,7 @@ class ControlsSubState extends MusicBeatSubstate
 
 					bindingText = new Alphabet(FlxG.width / 2, 160, Language.getPhrase('controls_rebinding', 'Rebinding {1}', [options[curOptions[curSelected]][3]]), false);
 					bindingText.alignment = CENTERED;
+					bindingText.letterColor = FlxColor.WHITE;
 					add(bindingText);
 					
 					bindingText2 = new Alphabet(FlxG.width / 2, 340, Language.getPhrase('controls_rebinding2', 'Hold ESC to Cancel\nHold Backspace to Delete'), true);
@@ -480,7 +480,7 @@ class ControlsSubState extends MusicBeatSubstate
 		ClientPrefs.reloadVolumeKeys();
 	}
 
-	function updateText(?change:Int = 0)
+	function updateText(?change:Int = 0, playSound:Bool = true)
 	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, curOptions.length - 1);
 
@@ -506,13 +506,13 @@ class ControlsSubState extends MusicBeatSubstate
 		});
 
 		updateAlt();
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 
 	function swapMode()
 	{
-		FlxTween.cancelTweensOf(bg);
-		FlxTween.color(bg, 0.5, bg.color, onKeyboardMode ? gamepadColor : keyboardColor, {ease: FlxEase.linear});
+		FlxTween.cancelTweensOf(grid);
+		FlxTween.color(grid, 0.5, grid.color, onKeyboardMode ? gamepadColor : keyboardColor, {ease: FlxEase.linear});
 		onKeyboardMode = !onKeyboardMode;
 
 		curSelected = 0;

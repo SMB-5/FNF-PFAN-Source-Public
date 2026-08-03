@@ -13,6 +13,7 @@ class Alphabet extends FlxSpriteGroup
 
 	public var bold:Bool = false;
 	public var letters:Array<AlphaCharacter> = [];
+	public var letterColor(default, set):FlxColor = FlxColor.BLACK;
 
 	public var isMenuItem:Bool = false;
 	public var isPersonaItem:Bool = false;
@@ -87,6 +88,18 @@ class Alphabet extends FlxSpriteGroup
 		updateAlignment();
 		this.text = newText;
 		return newText;
+	}
+
+	private function set_letterColor(color:FlxColor)
+	{
+		this.letterColor = color;
+		for (letter in letters)
+		{
+			letter.colorTransform.redOffset = letterColor.red;
+			letter.colorTransform.greenOffset = letterColor.green;
+			letter.colorTransform.blueOffset = letterColor.blue;
+		}
+		return color;
 	}
 
 	public function clearLetters()
@@ -235,6 +248,9 @@ class Alphabet extends FlxSpriteGroup
 					letter.scale.x = scaleX;
 					letter.scale.y = scaleY;
 					letter.rowWidth = 0;
+					letter.colorTransform.redOffset = letterColor.red;
+					letter.colorTransform.greenOffset = letterColor.green;
+					letter.colorTransform.blueOffset = letterColor.blue;
 
 					letter.setupAlphaCharacter(xPos, rows * Y_PER_ROW * scale.y, character, bold);
 					@:privateAccess letter.parent = this;

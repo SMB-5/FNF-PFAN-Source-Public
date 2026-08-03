@@ -58,6 +58,8 @@ off: "Off"
 edit: "Edit"
 reset: "Reset"
 back: "Back"
+story_mode: "Story Mode"
+freeplay: "Freeplay"
 
 opponent: "OPPONENT"
 
@@ -133,22 +135,19 @@ description_two_keys: "Finish a Song pressing only two keys."
 reset_achievement: "Reset Achievement:"
 
 // Options
-options_note_colors: "Note Colors"
-options_controls: "Controls"
-options_mobile: "Mobile"
-options_adjust_delay_and_combo: "Adjust Delay and Combo"
-options_gameplay: "Gameplay"
-options_visuals: "Visuals"
-options_graphics: "Graphics"
-options_language: "Language"
+options_note_colors: "NOTE COLORS"
+options_controls: "CONTROLS"
+options_mobile: "MOBILE"
+options_combooffset: "COMBO/OFFSET"
+options_gameplay: "GAMEPLAY"
+options_visuals: "VISUALS"
+options_graphics: "GRAPHICS"
+options_language: "LANGUAGE"
 
-mobile_menu: "Mobile Settings"
-gameplay_menu: "Gameplay Settings"
-graphics_menu: "Graphic Settings"
-visuals_menu: "Visual Settings"
-
-customizable_description: "(This setting is customizable, click the cog!)"
-customizable_description_controller: "(This setting is customizable, press L3!)"
+mobile_menu: "MOBILE"
+gameplay_menu: "GAMEPLAY"
+graphics_menu: "GRAPHICS"
+visuals_menu: "VISUALS"
 
 // Note Colors Menu
 note_colors_tip: "Press RESET to Reset the selected Note Part."
@@ -167,34 +166,55 @@ switch_on_accept: "(Press Accept to Switch)"
 switch_on_start: "(Press Start to Switch)"
 
 // Gameplay Modifiers
+setting_locked: "This option cannot be changed on"
+setting_locked_default: "{1} will be defaulted to {2}."
+
 setting_scroll_type: "Scroll Type"
 setting_scroll_type-constant: "Constant"
 setting_scroll_type-multiplicative: "Multiplicative"
+description_scroll_type: "Which scroll type would you like to play on?"
 
 setting_scroll_speed: "Scroll Speed"
-setting_playback_rate: "Playback Rate"
-setting_health_gain_multiplier: "Health Gain Multiplier"
-setting_health_loss_multiplier: "Health Loss Multiplier"
-setting_instakill_on_miss: "Instakill on Miss"
-setting_practice_mode: "Practice Mode"
-setting_botplay: "Botplay"
-setting_play_as_opponent: "Play As Opponent"
-setting_merciless: "Merciless"
+description_scroll_speed: "How fast should the chart be?\n\nThis option changes depending on the Scroll Type option."
 
-merciless_gl: "You will need to beat the song without breaking your combo or getting a Bad/Shit rating. Good Luck! You're gonna need it!"
+setting_playback_rate: "Playback Rate"
+description_playback_rate: "How fast should the game be?"
+
+setting_health_gain_multiplier: "Health Gain Multiplier"
+description_health_gain_multiplier: "How much health should you gain when hitting notes?"
+
+setting_health_loss_multiplier: "Health Loss Multiplier"
+description_health_loss_multiplier: "How much health should you lose when hitting notes?"
+
+setting_merciless: "Merciless"
+description_merciless: "Instakills upon a Bad/Shit rating being hit or upon receiving a miss."
+
+setting_instakill_on_miss: "Instakill on Miss"
+description_instakill_on_miss: "Instakills upon receiving a miss."
+
+setting_practice_mode: "Practice Mode"
+description_practice_mode: "Disables the game over."
+
+setting_botplay: "Botplay"
+description_botplay: "Watch a perfect bot play through the song."
+
+setting_play_as_opponent: "Play As Opponent"
+description_play_as_opponent: "Play as the opponent."
 
 // Mobile Settings
 setting_edit_mobile_controls: "Edit Mobile Controls"
 description_edit_mobile_controls: "Change the current control mode or customize your controls."
 
-setting_control_alpha: "Control Alpha:"
+setting_control_alpha: "Control Alpha"
 description_control_alpha: "How opaque do you want the controls to be?"
 
 setting_enable_pause_button: "Enable Pause Button"
 description_enable_pause_button: "Whether or not the pause button should be enabled.\nYou can still press the back button to pause."
 
 // Mobile Hitbox Settings
-setting_hitbox_style: "Hitbox Style:"
+setting_hitbox_style: "Hitbox Style"
+setting_hitbox_style-normal: "Normal"
+setting_hitbox_style-gradient: "Gradient"
 description_hitbox_style: "Which hitbox style should be used?"
 
 setting_show_hints: "Show Hints"
@@ -223,20 +243,20 @@ setting_framerate: "Framerate"
 description_framerate: "Pretty self explanatory, isn't it?"
 
 // Visuals Settings
-setting_note_skins: "Note Skins:"
-setting_note_skins-default: "Default"
-setting_note_skins-future: "Future"
-setting_note_skins-chip: "Chip"
-description_note_skins: "Select your prefered Note skin."
+setting_note_skin: "Note Skin"
+setting_note_skin-default: "Default"
+setting_note_skin-future: "Future"
+setting_note_skin-chip: "Chip"
+description_note_skin: "Select your preferred note skin."
 
-setting_note_splashes: "Note Splashes:"
-setting_note_splashes-psych: "Psych"
-setting_note_splashes-diamond: "Diamond"
-setting_note_splashes-electric: "Electric"
-setting_note_splashes-sparkles: "Sparkles"
-setting_note_splashes-vanilla: "Vanilla"
-setting_note_splashes-psych-old: "Psych-Old"
-description_note_splashes: "Select your prefered Note Splash variation or turn it off."
+setting_note_splash: "Note Splash"
+setting_note_splash-psych: "Psych"
+setting_note_splash-diamond: "Diamond"
+setting_note_splash-electric: "Electric"
+setting_note_splash-sparkles: "Sparkles"
+setting_note_splash-vanilla: "Vanilla"
+setting_note_splash-psych-old: "Psych-Old"
+description_note_splash: "Select your preferred note splash variation."
 
 setting_note_splash_opacity: "Note Splash Opacity"
 description_note_splash_opacity: "How transparent the Note Splashes should be."
@@ -259,12 +279,12 @@ description_hide_hud: "If checked, hides most HUD elements."
 setting_show_misses_and_accuracy: "Show Misses and Accuracy"
 description_show_misses_and_accuracy: "If unchecked, hides Misses and Accuracy on the HUD and the Score is displayed like Base Game."
 
-setting_time_bar: "Time Bar:"
-setting_time_bar-time_left: "Time Left"
-setting_time_bar-time_elapsed: "Time Elapsed"
-setting_time_bar-song_name: "Song Name"
-setting_time_bar-disabled: "Disabled"
-description_time_bar: "What should the Time Bar display?"
+setting_time_bar_display: "Time Bar Display"
+setting_time_bar_display-time_left: "Time Left"
+setting_time_bar_display-time_elapsed: "Time Elapsed"
+setting_time_bar_display-song_name: "Song Name"
+setting_time_bar_display-disabled: "Disabled"
+description_time_bar_display: "What should the Time Bar display?"
 
 setting_subtitles: "Subtitles"
 description_subtitles: "If checked, subtitles will appear if a character speaks or sings lyrics."

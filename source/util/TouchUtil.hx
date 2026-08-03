@@ -89,6 +89,13 @@ class TouchUtil
 		}
 	}
 
+	public static function initiallyOverlapped(object:FlxObject, ?camera:FlxCamera, ?offset:FlxPoint):Bool {
+		if (TouchUtil.input == null) return false;
+		@:privateAccess
+		var justPressedPosition:FlxPoint = #if mobile TouchUtil.input.justPressedPosition #else TouchUtil.input._leftButton.justPressedPosition #end;
+		return TouchUtil.overlapsPoint(object, justPressedPosition, offset, true, camera ?? object.camera);
+	}
+
 	static function get_justPressed():Bool {
 		#if mobile
 		for (touch in FlxG.touches.list) {

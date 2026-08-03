@@ -5,6 +5,8 @@ import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
 import mobile.input.MobileInputID;
 
+import options.GameplayChangersSubstate;
+
 import states.TitleState;
 
 // Add a variable here and it will get automatically saved
@@ -126,9 +128,9 @@ class ClientPrefs {
 		'ui_down'		=> [S, DOWN],
 		'ui_right'		=> [D, RIGHT],
 		
-		'accept'		=> [SPACE, ENTER],
-		'back'			=> [BACKSPACE, ESCAPE],
-		'pause'			=> [ENTER, ESCAPE],
+		'accept'		=> [ENTER, SPACE],
+		'back'			=> [ESCAPE, BACKSPACE],
+		'pause'			=> [ESCAPE, ENTER],
 		'screenshot'    => [F3],
 		'reset'			=> [R],
 		
@@ -282,10 +284,23 @@ class ClientPrefs {
 		}
 	}
 
-	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic = null, ?customDefaultValue:Bool = false):Dynamic
+	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic = null, customDefaultValue:Bool = false, checkDisallowed:Bool = false):Dynamic
 	{
 		if(!customDefaultValue) defaultValue = defaultData.gameplaySettings.get(name);
-		return /*PlayState.isStoryMode ? defaultValue : */ (data.gameplaySettings.exists(name) ? data.gameplaySettings.get(name) : defaultValue);
+		if (data.gameplaySettings.exists(name))
+		{
+			var value:Dynamic = data.gameplaySettings.get(name);
+			if (checkDisallowed && PlayState.instance != null)
+			{
+				if (GameplayChangersSubstate.modifiers == null || GameplayChangersSubstate.modifiers.length < 1)
+					GameplayChangersSubstate.modifiers = GameplayChangersSubstate.getOptions();
+
+				if (GameplayChangersSubstate.getModifierByVariable(name)?.disallowedSongs?.contains(PlayState.SONG.song))
+					value = defaultValue;
+			}
+			return value;
+		}
+		return defaultValue;
 	}
 
 	public static function reloadVolumeKeys()

@@ -48,9 +48,12 @@ class NotesColorSubState extends MusicBeatSubstate
 
 	#if mobile
 	var backButton:BackButton;
+	var resetButton:FlxSprite;
 	#end
 
+	#if !mobile
 	var tipTxt:FlxText;
+	#end
 
 	public function new() {
 		super();
@@ -60,17 +63,6 @@ class NotesColorSubState extends MusicBeatSubstate
 		#end
 
 		onPixel = PlayState.isPixelStage;
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFEA71FD;
-		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.data.antialiasing;
-		add(bg);
-
-		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
-		grid.velocity.set(40, 40);
-		grid.alpha = 0;
-		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
-		add(grid);
 
 		modeBG = new FlxSprite(215, 85).makeGraphic(315, 115, FlxColor.BLACK);
 		modeBG.visible = false;
@@ -98,6 +90,7 @@ class NotesColorSubState extends MusicBeatSubstate
 		var text:Alphabet = new Alphabet(50, 86, 'CTRL', false);
 		text.alignment = CENTERED;
 		text.setScale(0.4);
+		text.letterColor = FlxColor.WHITE;
 		add(text);
 
 		copyButton = new FlxSprite(760, 50).loadGraphic(Paths.image('noteColorMenu/copy'));
@@ -148,8 +141,8 @@ class NotesColorSubState extends MusicBeatSubstate
 
 		spawnNotes();
 		updateNotes(true);
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
 
+		#if !mobile
 		var tipX = 20;
 		var tipY = 660;
 		var tip:FlxText = new FlxText(tipX, tipY, 0, Language.getPhrase('note_colors_tip', 'Press RESET to Reset the selected Note Part.'), 16);
@@ -162,6 +155,7 @@ class NotesColorSubState extends MusicBeatSubstate
 		tipTxt.borderSize = 2;
 		add(tipTxt);
 		updateTip();
+		#end
 
 		controllerPointer = new FlxShapeCircle(0, 0, 20, {thickness: 0}, FlxColor.WHITE);
 		controllerPointer.offset.set(20, 20);
@@ -170,9 +164,15 @@ class NotesColorSubState extends MusicBeatSubstate
 		add(controllerPointer);
 
 		#if mobile
-		backButton = new BackButton(20, FlxG.height - 250);
+		backButton = new BackButton(20, FlxG.height - 350);
 		backButton.flipX = true;
 		add(backButton);
+
+		resetButton = new FlxSprite(backButton.x + 5, backButton.y + 150, Paths.image('resetButton'));
+		resetButton.scale.set(0.85, 0.85);
+		resetButton.updateHitbox();
+		resetButton.alpha = 0.7;
+		add(resetButton);
 		#end
 		
 		FlxG.mouse.visible = !controls.controllerMode;
@@ -180,11 +180,13 @@ class NotesColorSubState extends MusicBeatSubstate
 		_lastControllerMode = controls.controllerMode;
 	}
 
+	#if !mobile
 	function updateTip()
 	{
 		var key:String = !controls.controllerMode ? Language.getPhrase('note_colors_shift', 'Shift') : Language.getPhrase('note_colors_lb', 'Left Shoulder Button');
 		tipTxt.text = Language.getPhrase('note_colors_hold_tip', 'Hold {1} + Press RESET key to fully reset the selected Note.', [key]);
 	}
+	#end
 
 	var _storedColor:FlxColor;
 	var changingNote:Bool = false;
@@ -232,7 +234,7 @@ class NotesColorSubState extends MusicBeatSubstate
 			// apparently theres no easy way to change mouse position that i know, oh well
 			*/
 			_lastControllerMode = controls.controllerMode;
-			updateTip();
+			#if !mobile updateTip(); #end
 		}
 
 		// controller things
@@ -478,7 +480,7 @@ class NotesColorSubState extends MusicBeatSubstate
 				}
 			} 
 		}
-		else if(controls.RESET && hexTypeNum < 0)
+		else if((controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end) && hexTypeNum < 0)
 		{
 			if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyPressed(LEFT_SHOULDER))
 			{

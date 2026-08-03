@@ -263,26 +263,10 @@ class ResultsSubstate extends MusicBeatSubstate
 
 		if (PlayState.isStoryMode && PlayState.campaignScore > Highscore.getWeekScore(WeekData.getCurrentWeek().weekName, PlayState.storyDifficulty) || !PlayState.isStoryMode && PlayState.instance.songScore > Highscore.getScore(PlayState.instance.songName, PlayState.storyDifficulty, PlayState.opponentMode)) 
 		{
-			var randScale:Float = FlxG.random.float(1, 1.15);
 			addEvent(5.5, ()->{
-				FlxG.sound.play(Paths.sound('persona/highscore'), 1.5);
+				FlxG.sound.play(Paths.sound('persona/highscore'));
 				highscore.visible = true;
-				highscore.angle = 9;
-				highscore.scale.set(1.2, 1.2);
-				FlxTween.shake(highscore, 0.02, 0.05);
-			});
-			addEvent(5.65, ()->{
-				highscore.angle = -7;
-				highscore.scale.set(randScale, randScale);
-			});
-			addEvent(5.8, ()->{
-				randScale = FlxG.random.float(1, 1.15);
-				highscore.angle = 4;
-				highscore.scale.set(randScale, randScale);
-			});
-			addEvent(5.95, ()->{
-				highscore.angle = 0;
-				highscore.scale.set(1, 1);
+				FlxTween.shake(highscore, 0.05, 0.25);
 			});
 		}
 

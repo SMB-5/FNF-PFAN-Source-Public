@@ -13,7 +13,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 	var noteY:Float = 90;
 	public function new()
 	{
-		title = Language.getPhrase('visuals_menu', 'Visuals Settings');
+		title = Language.getPhrase('visuals_menu', 'VISUALS');
 		rpcTitle = 'Visuals Settings Menu'; //for Discord Rich Presence
 
 		// for note skins and splash skins
@@ -41,11 +41,11 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 				ClientPrefs.data.noteSkin = ClientPrefs.defaultData.noteSkin; //Reset to default if saved noteskin couldnt be found
 
 			noteSkins.insert(0, ClientPrefs.defaultData.noteSkin); //Default skin always comes first
-			var option:Option = new Option('Note Skins:',
-				"Select your prefered Note skin.",
+			var option:Option = new Option('Note Skin',
+				"Select your preferred note skin.",
 				'noteSkin',
 				STRING,
-				noteSkins);
+				ClientPrefs.defaultData.noteSkin, noteSkins);
 			addOption(option);
 			option.onChange = onChangeNoteSkin;
 			noteOptionID = optionsArray.length - 1;
@@ -58,11 +58,11 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 				ClientPrefs.data.splashSkin = ClientPrefs.defaultData.splashSkin; //Reset to default if saved splashskin couldnt be found
 
 			noteSplashes.insert(0, ClientPrefs.defaultData.splashSkin); //Default skin always comes first
-			var option:Option = new Option('Note Splashes:',
-				"Select your prefered Note Splash variation.",
+			var option:Option = new Option('Note Splash',
+				"Select your preferred note splash variation.",
 				'splashSkin',
 				STRING,
-				noteSplashes);
+				ClientPrefs.defaultData.splashSkin, noteSplashes);
 			addOption(option);
 			option.onChange = onChangeSplashSkin;
 		}
@@ -88,7 +88,9 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Note Quantization',
 			'If checked, colors the notes based on their snap.',
 			'noteQuantization',
-			BOOL, null, null, true, options.QuantizationColorSubstate);
+			BOOL);
+		option.customizable = true;
+		option.customizationClass = options.QuantizationColorSubstate;
 		addOption(option);
 
 		var option:Option = new Option('Character Note Colors',
@@ -120,11 +122,11 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			BOOL);
 		addOption(option);
 		
-		var option:Option = new Option('Time Bar:',
+		var option:Option = new Option('Time Bar Display',
 			"What should the Time Bar display?",
 			'timeBarType',
 			STRING,
-			['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']);
+			'Time Left', ['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']);
 		addOption(option);
 
 		var option:Option = new Option('Subtitles',
@@ -161,10 +163,6 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			'How much transparent should the health bar and icons be.',
 			'healthBarAlpha',
 			PERCENT);
-		option.scrollSpeed = 1.6;
-		option.minValue = 0.0;
-		option.maxValue = 1;
-		option.changeValue = 0.1;
 		option.decimals = 1;
 		addOption(option);
 		
@@ -203,10 +201,10 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 	}
 
 	var notesShown:Bool = false;
-	override function changeSelection(change:Int = 0)
+	override function changeSelection(change:Int = 0, playSound:Bool = true)
 	{
-		super.changeSelection(change);
-		
+		super.changeSelection(change, playSound);
+		/*
 		switch(curOption.variable)
 		{
 			case 'noteSkin', 'splashSkin', 'splashAlpha':
@@ -231,18 +229,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 					}
 				}
 				notesShown = false;
-		}
-	}
-
-	var changedMusic:Bool = false;
-	function onChangePauseMusic()
-	{
-		if(ClientPrefs.data.pauseMusic == 'None')
-			FlxG.sound.music.volume = 0;
-		else
-			FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)));
-
-		changedMusic = true;
+		}*/
 	}
 
 	function onChangeNoteSkin()
@@ -319,7 +306,6 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 
 	override function destroy()
 	{
-		if(changedMusic && !OptionsState.onPlayState) FlxG.sound.playMusic(Paths.music('freakyMenu'), 1, true);
 		Note.globalRgbShaders = [];
 		super.destroy();
 	}

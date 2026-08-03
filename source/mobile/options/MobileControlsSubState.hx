@@ -34,6 +34,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 	var strumLineNotes:FlxTypedGroup<StrumNote>;
 
 	override function create() {
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF77F24E);
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.screenCenter();

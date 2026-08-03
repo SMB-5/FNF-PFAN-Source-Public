@@ -20,13 +20,15 @@ class ResetScoreSubState extends MusicBeatSubstate
 	var song:String;
 	var difficulty:Int;
 	var week:Int;
+	var opponent:Bool;
 
 	// Week -1 = Freeplay
-	public function new(song:String, difficulty:Int, character:String, week:Int = -1)
+	public function new(song:String, difficulty:Int, character:String, week:Int = -1, opponent:Bool = false)
 	{
 		this.song = song;
 		this.difficulty = difficulty;
 		this.week = week;
+		this.opponent = opponent;
 
 		super();
 
@@ -61,13 +63,13 @@ class ResetScoreSubState extends MusicBeatSubstate
 			icon.setPosition(text.x - icon.width + (10 * tooLong), text.y - 30);
 			icon.alpha = 0;
 			add(icon);
-			if (FreeplayState.opponentMode) {
-				var text:Alphabet = new Alphabet(0, text.y + 110, '(' + Language.getPhrase('Opponent') + ')', true);
-				text.screenCenter(X);
-				alphabetArray.push(text);
-				text.alpha = 0;
-				add(text);
-			}
+		}
+		if (opponent) {
+			var text:Alphabet = new Alphabet(0, text.y + 110, '(' + Language.getPhrase('Opponent') + ')', true);
+			text.screenCenter(X);
+			alphabetArray.push(text);
+			text.alpha = 0;
+			add(text);
 		}
 
 		yesText = new Alphabet(0, text.y + 150, Language.getPhrase('Yes'), true);
@@ -78,7 +80,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 		noText.screenCenter(X);
 		noText.x += 200;
 		add(noText);
-		if (week == -1 && FreeplayState.opponentMode) {
+		if (opponent) {
 			yesText.y += 100;
 			noText.y += 100;
 		}
@@ -119,7 +121,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 		} else if(pressedAccept) {
 			if(onYes) {
 				if(week == -1) {
-					Highscore.resetSong(song, difficulty, FreeplayState.opponentMode);
+					Highscore.resetSong(song, difficulty, opponent);
 				} else {
 					Highscore.resetWeek(WeekData.weeksList[week], difficulty);
 				}

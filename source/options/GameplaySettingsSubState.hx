@@ -4,7 +4,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 {
 	public function new()
 	{
-		title = Language.getPhrase('gameplay_menu', 'Gameplay Settings');
+		title = Language.getPhrase('gameplay_menu', 'GAMEPLAY');
 		rpcTitle = 'Gameplay Settings Menu'; //for Discord Rich Presence
 
 		//I'd suggest using "Downscroll" as an example for making your own option since it is the simplest here
@@ -62,11 +62,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'hitsoundVolume',
 			PERCENT);
 		addOption(option);
-		option.scrollSpeed = 1.6;
-		option.minValue = 0.0;
-		option.maxValue = 1;
-		option.changeValue = 0.1;
-		option.decimals = 1;
 		option.onChange = onChangeHitsoundVolume;
 
 		var option:Option = new Option('Rating Offset',
@@ -93,7 +88,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Good Hit Window',
 			'Changes the amount of time you have\nfor hitting a "Good" in milliseconds.',
 			'goodWindow',
-			INT);
+			FLOAT);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 30;
 		option.minValue = 15.0;
@@ -104,7 +99,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Bad Hit Window',
 			'Changes the amount of time you have\nfor hitting a "Bad" in milliseconds.',
 			'badWindow',
-			INT);
+			FLOAT);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 60;
 		option.minValue = 15.0;

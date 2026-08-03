@@ -61,7 +61,7 @@ class MusicBeatState extends FlxState
 		super.create();
 
 		if(!skip) {
-			openSubState(new CustomFadeTransition(0.6, true));
+			openSubState(new CustomFadeTransition(0.6, IN));
 		}
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
@@ -158,7 +158,7 @@ class MusicBeatState extends FlxState
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
-	public static function switchState(nextState:FlxState = null) {
+	public static function switchState(nextState:FlxState = null, fadeType:FadeType = OUT) {
 		if(nextState == null) nextState = FlxG.state;
 		if(nextState == FlxG.state)
 		{
@@ -167,23 +167,23 @@ class MusicBeatState extends FlxState
 		}
 
 		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
-		else startTransition(nextState);
+		else startTransition(nextState, fadeType);
 		FlxTransitionableState.skipNextTransIn = false;
 	}
 
-	public static function resetState() {
+	public static function resetState(fadeType:FadeType = OUT) {
 		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
-		else startTransition();
+		else startTransition(null, fadeType);
 		FlxTransitionableState.skipNextTransIn = false;
 	}
 
 	// Custom made Trans in
-	public static function startTransition(nextState:FlxState = null)
+	public static function startTransition(nextState:FlxState = null, fadeType:FadeType = OUT)
 	{
 		if(nextState == null)
 			nextState = FlxG.state;
 
-		FlxG.state.openSubState(new CustomFadeTransition(0.6, false));
+		FlxG.state.openSubState(new CustomFadeTransition(0.6, fadeType));
 		if(nextState == FlxG.state)
 			CustomFadeTransition.finishCallback = function() FlxG.resetState();
 		else

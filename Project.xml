@@ -82,7 +82,7 @@
 		<assets path="assets/translations" rename="assets" exclude="*.mp3"  unless="web"/>
 	</section>
 
-	<!-- <define name="CHECK_FOR_UPDATES" if="cpp officialBuild"/> -->
+	<define name="CHECK_FOR_UPDATES" if="cpp"/>
 
 	<section if="MODS_ALLOWED">
 		<assets path='example_mods' rename='mods' embed='false' type='template' unless="mac || mobile"/>

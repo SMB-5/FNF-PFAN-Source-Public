@@ -260,7 +260,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 			}
 
 			if (allowScrolling) {
-				if (scrollTimer >= 0.75 && scrollTween == null) {
+				if (scrollTimer >= 1 && scrollTween == null) {
 					scrollTween = FlxTween.tween(scrollBar, { alpha: 0 }, 0.25);
 				}
 				#if !mobile

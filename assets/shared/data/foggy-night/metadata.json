@@ -7,7 +7,7 @@
     "credits" : {
         "music" : "Dog",
         "chart" : "melodiekit",
-        "art" : "JuhoSprite, Clefanight, Frenchie",
-        "code" : "SMB"
+        "art" : "JuhoSprite, clefanight, Frenchie",
+        "code" : "SMB, melodiekit"
     }
 }

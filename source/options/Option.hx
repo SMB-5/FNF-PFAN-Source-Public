@@ -6,8 +6,6 @@ typedef Keybind = {
 }
 
 enum OptionType {
-	// Bool will use checkboxes
-	// Everything else will use a text
 	BOOL;
 	INT;
 	FLOAT;
@@ -19,10 +17,11 @@ enum OptionType {
 
 class Option
 {
-	public var child:Alphabet;
+	public var child:FlxText;
 	public var text(get, set):String;
 	public var onChange:Void->Void = null; //Pressed enter (on Bool type options) or pressed/held left/right (on other types)
 	public var type:OptionType = BOOL;
+	public var gameplayOption:Bool = false; //Checks ClientPrefs.data.gameplaySettings instead of ClientPrefs.data
 
 	public var customizable:Bool = false;
 	public var customizationClass:Class<Dynamic>;
@@ -33,10 +32,16 @@ class Option
 
 	public var curOption:Int = 0; //Don't change this
 	public var options:Array<String> = null; //Only used in string type
-	public var changeValue:Dynamic = 1; //Only used in int/float/percent type, how much is changed when you PRESS
-	public var minValue:Dynamic = null; //Only used in int/float/percent type
-	public var maxValue:Dynamic = null; //Only used in int/float/percent type
-	public var decimals:Int = 1; //Only used in float/percent type
+	public var changeValue:Dynamic = 1; //Only used in int/float type, how much is changed when you PRESS
+	public var minValue:Dynamic = null; //Only used in int/float type
+	public var maxValue:Dynamic = null; //Only used in int/float type
+	public var decimals:Int = 1; //Only used in float type
+
+	// You don't need to change this variable as it will automatically change by checking all of the 3 disallowed conditions
+	public var disallowed:Bool = false; //Changes option to the default value if any of the 3 disallowed conditions are true
+	public var disallowedSongs:Array<String> = null;
+	public var disallowStoryMode:Bool = false;
+	public var disallowFreeplay:Bool = false;
 
 	public var displayFormat:String = '%v'; //How String/Float/Percent/Int values are shown, %v = Current value, %d = Default value
 	public var description:String = '';
@@ -45,42 +50,43 @@ class Option
 	public var defaultKeys:Keybind = null; //Only used in keybind type
 	public var keys:Keybind = null; //Only used in keybind type
 
-	public function new(name:String, description:String = '', variable:String, type:OptionType = BOOL, ?options:Array<String> = null, ?translation:String = null, customizable = false, ?customizationClass:Class<Dynamic>)
+	public function new(name:String, description:String = '', variable:String, type:OptionType = BOOL, defaultValue:Dynamic = null, options:Array<String> = null, gameplayOption:Bool = false)
 	{
-		_name = name;
-		_translationKey = translation != null ? translation : _name;
-		this.name = Language.getPhrase('setting_$_translationKey', name);
-		this.description = Language.getPhrase('description_$_translationKey', description);
+		this.name = name;
+		this.description = description;
 		this.variable = variable;
 		this.type = type;
+		this.defaultValue = defaultValue;
 		this.options = options;
-		this.customizable = customizable;
-		this.customizationClass = customizationClass;
-		if (this.customizationClass == null) this.customizable = false;
+		this.gameplayOption = gameplayOption;
 
-		if(this.type != KEYBIND) this.defaultValue = Reflect.getProperty(ClientPrefs.defaultData, variable);
+		if (this.type != KEYBIND && this.defaultValue == null) {
+			if (gameplayOption)
+				this.defaultValue = ClientPrefs.defaultData.gameplaySettings.get(variable);
+			else
+				this.defaultValue = Reflect.getProperty(ClientPrefs.defaultData, variable);
+		}
 		switch(type)
 		{
 			case BOOL:
-				if(defaultValue == null) defaultValue = false;
+				if (this.defaultValue == null) this.defaultValue = false;
 			case INT, FLOAT:
-				if(defaultValue == null) defaultValue = 0;
+				if (this.defaultValue == null) this.defaultValue = 0;
 			case PERCENT:
-				if(defaultValue == null) defaultValue = 1;
+				if (this.defaultValue == null) this.defaultValue = 1;
 				displayFormat = '%v%';
 				changeValue = 0.01;
 				minValue = 0;
 				maxValue = 1;
-				scrollSpeed = 0.5;
-				decimals = 2;
+				scrollSpeed = 0;
 			case STRING:
-				if(options.length > 0)
-					defaultValue = options[0];
-				if(defaultValue == null)
-					defaultValue = '';
+				if (options != null && options.length > 0)
+					this.defaultValue = options[0];
+				if (this.defaultValue == null)
+					this.defaultValue = '';
 
 			case KEYBIND:
-				defaultValue = '';
+				this.defaultValue = '';
 				defaultKeys = {gamepad: 'NONE', keyboard: 'NONE'};
 				keys = {gamepad: 'NONE', keyboard: 'NONE'};
 
@@ -91,7 +97,7 @@ class Option
 		try
 		{
 			if(getValue() == null)
-				setValue(defaultValue);
+				setValue(this.defaultValue);
 	
 			switch(type)
 			{
@@ -114,26 +120,40 @@ class Option
 
 	dynamic public function getValue():Dynamic
 	{
-		var value = Reflect.getProperty(ClientPrefs.data, variable);
-		if(type == KEYBIND) return !Controls.instance.controllerMode ? value.keyboard : value.gamepad;
+		var value:Dynamic;
+		if (gameplayOption)
+			value = ClientPrefs.data.gameplaySettings.get(variable);
+		else
+			value = Reflect.getProperty(ClientPrefs.data, variable);
+
+		if (type == KEYBIND) return !Controls.instance.controllerMode ? value.keyboard : value.gamepad;
 		return value;
 	}
 
 	dynamic public function setValue(value:Dynamic)
 	{
-		if(type == KEYBIND)
+		if (type == KEYBIND)
 		{
-			var keys = Reflect.getProperty(ClientPrefs.data, variable);
+			var keys;
+			if (gameplayOption)
+				keys = ClientPrefs.data.gameplaySettings.get(variable);
+			else
+				keys = Reflect.getProperty(ClientPrefs.data, variable);
+
 			if(!Controls.instance.controllerMode) keys.keyboard = value;
 			else keys.gamepad = value;
 			return value;
 		}
-		return Reflect.setProperty(ClientPrefs.data, variable, value);
+
+		if (gameplayOption)
+			ClientPrefs.data.gameplaySettings.set(variable, value);
+		else
+			Reflect.setProperty(ClientPrefs.data, variable, value);
+
+		return value;
 	}
 
-	var _name:String = null;
 	var _text:String = null;
-	var _translationKey:String = null;
 	private function get_text()
 		return _text;
 
@@ -142,7 +162,7 @@ class Option
 		if(child != null)
 		{
 			_text = newValue;
-			child.text = Language.getPhrase('setting_$_translationKey-${getValue()}', _text);
+			child.text = Language.getPhrase('setting_$name-${getValue()}', _text);
 			return _text;
 		}
 		return null;

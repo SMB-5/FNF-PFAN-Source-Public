@@ -336,7 +336,7 @@ class PlayState extends MusicBeatState
 		// for lua
 		instance = this;
 
-		playbackRate = ClientPrefs.getGameplaySetting('songspeed');
+		playbackRate = getModifier('songspeed');
 
 		keysArray = [
 			'note_left',
@@ -351,14 +351,14 @@ class PlayState extends MusicBeatState
 		#if !mobile FlxG.mouse.visible = false; #end
 
 		// Gameplay settings
-		healthGain = ClientPrefs.getGameplaySetting('healthgain');
-		healthLoss = ClientPrefs.getGameplaySetting('healthloss');
-		merciless = ClientPrefs.getGameplaySetting('merciless');
-		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill');
-		practiceMode = ClientPrefs.getGameplaySetting('practice');
-		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
+		healthGain = getModifier('healthgain');
+		healthLoss = getModifier('healthloss');
+		merciless = getModifier('merciless');
+		instakillOnMiss = getModifier('instakill');
+		practiceMode = getModifier('practice');
+		cpuControlled = getModifier('botplay');
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
-		opponentMode = (!PlayState.isStoryMode && ClientPrefs.getGameplaySetting('opponentmode'));
+		opponentMode = getModifier('opponentmode');
 
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
@@ -439,9 +439,6 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'Mementos': new Mementos(); 
-			case 'Specialist': new Specialist();
-
 			// base game
 			case 'stage': new StageWeek1();
 			//case 'spooky': new Spooky();
@@ -1440,6 +1437,10 @@ class PlayState extends MusicBeatState
 		callOnScripts('onSongStart');
 	}
 
+	public function getModifier(name:String):Dynamic {
+		return ClientPrefs.getGameplaySetting(name, null, false, true);
+	}
+
 	private var noteTypes:Array<String> = [];
 	private var eventsPushed:Array<String> = [];
 	private var totalColumns: Int = 4;
@@ -1447,13 +1448,13 @@ class PlayState extends MusicBeatState
 	private function generateSong():Void
 	{
 		songSpeed = PlayState.SONG.speed;
-		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype');
+		songSpeedType = getModifier('scrolltype');
 		switch(songSpeedType)
 		{
 			case "multiplicative":
-				songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed');
+				songSpeed = SONG.speed * getModifier('scrollspeed');
 			case "constant":
-				songSpeed = ClientPrefs.getGameplaySetting('scrollspeed');
+				songSpeed = getModifier('scrollspeed');
 		}
 
 		var songData = SONG;
@@ -1533,7 +1534,7 @@ class PlayState extends MusicBeatState
 					// CLEAR ANY POSSIBLE GHOST NOTES
 					for (evilNote in unspawnNotes) {
 						var matches: Bool = (noteColumn == evilNote.noteData && gottaHitNote == evilNote.mustPress && evilNote.noteType == noteType);
-						if (matches && Math.abs(spawnTime - evilNote.strumTime) < flixel.math.FlxMath.EPSILON) {
+						if (matches && Math.abs(spawnTime + ClientPrefs.data.noteOffset - evilNote.strumTime) < flixel.math.FlxMath.EPSILON) {
 							if (evilNote.tail.length > 0)
 								for (tail in evilNote.tail)
 								{
@@ -2601,7 +2602,7 @@ class PlayState extends MusicBeatState
 					if(flValue1 == null) flValue1 = 1;
 					if(flValue2 == null) flValue2 = 0;
 
-					var newValue:Float = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed') * flValue1;
+					var newValue:Float = SONG.speed * getModifier('scrollspeed') * flValue1;
 					if(flValue2 <= 0)
 						songSpeed = newValue;
 					else
@@ -2954,6 +2955,7 @@ class PlayState extends MusicBeatState
 
 		if(!cpuControlled) {
 			songScore += score;
+			lerpScore += score;
 			if(!note.ratingDisabled)
 			{
 				songHits++;
@@ -3319,7 +3321,7 @@ class PlayState extends MusicBeatState
 		var subtract:Float = 0.05;
 		if(note != null) subtract = note.missHealth;
 		health -= subtract * healthLoss;
-		if(!practiceMode) songScore -= 100;
+		songScore -= 100;
 		RecalculateRating(true);
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 
@@ -3700,6 +3702,22 @@ class PlayState extends MusicBeatState
 		note.kill();
 		notes.remove(note, true);
 		note.destroy();
+	}
+
+	public function makeGhostNote(note:Note) {
+		var ghost = new Note(note.strumTime, note.noteData, null, note.isSustainNote);
+		ghost.noteType = 'MISSED_NOTE';
+		ghost.multAlpha = note.multAlpha * .5;
+		ghost.mustPress = note.mustPress;
+		ghost.ignoreNote = true;
+		ghost.blockHit = true;
+		notes.add(ghost);
+		ghost.rgbShader.r.saturation = .2;
+		ghost.rgbShader.g.saturation = .2;
+		ghost.rgbShader.b.saturation = .2;
+		ghost.rgbShader.r = ghost.rgbShader.r;
+		ghost.rgbShader.g = ghost.rgbShader.g;
+		ghost.rgbShader.b = ghost.rgbShader.b;
 	}
 
 	public function spawnHoldSplashOnNote(note:Note) {
@@ -4138,7 +4156,7 @@ class PlayState extends MusicBeatState
 	{
 		if(chartingMode) return;
 
-		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice') || ClientPrefs.getGameplaySetting('botplay'));
+		var usedPractice:Bool = (getModifier('practice') || getModifier('botplay'));
 		var char:Character = !opponentMode ? boyfriend : dad;
 		if(cpuControlled) return;
 
@@ -4252,21 +4270,5 @@ class PlayState extends MusicBeatState
 		FlxG.log.warn('This platform doesn\'t support Runtime Shaders!');
 		#end
 		return false;
-	}
-
-	function makeGhostNote(note:Note) {
-		var ghost = new Note(note.strumTime, note.noteData, null, note.isSustainNote);
-		ghost.noteType = 'MISSED_NOTE';
-		ghost.multAlpha = note.multAlpha * .5;
-		ghost.mustPress = note.mustPress;
-		ghost.ignoreNote = true;
-		ghost.blockHit = true;
-		notes.add(ghost);
-		ghost.rgbShader.r.saturation = .2;
-		ghost.rgbShader.g.saturation = .2;
-		ghost.rgbShader.b.saturation = .2;
-		ghost.rgbShader.r = ghost.rgbShader.r;
-		ghost.rgbShader.g = ghost.rgbShader.g;
-		ghost.rgbShader.b = ghost.rgbShader.b;
 	}
 }

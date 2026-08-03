@@ -198,6 +198,7 @@ class FunkinLua {
 		set('healthBarAlpha', ClientPrefs.data.healthBarAlpha);
 		set('noResetButton', ClientPrefs.data.noReset);
 		set('lowQuality', ClientPrefs.data.lowQuality);
+		set('antialiasing', ClientPrefs.data.antialiasing);
 		set('shadersEnabled', ClientPrefs.data.shaders);
 		set('scriptName', scriptName);
 		set('currentModDirectory', Mods.currentModDirectory);

@@ -227,10 +227,8 @@ class PauseSubState extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		cantUnpause -= elapsed;
-		if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;
 
-		if(controls.BACK)
+		if(controls.BACK #if android || FlxG.android.justReleased.BACK #end)
 		{
 			close();
 			return;
@@ -240,19 +238,17 @@ class PauseSubState extends MusicBeatSubstate
 		for (i in 0...buttonHitboxes.length) {
 			// backwards loop so that lower hitboxes will have higher priority on touch
 			var k = Std.int(Math.abs(i - buttonHitboxes.length) - 1);
-			if (TouchUtil.input != null) {
-				if (TouchUtil.input.overlaps(buttonHitboxes[k], camera)) {
-					#if mobile if (TouchUtil.input.justPressed) { #end
+			if (TouchUtil.overlaps(buttonHitboxes[k], camera)) {
+				#if mobile if (TouchUtil.justPressed) #end
+				{
 					if (curSelected != buttonHitboxes[k].ID) {
 						curSelected = buttonHitboxes[k].ID;
 						changeSelection();
 					}
-					else #if !mobile if (TouchUtil.input.justPressed) #end {
+					else #if !mobile if (TouchUtil.justPressed) #end
 						pressedAccept = true;
-					}
-					#if mobile } #end
-					break;
 				}
+				break;
 			}
 		}
 
@@ -276,12 +272,12 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Config':
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
-					MusicBeatState.switchState(new OptionsState());
+					OptionsState.onPlayState = true;
+					MusicBeatState.switchState(new options.MainMenuOptions());
 					FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Have a Short Rest'));
 					FlxG.sound.music.time = pauseMusic.time;
 					FlxG.sound.music.volume = pauseMusic.volume;
-					FlxTween.tween(FlxG.sound.music, {volume: 1}, 0.8);
-					OptionsState.onPlayState = true;
+					FlxTween.tween(FlxG.sound.music, {volume: 0.7}, 0.35);
 				case "Exit":
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 					PlayState.deathCounter = 0;

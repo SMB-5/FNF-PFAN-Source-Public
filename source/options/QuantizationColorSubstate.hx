@@ -65,10 +65,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 	var holdingOnObj:FlxSprite;
 
 	override function create() {
-		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
-		grid.velocity.set(40, 40);
-		grid.alpha = 0;
-		add(grid);
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
@@ -86,7 +83,6 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		editingGroup = new FlxTypedGroup<Dynamic>();
 		add(editingGroup);
 
-		FlxTween.tween(grid, { alpha: 1 }, 0.5, { ease: FlxEase.quadOut });
 		FlxTween.tween(bg, { alpha: 0.4 }, 0.5, { ease: FlxEase.quadOut });
 
 		controllerPointer = new FlxShapeCircle(0, 0, 20, {thickness: 0}, FlxColor.WHITE);

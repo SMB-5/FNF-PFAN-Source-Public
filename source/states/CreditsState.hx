@@ -233,16 +233,11 @@ class CreditsState extends MusicBeatState
 
 		if (!exiting && (scrollCredits && camFollow.y >= FlxG.height / 2 + creditsGroup.height + 200 || controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)) {
 			exiting = true;
-			FlxG.sound.music.fadeOut(0.25, 0);
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			FlxG.sound.music.fadeOut(0.35, 0, t->FlxG.sound.music.stop());
+			MusicBeatState.switchState(new MainMenuState(true), OUT_BOTTOM);
 		}
 		super.update(elapsed);
-	}
-
-	override function destroy() {
-		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
-		super.destroy();
 	}
 
 	public static function getCreditData():CreditFile {

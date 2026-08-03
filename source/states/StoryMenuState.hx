@@ -263,7 +263,7 @@ class StoryMenuState extends MusicBeatState
 			if(FlxG.keys.justPressed.CONTROL)
 			{
 				persistentUpdate = false;
-				openSubState(new GameplayChangersSubstate());
+				openSubState(new GameplayChangersSubstate(loadedWeeks[curWeek].fileName, true));
 			}
 			else if(controls.RESET)
 			{

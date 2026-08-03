@@ -7,7 +7,7 @@ class CheckboxThingie extends FlxSprite
 	public var copyAlpha:Bool = true;
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
-	public function new(x:Float = 0, y:Float = 0, ?checked = false) {
+	public function new(x:Float = 0, y:Float = 0, ?checked:Bool = false) {
 		super(x, y);
 
 		frames = Paths.getSparrowAtlas('checkboxanim');

@@ -4,19 +4,10 @@ import objects.Character;
 
 class GraphicsSettingsSubState extends BaseOptionsMenu
 {
-	var antialiasingOption:Int;
-	var boyfriend:Character = null;
 	public function new()
 	{
-		title = Language.getPhrase('graphics_menu', 'Graphics Settings');
+		title = Language.getPhrase('graphics_menu', 'GRAPHICS');
 		rpcTitle = 'Graphics Settings Menu'; //for Discord Rich Presence
-
-		boyfriend = new Character(840, 170, 'bf', true);
-		boyfriend.setGraphicSize(Std.int(boyfriend.width * 0.75));
-		boyfriend.updateHitbox();
-		boyfriend.dance();
-		boyfriend.animation.onFinish.add(function (name:String) boyfriend.dance());
-		boyfriend.visible = false;
 
 		//I'd suggest using "Low Quality" as an example for making your own option since it is the simplest here
 		var option:Option = new Option('Low Quality', //Name
@@ -31,7 +22,6 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			BOOL);
 		option.onChange = onChangeAntiAliasing; //Changing onChange is only needed if you want to make a special interaction after it changes the value
 		addOption(option);
-		antialiasingOption = optionsArray.length-1;
 
 		var option:Option = new Option('Shaders', //Name
 			"If unchecked, disables shaders.\nIt's used for some visual effects, and also CPU intensive for weaker PCs.", //Description
@@ -61,15 +51,15 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		#end
 
 		super();
-		insert(1, boyfriend);
 	}
 
 	function onChangeAntiAliasing()
 	{
+		FlxSprite.defaultAntialiasing = ClientPrefs.data.antialiasing;
 		for (sprite in members)
 		{
 			var sprite:FlxSprite = cast sprite;
-			if(sprite != null && (sprite is FlxSprite) && !(sprite is FlxText)) {
+			if(sprite != null) {
 				sprite.antialiasing = ClientPrefs.data.antialiasing;
 			}
 		}
@@ -87,11 +77,5 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			FlxG.drawFramerate = ClientPrefs.data.framerate;
 			FlxG.updateFramerate = ClientPrefs.data.framerate;
 		}
-	}
-
-	override function changeSelection(change:Int = 0)
-	{
-		super.changeSelection(change);
-		boyfriend.visible = (antialiasingOption == curSelected);
 	}
 }

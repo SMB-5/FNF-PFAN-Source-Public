@@ -171,7 +171,7 @@ class GalleryState extends MusicBeatState {
 			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
 				allowInputs = false;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
-				MusicBeatState.switchState(new MainMenuState());
+				MusicBeatState.switchState(new MainMenuState(true), OUT_BOTTOM);
 			}
 
 			if (pressedAccept)

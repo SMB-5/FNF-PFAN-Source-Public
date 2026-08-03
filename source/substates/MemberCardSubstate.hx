@@ -91,7 +91,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 		bg.alpha = 0.6;
 		add(bg);
 
-		cardBG = new FlxSprite().makeGraphic(Std.int(camCard.width), Std.int(camCard.height), color);
+		cardBG = new FlxSprite().makeGraphic(Std.int(camCard.width), Std.int(camCard.height + 1), color);
 		add(cardBG);
 
 		cardBG2 = new FlxSprite(0, 65).makeGraphic(Std.int(cardBG.width), Std.int(cardBG.height / 3), 0xFF00293F);
@@ -209,14 +209,13 @@ class MemberCardSubstate extends MusicBeatSubstate
 		add(acceptIcon);
 		#else
 		acceptTxt = new FlxText(0, cardBG.height - 55, cardBG.width, Language.getPhrase('ui_open_link', 'Open Link'), 32);
-		acceptTxt.setFormat(Paths.font('Fontsona3FES.ttf'), 32, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		acceptTxt.setFormat(Paths.font('Fontsona5Royal.ttf'), 32, FlxColor.BLACK, LEFT);
 		acceptTxt.x = cardBG.width - acceptTxt.textField.textWidth - 30;
 		add(acceptTxt);
 
 		// i'm so fucking annoyed at having to do Std.int for EVERY SINGLE TIME THAT I REFERENCE THE WIDTH AND HEIGHT IN MAKEGRAPHIC somebody please kill me - melodiekit
-		var acceptBG:FlxSprite = new FlxSprite().makeGraphic(Std.int(acceptTxt.textField.textWidth + 20), Std.int(acceptTxt.textField.textHeight + 20), 0xFF000000);
-		acceptBG.setPosition(acceptTxt.x - 8, acceptTxt.y - 7);
-		acceptBG.alpha = 0.6;
+		var acceptBG:FlxSprite = new FlxSprite(acceptTxt.x - 8, acceptTxt.y - 7).makeGraphic(Std.int(acceptTxt.textField.textWidth + 20), Std.int(acceptTxt.textField.textHeight + 20), 0xFFFFFFFF);
+		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 5, color: 0xFF000000});
 		insert(members.indexOf(acceptTxt), acceptBG);
 		#end
 
@@ -254,7 +253,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 		if (statusHeader.x < -970) statusHeader.x = 970;
 		if (statusHeader2.x < -970) statusHeader2.x = 970;
 
-		if (!exiting && (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.overlapsPoint(cardBG, TouchUtil.input.justPressedPosition, FlxPoint.get(camCard.x, camCard.y), true, camCard) #end)) {
+		if (!exiting && (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard, FlxPoint.get(camCard.x, camCard.y)) #end)) {
 			exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			#if mobile 
@@ -265,15 +264,14 @@ class MemberCardSubstate extends MusicBeatSubstate
 			FlxTween.tween(camDesc, { x: camDesc.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut, onComplete:t->close() });
 		}
 
-		if (controls.ACCEPT #if mobile || TouchUtil.overlaps(acceptTxt, camCard) && TouchUtil.overlapsPoint(acceptTxt, TouchUtil.input.justPressedPosition, FlxPoint.get(camCard.x, camCard.y), true, camCard) && TouchUtil.justReleased #end) {
+		if (controls.ACCEPT #if mobile || TouchUtil.overlaps(acceptTxt, camCard)&& TouchUtil.justPressed #end) {
 			CoolUtil.browserLoad(link);
 		}
 
 		if (allowScrolling) {
-			if (scrollTimer >= 0.75 && scrollTween == null) {
+			if (scrollTimer >= 1 && scrollTween == null) {
 				scrollTween = FlxTween.tween(scrollBar, { alpha: 0 }, 0.25);
 			}
-			#if !mobile
 			if (FlxG.mouse.wheel != 0) {
 				var val:Float = -FlxG.mouse.wheel * 13;
 				camDesc.scroll.y += val;
@@ -285,8 +283,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 				scrollBar.y += val * (camDesc.height / (descTxt.textField.textHeight + 16));
 				scrollTimer = 0;
 			}
-			#end
-			if (TouchUtil.pressed && (TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
+			if (TouchUtil.pressed && (TouchUtil.initiallyOverlapped(descBox, camCard, FlxPoint.get(camCard.x, camCard.y)) && TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
 				if (TouchUtil.justPressed) {
 					holdingBox = true;
 					#if mobile prevMouseY += TouchUtil.input.viewY; #end

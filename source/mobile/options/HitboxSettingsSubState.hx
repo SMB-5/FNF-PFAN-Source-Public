@@ -10,11 +10,11 @@ class HitboxSettingsSubState extends BaseOptionsMenu
 		title = '';
 		rpcTitle = 'Mobile Settings Menu';
 
-		var option:Option = new Option('Hitbox Style:',
+		var option:Option = new Option('Hitbox Style',
 			'Which hitbox style should be used?',
 			'hitboxStyle',
 			STRING,
-			MobileData.hitboxStyles);
+			'Normal', MobileData.hitboxStyles);
 		addOption(option);
 
 		var option:Option = new Option('Show Hints',
@@ -25,7 +25,10 @@ class HitboxSettingsSubState extends BaseOptionsMenu
 
 		super();
 
-		bg.alpha = 0.75;
-		bg.color = 0xFFFFFFFF;
+		var bg:FlxSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
+		bg.setGraphicSize(FlxG.width, FlxG.height);
+		bg.updateHitbox();
+		bg.alpha = 0.8;
+		insert(0, bg);
 	}
 }

@@ -10,7 +10,7 @@ import objects.AttachedSprite;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 
-import options.GameplayChangersSubstate;
+import options.GameplayChangersSubstate as Changers;
 import substates.MusicPlayerSubstate;
 import substates.ResetScoreSubState;
 import substates.StickerSubState;
@@ -51,12 +51,10 @@ class FreeplayState extends MusicBeatState
 	var rankSprites:Array<AttachedSprite> = [];
 	private var curPlaying:Bool = false;
 
-	public static var opponentMode:Bool = false;
-	public static var onDisallowedSong:Bool = false;
-
-	var gameplayModifiers:Map<String, GameplayOption> = [];
+	var opponentMode(get, never):Bool;
 
 	var bg:FlxSprite;
+	var grid:FlxBackdrop;
 	var songBG:FlxSprite;
 	var bgHitbox:FlxObject;
 	var bar:FlxSprite;
@@ -108,12 +106,12 @@ class FreeplayState extends MusicBeatState
 
 		#if !mobile FlxG.mouse.visible = true; #end
 
-		var bg:FlxSprite = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
+		bg = new FlxSprite(-150, -110).loadGraphic(Paths.image('title-bg'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.setGraphicSize(Std.int(bg.width * 0.9));
 		add(bg);
 
-		var grid:FlxBackdrop = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
+		grid = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
 		grid.velocity.set(40, 40);
 		grid.alpha = 0;
 		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
@@ -186,12 +184,18 @@ class FreeplayState extends MusicBeatState
 
 		#if !mobile
 		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'movement', 1, 'ui_select', 0.1, 18);
-		movementIcon.icons[2].y = movementIcon.y - 25;
-		for (i in 0...movementIcon.icons.length) {
-			if (i == 0) continue;
-			movementIcon.icons[i].x -= i == 3 ? 10 : 5;
+		if (!controls.controllerMode) {
+			movementIcon.icons[2].y = movementIcon.y - 25;
+			for (i in 0...movementIcon.icons.length) {
+				if (i == 0) continue;
+				movementIcon.icons[i].x -= i == 3 ? 10 : 5;
+			}
+			movementIcon.iconText.x -= 15;
 		}
-		movementIcon.iconText.x -= 15;
+		else {
+			movementIcon.icons[0].y -= 5;
+			movementIcon.iconText.x -= 5;
+		}
 		movementIcon.iconText.y -= 5;
 		add(movementIcon);
 
@@ -221,17 +225,6 @@ class FreeplayState extends MusicBeatState
 		add(previewIcon);
 		#end
 
-		for (option in GameplayChangersSubstate.getOptions())
-		{
-			gameplayModifiers.set(option.variable, option);
-			if (option.variable.toLowerCase() == 'opponentmode')
-			{
-				opponentMode = ClientPrefs.getGameplaySetting('opponentmode');
-				if (opponentMode && option.disallowedSongs.contains(Paths.formatToSongPath(songs[curSelected].songName)))
-					opponentMode = false;
-			}
-		}
-
 		#if mobile
 		backButton = new BackButton(FlxG.width - 150, 90);
 		add(backButton);
@@ -249,7 +242,7 @@ class FreeplayState extends MusicBeatState
 		add(musicButton);
 		#end
 
-		changeSelection();
+		changeSelection(0, false);
 		updateTexts();
 		updateAllRanks();
 		super.create();
@@ -367,7 +360,11 @@ class FreeplayState extends MusicBeatState
 	{
 		for (i in 0...songs.length)
 		{
-			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, opponentMode);
+			var showOpponentScore:Bool = ClientPrefs.getGameplaySetting('opponentmode');
+			if (Changers.getModifierByVariable('opponentmode')?.disallowedSongs?.contains(songs[i].songName)) {
+				showOpponentScore = false;
+			}
+			var rating:Float = Highscore.getRating(songs[i].songName, curDifficulty, showOpponentScore);
 			var rank = rankSprites[i];
 
 			if (rank == null) continue;
@@ -455,7 +452,7 @@ class FreeplayState extends MusicBeatState
 	var holdTime:Float = 0;
 	var swiping:Bool = false;
 	var prevSelected:Int = curSelected;
-	var justChanged:Bool = false;
+	#if mobile var justChanged:Bool = false; #end
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.7)
@@ -484,17 +481,17 @@ class FreeplayState extends MusicBeatState
 
 		if (missingText.visible && (FlxG.keys.justPressed.ANY || TouchUtil.justPressed)) missingText.visible = missingTextBG.visible = false;
 
+		if (!opponentMode) {
+			scoreText.text = Language.getPhrase('personal_best', 'HIGHSCORE: {1} ({2}%)', [lerpScore, ratingSplit.join('.')]);
+		}
+		else {
+			scoreText.text = Language.getPhrase('personal_best_opponent', 'OPPONENT HIGHSCORE: {1} ({2}%)', [lerpScore, ratingSplit.join('.')]);
+		}
+		positionHighscore();
+
 		var pressedAccept:Bool = controls.ACCEPT;
 		if (!pickedRandom)
-		{
-			if (!opponentMode) {
-				scoreText.text = Language.getPhrase('personal_best', 'HIGHSCORE: {1} ({2}%)', [lerpScore, ratingSplit.join('.')]);
-			}
-			else {
-				scoreText.text = Language.getPhrase('personal_best_opponent', 'OPPONENT HIGHSCORE: {1} ({2}%)', [lerpScore, ratingSplit.join('.')]);
-			}
-			positionHighscore();
-			
+		{			
 			if (songs.length > 1)
 			{
 				if (FlxG.keys.justPressed.HOME || FlxG.keys.justPressed.END)
@@ -545,7 +542,7 @@ class FreeplayState extends MusicBeatState
 					}
 				}
 
-				if ((TouchUtil.overlaps(bgHitbox) || swiping) && TouchUtil.pressed) {
+				if ((TouchUtil.overlaps(bgHitbox) && TouchUtil.initiallyOverlapped(bgHitbox) || swiping) && TouchUtil.pressed) {
 					@:privateAccess
 					var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
 					var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(FlxG.camera).y;
@@ -566,33 +563,32 @@ class FreeplayState extends MusicBeatState
 				else if (swiping) {
 					swiping = false;
 				}
-
-				if ((TouchUtil.overlaps(leftArrow) || TouchUtil.overlaps(rightArrow)) && TouchUtil.justPressed #if mobile || TouchUtil.input != null && TouchUtil.overlapsPoint(catText, TouchUtil.input.justPressedPosition) && TouchUtil.justSwiped && !justChanged #end) {
-					var wentLeft:Bool = TouchUtil.overlaps(leftArrow);
-					#if mobile
-					if (TouchUtil.justSwiped && TouchUtil.swipe != null) wentLeft = TouchUtil.swipe.endPosition.x < TouchUtil.swipe.startPosition.x;
-					#end
-					curCategory = FlxMath.wrap(curCategory + (wentLeft ? -1 : 1), 0, categories.length - 1);
-					regenerateSongs();
-					justChanged = true;
-				}
-				else if (TouchUtil.justReleased && justChanged) justChanged = false;
 			}
 
-			if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
-			{
-				curCategory = FlxMath.wrap(curCategory + (controls.UI_LEFT_P ? -1 : 1), 0, categories.length - 1);
-				updateDots();
+			var keyboardPressed:Bool = controls.UI_LEFT_P || controls.UI_RIGHT_P;
+			var arrowPressed:Bool = (TouchUtil.overlaps(leftArrow) || TouchUtil.overlaps(rightArrow)) && TouchUtil.justPressed;
+			#if mobile
+			var swipePressed:Bool = TouchUtil.input != null && TouchUtil.overlapsPoint(catText, TouchUtil.input.justPressedPosition) && TouchUtil.justSwiped && !justChanged;
+			#end
+
+			if (keyboardPressed || arrowPressed #if mobile || swipePressed #end) {
+				var wentLeft:Bool = controls.UI_LEFT_P || TouchUtil.overlaps(leftArrow);
+				#if mobile
+				if (TouchUtil.justSwiped && TouchUtil.swipe != null) wentLeft = TouchUtil.swipe.endPosition.x > TouchUtil.swipe.startPosition.x;
+				#end
+				curCategory = FlxMath.wrap(curCategory + (wentLeft ? -1 : 1), 0, categories.length - 1);
 				regenerateSongs();
+				#if mobile justChanged = true; #end
 			}
+			#if mobile else if (TouchUtil.justReleased && justChanged) justChanged = false; #end
 
 			if (FlxG.keys.justPressed.CONTROL #if mobile || TouchUtil.overlaps(modsButton) && TouchUtil.justPressed #end)
 			{
-				openSubState(new GameplayChangersSubstate(this));
+				openSubState(new Changers(songs[curSelected].songName));
 			}
 			else if (songs[curSelected].songName.toLowerCase() != 'random' && (controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end))
 			{
-				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
+				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter, opponentMode));
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 			}
 		}
@@ -600,7 +596,7 @@ class FreeplayState extends MusicBeatState
 		if ((controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) && !pickedRandom)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			MusicBeatState.switchState(new MainMenuState(true), OUT_BOTTOM);
 		}
 
 		if ((FlxG.keys.justPressed.SPACE #if mobile || TouchUtil.overlaps(musicButton) && TouchUtil.justPressed #end) && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
@@ -634,17 +630,6 @@ class FreeplayState extends MusicBeatState
 
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-
-			var shouldSave:Bool = false;
-			for (option in gameplayModifiers)
-			{
-				if (option.disallowedSongs.contains(songLowercase) && option.getValue() != option.defaultValue)
-				{
-					option.setValue(option.defaultValue);
-					shouldSave = true;
-				}
-			}
-			if (shouldSave) ClientPrefs.saveSettings();
 
 			try
 			{
@@ -694,12 +679,7 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0, playSound:Bool = true, portraitUpdate:Bool = true)
 	{
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = songs.length - 1;
-		if (curSelected >= songs.length)
-			curSelected = 0;
+		curSelected = FlxMath.wrap(curSelected + change, 0, songs.length - 1);
 
 		if (songs[curSelected] == null) return;
 		Mods.currentModDirectory = songs[curSelected].folder;
@@ -711,20 +691,6 @@ class FreeplayState extends MusicBeatState
 		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty, opponentMode);
 		#end
 		positionHighscore();
-
-		if (gameplayModifiers.get('opponentmode') != null)
-		{
-			if (opponentMode && gameplayModifiers.get('opponentmode').disallowedSongs?.contains(Paths.formatToSongPath(songs[curSelected].songName)))
-			{
-				opponentMode = false;
-				onDisallowedSong = true;
-			}
-			else if (onDisallowedSong && !gameplayModifiers.get('opponentmode').disallowedSongs?.contains(Paths.formatToSongPath(songs[curSelected].songName)))
-			{
-				opponentMode = true;
-				onDisallowedSong = false;
-			}
-		}
 
 		#if mobile
 		if (musicButton != null) musicButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
@@ -824,7 +790,15 @@ class FreeplayState extends MusicBeatState
 		super.destroy();
 
 		FlxG.autoPause = ClientPrefs.data.autoPause;
-	}	
+	}
+
+	function get_opponentMode():Bool
+	{
+		if (Changers.getModifierByVariable('opponentmode')?.disallowedSongs?.contains(songs[curSelected].songName)) {
+			return false;
+		}
+		return ClientPrefs.getGameplaySetting('opponentmode');
+	}
 }
 
 class CategoryMetadata

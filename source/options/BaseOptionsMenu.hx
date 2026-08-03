@@ -1,4 +1,11 @@
+// FlxText is ragebait
+// I hate this class
+
 package options;
+
+import flixel.ui.FlxBar;
+
+import flixel.addons.display.shapes.FlxShapeCircle;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
@@ -9,673 +16,972 @@ import objects.CheckboxThingie;
 import objects.AttachedSprite;
 import objects.AttachedText;
 import options.Option;
-import backend.InputFormatter;
+
+import backend.WeekData;
 
 class BaseOptionsMenu extends MusicBeatSubstate
 {
-	private var ignoreCheck:Bool = false;
+	private var x:Null<Float> = null;
+	private var y:Null<Float> = null;
+	private var width:Null<Int> = null;
+	private var height:Null<Int> = null;
+
+	private var camOptions:FlxCamera;
+	private var camUI:FlxCamera;
 
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
-	private var floatSelected:Float = 0;
-	private var prevSelected:Int = 0;
+	private var selectedOption:Bool = false;
+	private var selectedSubOption:Int = 0;
 	private var optionsArray:Array<Option>;
 
-	private var grpOptions:FlxTypedGroup<Alphabet>;
-	private var optionHitboxes:Array<AttachedSprite> = [];
-	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
-	private var grpTexts:FlxTypedGroup<AttachedText>;
-	private var settingGroup:FlxTypedGroup<AttachedSprite>;
+	private var holdingBox:Bool = false;
+	private var allowScrolling:Bool = false;
+	private var scrollBar:FlxSprite;
+	private var scrollTimer:Float = 0;
+	private var scrollTween:FlxTween;
 
-	private var descBox:FlxSprite;
-	private var descText:FlxText;
+	private var bg:FlxSprite;
+	private var patternBG:FlxSprite;
+	private var outlineBG:FlxSprite;
+	private var optionHeader:FlxText;
+	private var optionHeader2:FlxText;
+
+	// Five. Hundred. Groups.
+	private var grpBackgrounds:FlxSpriteGroup;
+	private var grpOptions:FlxTypedGroup<FlxText>;
+	private var grpInfos:FlxTypedGroup<FlxSprite>;
+	private var grpReset:FlxTypedGroup<FlxSprite>;
+	private var grpSettings:FlxTypedGroup<FlxSprite>;
+	private var grpValues:FlxTypedGroup<FlxText>;
+	private var grpArrows:FlxTypedGroup<FlxText>;
+	private var grpEdits:FlxTypedGroup<FlxSprite>;
+	private var grpLocked:FlxTypedGroup<FlxSprite>;
+	private var grpLockedDesc:FlxTypedGroup<FlxSprite>;
+	private var grpDesc:FlxTypedGroup<FlxSprite>;
+	private var lineArray:Array<Array<FlxSprite>> = [];
+	private var barArray:Array<Array<FlxSprite>> = [];
+
+	public var songOrWeek:String = '';
+	public var storyMode:Bool = false;
+	private var disallowedString:String = '';
 
 	#if mobile
-	private var leftArrow:Alphabet;
-	private var rightArrow:Alphabet;
 	private var backButton:BackButton;
-	private var resetButton:FlxSprite;
 	#end
 
 	public var title:String;
 	public var rpcTitle:String;
+	public var useRPC:Bool = true;
 
-	public var bg:FlxSprite;
-	public function new()
-	{
+	public function new(songOrWeek:String = '', storyMode:Bool = false) {
 		super();
 
-		if(title == null) title = 'Options';
-		if(rpcTitle == null) rpcTitle = 'Options Menu';
+		if (title == null) title = 'Options';
+		if (rpcTitle == null) rpcTitle = 'Options Menu';
 		
 		#if DISCORD_ALLOWED
-		DiscordClient.changePresence(rpcTitle, null);
+		if (useRPC) DiscordClient.changePresence(rpcTitle, null);
 		#end
-		
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFea71fd;
-		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.data.antialiasing;
+
+		this.songOrWeek = songOrWeek;
+		this.storyMode = storyMode;
+
+		if (width == null) width = FlxG.width - 200;
+		if (height == null) height = FlxG.height - 70;
+		camOptions = new FlxCamera(0, 0, width, height);
+		camOptions.bgColor.alpha = 0;
+		if (x == null) x = camOptions.x = (FlxG.width - width) / 2 - 80;
+		else camOptions.x = x;
+		if (y == null) y = camOptions.y = (FlxG.height - height) / 2;
+		else camOptions.y = y;
+		camOptions.visible = false;
+		FlxG.cameras.add(camOptions, false);
+
+		camUI = new FlxCamera();
+		camUI.bgColor.alpha = 0;
+		FlxG.cameras.add(camUI, false);
+
+		cameras = [camOptions];
+
+		bg = new FlxSprite().makeGraphic(camOptions.width, camOptions.height, 0xFF454545);
+		bg.scrollFactor.set();
 		add(bg);
 
-		// avoids lagspikes while scrolling through menus!
-		grpOptions = new FlxTypedGroup<Alphabet>();
+		patternBG = new FlxSprite(0, 0, Paths.image('persona/results/resultsbg'));
+		patternBG.setGraphicSize(camOptions.width, camOptions.height);
+		patternBG.updateHitbox();
+		patternBG.scrollFactor.set();
+		patternBG.alpha = 0.4;
+		add(patternBG);
+
+		optionHeader = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height, 150, title, 120);
+		optionHeader.alignment = CENTER;
+		@:privateAccess
+		optionHeader._defaultFormat.leading = -30;
+		optionHeader.font = Paths.font('akira.otf');
+		optionHeader.camera = camUI;
+		add(optionHeader);
+
+		optionHeader2 = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height + optionHeader.height + 200, 150, title, 120);
+		optionHeader2.alignment = CENTER;
+		@:privateAccess
+		optionHeader2._defaultFormat.leading = -30;
+		optionHeader2.font = Paths.font('akira.otf');
+		optionHeader2.camera = camUI;
+		add(optionHeader2);
+
+		grpBackgrounds = new FlxSpriteGroup();
+		add(grpBackgrounds);
+
+		grpOptions = new FlxTypedGroup<FlxText>();
 		add(grpOptions);
 
-		grpTexts = new FlxTypedGroup<AttachedText>();
-		add(grpTexts);
+		grpInfos = new FlxTypedGroup<FlxSprite>();
+		add(grpInfos);
 
-		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
-		add(checkboxGroup);
+		grpReset = new FlxTypedGroup<FlxSprite>();
+		add(grpReset);
 
-		settingGroup = new FlxTypedGroup<AttachedSprite>();
-		add(settingGroup);
+		grpSettings = new FlxTypedGroup<FlxSprite>();
+		add(grpSettings);
 
-		descBox = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
-		descBox.alpha = 0.6;
-		add(descBox);
+		grpValues = new FlxTypedGroup<FlxText>();
+		add(grpValues);
 
-		var titleText:Alphabet = new Alphabet(75, 45, title, true);
-		titleText.setScale(0.6);
-		titleText.alpha = 0.4;
-		add(titleText);
+		grpArrows = new FlxTypedGroup<FlxText>();
+		add(grpArrows);
 
-		descText = new FlxText(50, 600, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		descText.scrollFactor.set();
-		descText.borderSize = 2.4;
-		add(descText);
+		grpEdits = new FlxTypedGroup<FlxSprite>();
+		add(grpEdits);
 
-		for (i in 0...optionsArray.length)
-		{
-			var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
-			optionText.isMenuItem = true;
-			optionText.targetY = i;
-			optionText.ID = i;
-			grpOptions.add(optionText);
+		grpLocked = new FlxTypedGroup<FlxSprite>();
+		add(grpLocked);
 
-			var hitbox:AttachedSprite = new AttachedSprite();
-			hitbox.makeGraphic(Std.int(optionText.width), Std.int(optionText.height), 0);
-			hitbox.sprTracker = optionText;
-			hitbox.yAdd += optionText.height;
-			hitbox.ID = i;
-			add(hitbox);
-			optionHitboxes.push(hitbox);
+		grpLockedDesc = new FlxTypedGroup<FlxSprite>();
+		add(grpLockedDesc);
+
+		grpDesc = new FlxTypedGroup<FlxSprite>();
+		add(grpDesc);
+
+		if (optionsArray.length > 9) allowScrolling = true;
+
+		for (i in 0...optionsArray.length) {
+			if (optionsArray[i].disallowStoryMode && storyMode || optionsArray[i].disallowFreeplay && !storyMode || checkDisallowedSong(optionsArray[i], songOrWeek)) {
+				optionsArray[i].disallowed = true;
+			}
+
+			var optionBG:FlxSprite = new FlxSprite(20, 30 + (70 * i)).makeGraphic(Std.int(camOptions.width - 40), 65, 0xFF000000);
+			optionBG.alpha = 0.3;
+			optionBG.ID = i;
+			grpBackgrounds.add(optionBG);
+
+			var info:FlxShapeCircle = new FlxShapeCircle(30, optionBG.y + 15, 17, {thickness: 5, color: 0xAF000000}, FlxColor.GRAY);
+			info.ID = i;
+			grpInfos.add(info);
+
+			var infoTxt:FlxText = new FlxText(info.x + 12, info.y + 2, 100, 'i', 28);
+			infoTxt.font = Paths.font('Fontsona3FES.ttf');
+			infoTxt.color = 0xFF000000;
+			infoTxt.alpha = 0.6;
+			grpInfos.add(infoTxt);
+
+			var option:FlxText = new FlxText(optionBG.x + 55, optionBG.y + 15, optionBG.width, Language.getPhrase('setting_' + optionsArray[i].name, optionsArray[i].name), 32);
+			option.font = Paths.font('Fontsona3FES.ttf');
+			option.ID = i;
+			if (option.textField.textWidth > 500) {
+				option.scale.x = option.scale.y = 500 / option.textField.textWidth;
+				option.origin.y = option.textField.textHeight / 2;
+				// i have to use a timer for some reason
+				new FlxTimer().start(0.000001, (_)->{
+					option.origin.x = 0;
+				});
+			}
+			grpOptions.add(option);
+
+			var optionWidth:Float = option.textField.textWidth * option.scale.x;
+
+			var reset = new FlxSprite(option.x + optionWidth + 13, option.y, Paths.image('resetButton'));
+			reset.setGraphicSize(40, 40);
+			reset.updateHitbox();
+			reset.color = FlxColor.GRAY;
+			reset.ID = i;
+			grpReset.add(reset);
 
 			if (optionsArray[i].customizable) {
-				#if !mobile if (!controls.controllerMode && !FlxG.mouse.visible) FlxG.mouse.visible = true; #end
-				var setting:AttachedSprite = new AttachedSprite('settingButton');
-				setting.scale.set(1.5, 1.5);
+				var setting:FlxSprite = new FlxSprite(reset.x + reset.width + 7, option.y - 1, Paths.image('settingButton'));
+				setting.scale.set(0.8, 0.8);
 				setting.updateHitbox();
+				setting.alpha = 0.8;
+				setting.color = FlxColor.GRAY;
 				setting.ID = i;
-				setting.copyAlpha = false;
-				setting.alpha = 0;
-				setting.sprTracker = optionText;
-				setting.xAdd = optionText.width + 30;
-				setting.yAdd = 50;
-				setting.offset.x = 150;
-				settingGroup.add(setting);
+				grpSettings.add(setting);
 			}
 
 			switch(optionsArray[i].type) {
-				case BOOL:
-					var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, Std.string(optionsArray[i].getValue()) == 'true');
-					checkbox.sprTracker = optionText;
-					checkbox.ID = i;
-					checkboxGroup.add(checkbox);
+				case STRING, INT, FLOAT, BOOL:
+					var leftArrow:FlxText = new FlxText(optionBG.x + optionBG.width - 325, optionBG.y + 5, 40, '<', 40);
+					leftArrow.font = Paths.font('Fontsona3FES.ttf');
+					leftArrow.ID = i;
+					grpArrows.add(leftArrow);
 
-					var hitbox:AttachedSprite = new AttachedSprite();
-					hitbox.makeGraphic(Std.int(checkbox.width), Std.int(checkbox.height), 0);
-					hitbox.sprTracker = checkbox;
-					hitbox.ID = i;
-					add(hitbox);
-					optionHitboxes.push(hitbox);
+					var rightArrow:FlxText = new FlxText(optionBG.x + optionBG.width - 50, optionBG.y + 5, 40, '>', 40);
+					rightArrow.font = Paths.font('Fontsona3FES.ttf');
+					rightArrow.ID = i;
+					grpArrows.add(rightArrow);
+
+					var curValue:String = optionsArray[i].type != BOOL ? Std.string(optionsArray[i].getValue()) : optionsArray[i].getValue() == true ? 'ON' : 'OFF';
+					var curOption:FlxText = new FlxText(0, optionBG.y + 15, 0, curValue, 28);
+					curOption.font = Paths.font('Fontsona3FES.ttf');
+					curOption.x = (leftArrow.x + rightArrow.x - curOption.textField.textWidth) / 2 + 15;
+					if (curOption.textField.textWidth >= 200) {
+						curOption.scale.x = curOption.scale.y = 200 / curOption.textField.textWidth;
+						curOption.origin.y = curOption.textField.textHeight / 2;
+					}
+					curOption.ID = i;
+					grpValues.add(curOption);
+					optionsArray[i].child = curOption;
+
+					if (optionsArray[i].type == STRING) {
+						lineArray[i] = [];
+						for (k in 0...optionsArray[i].options.length) {
+							var line = new FlxSprite(0, curOption.y + 40).makeGraphic(20, 5, 0xFFFFFFFF);
+							line.color = 0xFF676767; // 67 67 67 67 67 67
+							line.x = (curOption.x + curOption.textField.textWidth / 2) - (5 * (optionsArray[i].options.length - 1)) + (30 * k) - line.width / 2 * optionsArray[i].options.length;
+							add(line);
+							lineArray[i].push(line);
+							if (optionsArray[i].getValue() == optionsArray[i].options[k]) {
+								line.color = 0xFFFFFF00;
+							}
+						}
+					}
+				// Percent uses bar cuz it's cool!!! :D
+				case PERCENT:
+					barArray[i] = [];
+
+					var bar:FlxBar = new FlxBar(0, optionBG.y + 48, LEFT_TO_RIGHT, 170, 10, null, '', optionsArray[i].minValue, optionsArray[i].maxValue * 100);
+					bar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+					bar.x = optionBG.x + optionBG.width - bar.width - 87;
+					bar.drawRect(0, 0, bar.width, bar.height, 0, {thickness: 1, color: 0xFFFFFFFF});
+					bar.percent = optionsArray[i].getValue() * 100;
+					bar.ID = i;
+					add(bar);
+					barArray[i].push(bar);
+
+					var barCircle:FlxShapeCircle = new FlxShapeCircle(bar.x - 5, bar.y - 2, 7, {thickness: 1}, 0xFFFFFFFF);
+					barCircle.ID = i;
+					add(barCircle);
+					barArray[i].push(barCircle);
+
+					var curOption:FlxText = new FlxText(0, bar.y - 35, 300, Std.string(optionsArray[i].getValue()), 28);
+					curOption.font = Paths.font('Fontsona3FES.ttf');
+					curOption.x = bar.getMidpoint().x - curOption.textField.textWidth / 2;
+					curOption.ID = i;
+					grpValues.add(curOption);
+					optionsArray[i].child = curOption;
 				case SUBSTATE(cl):
-					optionText.x -= 80;
-					optionText.startPosition.x -= 80;
-				default:
-					optionText.x -= 80;
-					optionText.startPosition.x -= 80;
-					var valueText:AttachedText = new AttachedText('' + optionsArray[i].getValue(), optionText.width + 60);
-					valueText.sprTracker = optionText;
-					valueText.copyAlpha = true;
-					valueText.ID = i;
-					grpTexts.add(valueText);
-					optionsArray[i].child = valueText;
-					updateTextFrom(optionsArray[i]);
+					var editBG:FlxSprite = new FlxSprite(optionBG.x + optionBG.width - 260, optionBG.y + 13).makeGraphic(175, 40, 0xFFFFFFFF);
+					editBG.drawRect(0, 0, editBG.width, editBG.height, 0, {thickness: 5, color: 0xFF000000});
+					editBG.ID = i;
+					grpEdits.add(editBG);
 
-					hitbox.setGraphicSize(Std.int(optionText.width + valueText.width), Std.int(optionText.height));
-					hitbox.updateHitbox();
+					// this isn't translated for now because i literally can't figure out how to center it properly
+					var edit:FlxText = new FlxText(0, editBG.y + 3, editBG.width, 'Edit', 28);
+					edit.x = editBG.x + edit.textField.textWidth - 7;
+					edit.font = Paths.font('Fontsona5Royal.ttf');
+					edit.color = 0xFF000000;
+					grpEdits.add(edit);
+				case _:
+			}
+
+			if (optionsArray[i].disallowed) {
+				var lockedBG:FlxSprite = new FlxSprite(optionBG.x + 710, optionBG.y).makeGraphic(Std.int(optionBG.width - 710), Std.int(optionBG.height), 0xFF000000);
+				lockedBG.ID = i;
+				grpLocked.add(lockedBG);
+
+				var locked:FlxText = new FlxText(0, lockedBG.y + 13, lockedBG.width, 'LOCKED', 36);
+				locked.x = lockedBG.getMidpoint().x - 90;
+				locked.font = Paths.font('Fontsona3FES.ttf');
+				grpLocked.add(locked);
+
+				var lockedDesc:FlxSprite = new FlxSprite(lockedBG.x - 320, lockedBG.y + 70).makeGraphic(500, 210, 0xFF000000);
+				lockedDesc.alpha = 0.9;
+				lockedDesc.drawRect(0, 0, lockedDesc.width, lockedDesc.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+				lockedDesc.visible = false;
+				lockedDesc.ID = i;
+				grpLockedDesc.add(lockedDesc);
+
+				var lockedDescTxt:FlxText = new FlxText(lockedDesc.x + 20, lockedDesc.y + 10, lockedDesc.width - 40, getDisallowedString(optionsArray[i]), 20);
+				@:privateAccess
+				lockedDescTxt._defaultFormat.leading = 6;
+				lockedDescTxt.font = Paths.font('Fontsona3FES.ttf');
+				lockedDescTxt.visible = false;
+				lockedDescTxt.ID = i;
+				grpLockedDesc.add(lockedDescTxt);
+			}
+
+			var descBG:FlxSprite = new FlxSprite(info.x, info.y + 50).makeGraphic(500, 210, 0xFF000000);
+			descBG.alpha = 0.9;
+			descBG.drawRect(0, 0, descBG.width, descBG.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+			descBG.visible = false;
+			descBG.ID = i;
+			grpDesc.add(descBG);
+
+			var descTxt:FlxText = new FlxText(descBG.x + 20, descBG.y + 10, descBG.width - 40, Language.getPhrase('description_' + optionsArray[i].name, optionsArray[i].description), 20);
+			@:privateAccess
+			descTxt._defaultFormat.leading = 6;
+			descTxt.font = Paths.font('Fontsona3FES.ttf');
+			descTxt.visible = false;
+			descTxt.ID = i;
+			grpDesc.add(descTxt);
+
+			updateTextFrom(optionsArray[i]);
+		}
+
+		if (allowScrolling) {
+			for (num => desc in grpDesc) {
+				if (desc is FlxSprite && desc.y >= grpBackgrounds.height - 200) {
+					desc.y = grpInfos.members[num].y - desc.height - 20;
+					grpDesc.members[num + 1].y = desc.y + 10;
+				}
+			}
+			for (num => desc in grpLockedDesc) {
+				if (desc is FlxSprite && desc.y >= grpBackgrounds.height - 200) {
+					desc.y = grpLocked.members[num].y - desc.height - 20;
+					grpLockedDesc.members[num + 1].y = desc.y + 10;
+				}
 			}
 		}
 
+		scrollBar = new FlxSprite().makeGraphic(20, Math.round(camOptions.height * camOptions.height / grpBackgrounds.height) - 27, 0xFF000000);
+		scrollBar.x = camOptions.width - scrollBar.width;
+		scrollBar.camera = camOptions;
+		scrollBar.alpha = 0.6;
+		scrollBar.visible = allowScrolling;
+		scrollBar.scrollFactor.set();
+		add(scrollBar);
+
+		outlineBG = new FlxSprite(camOptions.x, camOptions.y).makeGraphic(camOptions.width, camOptions.height, 0);
+		outlineBG.drawRect(0, 0, outlineBG.width, outlineBG.height, 0, {thickness: 10, color: 0xFFFFFFFF});
+		outlineBG.camera = camUI;
+		outlineBG.visible = false;
+		add(outlineBG);
+
 		#if mobile
-		leftArrow = new Alphabet(0, 0, '<');
-		leftArrow.x = (FlxG.width - leftArrow.width) / 2 - 100;
-		leftArrow.visible = false;
-		add(leftArrow);
-
-		rightArrow = new Alphabet(0, 0, '>');
-		rightArrow.x = (FlxG.width - rightArrow.width) / 2 + 100;
-		rightArrow.visible = false;
-		add(rightArrow);
-
 		backButton = new BackButton();
+		backButton.x += 50;
+		backButton.camera = camUI;
 		add(backButton);
-
-		resetButton = new FlxSprite(backButton.x - 150, backButton.y, Paths.image('resetButton'));
-		add(resetButton);
 		#end
 
-		changeSelection();
-		reloadCheckboxes();
+		FlxTween.tween(camOptions, { height: height }, 0.15, { startDelay: 0.25, onComplete: _->{
+			updateCam(_);
+			enableInputs = true;
+		}, onUpdate: updateCam, onStart: _->{
+			outlineBG.setGraphicSize(outlineBG.width, 10);
+			camOptions.height = 10;
+			camOptions.visible = true;
+			outlineBG.visible = true;
+			FlxG.sound.play(Paths.sound('persona/ui_open'));
+		} });
+
+		#if !mobile
+		changeSelection(0, false);
+		#end
+	}
+
+	function updateCam(_) {
+		camOptions.y = (FlxG.height - camOptions.height) / 2;
+		outlineBG.setGraphicSize(outlineBG.width, camOptions.height);
+		outlineBG.updateHitbox();
+		outlineBG.y = camOptions.y;
+		patternBG.y = (camOptions.height - patternBG.height) / 2;
 	}
 
 	public function addOption(option:Option) {
-		if(optionsArray == null || optionsArray.length < 1) optionsArray = [];
+		if (optionsArray == null || optionsArray.length < 1) optionsArray = [];
 		optionsArray.push(option);
 		return option;
 	}
 
-	var nextAccept:Int = 5;
+	var enableInputs:Bool = false;
 	var holdTime:Float = 0;
+	var holdTimeKey:Float = 0;
 	var holdValue:Float = 0;
+	var holdValueKey:Float = 0;
+	var holdTimeOption:Float = 0;
 	var swiping:Bool = false;
-
-	var bindingKey:Bool = false;
-	var holdingEsc:Float = 0;
-	var bindingBlack:FlxSprite;
-	var bindingText:Alphabet;
-	var bindingText2:Alphabet;
-	override function update(elapsed:Float)
-	{
+	// GOD
+	var hoveringArrow:Bool = false;
+	var hoveringBar:Bool = false;
+	var holdingArrow:Int = -1;
+	var holdingBar:Int = -1;
+	var holdingDesc:Int = -1;
+	var holdingLockedDesc:Int = -1;
+	var prevMouseY:Float = 0;
+	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (ignoreCheck) {
-			ignoreCheck = false;
-			return;
-		}
+		if (!enableInputs) return;
 
-		if(bindingKey)
-		{
-			bindingKeyUpdate(elapsed);
-			return;
-		}
+		scrollTimer += elapsed;
 
-		var pressedAccept:Bool = controls.ACCEPT;
-		if (!swiping #if mobile && !TouchUtil.overlaps(leftArrow) && !TouchUtil.overlaps(rightArrow) && !TouchUtil.overlaps(resetButton) && !TouchUtil.overlaps(backButton) #end) {
-			for (option in optionHitboxes) {
-				if (TouchUtil.overlaps(option, FlxG.camera) && TouchUtil.justReleased) {
-					if (curSelected != option.ID) {
-						curSelected = option.ID;
-						changeSelection();
-					}
-					else {
-						pressedAccept = true;
-					}
+		optionHeader.y -= 140 * elapsed;
+		optionHeader2.y -= 140 * elapsed;
+		if (optionHeader.y <= -optionHeader.height) optionHeader.y = optionHeader.height + 400;
+		if (optionHeader2.y <= -optionHeader2.height) optionHeader2.y = optionHeader.height + 400;
+
+		// KEYBOARD AND CONTROLLER INPUTS ARE WIP!!!!!!!!
+		#if !mobile
+		/*
+		if (FlxG.mouse.justMoved) {
+			for (bg in grpBackgrounds) {
+				if (!hoveringBar && !hoveringArrow && FlxG.mouse.overlaps(bg, camOptions) && curSelected != bg.ID) {
+					changeSelection(bg.ID, false);
 				}
 			}
 		}
 
-		if (TouchUtil.pressed) {
+		if (controls.UI_UP || controls.UI_DOWN) {
+			holdTimeKey = holdValueKey = 0;
+			holdTimeOption += elapsed;
+			var descBG:FlxSprite = grpDesc.members[curSelected];
+			var descTxt:FlxText = cast grpDesc.members[curSelected + 1];
+			if (descBG != null && descTxt != null && descBG.visible) {
+				descBG.visible = descTxt.visible = false;
+			}
+			var lockedDescBG:FlxSprite = grpLockedDesc.members[curSelected];
+			var lockedDescTxt:FlxText = cast grpLockedDesc.members[curSelected + 1];
+			if (lockedDescBG != null && lockedDescTxt != null && lockedDescBG.visible) {
+				lockedDescBG.visible = lockedDescTxt.visible = false;
+			}
+			if (controls.UI_UP_P || controls.UI_DOWN_P || holdTimeOption > 0.5) {
+				changeSelection(curSelected + (controls.UI_DOWN_P ? 1 : -1));
+			}
+		}
+		else {
+			holdTimeOption = 0;
+		}
+
+		// i apologize for this
+		if (selectedOption && (controls.UI_LEFT || controls.UI_RIGHT)) {
+			if (!curOption.disallowed) {
+				var justPressed:Bool = controls.UI_LEFT_P || controls.UI_RIGHT_P;
+				if (holdTimeKey > 0.5 || justPressed) {
+					if (curOption.type == INT || curOption.type == FLOAT) {
+						if (controls.UI_LEFT_P && curOption.getValue() > curOption.minValue || controls.UI_RIGHT_P && curOption.getValue() < curOption.maxValue) {
+							FlxG.sound.play(Paths.sound('scrollMenu'));
+						}
+						else if (holdTimeKey <= 0.5) {
+							FlxG.sound.play(Paths.sound('cancelMenu'));
+						}
+					}
+					else if (holdTimeKey <= 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
+				}
+				var add:Dynamic = null;
+				if (justPressed) {
+					if (curOption.type != STRING) {
+						add = controls.UI_LEFT_P ? -curOption.changeValue : curOption.changeValue;
+					}
+					if (curOption.type == INT || curOption.type == FLOAT) {
+						holdValueKey = FlxMath.bound(curOption.getValue() + add, curOption.minValue, curOption.maxValue);
+					}
+				}
+				switch(curOption.type) {
+					case BOOL if (justPressed):
+						curOption.setValue((curOption.getValue() == true) ? false : true);
+						curOption.change();
+						updateTextFrom(curOption);
+					default:
+						if (justPressed) {
+							switch(curOption.type) {
+								case INT, FLOAT:		
+									if (curOption.type == INT) {
+										holdValueKey = Math.round(holdValueKey);
+										curOption.setValue(holdValueKey);
+									}
+									else {
+										holdValueKey = FlxMath.roundDecimal(Math.round(holdValueKey / curOption.changeValue) * curOption.changeValue, curOption.decimals);
+										curOption.setValue(holdValueKey);
+									}
+		
+								case STRING:
+									var num:Int = curOption.curOption;
+									num = FlxMath.wrap(num + (controls.UI_LEFT_P ? -1 : 1), 0, curOption.options.length - 1);
+									curOption.curOption = num;
+									curOption.setValue(curOption.options[num]);
+
+									if (curOption.variable == 'scrolltype') {
+										var oOption:Option = getOptionByVariable('scrollspeed');
+										if (oOption != null) {
+											if (curOption.getValue() == 'constant') {
+												oOption.displayFormat = '%v';
+												oOption.maxValue = 6;
+											}
+											else {
+												oOption.displayFormat = '%vx';
+												oOption.maxValue = 3;
+												if (oOption.getValue() > 3) oOption.setValue(3);
+											}
+											updateTextFrom(oOption);
+										}
+									}
+
+								default:
+							}
+							updateTextFrom(curOption);
+							curOption.change();
+						}
+						else if (holdTimeKey > 0.5 && curOption.type != STRING) {
+							holdValueKey += curOption.scrollSpeed * elapsed * (controls.UI_LEFT_P ? -1 : 1);
+							if (holdValueKey < curOption.minValue) holdValueKey = curOption.minValue;
+							else if (holdValueKey > curOption.maxValue) holdValueKey = curOption.maxValue;
+		
+							switch(curOption.type) {
+								case INT:
+									curOption.setValue(Math.round(holdValueKey));
+								case FLOAT:
+									curOption.setValue(FlxMath.roundDecimal(holdValueKey, curOption.decimals));
+								default:
+							}
+							updateTextFrom(curOption);
+							curOption.change();
+						}
+
+						if (curOption.type != STRING) {
+							holdTimeKey += elapsed;
+						}
+				}
+			}
+		}
+		else {
+			if (holdTimeKey > 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
+			holdTimeKey = 0;
+		}
+
+		if (FlxG.keys.justPressed.F1) {
+			var descBG:FlxSprite = grpDesc.getFirst(s->s.ID == curSelected);
+			var descTxt:FlxText = cast grpDesc.members[grpDesc.members.indexOf(descBG) + 1];
+			if (descBG != null && descTxt != null) {
+				descBG.visible = descTxt.visible = !descBG.visible;
+			}
+		}
+
+		if (controls.RESET) {
+			resetOption(curOption);
+		}
+
+		if (FlxG.keys.justPressed.TAB && curOption.customizable) {
+			openSubState(Type.createInstance(curOption.customizationClass, []));
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+		}
+
+		if (controls.ACCEPT) {
+			if (!curOption.disallowed) {
+				switch(curOption.type) {
+					case SUBSTATE(cl):
+						openSubState(Type.createInstance(cl, []));
+						FlxG.sound.play(Paths.sound('scrollMenu'));
+					default:
+				}
+			}
+			else {
+				var descBG:FlxSprite = grpLockedDesc.getFirst(s->s.ID == curSelected);
+				var descTxt:FlxText = cast grpLockedDesc.members[grpLockedDesc.members.indexOf(descBG) + 1];
+				if (descBG != null && descTxt != null) {
+					descBG.visible = descTxt.visible = !descBG.visible;
+				}
+			}
+		}*/
+		#end
+
+		if (allowScrolling) {
+			if (scrollTimer >= 1 && scrollTween == null) {
+				scrollTween = FlxTween.tween(scrollBar, { alpha: 0 }, 0.25);
+			}
+			if (FlxG.mouse.wheel != 0) {
+				var val:Float = -FlxG.mouse.wheel * 13;
+				camOptions.scroll.y += val;
+				if (scrollTween != null) {
+					scrollTween.cancel();
+					scrollTween = null;
+				}
+				scrollBar.alpha = 0.6;
+				scrollBar.y += val * (camOptions.height / (grpBackgrounds.height + 50));
+				scrollTimer = 0;
+			}
+			if (!hoveringBar && !hoveringArrow && (TouchUtil.justPressed && TouchUtil.overlaps(bg, camOptions) || TouchUtil.pressed && holdingBox)) {
+				if (TouchUtil.justPressed) {
+					holdingBox = true;
+					#if mobile prevMouseY += TouchUtil.input.viewY; #end
+				}
+				@:privateAccess
+				var leftInput = #if !mobile FlxG.mouse._leftButton #else TouchUtil.input #end;
+				var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(camOptions).y;
+				if (Math.abs(offset) > 40 || swiping) {
+					swiping = true;
+					#if !mobile
+					var val:Float = camOptions.scroll.y - FlxG.mouse.deltaViewY;
+					#else
+					var val:Float = prevMouseY - TouchUtil.input.viewY;
+					#end
+					camOptions.scroll.y = val;
+					if (scrollTween != null) {
+						scrollTween.cancel();
+						scrollTween = null;
+					}
+					scrollBar.alpha = 0.6;
+					scrollBar.y = val * (camOptions.height / (grpBackgrounds.height + 50));
+					scrollTimer = 0;
+				}
+			}
+
+			camOptions.scroll.y = FlxMath.bound(camOptions.scroll.y, 0, grpBackgrounds.height - camOptions.height + 50);
+			scrollBar.y = FlxMath.bound(scrollBar.y, 0, camOptions.height - scrollBar.height);
+		}
+
+		for (num => arrow in grpArrows) {
+			var selectedOption:Option = optionsArray[arrow.ID];
+			if (selectedOption.disallowed) continue;
+			if (!swiping && !hoveringBar && (TouchUtil.pressed && hoveringArrow || TouchUtil.justPressed) && TouchUtil.overlaps(arrow, camOptions, FlxPoint.get(-12, 4))) {
+				holdingArrow = num;
+				var pressedLeft:Bool = arrow.text == '<';
+				if (holdTime > 0.5 || TouchUtil.justPressed) {
+					if (selectedOption.type == INT || selectedOption.type == FLOAT) {
+						if (pressedLeft && selectedOption.getValue() > selectedOption.minValue || !pressedLeft && selectedOption.getValue() < selectedOption.maxValue) {
+							FlxG.sound.play(Paths.sound('scrollMenu'));
+						}
+						else if (holdTime <= 0.5) {
+							FlxG.sound.play(Paths.sound('cancelMenu'));
+						}
+					}
+					else if (holdTime <= 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
+				}
+				var add:Dynamic = null;
+				if (TouchUtil.justPressed) {
+					if (selectedOption.type != STRING) {
+						add = pressedLeft ? -selectedOption.changeValue : selectedOption.changeValue;
+					}
+					if (selectedOption.type == INT || selectedOption.type == FLOAT) {
+						holdValue = FlxMath.bound(selectedOption.getValue() + add, selectedOption.minValue, selectedOption.maxValue);
+					}
+				}
+				switch(selectedOption.type) {
+					case BOOL if (TouchUtil.justPressed):
+						selectedOption.setValue((selectedOption.getValue() == true) ? false : true);
+						selectedOption.change();
+						updateTextFrom(selectedOption);
+					default:
+						if (TouchUtil.justPressed) {
+							switch(selectedOption.type) {
+								case INT, FLOAT:		
+									if (selectedOption.type == INT) {
+										holdValue = Math.round(holdValue);
+										selectedOption.setValue(holdValue);
+									}
+									else {
+										holdValue = FlxMath.roundDecimal(Math.round(holdValue / selectedOption.changeValue) * selectedOption.changeValue, selectedOption.decimals);
+										selectedOption.setValue(holdValue);
+									}
+		
+								case STRING:
+									var num:Int = selectedOption.curOption;
+									num = FlxMath.wrap(num + (pressedLeft ? -1 : 1), 0, selectedOption.options.length - 1);
+									selectedOption.curOption = num;
+									selectedOption.setValue(selectedOption.options[num]);
+
+									if (selectedOption.variable == 'scrolltype') {
+										var oOption:Option = getOptionByVariable('scrollspeed');
+										if (oOption != null) {
+											if (selectedOption.getValue() == 'constant') {
+												oOption.displayFormat = '%v';
+												oOption.maxValue = 6;
+											}
+											else {
+												oOption.displayFormat = '%vx';
+												oOption.maxValue = 3;
+												if (oOption.getValue() > 3) oOption.setValue(3);
+											}
+											updateTextFrom(oOption);
+										}
+									}
+
+								default:
+							}
+							updateTextFrom(selectedOption);
+							selectedOption.change();
+						}
+						else if (holdTime > 0.5 && selectedOption.type != STRING) {
+							holdValue = FlxMath.bound(holdValue + selectedOption.scrollSpeed * elapsed * (pressedLeft ? -1 : 1), selectedOption.minValue, selectedOption.maxValue);
+		
+							switch(selectedOption.type) {
+								case INT:
+									selectedOption.setValue(Math.round(holdValue));
+								case FLOAT:
+									selectedOption.setValue(FlxMath.roundDecimal(holdValue, selectedOption.decimals));
+								default:
+							}
+							updateTextFrom(selectedOption);
+							selectedOption.change();
+						}
+						hoveringArrow = true;
+
+						if (selectedOption.type != STRING) {
+							holdTime += elapsed;
+						}
+				}
+			}
+			else if (holdingArrow == num && (!TouchUtil.overlaps(arrow, camOptions, FlxPoint.get(-12, 4)) || TouchUtil.released)) {
+				holdTime = 0;
+				holdValue = 0;
+				hoveringArrow = false;
+				holdingArrow = -1;
+			}
+		}
+
+		for (bar in barArray) {
+			if (bar == null) continue;
+			var realBar:FlxBar = cast bar[0];
+			var selectedOption:Option = optionsArray[realBar.ID];
+			if (selectedOption.disallowed) continue;
+			if (TouchUtil.justPressed && TouchUtil.overlaps(realBar, camOptions) || TouchUtil.pressed && holdingBar == realBar.ID) {
+				holdingBar = realBar.ID;
+				var touchX = TouchUtil.input.getScreenPosition(camOptions).x;
+				var value = FlxMath.bound((touchX - realBar.x) / realBar.width, selectedOption.minValue, selectedOption.maxValue);
+				if (value != selectedOption.getValue()) {
+					selectedOption.setValue(value);
+					selectedOption.change();
+					updateTextFrom(selectedOption);
+				}
+				hoveringBar = true;
+			}
+			if (TouchUtil.justReleased && hoveringBar) hoveringBar = false;
 			@:privateAccess
-			var leftInput = #if !mobile TouchUtil.input._leftButton #else TouchUtil.input #end;
-			var offset:Float = leftInput.justPressedPosition.y - TouchUtil.input.getScreenPosition(FlxG.camera).y;
-			if (Math.abs(offset) > 10) {
-				if (!swiping) {
-					prevSelected = curSelected;
-				}
-				swiping = true;
-				floatSelected = prevSelected + offset * 0.01;
-				for (num => item in grpOptions) {
-					item.targetY = num - floatSelected;
-				}
-				var boundSelected:Int = Math.round(FlxMath.bound(floatSelected, 0, grpOptions.length - 1));
-				if (boundSelected != curSelected) {
-					curSelected = boundSelected;
-					changeSelection();
-				}
-			}
+			bar[1].x = realBar.x + realBar._filledBarRect.width - 5;
+			bar[1].x = FlxMath.bound(bar[1].x, realBar.x - 5, realBar.x + realBar.width - 5);
 		}
-		else if (swiping) {
-			swiping = false;
-			for (num => item in grpOptions) {
-				item.targetY = num - curSelected;
+		if (!hoveringBar && holdingBar != -1) {
+			holdingBar = -1;
+		}
+
+		for (num => info in grpInfos) {
+			if (info is FlxText) continue;
+			var descBG:FlxSprite = grpDesc.members[num];
+			var descTxt:FlxText = cast grpDesc.members[num + 1];
+			if (descBG == null || descTxt == null) continue;
+			if (!swiping #if mobile && TouchUtil.justReleased #end && TouchUtil.overlaps(info, camOptions) && !descBG.visible) {
+				holdingDesc = num;
+				descBG.visible = descTxt.visible = true;
+			}
+			#if !mobile
+			if (!TouchUtil.overlaps(info, camOptions) && holdingDesc == num) {
+				holdingDesc = -1;
+				descBG.visible = descTxt.visible = false;
+			}
+			#else
+			if (TouchUtil.justPressed && !TouchUtil.overlaps(info, camOptions) && holdingDesc == num) {
+				holdingDesc = -1;
+				descBG.visible = descTxt.visible = false;
+			}
+			#end
+		}
+
+		for (reset in grpReset) {
+			if (reset is FlxText) continue;
+			var selectedOption:Option = optionsArray[reset.ID];
+			if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(reset, camOptions)) {
+				resetOption(selectedOption);
 			}
 		}
 
-		if (controls.UI_UP_P)
-		{
-			changeSelection(-1);
+		for (setting in grpSettings) {
+			var selectedOption:Option = optionsArray[setting.ID];
+			if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(setting, camOptions)) {
+				openSubState(Type.createInstance(selectedOption.customizationClass, []));
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+			}
 		}
-		if (controls.UI_DOWN_P)
-		{
-			changeSelection(1);
+
+		for (edit in grpEdits) {
+			if (edit is FlxText) continue;
+			var selectedOption:Option = optionsArray[edit.ID];
+			if (selectedOption.disallowed) continue;
+			switch(selectedOption.type) {
+				case SUBSTATE(cl) if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(edit, camOptions)):
+					openSubState(Type.createInstance(cl, []));
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+				default:
+			}
+		}
+
+		for (num => locked in grpLocked) {
+			if (locked is FlxText) continue;
+			var descBG:FlxSprite = grpLockedDesc.members[num];
+			var descTxt:FlxText = cast grpLockedDesc.members[num + 1];
+			if (descBG == null || descTxt == null) continue;
+			if (!swiping #if mobile && TouchUtil.justReleased #end && TouchUtil.overlaps(locked, camOptions) && !descBG.visible) {
+				holdingLockedDesc = num;
+				descBG.visible = descTxt.visible = true;
+			}
+			#if !mobile
+			if (!TouchUtil.overlaps(locked, camOptions) && holdingLockedDesc == num) {
+				holdingLockedDesc = -1;
+				descBG.visible = descTxt.visible = false;
+			}
+			#else
+			if (TouchUtil.justPressed && !TouchUtil.overlaps(locked, camOptions) && holdingLockedDesc == num) {
+				holdingLockedDesc = -1;
+				descBG.visible = descTxt.visible = false;
+			}
+			#end
+		}
+
+		if (allowScrolling && TouchUtil.justReleased && holdingBox) {
+			holdingBox = false;
+			swiping = false;
+			#if mobile prevMouseY = FlxMath.bound(camOptions.scroll.y, 0, grpBackgrounds.height - camOptions.height + 55); #end
 		}
 
 		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
-			close();
-			FlxG.mouse.visible = false;
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-		}
-
-		if(nextAccept <= 0)
-		{
-			for (setting in settingGroup) {
-				if (setting.ID == curSelected) {
-					if (TouchUtil.overlaps(setting) && TouchUtil.justPressed || FlxG.gamepads.anyJustPressed(LEFT_STICK_CLICK)) { // idk what button to use for controller lol
-						openSubState(Type.createInstance(curOption.customizationClass, []));
-						FlxG.sound.play(Paths.sound('scrollMenu'));
-					}
-				}
-			}
-			switch(curOption.type)
-			{
-				case BOOL:
-					if(pressedAccept)
-					{
-						FlxG.sound.play(Paths.sound('scrollMenu'));
-						curOption.setValue((curOption.getValue() == true) ? false : true);
-						curOption.change();
-						reloadCheckboxes();
-					}
-			case KEYBIND:
-					if(pressedAccept)
-					{
-						bindingBlack = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
-						bindingBlack.scale.set(FlxG.width, FlxG.height);
-						bindingBlack.updateHitbox();
-						bindingBlack.alpha = 0;
-						FlxTween.tween(bindingBlack, {alpha: 0.6}, 0.35, {ease: FlxEase.linear});
-						add(bindingBlack);
-	
-						bindingText = new Alphabet(FlxG.width / 2, 160, Language.getPhrase('controls_rebinding', 'Rebinding {1}', [curOption.name]), false);
-						bindingText.alignment = CENTERED;
-						add(bindingText);
-						
-						bindingText2 = new Alphabet(FlxG.width / 2, 340, Language.getPhrase('controls_rebinding2', 'Hold ESC to Cancel\nHold Backspace to Delete'), true);
-						bindingText2.alignment = CENTERED;
-						add(bindingText2);
-	
-						bindingKey = true;
-						holdingEsc = 0;
-						ClientPrefs.toggleVolumeKeys(false);
-						FlxG.sound.play(Paths.sound('scrollMenu'));
-					}
-
-				case SUBSTATE(cl):
-					if (pressedAccept) {
-						FlxG.sound.play(Paths.sound('scrollMenu'));
-						openSubState(Type.createInstance(cl, []));
-					}
-
-				default:
-					var pressedLeft:Bool = controls.UI_LEFT;
-					var pressedRight:Bool = controls.UI_RIGHT;
-					#if mobile
-					pressedLeft = pressedLeft || TouchUtil.overlaps(leftArrow);
-					pressedRight = pressedRight || TouchUtil.overlaps(rightArrow);
-					#end
-					if((pressedLeft || pressedRight) #if mobile && TouchUtil.pressed #end)
-					{
-						var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P);
-						#if mobile
-						pressed = (pressedLeft || pressedRight) && TouchUtil.justPressed;
-						#end
-						if(holdTime > 0.5 || pressed)
-						{
-							if(pressed)
-							{
-								var add:Dynamic = null;
-								if(curOption.type != STRING)
-									add = pressedLeft ? -curOption.changeValue : curOption.changeValue;
-		
-								switch(curOption.type)
-								{
-									case INT, FLOAT, PERCENT:
-										holdValue = curOption.getValue() + add;
-										if(holdValue < curOption.minValue) holdValue = curOption.minValue;
-										else if (holdValue > curOption.maxValue) holdValue = curOption.maxValue;
-		
-										if(curOption.type == INT)
-										{
-											holdValue = Math.round(holdValue);
-											curOption.setValue(holdValue);
-										}
-										else
-										{
-											holdValue = FlxMath.roundDecimal(holdValue, curOption.decimals);
-											curOption.setValue(holdValue);
-										}
-		
-									case STRING:
-										var num:Int = curOption.curOption; //lol
-										if(pressedLeft) --num;
-										else num++;
-		
-										if(num < 0)
-											num = curOption.options.length - 1;
-										else if(num >= curOption.options.length)
-											num = 0;
-		
-										curOption.curOption = num;
-										curOption.setValue(curOption.options[num]);
-										//trace(curOption.options[num]);
-
-									default:
-							}
-								updateTextFrom(curOption);
-								curOption.change();
-								FlxG.sound.play(Paths.sound('scrollMenu'));
-							}
-							else if(curOption.type != STRING)
-							{
-								holdValue += curOption.scrollSpeed * elapsed * (pressedLeft ? -1 : 1);
-								if(holdValue < curOption.minValue) holdValue = curOption.minValue;
-								else if (holdValue > curOption.maxValue) holdValue = curOption.maxValue;
-		
-								switch(curOption.type)
-								{
-									case INT:
-										curOption.setValue(Math.round(holdValue));
-
-									case FLOAT, PERCENT:
-										curOption.setValue(FlxMath.roundDecimal(holdValue, curOption.decimals));
-
-									default:
-								}
-								updateTextFrom(curOption);
-								curOption.change();
-							}
-						}
-		
-						if(curOption.type != STRING)
-							holdTime += elapsed;
-					}
-					else if(controls.UI_LEFT_R || controls.UI_RIGHT_R #if mobile || TouchUtil.justReleased #end)
-					{
-						if(holdTime > 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
-						holdTime = 0;
-					}
-			}
-
-			if(controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end)
-			{
-				var leOption:Option = optionsArray[curSelected];
-				if(leOption.type != KEYBIND)
-				{
-					leOption.setValue(leOption.defaultValue);
-					if(leOption.type != BOOL)
-					{
-						if(leOption.type == STRING) leOption.curOption = leOption.options.indexOf(leOption.getValue());
-						updateTextFrom(leOption);
-					}
-				}
-				else
-				{
-					leOption.setValue(!Controls.instance.controllerMode ? leOption.defaultKeys.keyboard : leOption.defaultKeys.gamepad);
-					updateBind(leOption);
-				}
-				leOption.change();
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				reloadCheckboxes();
-			}
-		}
-
-		if(nextAccept > 0) {
-			nextAccept -= 1;
-		}
-
-		#if mobile
-		leftArrow.x = grpOptions.members[curSelected].x + 50;
-		rightArrow.x = leftArrow.x + 200;
-		leftArrow.y = rightArrow.y = grpOptions.members[curSelected].y + grpOptions.members[curSelected].height + 70;
-		#end
-	}
-
-	function bindingKeyUpdate(elapsed:Float)
-	{
-		if(FlxG.keys.pressed.ESCAPE || FlxG.gamepads.anyPressed(B))
-		{
-			holdingEsc += elapsed;
-			if(holdingEsc > 0.5)
-			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				closeBinding();
-			}
-		}
-		else if (FlxG.keys.pressed.BACKSPACE || FlxG.gamepads.anyPressed(BACK))
-		{
-			holdingEsc += elapsed;
-			if(holdingEsc > 0.5)
-			{
-				if (!controls.controllerMode) curOption.keys.keyboard = NONE;
-				else curOption.keys.gamepad = NONE;
-				updateBind(!controls.controllerMode ? InputFormatter.getKeyName(NONE) : InputFormatter.getGamepadName(NONE));
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				closeBinding();
-			}
-		}
-		else
-		{
-			holdingEsc = 0;
-			var changed:Bool = false;
-			if(!controls.controllerMode)
-			{
-				if(FlxG.keys.justPressed.ANY || FlxG.keys.justReleased.ANY)
-				{
-					var keyPressed:FlxKey = cast (FlxG.keys.firstJustPressed(), FlxKey);
-					var keyReleased:FlxKey = cast (FlxG.keys.firstJustReleased(), FlxKey);
-
-					if(keyPressed != NONE && keyPressed != ESCAPE && keyPressed != BACKSPACE)
-					{
-						changed = true;
-						curOption.keys.keyboard = keyPressed;
-					}
-					else if(keyReleased != NONE && (keyReleased == ESCAPE || keyReleased == BACKSPACE))
-					{
-						changed = true;
-						curOption.keys.keyboard = keyReleased;
-					}
-				}
-			}
-			else if(FlxG.gamepads.anyJustPressed(ANY) || FlxG.gamepads.anyJustPressed(LEFT_TRIGGER) || FlxG.gamepads.anyJustPressed(RIGHT_TRIGGER) || FlxG.gamepads.anyJustReleased(ANY))
-			{
-				var keyPressed:FlxGamepadInputID = NONE;
-				var keyReleased:FlxGamepadInputID = NONE;
-				if(FlxG.gamepads.anyJustPressed(LEFT_TRIGGER))
-					keyPressed = LEFT_TRIGGER; //it wasnt working for some reason
-				else if(FlxG.gamepads.anyJustPressed(RIGHT_TRIGGER))
-					keyPressed = RIGHT_TRIGGER; //it wasnt working for some reason
-				else
-				{
-					for (i in 0...FlxG.gamepads.numActiveGamepads)
-					{
-						var gamepad:FlxGamepad = FlxG.gamepads.getByID(i);
-						if(gamepad != null)
-						{
-							keyPressed = gamepad.firstJustPressedID();
-							keyReleased = gamepad.firstJustReleasedID();
-							if(keyPressed != NONE || keyReleased != NONE) break;
-						}
-					}
-				}
-
-				if(keyPressed != NONE && keyPressed != FlxGamepadInputID.BACK && keyPressed != FlxGamepadInputID.B)
-				{
-					changed = true;
-					curOption.keys.gamepad = keyPressed;
-				}
-				else if(keyReleased != NONE && (keyReleased == FlxGamepadInputID.BACK || keyReleased == FlxGamepadInputID.B))
-				{
-					changed = true;
-					curOption.keys.gamepad = keyReleased;
-				}
-			}
-
-			if(changed)
-			{
-				var key:String = null;
-				if(!controls.controllerMode)
-				{
-					if(curOption.keys.keyboard == null) curOption.keys.keyboard = 'NONE';
-					curOption.setValue(curOption.keys.keyboard);
-					key = InputFormatter.getKeyName(FlxKey.fromString(curOption.keys.keyboard));
-				}
-				else
-				{
-					if(curOption.keys.gamepad == null) curOption.keys.gamepad = 'NONE';
-					curOption.setValue(curOption.keys.gamepad);
-					key = InputFormatter.getGamepadName(FlxGamepadInputID.fromString(curOption.keys.gamepad));
-				}
-				updateBind(key);
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-				closeBinding();
-			}
+			FlxG.sound.play(Paths.sound('persona/ui_close'));
+			FlxTween.tween(camOptions, { height: 10 }, 0.15, { onComplete: (_)->{
+				updateCam(_);
+				camOptions.visible = false;
+				close();
+			}, onUpdate: updateCam });
 		}
 	}
 
 	override function closeSubState() {
-		ignoreCheck = true;
+		FlxG.inputs.reset();
 		super.closeSubState();
 	}
 
-	final MAX_KEYBIND_WIDTH = 320;
-	function updateBind(?text:String = null, ?option:Option = null)
-	{
-		if(option == null) option = curOption;
-		if(text == null)
-		{
-			text = option.getValue();
-			if(text == null) text = 'NONE';
-
-			if(!controls.controllerMode)
-				text = InputFormatter.getKeyName(FlxKey.fromString(text));
-			else
-				text = InputFormatter.getGamepadName(FlxGamepadInputID.fromString(text));
+	public function getOptionByName(name:String) {
+		for (i in optionsArray) {
+			var opt:Option = i;
+			if (opt.name == name)
+				return opt;
 		}
-
-		var bind:AttachedText = cast option.child;
-		var attach:AttachedText = new AttachedText(text, bind.offsetX);
-		attach.sprTracker = bind.sprTracker;
-		attach.copyAlpha = true;
-		attach.ID = bind.ID;
-		playstationCheck(attach);
-		attach.scaleX = Math.min(1, MAX_KEYBIND_WIDTH / attach.width);
-		attach.x = bind.x;
-		attach.y = bind.y;
-
-		option.child = attach;
-		grpTexts.insert(grpTexts.members.indexOf(bind), attach);
-		grpTexts.remove(bind);
-		bind.destroy();
+		return null;
 	}
 
-	function playstationCheck(alpha:Alphabet)
-	{
-		if(!controls.controllerMode) return;
-
-		var gamepad:FlxGamepad = FlxG.gamepads.firstActive;
-		var model:FlxGamepadModel = gamepad != null ? gamepad.detectedModel : UNKNOWN;
-		var letter = alpha.letters[0];
-		if(model == PS4)
-		{
-			switch(alpha.text)
-			{
-				case '[', ']': //Square and Triangle respectively
-					letter.image = 'alphabet_playstation';
-					letter.updateHitbox();
-					
-					letter.offset.x += 4;
-					letter.offset.y -= 5;
-			}
+	public function getOptionByVariable(variable:String) {
+		for (i in optionsArray) {
+			var opt:Option = i;
+			if (opt.variable == variable)
+				return opt;
 		}
-	}
-
-	function closeBinding()
-	{
-		bindingKey = false;
-		bindingBlack.destroy();
-		remove(bindingBlack);
-
-		bindingText.destroy();
-		remove(bindingText);
-
-		bindingText2.destroy();
-		remove(bindingText2);
-		ClientPrefs.toggleVolumeKeys(true);
+		return null;
 	}
 
 	function updateTextFrom(option:Option) {
-		if(option.type == KEYBIND)
-		{
-			updateBind(option);
-			return;
+		switch(option.type) {
+			case SUBSTATE(cl):
+			case KEYBIND:
+			case BOOL:
+				option.text = option.getValue() == true ? 'ON' : 'OFF';
+				option.child.x = (grpArrows.members[option.child.ID].x + grpArrows.members[option.child.ID + 1].x - option.child.textField.textWidth) / 2 + 15;
+			default:
+				var text:String = option.displayFormat;
+				var val:Dynamic = option.getValue();
+				if (option.type == PERCENT) val = Math.floor(val * 100);
+				var def:Dynamic = option.defaultValue;
+				option.text = text.replace('%v', val).replace('%d', def);
+				if (option.type == PERCENT) {
+					cast(barArray[option.child.ID][0], FlxBar).percent = val;
+					option.child.x = barArray[option.child.ID][0].getMidpoint().x - option.child.textField.textWidth / 2;
+				}
+				else {
+					if (grpArrows.members[option.child.ID] == null || grpArrows.members[option.child.ID + 1] == null) return; // ?????????????
+					option.child.x = (grpArrows.members[option.child.ID].x + grpArrows.members[option.child.ID + 1].x - option.child.textField.textWidth) / 2 + 15;
+					if (option.type == STRING) {
+						if (option.child.textField.textWidth >= 200) {
+							option.child.scale.x = option.child.scale.y = 200 / option.child.textField.textWidth;
+							option.child.origin.y = option.child.textField.textHeight / 2;
+						}
+						for (i => arr in lineArray) {
+							if (arr == null) continue;
+							if (i == option.child.ID) {
+								for (k => line in arr) {
+									line.color = k == option.curOption ? 0xFFFFFF00 : 0xFF676767;
+								}
+							}
+						}
+					}
+				}
 		}
+	}
 
-		var text:String = option.displayFormat;
-		var val:Dynamic = option.getValue();
-		if(option.type == PERCENT) val *= 100;
-		var def:Dynamic = option.defaultValue;
-		option.text = text.replace('%v', val).replace('%d', def);
+	function resetOption(option:Option) {
+		option.setValue(option.defaultValue);
+		if (option.type == STRING) option.curOption = option.options.indexOf(option.getValue());
+		if (option.variable == 'scrolltype') {
+			var oOption:Option = getOptionByVariable('scrollspeed');
+			if (oOption != null) {
+				if (option.getValue() == 'constant') {
+					oOption.displayFormat = '%v';
+					oOption.maxValue = 6;
+				}
+				else {
+					oOption.displayFormat = '%vx';
+					oOption.maxValue = 3;
+					if (oOption.getValue() > 3) oOption.setValue(3);
+				}
+				oOption.change();
+				updateTextFrom(oOption);
+			}
+		}
+		option.change();
+		updateTextFrom(option);
+		FlxG.sound.play(Paths.sound('cancelMenu'));
 	}
 	
-	function changeSelection(change:Int = 0)
-	{
-		curSelected = FlxMath.wrap(curSelected + change, 0, optionsArray.length - 1);
-
-		var desc:String = optionsArray[curSelected].description;
-		if (optionsArray[curSelected].customizable) {
-			var input:String = Language.getPhrase('customizable_description', '(This setting is customizable, click the cog!)');
-			if (Controls.instance.controllerMode) input = Language.getPhrase('customizable_description_controller', '(This setting is customizable, press L3!)');
-			desc = '$input\n$desc';
-		}
-		descText.text = desc;
-		descText.screenCenter(Y);
-		descText.y += 270;
-
-		for (num => item in grpOptions.members)
-		{
-			if (!swiping) item.targetY = num - curSelected;
-			item.alpha = 0.6;
-			if (item.ID == curSelected) item.alpha = 1;
-		}
-		for (text in grpTexts)
-		{
-			text.alpha = 0.6;
-			if(text.ID == curSelected) text.alpha = 1;
-		}
-		for (setting in settingGroup) {
-			if (setting.ID == curSelected) {
-				FlxTween.cancelTweensOf(setting);
-				setting.health = 0.5;
-				FlxTween.tween(setting, { 'offset.x': 0, alpha: 1 }, 0.15, { ease: FlxEase.quadOut });
-			}
-			else if (setting.health == 0.5) { // health 0.5 = previous option
-				FlxTween.cancelTweensOf(setting);
-				setting.health = 1;
-				FlxTween.tween(setting, { 'offset.x': 150, alpha: 0 }, 0.15, { ease: FlxEase.quadOut });
-			}
-		}
-
-		descBox.setPosition(descText.x - 10, descText.y - 10);
-		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
-		descBox.updateHitbox();
-
-		curOption = optionsArray[curSelected]; //shorter lol
-		FlxG.sound.play(Paths.sound('scrollMenu'));
-
-		#if mobile
-		switch(curOption.type) {
-			case STRING, INT, FLOAT, PERCENT:
-				leftArrow.visible = rightArrow.visible = true;
-			default:
-				leftArrow.visible = rightArrow.visible = false;
-		}
-		#end
+	function changeSelection(option:Int = 0, playSound:Bool = true) {
+		if (option < 0 || option > optionsArray.length - 1) return;
+		// can't use null-safe field access?
+		if (grpBackgrounds.members[curSelected] != null) grpBackgrounds.members[curSelected].alpha = 0.3;
+		curSelected = option;
+		curOption = optionsArray[curSelected];
+		if (grpBackgrounds.members[curSelected] != null) grpBackgrounds.members[curSelected].alpha = 0.6;
+		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 
-	function reloadCheckboxes()
-		for (checkbox in checkboxGroup)
-			checkbox.daValue = Std.string(optionsArray[checkbox.ID].getValue()) == 'true'; //Do not take off the Std.string() from this, it will break a thing in Mod Settings Menu
+	function checkDisallowedSong(option:Option, song:String):Bool {
+		if (option == null) return false;
+		if (!storyMode) {
+			if (option.disallowedSongs?.contains(song)) return true;
+		}
+		else {
+			// i don't know if we would want this implementation of checking the song instead of the week for story mode
+			// but we aren't using the story mode for the demo so...
+			// oh well, it's a problem for future melodie
+			var week:WeekData = WeekData.weeksLoaded.get(song);
+			if (week == null) return false;
+			for (weekSong in week.songs) {
+				if (option.disallowedSongs?.contains(weekSong[0])) return true;
+			}
+		}
+		return false;
+	}
+
+	function getDisallowedString(option:Option):String {
+		if (option == null) return '';
+		var str:String = Language.getPhrase('setting_locked', 'This option cannot be changed on');
+		if (option.disallowStoryMode && option.disallowFreeplay)
+			// only for debug, this shouldn't actually happen
+			str += ' Story Mode and Freeplay.';
+		else if (option.disallowStoryMode && storyMode)
+			str += ' ' + Language.getPhrase('Story Mode') + '.';
+		else if (option.disallowFreeplay && !storyMode)
+			str += ' ' + Language.getPhrase('Freeplay') + '.';
+		else if (songOrWeek != null && songOrWeek.length > 0)
+			str += ' ' + (storyMode ? WeekData.weeksLoaded.get(songOrWeek).weekName : songOrWeek) + '.';
+		else
+			str = 'Missing song or week. This should not happen.';
+
+		str += '\n\n' + Language.getPhrase('setting_locked_default', '{1} will be defaulted to {2}.', [option.name, option.defaultValue]);
+
+		return str;
+	}
 }

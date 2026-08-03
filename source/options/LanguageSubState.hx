@@ -16,11 +16,6 @@ class LanguageSubState extends MusicBeatSubstate
 	{
 		super();
 
-		var bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFea71fd;
-		bg.antialiasing = ClientPrefs.data.antialiasing;
-		bg.screenCenter();
-		add(bg);
 		add(grpLanguages);
 
 		//languages.push(ClientPrefs.defaultData.language); //English (US)
@@ -101,7 +96,7 @@ class LanguageSubState extends MusicBeatSubstate
 		add(backButton);
 		#end
 
-		changeSelected();
+		changeSelected(0, false);
 	}
 
 	var changedLanguage:Bool = false;
@@ -123,7 +118,7 @@ class LanguageSubState extends MusicBeatSubstate
 			{
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
-				MusicBeatState.resetState();
+				MusicBeatState.switchState(new MainMenuOptions(true));
 			}
 			else close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -132,13 +127,15 @@ class LanguageSubState extends MusicBeatSubstate
 		var pressedAccept:Bool = controls.ACCEPT;
 		for (option in grpLanguages) {
 			if (TouchUtil.overlaps(option, FlxG.camera)) {
-				#if mobile if (TouchUtil.justPressed) { #end
-				if (curSelected != option.ID) {
-					curSelected = option.ID;
-					changeSelected();
+				#if mobile if (TouchUtil.justPressed) #end
+				{
+					if (curSelected != option.ID) {
+						curSelected = option.ID;
+						changeSelected();
+					}
+					else #if !mobile if (TouchUtil.justPressed) #end
+						pressedAccept = true;
 				}
-				else #if !mobile if (TouchUtil.justPressed) #end pressedAccept = true;
-				#if mobile } #end
 			}
 		}
 		if(pressedAccept)
@@ -152,7 +149,7 @@ class LanguageSubState extends MusicBeatSubstate
 		}
 	}
 
-	function changeSelected(change:Int = 0)
+	function changeSelected(change:Int = 0, playSound:Bool = true)
 	{
 		curSelected = FlxMath.wrap(curSelected + change, 0, languages.length-1);
 		for (num => lang in grpLanguages)
@@ -161,7 +158,7 @@ class LanguageSubState extends MusicBeatSubstate
 			lang.alpha = 0.6;
 			if(num == curSelected) lang.alpha = 1;
 		}
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
 	}
 	#end
 }
