@@ -773,13 +773,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			var descBG:FlxSprite = grpDesc.members[num];
 			var descTxt:FlxText = cast grpDesc.members[num + 1];
 			if (descBG == null || descTxt == null) continue;
-			if (descBG.y + descBG.height > camOptions.scroll.y + camOptions.height) {
+			if (descBG.y + descBG.height > camOptions.scroll.y + camOptions.height && descBG.y != info.y - descBG.height - 20) {
 				descBG.y = info.y - descBG.height - 20;
+				descTxt.y = descBG.y + 10;
 			}
-			else if (descBG.y < camOptions.scroll.y) {
+			else if (descBG.y < camOptions.scroll.y && descBG.y != info.y + 50) {
 				descBG.y = info.y + 50;
+				descTxt.y = descBG.y + 10;
 			}
-			descTxt.y = descBG.y + 10;
 			if (!swiping #if mobile && TouchUtil.justReleased #end && TouchUtil.overlaps(info, camOptions) && !descBG.visible) {
 				holdingDesc = num;
 				descBG.visible = descTxt.visible = true;
@@ -830,13 +831,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			var descBG:FlxSprite = grpLockedDesc.members[num];
 			var descTxt:FlxText = cast grpLockedDesc.members[num + 1];
 			if (descBG == null || descTxt == null) continue;
-			if (descBG.y + descBG.height > camOptions.scroll.y + camOptions.height) {
+			if (descBG.y + descBG.height > camOptions.scroll.y + camOptions.height && descBG.y != locked.y - descBG.height - 20) {
 				descBG.y = locked.y - descBG.height - 20;
+				descTxt.y = descBG.y + 10;
 			}
-			else if (descBG.y < camOptions.scroll.y) {
+			else if (descBG.y < camOptions.scroll.y && descBG.y != locked.y + 70) {
 				descBG.y = locked.y + 70;
+				descTxt.y = descBG.y + 10;
 			}
-			descTxt.y = descBG.y + 10;
 			if (!swiping #if mobile && TouchUtil.justReleased #end && TouchUtil.overlaps(locked, camOptions) && !descBG.visible) {
 				holdingLockedDesc = num;
 				descBG.visible = descTxt.visible = true;
