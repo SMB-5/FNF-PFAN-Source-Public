@@ -46,10 +46,8 @@ class NotesColorSubState extends MusicBeatSubstate
 	var controllerPointer:FlxSprite;
 	var _lastControllerMode:Bool = false;
 
-	#if mobile
 	var backButton:BackButton;
 	var resetButton:FlxSprite;
-	#end
 
 	#if !mobile
 	var tipTxt:FlxText;
@@ -142,7 +140,6 @@ class NotesColorSubState extends MusicBeatSubstate
 		spawnNotes();
 		updateNotes(true);
 
-		#if !mobile
 		var tipX = 20;
 		var tipY = 660;
 		var tip:FlxText = new FlxText(tipX, tipY, 0, Language.getPhrase('note_colors_tip', 'Press RESET to Reset the selected Note Part.'), 16);
@@ -150,6 +147,7 @@ class NotesColorSubState extends MusicBeatSubstate
 		tip.borderSize = 2;
 		add(tip);
 
+		#if !mobile
 		tipTxt = new FlxText(tipX, tipY + 24, 0, '', 16);
 		tipTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipTxt.borderSize = 2;
@@ -163,17 +161,15 @@ class NotesColorSubState extends MusicBeatSubstate
 		controllerPointer.alpha = 0.6;
 		add(controllerPointer);
 
-		#if mobile
-		backButton = new BackButton(20, FlxG.height - 350);
+		backButton = new BackButton(20, FlxG.height - 360);
 		backButton.flipX = true;
 		add(backButton);
 
-		resetButton = new FlxSprite(backButton.x + 5, backButton.y + 150, Paths.image('resetButton'));
+		resetButton = new FlxSprite(backButton.x + 7, backButton.y + 150, Paths.image('resetButton'));
 		resetButton.scale.set(0.85, 0.85);
 		resetButton.updateHitbox();
 		resetButton.alpha = 0.7;
 		add(resetButton);
-		#end
 		
 		FlxG.mouse.visible = !controls.controllerMode;
 		controllerPointer.visible = controls.controllerMode;
@@ -197,7 +193,7 @@ class NotesColorSubState extends MusicBeatSubstate
 		NUMPADSEVEN => '7', NUMPADEIGHT => '8', NUMPADNINE => '9', A => 'A', B => 'B', C => 'C', D => 'D', E => 'E', F => 'F'];
 
 	override function update(elapsed:Float) {
-		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
+		if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end) {
 			FlxG.mouse.visible = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			close();
@@ -480,7 +476,7 @@ class NotesColorSubState extends MusicBeatSubstate
 				}
 			} 
 		}
-		else if((controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end) && hexTypeNum < 0)
+		else if((controls.RESET || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed) && hexTypeNum < 0)
 		{
 			if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyPressed(LEFT_SHOULDER))
 			{

@@ -29,10 +29,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var camOptions:FlxCamera;
 	private var camUI:FlxCamera;
 
+	private var keyIcons:FlxSpriteGroup;
+
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
-	private var selectedOption:Bool = false;
-	private var selectedSubOption:Int = 0;
 	private var optionsArray:Array<Option>;
 
 	private var holdingBox:Bool = false;
@@ -66,9 +66,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	public var storyMode:Bool = false;
 	private var disallowedString:String = '';
 
-	#if mobile
 	private var backButton:BackButton;
-	#end
 
 	public var title:String;
 	public var rpcTitle:String;
@@ -88,12 +86,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		this.storyMode = storyMode;
 
 		if (width == null) width = FlxG.width - 200;
-		if (height == null) height = FlxG.height - 70;
+		if (height == null) height = FlxG.height - #if !mobile 90 #else 70 #end;
 		camOptions = new FlxCamera(0, 0, width, height);
 		camOptions.bgColor.alpha = 0;
 		if (x == null) x = camOptions.x = (FlxG.width - width) / 2 - 80;
 		else camOptions.x = x;
-		if (y == null) y = camOptions.y = (FlxG.height - height) / 2;
+		if (y == null) y = camOptions.y = (FlxG.height - height) / 2 #if !mobile - 20 #end;
 		else camOptions.y = y;
 		camOptions.visible = false;
 		FlxG.cameras.add(camOptions, false);
@@ -163,6 +161,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		grpDesc = new FlxTypedGroup<FlxSprite>();
 		add(grpDesc);
+
+		keyIcons = new FlxSpriteGroup();
+		keyIcons.cameras = [camUI];
+		add(keyIcons);
 
 		if (optionsArray.length > 9) allowScrolling = true;
 
@@ -338,21 +340,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			updateTextFrom(optionsArray[i]);
 		}
 
-		if (allowScrolling) {
-			for (num => desc in grpDesc) {
-				if (desc is FlxSprite && desc.y >= grpBackgrounds.height - 200) {
-					desc.y = grpInfos.members[num].y - desc.height - 20;
-					grpDesc.members[num + 1].y = desc.y + 10;
-				}
-			}
-			for (num => desc in grpLockedDesc) {
-				if (desc is FlxSprite && desc.y >= grpBackgrounds.height - 200) {
-					desc.y = grpLocked.members[num].y - desc.height - 20;
-					grpLockedDesc.members[num + 1].y = desc.y + 10;
-				}
-			}
-		}
-
 		scrollBar = new FlxSprite().makeGraphic(20, Math.round(camOptions.height * camOptions.height / grpBackgrounds.height) - 27, 0xFF000000);
 		scrollBar.x = camOptions.width - scrollBar.width;
 		scrollBar.camera = camOptions;
@@ -367,12 +354,30 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		outlineBG.visible = false;
 		add(outlineBG);
 
-		#if mobile
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
+		keyIcons.add(movementIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		keyIcons.add(backIcon);
+
+		var acceptIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 15, FlxG.height - 44, 'accept', 0, 'ui_confirm', 0.15, 24);
+		keyIcons.add(acceptIcon);
+
+		var infoIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 15, FlxG.height - 44, controls.controllerMode ? 'X' : 'F1', 0, 'ui_view_description', 0.15, 24);
+		keyIcons.add(infoIcon);
+
+		var resetIcon:KeyIcon = new KeyIcon(infoIcon.x + infoIcon.width + 15, FlxG.height - 44, 'reset', 0, 'ui_reset', 0.15, 24);
+		keyIcons.add(resetIcon);
+
+		var customizableIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 15, FlxG.height - 44, controls.controllerMode ? 'START' : 'TAB', 0, 'ui_customize_option', 0.15, 24);
+		keyIcons.add(customizableIcon);
+		#end
+
 		backButton = new BackButton();
 		backButton.x += 50;
 		backButton.camera = camUI;
 		add(backButton);
-		#end
 
 		FlxTween.tween(camOptions, { height: height }, 0.15, { startDelay: 0.25, onComplete: _->{
 			updateCam(_);
@@ -391,7 +396,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	}
 
 	function updateCam(_) {
-		camOptions.y = (FlxG.height - camOptions.height) / 2;
+		camOptions.y = (FlxG.height - camOptions.height) / 2 #if !mobile - 20 #end;
 		outlineBG.setGraphicSize(outlineBG.width, camOptions.height);
 		outlineBG.updateHitbox();
 		outlineBG.y = camOptions.y;
@@ -409,7 +414,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var holdTimeKey:Float = 0;
 	var holdValue:Float = 0;
 	var holdValueKey:Float = 0;
-	var holdTimeOption:Float = 0;
 	var swiping:Bool = false;
 	// GOD
 	var hoveringArrow:Bool = false;
@@ -431,10 +435,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (optionHeader.y <= -optionHeader.height) optionHeader.y = optionHeader.height + 400;
 		if (optionHeader2.y <= -optionHeader2.height) optionHeader2.y = optionHeader.height + 400;
 
-		// KEYBOARD AND CONTROLLER INPUTS ARE WIP!!!!!!!!
 		#if !mobile
-		/*
 		if (FlxG.mouse.justMoved) {
+			if (holdingDesc <= -1) {
+				for (desc in grpDesc) desc.visible = false;
+			}
+			if (holdingLockedDesc <= -1) {
+				for (desc in grpLockedDesc) desc.visible = false;
+			}
 			for (bg in grpBackgrounds) {
 				if (!hoveringBar && !hoveringArrow && FlxG.mouse.overlaps(bg, camOptions) && curSelected != bg.ID) {
 					changeSelection(bg.ID, false);
@@ -442,33 +450,29 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 		}
 
-		if (controls.UI_UP || controls.UI_DOWN) {
+		if (controls.UI_UP_P || controls.UI_DOWN_P) {
 			holdTimeKey = holdValueKey = 0;
-			holdTimeOption += elapsed;
-			var descBG:FlxSprite = grpDesc.members[curSelected];
-			var descTxt:FlxText = cast grpDesc.members[curSelected + 1];
-			if (descBG != null && descTxt != null && descBG.visible) {
-				descBG.visible = descTxt.visible = false;
+			if (holdingDesc <= -1) {
+				for (desc in grpDesc) desc.visible = false;
 			}
-			var lockedDescBG:FlxSprite = grpLockedDesc.members[curSelected];
-			var lockedDescTxt:FlxText = cast grpLockedDesc.members[curSelected + 1];
-			if (lockedDescBG != null && lockedDescTxt != null && lockedDescBG.visible) {
-				lockedDescBG.visible = lockedDescTxt.visible = false;
+			if (holdingLockedDesc <= -1) {
+				for (desc in grpLockedDesc) desc.visible = false;
 			}
-			if (controls.UI_UP_P || controls.UI_DOWN_P || holdTimeOption > 0.5) {
-				changeSelection(curSelected + (controls.UI_DOWN_P ? 1 : -1));
-			}
-		}
-		else {
-			holdTimeOption = 0;
+			changeSelection(curSelected + (controls.UI_DOWN_P ? 1 : -1), false, true);
 		}
 
 		// i apologize for this
-		if (selectedOption && (controls.UI_LEFT || controls.UI_RIGHT)) {
-			if (!curOption.disallowed) {
+		if (controls.UI_LEFT || controls.UI_RIGHT) {
+			var go = true;
+			switch(curOption.type) {
+				case KEYBIND: go = false;
+				case SUBSTATE(cl): go = false;
+				default:
+			}
+			if (!curOption.disallowed && go) {
 				var justPressed:Bool = controls.UI_LEFT_P || controls.UI_RIGHT_P;
 				if (holdTimeKey > 0.5 || justPressed) {
-					if (curOption.type == INT || curOption.type == FLOAT) {
+					if (curOption.type == INT || curOption.type == FLOAT || curOption.type == PERCENT) {
 						if (controls.UI_LEFT_P && curOption.getValue() > curOption.minValue || controls.UI_RIGHT_P && curOption.getValue() < curOption.maxValue) {
 							FlxG.sound.play(Paths.sound('scrollMenu'));
 						}
@@ -483,7 +487,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					if (curOption.type != STRING) {
 						add = controls.UI_LEFT_P ? -curOption.changeValue : curOption.changeValue;
 					}
-					if (curOption.type == INT || curOption.type == FLOAT) {
+					if (curOption.type == INT || curOption.type == FLOAT || curOption.type == PERCENT) {
 						holdValueKey = FlxMath.bound(curOption.getValue() + add, curOption.minValue, curOption.maxValue);
 					}
 				}
@@ -495,15 +499,17 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					default:
 						if (justPressed) {
 							switch(curOption.type) {
-								case INT, FLOAT:		
+								case INT, FLOAT, PERCENT:
 									if (curOption.type == INT) {
 										holdValueKey = Math.round(holdValueKey);
-										curOption.setValue(holdValueKey);
+									}
+									else if (curOption.type == FLOAT) {
+										holdValueKey = FlxMath.roundDecimal(Math.round(holdValueKey / curOption.changeValue) * curOption.changeValue, curOption.decimals);
 									}
 									else {
-										holdValueKey = FlxMath.roundDecimal(Math.round(holdValueKey / curOption.changeValue) * curOption.changeValue, curOption.decimals);
-										curOption.setValue(holdValueKey);
+										holdValueKey = FlxMath.roundDecimal(holdValueKey, curOption.decimals);
 									}
+									curOption.setValue(holdValueKey);
 		
 								case STRING:
 									var num:Int = curOption.curOption;
@@ -533,14 +539,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							curOption.change();
 						}
 						else if (holdTimeKey > 0.5 && curOption.type != STRING) {
-							holdValueKey += curOption.scrollSpeed * elapsed * (controls.UI_LEFT_P ? -1 : 1);
-							if (holdValueKey < curOption.minValue) holdValueKey = curOption.minValue;
-							else if (holdValueKey > curOption.maxValue) holdValueKey = curOption.maxValue;
+							holdValueKey = FlxMath.bound(holdValueKey + curOption.scrollSpeed * elapsed * (controls.UI_LEFT ? -1 : 1), curOption.minValue, curOption.maxValue);
 		
 							switch(curOption.type) {
 								case INT:
 									curOption.setValue(Math.round(holdValueKey));
-								case FLOAT:
+								case FLOAT, PERCENT:
 									curOption.setValue(FlxMath.roundDecimal(holdValueKey, curOption.decimals));
 								default:
 							}
@@ -559,7 +563,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			holdTimeKey = 0;
 		}
 
-		if (FlxG.keys.justPressed.F1) {
+		if (FlxG.keys.justPressed.F1 || FlxG.gamepads.anyJustPressed(X)) {
 			var descBG:FlxSprite = grpDesc.getFirst(s->s.ID == curSelected);
 			var descTxt:FlxText = cast grpDesc.members[grpDesc.members.indexOf(descBG) + 1];
 			if (descBG != null && descTxt != null) {
@@ -571,7 +575,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			resetOption(curOption);
 		}
 
-		if (FlxG.keys.justPressed.TAB && curOption.customizable) {
+		if ((FlxG.keys.justPressed.TAB || FlxG.gamepads.anyJustPressed(START)) && curOption.customizable) {
 			openSubState(Type.createInstance(curOption.customizationClass, []));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
@@ -592,7 +596,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					descBG.visible = descTxt.visible = !descBG.visible;
 				}
 			}
-		}*/
+		}
 		#end
 
 		if (allowScrolling) {
@@ -769,6 +773,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			var descBG:FlxSprite = grpDesc.members[num];
 			var descTxt:FlxText = cast grpDesc.members[num + 1];
 			if (descBG == null || descTxt == null) continue;
+			if (descBG.y + descBG.height > camOptions.scroll.y + camOptions.height) {
+				descBG.y = info.y - descBG.height - 20;
+			}
+			else if (descBG.y < camOptions.scroll.y) {
+				descBG.y = info.y + 50;
+			}
+			descTxt.y = descBG.y + 10;
 			if (!swiping #if mobile && TouchUtil.justReleased #end && TouchUtil.overlaps(info, camOptions) && !descBG.visible) {
 				holdingDesc = num;
 				descBG.visible = descTxt.visible = true;
@@ -819,6 +830,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			var descBG:FlxSprite = grpLockedDesc.members[num];
 			var descTxt:FlxText = cast grpLockedDesc.members[num + 1];
 			if (descBG == null || descTxt == null) continue;
+			if (descBG.y + descBG.height > camOptions.scroll.y + camOptions.height) {
+				descBG.y = locked.y - descBG.height - 20;
+			}
+			else if (descBG.y < camOptions.scroll.y) {
+				descBG.y = locked.y + 70;
+			}
+			descTxt.y = descBG.y + 10;
 			if (!swiping #if mobile && TouchUtil.justReleased #end && TouchUtil.overlaps(locked, camOptions) && !descBG.visible) {
 				holdingLockedDesc = num;
 				descBG.visible = descTxt.visible = true;
@@ -839,10 +857,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (allowScrolling && TouchUtil.justReleased && holdingBox) {
 			holdingBox = false;
 			swiping = false;
-			#if mobile prevMouseY = FlxMath.bound(camOptions.scroll.y, 0, grpBackgrounds.height - camOptions.height + 55); #end
+			#if mobile prevMouseY = FlxMath.bound(camOptions.scroll.y, 0, grpBackgrounds.height - camOptions.height + 50); #end
 		}
 
-		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
+		if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end) {
 			FlxG.sound.play(Paths.sound('persona/ui_close'));
 			FlxTween.tween(camOptions, { height: 10 }, 0.15, { onComplete: (_)->{
 				updateCam(_);
@@ -937,14 +955,54 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		FlxG.sound.play(Paths.sound('cancelMenu'));
 	}
 	
-	function changeSelection(option:Int = 0, playSound:Bool = true) {
+	function changeSelection(option:Int = 0, playSound:Bool = true, moveCamera:Bool = false) {
 		if (option < 0 || option > optionsArray.length - 1) return;
 		// can't use null-safe field access?
 		if (grpBackgrounds.members[curSelected] != null) grpBackgrounds.members[curSelected].alpha = 0.3;
 		curSelected = option;
 		curOption = optionsArray[curSelected];
-		if (grpBackgrounds.members[curSelected] != null) grpBackgrounds.members[curSelected].alpha = 0.6;
+		if (grpBackgrounds.members[curSelected] != null) {
+			grpBackgrounds.members[curSelected].alpha = 0.6;
+			if (moveCamera) {
+				if (grpBackgrounds.members[curSelected].y + grpBackgrounds.members[curSelected].height > camOptions.scroll.y + camOptions.height) {
+					camOptions.scroll.y = grpBackgrounds.members[curSelected].y + grpBackgrounds.members[curSelected].height - camOptions.height + 20;
+				}
+				else if (grpBackgrounds.members[curSelected].y < camOptions.scroll.y) {
+					camOptions.scroll.y = grpBackgrounds.members[curSelected].y - 20;
+				}
+				#if mobile prevMouseY = FlxMath.bound(camOptions.scroll.y, 0, grpBackgrounds.height - camOptions.height + 50); #end
+			}
+		}
 		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'));
+		updateKeyIcons();
+	}
+
+	function updateKeyIcons() {
+		var removeOffset:Float = 0;
+		for (num => icon in keyIcons.group.keyValueIterator()) {
+			if (num < 2) continue; // Ignore Select and Back
+			if (num == 2) { // Confirm
+				switch(curOption.type) {
+					case KEYBIND:
+						icon.visible = true;
+					case SUBSTATE(cl):
+						icon.visible = true;
+					default:
+						if (!curOption.disallowed) {
+							icon.visible = false;
+							removeOffset = icon.width + 15;
+						}
+						else icon.visible = true;
+				}
+			}
+			else {
+				if (num == 5) { // Customize Option
+					icon.visible = curOption.customizable;
+				}
+				icon.x = Std.int(keyIcons.members[num - 1].x + keyIcons.members[num - 1].width + 15);
+				if (num == 3) icon.x -= removeOffset;
+			}
+		}
 	}
 
 	function checkDisallowedSong(option:Option, song:String):Bool {
@@ -967,21 +1025,19 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 	function getDisallowedString(option:Option):String {
 		if (option == null) return '';
-		var str:String = Language.getPhrase('setting_locked', 'This option cannot be changed on');
+		var str:String = '';
 		if (option.disallowStoryMode && option.disallowFreeplay)
 			// only for debug, this shouldn't actually happen
-			str += ' Story Mode and Freeplay.';
+			str = 'Story Mode and Freeplay.';
 		else if (option.disallowStoryMode && storyMode)
-			str += ' ' + Language.getPhrase('Story Mode') + '.';
+			str = Language.getPhrase('Story Mode');
 		else if (option.disallowFreeplay && !storyMode)
-			str += ' ' + Language.getPhrase('Freeplay') + '.';
+			str = Language.getPhrase('Freeplay');
 		else if (songOrWeek != null && songOrWeek.length > 0)
-			str += ' ' + (storyMode ? WeekData.weeksLoaded.get(songOrWeek).weekName : songOrWeek) + '.';
+			str = (storyMode ? WeekData.weeksLoaded.get(songOrWeek).weekName : songOrWeek);
 		else
 			str = 'Missing song or week. This should not happen.';
 
-		str += '\n\n' + Language.getPhrase('setting_locked_default', '{1} will be defaulted to {2}.', [option.name, option.defaultValue]);
-
-		return str;
+		return Language.getPhrase('setting_locked', 'This option cannot be changed on {1}.', [str]) + '\n\n' + Language.getPhrase('setting_locked_default', '{1} will be defaulted to {2}.', [option.name, option.defaultValue]);
 	}
 }

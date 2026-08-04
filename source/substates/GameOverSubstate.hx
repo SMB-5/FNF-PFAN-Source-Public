@@ -17,9 +17,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	public var boyfriend:Character;
 	public var fakeBoyfriend:Character;
 	var camFollow:FlxObject;
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	var stagePostfix:String = "";
 
@@ -157,11 +155,9 @@ class GameOverSubstate extends MusicBeatSubstate
 			}
 		}
 
-		#if mobile
 		backButton = new BackButton();
 		backButton.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		add(backButton);
-		#end
 
 		super.create();
 	}
@@ -186,11 +182,11 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if(!isEnding)
 		{
-			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
+			if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)
 			{
 				leaveGameOver();
 			}
-			else if (controls.ACCEPT #if mobile || TouchUtil.justPressed && !backButton.initiallyPressed #end)
+			else if ((controls.ACCEPT || TouchUtil.justPressed) && !backButton.initiallyPressed)
 			{
 				retryGameOver();
 			}
@@ -230,9 +226,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				overlay.animation.play('deathConfirm');
 				overlay.offset.set(overlayConfirmOffsets.x, overlayConfirmOffsets.y);
 			}
-			#if mobile
 			FlxTween.tween(backButton, { alpha: 0 }, 0.25);
-			#end
 			FlxG.sound.music.stop();
 			FlxG.sound.play(Paths.music(endSoundName));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)

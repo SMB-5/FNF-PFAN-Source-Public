@@ -34,15 +34,10 @@ class MemberCardSubstate extends MusicBeatSubstate
 	var descHeader:FlxText;
 	var descTxt:FlxText;
 	var backIcon:KeyIcon;
-	#if !mobile
 	var acceptIcon:KeyIcon;
-	#else
 	var acceptTxt:FlxText;
-	#end
 
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	var allowScrolling:Bool = false;
 	var scrollTimer:Float = 0;
@@ -202,24 +197,26 @@ class MemberCardSubstate extends MusicBeatSubstate
 		#if !mobile
 		backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 1, 'ui_close');
 		backIcon.iconText.font = Paths.font('p5hatty-1.ttf');
+		if (controls.controllerMode) backIcon.icons[0].y -= 7;
 		add(backIcon);
 
 		acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 1, 'ui_open_link');
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
+		if (controls.controllerMode) acceptIcon.icons[0].y -= 7;
 		add(acceptIcon);
-		#else
-		acceptTxt = new FlxText(0, cardBG.height - 55, cardBG.width, Language.getPhrase('ui_open_link', 'Open Link'), 32);
+		#end
+
+		acceptTxt = new FlxText(0, cardBG.height - 65, cardBG.width, Language.getPhrase('ui_open_link', 'Open Link'), 32);
 		acceptTxt.setFormat(Paths.font('Fontsona5Royal.ttf'), 32, FlxColor.BLACK, LEFT);
 		acceptTxt.x = cardBG.width - acceptTxt.textField.textWidth - 30;
+		#if !mobile acceptTxt.y -= 45; #end
 		add(acceptTxt);
 
 		// i'm so fucking annoyed at having to do Std.int for EVERY SINGLE TIME THAT I REFERENCE THE WIDTH AND HEIGHT IN MAKEGRAPHIC somebody please kill me - melodiekit
 		var acceptBG:FlxSprite = new FlxSprite(acceptTxt.x - 8, acceptTxt.y - 7).makeGraphic(Std.int(acceptTxt.textField.textWidth + 20), Std.int(acceptTxt.textField.textHeight + 20), 0xFFFFFFFF);
-		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 5, color: 0xFF000000});
+		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 8, color: 0xFF000000});
 		insert(members.indexOf(acceptTxt), acceptBG);
-		#end
 
-		#if mobile
 		var camUI:FlxCamera = new FlxCamera();
 		camUI.bgColor.alpha = 0;
 		FlxG.cameras.add(camUI, false);
@@ -227,7 +224,6 @@ class MemberCardSubstate extends MusicBeatSubstate
 		backButton = new BackButton();
 		backButton.camera = camUI;
 		add(backButton);
-		#end
 
 		camCard.x -= 310;
 		camCard.alpha = 0;
@@ -253,18 +249,16 @@ class MemberCardSubstate extends MusicBeatSubstate
 		if (statusHeader.x < -970) statusHeader.x = 970;
 		if (statusHeader2.x < -970) statusHeader2.x = 970;
 
-		if (!exiting && (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard, FlxPoint.get(camCard.x, camCard.y)) #end)) {
+		if (!exiting && (controls.BACK || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard, FlxPoint.get(camCard.x, camCard.y)) #if android || FlxG.android.justReleased.BACK #end)) {
 			exiting = true;
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			#if mobile 
+			FlxG.sound.play(Paths.sound('cancelMenu')); 
 			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
-			#end
 			FlxTween.tween(bg, { alpha: 0 }, 0.3, { ease: FlxEase.expoOut });
 			FlxTween.tween(camCard, { x: camCard.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut });
 			FlxTween.tween(camDesc, { x: camDesc.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut, onComplete:t->close() });
 		}
 
-		if (controls.ACCEPT #if mobile || TouchUtil.overlaps(acceptTxt, camCard)&& TouchUtil.justPressed #end) {
+		if (controls.ACCEPT || TouchUtil.overlaps(acceptTxt, camCard) && TouchUtil.justPressed) {
 			CoolUtil.browserLoad(link);
 		}
 

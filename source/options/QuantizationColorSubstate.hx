@@ -55,9 +55,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 	var controllerPointer:FlxSprite;
 	var _lastControllerMode:Bool = false;
 
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	var tipTxt:FlxText;
 
@@ -91,10 +89,8 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		controllerPointer.alpha = 0.6;
 		add(controllerPointer);
 
-		#if mobile
 		backButton = new BackButton();
 		add(backButton);
-		#end
 		
 		#if !mobile FlxG.mouse.visible = !controls.controllerMode; #end
 		controllerPointer.visible = controls.controllerMode;
@@ -182,7 +178,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 		switch(currentTab) {
 			case NOTE_SELECTION:
-				if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
+				if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end) {
 					ClientPrefs.saveSettings();
 					close();
 					FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -370,9 +366,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 		switch(tab) {
 			case NOTE_SELECTION:
-				#if mobile
 				backButton.revive();
-				#end
 
 				box = new FlxSprite().makeGraphic(850, 500, 0xC9000000);
 				box.screenCenter();
@@ -415,9 +409,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 					btnGroup.insert(btnGroup.members.indexOf(resetTxt), bg);
 				}
 			case NOTE_EDITING:
-				#if mobile
 				backButton.kill();
-				#end
 
 				box = new FlxSprite().makeGraphic(950, 670, 0xC9000000);
 				box.screenCenter();

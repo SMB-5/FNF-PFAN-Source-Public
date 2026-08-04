@@ -45,9 +45,7 @@ class CreditsState extends MusicBeatState
 
 	var arrow:FlxText;
 
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	override function create() {
 		#if DISCORD_ALLOWED
@@ -137,11 +135,9 @@ class CreditsState extends MusicBeatState
 
 		camFollow = new FlxObject(FlxG.width / 2, FlxG.height / 2 - FlxG.height, 1, 1);
 
-		#if mobile
 		backButton = new BackButton();
 		backButton.scrollFactor.set();
 		add(backButton);
-		#end
 
 		FlxG.sound.playMusic(Paths.music('persona/songs from the games/P5/Beneath-the-Mask-instrumental'), 0.7);
 
@@ -231,7 +227,7 @@ class CreditsState extends MusicBeatState
 			timeSinceLastInput = 0;
 		}
 
-		if (!exiting && (scrollCredits && camFollow.y >= FlxG.height / 2 + creditsGroup.height + 200 || controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)) {
+		if (!exiting && (scrollCredits && camFollow.y >= FlxG.height / 2 + creditsGroup.height + 200 || controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)) {
 			exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			FlxG.sound.music.fadeOut(0.35, 0, t->FlxG.sound.music.stop());

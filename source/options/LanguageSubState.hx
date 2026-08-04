@@ -9,9 +9,7 @@ class LanguageSubState extends MusicBeatSubstate
 	var languages:Array<String> = [];
 	var displayLanguages:Map<String, String> = [];
 	var curSelected:Int = 0;
-	#if mobile
 	var backButton:BackButton;
-	#end
 	public function new()
 	{
 		super();
@@ -91,10 +89,8 @@ class LanguageSubState extends MusicBeatSubstate
 			grpLanguages.add(text);
 		}
 
-		#if mobile
 		backButton = new BackButton();
 		add(backButton);
-		#end
 
 		changeSelected(0, false);
 	}
@@ -112,7 +108,7 @@ class LanguageSubState extends MusicBeatSubstate
 		if(FlxG.mouse.wheel != 0)
 			changeSelected(FlxG.mouse.wheel * mult);
 
-		if(controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
+		if(controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)
 		{
 			if(changedLanguage)
 			{

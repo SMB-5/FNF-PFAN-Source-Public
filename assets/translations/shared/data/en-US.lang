@@ -29,9 +29,6 @@ category_all: "All"
 category_story: "Main Story"
 category_freeplay: "Side Stories"
 
-// Music Player
-musicplayer_tip: "Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to Switch Songs\nPress BACK to Exit / Press RESET to Restart the Song"
-
 // Music Player Settings
 musicplayer_setting_playback_rate: "Playback Rate"
 musicplayer_setting_instrumental_volume: "Instrumental Volume"
@@ -71,11 +68,17 @@ ui_select: "Select"
 ui_confirm: "Confirm"
 ui_close: "Close"
 ui_back: "Back"
-ui_gmodifiers: "Modifiers"
 ui_reset: "Reset"
+ui_preview: "Preview"
+ui_gmodifiers: "Modifiers"
 ui_change_character: "Character"
-ui_music_player: "Preview"
+ui_play_song: "Play/Pause Song"
+ui_switch_song: "Switch Song"
+ui_restart_song: "Restart Song"
+ui_open_settings: "Open Settings"
 ui_open_link: "Open Link"
+ui_view_description: "View Description"
+ui_customize_option: "Customize Option"
 
 // Credits
 credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
@@ -166,7 +169,7 @@ switch_on_accept: "(Press Accept to Switch)"
 switch_on_start: "(Press Start to Switch)"
 
 // Gameplay Modifiers
-setting_locked: "This option cannot be changed on"
+setting_locked: "This option cannot be changed on {1}."
 setting_locked_default: "{1} will be defaulted to {2}."
 
 setting_scroll_type: "Scroll Type"
@@ -339,7 +342,7 @@ setting_disable_reset_button: "Disable Reset Button"
 description_disable_reset_button: "If checked, pressing Reset won't do anything."
 
 setting_hitsound_volume: "Hitsound Volume"
-description_hitsound_volume: "Funny notes go \"Tick!\" when you hit them."
+description_hitsound_volume: "Funny notes go "Tick!" when you hit them."
 
 setting_rating_offset: "Rating Offset"
 description_rating_offset: "Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later."

@@ -201,10 +201,11 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 	}
 
 	var notesShown:Bool = false;
+	/*
 	override function changeSelection(change:Int = 0, playSound:Bool = true)
 	{
 		super.changeSelection(change, playSound);
-		/*
+		
 		switch(curOption.variable)
 		{
 			case 'noteSkin', 'splashSkin', 'splashAlpha':
@@ -229,8 +230,8 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 					}
 				}
 				notesShown = false;
-		}*/
-	}
+		}
+	}*/
 
 	function onChangeNoteSkin()
 	{

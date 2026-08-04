@@ -42,8 +42,9 @@ class NoteOffsetState extends MusicBeatState
 	var controllerPointer:FlxSprite;
 	var _lastControllerMode:Bool = false;
 
-	#if mobile
 	var backButton:BackButton;
+
+	#if mobile
 	var resetButton:FlxSprite;
 	#end
 
@@ -205,11 +206,11 @@ class NoteOffsetState extends MusicBeatState
 		controllerPointer.cameras = [camHUD];
 		add(controllerPointer);
 
-		#if mobile
 		backButton = new BackButton();
 		backButton.camera = camOther;
 		add(backButton);
 
+		#if mobile
 		resetButton = new FlxSprite(backButton.x - 150, backButton.y + 5, Paths.image('resetButton'));
 		resetButton.camera = camOther;
 		resetButton.scale.set(0.85, 0.85);
@@ -484,7 +485,7 @@ class NoteOffsetState extends MusicBeatState
 			rightSelector.animation.play('idle');
 		}
 
-		if(controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end)
+		if(controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)
 		{
 			if(zoomTween != null) zoomTween.cancel();
 			if(beatTween != null) beatTween.cancel();

@@ -26,7 +26,7 @@ class Option
 	public var customizable:Bool = false;
 	public var customizationClass:Class<Dynamic>;
 
-	public var scrollSpeed:Float = 50; //Only works on int/float, defines how fast it scrolls per second while holding left/right
+	public var scrollSpeed:Float = 50; //Only works on int/float/percent, defines how fast it scrolls per second while holding left/right
 	public var variable(default, null):String = null; //Variable from ClientPrefs.hx
 	public var defaultValue:Dynamic = null;
 
@@ -78,7 +78,8 @@ class Option
 				changeValue = 0.01;
 				minValue = 0;
 				maxValue = 1;
-				scrollSpeed = 0;
+				scrollSpeed = 0.5;
+				decimals = 2;
 			case STRING:
 				if (options != null && options.length > 0)
 					this.defaultValue = options[0];

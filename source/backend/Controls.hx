@@ -1,5 +1,6 @@
 package backend;
 
+import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.gamepad.mappings.FlxGamepadMapping;
@@ -199,5 +200,69 @@ class Controls
 		keyboardBinds = ClientPrefs.keyBinds;
 		gamepadBinds = ClientPrefs.gamepadBinds;
 		mobileBinds = ClientPrefs.mobileBinds;
+	}
+
+	public static function formatGamepadButton(button:FlxGamepadInputID):String {
+		var model:FlxGamepadModel = FlxG.gamepads.firstActive?.detectedModel;
+		switch(button) {
+			case A:
+				switch(model) {
+					case PS4: return 'CROSS';
+					default: return 'A';
+				}
+			case B:
+				switch(model) {
+					case PS4: return 'CIRCLE';
+					default: return 'B';
+				}
+			case X:
+				switch(model) {
+					case PS4: return 'SQUARE';
+					default: return 'X';
+				}
+			case Y:
+				switch(model) {
+					case PS4: return 'TRIANGLE';
+					default: return 'Y';
+				}
+			case BACK:
+				switch(model) {
+					case PS4: return 'TOUCHPAD';
+					case SWITCH_PRO, SWITCH_JOYCON_LEFT, SWITCH_JOYCON_RIGHT: 'MINUS';
+					default: return 'VIEW';
+				}
+			case START:
+				switch(model) {
+					case PS4: return 'OPTIONS';
+					case SWITCH_PRO, SWITCH_JOYCON_LEFT, SWITCH_JOYCON_RIGHT: 'PLUS';
+					default: return 'MENU';
+				}
+			case LEFT_SHOULDER:
+				switch(model) {
+					case PS4: return 'L1';
+					case SWITCH_PRO, SWITCH_JOYCON_LEFT, SWITCH_JOYCON_RIGHT: 'L';
+					default: return 'LB';
+				}
+			case LEFT_TRIGGER:
+				switch(model) {
+					case PS4: return 'L2';
+					case SWITCH_PRO, SWITCH_JOYCON_LEFT, SWITCH_JOYCON_RIGHT: 'ZL';
+					default: return 'LT';
+				}
+			case RIGHT_SHOULDER:
+				switch(model) {
+					case PS4: return 'R1';
+					case SWITCH_PRO, SWITCH_JOYCON_LEFT, SWITCH_JOYCON_RIGHT: 'R';
+					default: return 'RB';
+				}
+			case RIGHT_TRIGGER:
+				switch(model) {
+					case PS4: return 'R2';
+					case SWITCH_PRO, SWITCH_JOYCON_LEFT, SWITCH_JOYCON_RIGHT: 'ZR';
+					default: return 'RT';
+				}
+			default:
+		}
+		return 'No Button Found';
 	}
 }

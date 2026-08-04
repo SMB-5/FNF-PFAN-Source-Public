@@ -30,9 +30,7 @@ class GalleryState extends MusicBeatState {
 	var previousIndex:Int = 0;
 	var allowInputs:Bool = true;
 	var swiping:Bool = false;
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	var uiGroup:FlxSpriteGroup;
 	var hideUI:Bool = false;
@@ -106,10 +104,8 @@ class GalleryState extends MusicBeatState {
 
 		add(uiGroup);
 
-		#if mobile
 		backButton = new BackButton(null, 10);
 		add(backButton);
-		#end
 
 		persistentUpdate = true;
 		changeSelection();
@@ -168,7 +164,7 @@ class GalleryState extends MusicBeatState {
 				FlxG.sound.play(Paths.sound("scrollMenu"));
 			}
 
-			if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
+			if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end) {
 				allowInputs = false;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState(true), OUT_BOTTOM);

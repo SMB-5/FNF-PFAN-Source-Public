@@ -246,7 +246,7 @@ class LoadingState extends MusicBeatState
 
 		if(!spawnedPessy)
 		{
-			if(!transitioning && (controls.ACCEPT #if mobile || TouchUtil.justPressed #end))
+			if(!transitioning && (controls.ACCEPT || TouchUtil.justPressed))
 			{
 				shakeMult = 1;
 				FlxG.sound.play(Paths.sound('cancelMenu'));

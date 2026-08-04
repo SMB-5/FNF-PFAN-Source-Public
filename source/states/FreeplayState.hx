@@ -70,12 +70,12 @@ class FreeplayState extends MusicBeatState
 	var bottomText:FlxText;
 	var bottomBG:FlxSprite;
 
-	#if mobile
+	var keyIcons:FlxSpriteGroup;
+
 	var backButton:BackButton;
 	var modsButton:FlxSprite;
 	var resetButton:FlxSprite;
 	var musicButton:FlxSprite;
-	#end
 
 	var stickerSubState:StickerSubState;
 
@@ -182,8 +182,11 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length) curSelected = 0;
 		lerpSelected = curSelected;
 
+		keyIcons = new FlxSpriteGroup();
+		add(keyIcons);
+
 		#if !mobile
-		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'movement', 1, 'ui_select', 0.1, 18);
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'dpad', 1, 'ui_select', 0.1, 18);
 		if (!controls.controllerMode) {
 			movementIcon.icons[2].y = movementIcon.y - 25;
 			for (i in 0...movementIcon.icons.length) {
@@ -197,39 +200,43 @@ class FreeplayState extends MusicBeatState
 			movementIcon.iconText.x -= 5;
 		}
 		movementIcon.iconText.y -= 5;
-		add(movementIcon);
+		keyIcons.add(movementIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 24, 'accept', 1, 'ui_confirm', 0.1, 18);
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 18);
 		acceptIcon.iconText.x -= 5;
 		acceptIcon.iconText.y -= 5;
-		add(acceptIcon);
+		if (controls.controllerMode) acceptIcon.icons[0].y -= 5;
+		keyIcons.add(acceptIcon);
 
-		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 1, 'ui_back', 0.1, 18);
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 18);
 		backIcon.iconText.x -= 5;
 		backIcon.iconText.y -= 5;
-		add(backIcon);
+		if (controls.controllerMode) backIcon.icons[0].y -= 5;
+		keyIcons.add(backIcon);
 
-		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, 'control', 0, 'ui_gmodifiers', 0.1, 18);
+		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'START' : 'CONTROL', 0, 'ui_gmodifiers', 0.1, 18, true);
 		controlIcon.iconText.x -= 5;
 		controlIcon.iconText.y -= 5;
-		add(controlIcon);
+		if (controls.controllerMode) controlIcon.icons[0].y -= 5;
+		keyIcons.add(controlIcon);
 
 		var resetIcon:KeyIcon = new KeyIcon(controlIcon.x + controlIcon.width + 5, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1, 18);
 		resetIcon.iconText.x -= 5;
 		resetIcon.iconText.y -= 5;
-		add(resetIcon);
+		if (controls.controllerMode) resetIcon.icons[0].y -= 5;
+		keyIcons.add(resetIcon);
 
-		var previewIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 5, FlxG.height - 24, 'space', 0, 'ui_music_player', 0.1, 18);
+		var previewIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'Y' : 'SPACE', 0, 'ui_preview', 0.1, 18);
 		previewIcon.iconText.x -= 5;
 		previewIcon.iconText.y -= 5;
-		add(previewIcon);
+		if (controls.controllerMode) previewIcon.icons[0].y -= 5;
+		keyIcons.add(previewIcon);
 		#end
 
-		#if mobile
 		backButton = new BackButton(FlxG.width - 150, 90);
 		add(backButton);
 
-		modsButton = new FlxSprite(FlxG.width / 2 + 10, FlxG.height / 2 + 200, Paths.image('modsButton'));
+		modsButton = new FlxSprite(FlxG.width / 2 - 10, FlxG.height / 2 + 170, Paths.image('modsButton'));
 		modsButton.setGraphicSize(Std.int(modsButton.width * 0.9));
 		add(modsButton);
 
@@ -240,7 +247,6 @@ class FreeplayState extends MusicBeatState
 		musicButton = new FlxSprite(resetButton.x - 35, resetButton.y - 150, Paths.image('musicButton'));
 		musicButton.setGraphicSize(Std.int(musicButton.width * 0.9));
 		add(musicButton);
-		#end
 
 		changeSelection(0, false);
 		updateTexts();
@@ -352,6 +358,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection(0, false, false);
 		updateAllRanks();
 		FlxG.inputs.reset();
+		keyIcons.visible = true;
 		if (!FlxG.sound.music.playing) FlxG.sound.music.play();
 		super.closeSubState();
 	}
@@ -582,95 +589,95 @@ class FreeplayState extends MusicBeatState
 			}
 			#if mobile else if (TouchUtil.justReleased && justChanged) justChanged = false; #end
 
-			if (FlxG.keys.justPressed.CONTROL #if mobile || TouchUtil.overlaps(modsButton) && TouchUtil.justPressed #end)
+			if (FlxG.keys.justPressed.CONTROL || FlxG.gamepads.anyJustPressed(START) || TouchUtil.overlaps(modsButton) && TouchUtil.justPressed)
 			{
+				keyIcons.visible = false;
 				openSubState(new Changers(songs[curSelected].songName));
 			}
-			else if (songs[curSelected].songName.toLowerCase() != 'random' && (controls.RESET #if mobile || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed #end))
+			else if ((controls.RESET || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed) && songs[curSelected].songName.toLowerCase() != 'random')
 			{
 				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter, opponentMode));
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 			}
-		}
-
-		if ((controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) && !pickedRandom)
-		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState(true), OUT_BOTTOM);
-		}
-
-		if ((FlxG.keys.justPressed.SPACE #if mobile || TouchUtil.overlaps(musicButton) && TouchUtil.justPressed #end) && songs[curSelected].songName.toLowerCase() != 'random' && !pickedRandom)
-		{
-			openSubState(new MusicPlayerSubstate(curSelected - 1));
-			FlxG.sound.music.pause();
-		}
-		else if (pressedAccept && !pickedRandom)
-		{
-			if (songs.length <= 1) {
-				missingText.text = 'There are no songs to play!';
-				missingText.screenCenter(Y);
-				missingText.visible = true;
-				missingTextBG.visible = true;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-
-				super.update(elapsed);
-				return;
-			}
-
-			if (songs[curSelected].songName.toLowerCase() == 'random')
+			else if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)
 			{
-				changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
-				pickedRandom = true;
-				new FlxTimer().start(1, function(tmr) {
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				MusicBeatState.switchState(new MainMenuState(true), OUT_BOTTOM);
+			}
+			else if ((FlxG.keys.justPressed.SPACE || FlxG.gamepads.anyJustPressed(Y) || TouchUtil.overlaps(musicButton) && TouchUtil.justPressed) && songs[curSelected].songName.toLowerCase() != 'random')
+			{
+				keyIcons.visible = false;
+				openSubState(new MusicPlayerSubstate(curSelected - 1));
+				FlxG.sound.music.pause();
+			}
+			else if (pressedAccept)
+			{
+				if (songs.length <= 1) {
+					missingText.text = 'There are no songs to play!';
+					missingText.screenCenter(Y);
+					missingText.visible = true;
+					missingTextBG.visible = true;
+					FlxG.sound.play(Paths.sound('cancelMenu'));
+
+					super.update(elapsed);
+					return;
+				}
+
+				if (songs[curSelected].songName.toLowerCase() == 'random')
+				{
+					changeSelection(FlxG.random.int(1, songs.length - 1, [curSelected]));
+					pickedRandom = true;
+					new FlxTimer().start(1, function(tmr) {
+						LoadingState.prepareToSong();
+						LoadingState.loadAndSwitchState(new PlayState());
+						#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+					});
+				}
+
+				var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
+				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+
+				try
+				{
+					Song.loadFromJson(poop, songLowercase);
+					PlayState.isStoryMode = false;
+					PlayState.storyDifficulty = curDifficulty;
+
+					trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+				}
+				catch(e:haxe.Exception)
+				{
+					trace('ERROR! ${e.message}');
+
+					var errorStr:String = e.message;
+					if(errorStr.contains('There is no TEXT asset with an ID of')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(songLowercase), errorStr.length-1); //Missing chart
+					else errorStr += '\n\n' + e.stack;
+
+					missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
+					missingText.screenCenter(Y);
+					missingText.visible = true;
+					missingTextBG.visible = true;
+					FlxG.sound.play(Paths.sound('cancelMenu'));
+
+					super.update(elapsed);
+					return;
+				}
+				@:privateAccess
+				if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
+				{
+					trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
+					Paths.freeGraphicsFromMemory();
+				}
+				if (!pickedRandom) {
 					LoadingState.prepareToSong();
 					LoadingState.loadAndSwitchState(new PlayState());
 					#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-				});
+				}
+
+				#if (MODS_ALLOWED && DISCORD_ALLOWED)
+				DiscordClient.loadModRPC();
+				#end
 			}
-
-			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
-			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-
-			try
-			{
-				Song.loadFromJson(poop, songLowercase);
-				PlayState.isStoryMode = false;
-				PlayState.storyDifficulty = curDifficulty;
-
-				trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-			}
-			catch(e:haxe.Exception)
-			{
-				trace('ERROR! ${e.message}');
-
-				var errorStr:String = e.message;
-				if(errorStr.contains('There is no TEXT asset with an ID of')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(songLowercase), errorStr.length-1); //Missing chart
-				else errorStr += '\n\n' + e.stack;
-
-				missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-				missingText.screenCenter(Y);
-				missingText.visible = true;
-				missingTextBG.visible = true;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-
-				super.update(elapsed);
-				return;
-			}
-			@:privateAccess
-			if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
-			{
-				trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
-				Paths.freeGraphicsFromMemory();
-			}
-			if (!pickedRandom) {
-				LoadingState.prepareToSong();
-				LoadingState.loadAndSwitchState(new PlayState());
-				#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-			}
-
-			#if (MODS_ALLOWED && DISCORD_ALLOWED)
-			DiscordClient.loadModRPC();
-			#end
 		}
 
 		updateTexts(elapsed);
@@ -692,10 +699,8 @@ class FreeplayState extends MusicBeatState
 		#end
 		positionHighscore();
 
-		#if mobile
 		if (musicButton != null) musicButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
 		if (resetButton != null) resetButton.alpha = songs[curSelected].songName == 'Random' ? 0.4 : 1;
-		#end
 		if (portraitUpdate) updatePortrait();
 		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 	}

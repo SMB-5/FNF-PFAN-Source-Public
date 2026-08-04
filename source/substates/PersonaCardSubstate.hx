@@ -13,9 +13,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
 	var titleText:FlxText;
 	var cardText:FlxText;
 	var acceptIcon:KeyIcon;
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	public function new(prompt:String)
 	{
@@ -67,12 +65,10 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(acceptIcon);
 		#end
 
-		#if mobile
 		backButton = new BackButton();
 		backButton.alpha = 0;
 		FlxTween.tween(backButton, {alpha: 0.7}, 0.3, {ease: FlxEase.quartInOut});
 		add(backButton);
-		#end
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.3, {ease: FlxEase.quartInOut});
 		FlxTween.tween(cardBG, {x: 210, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
@@ -109,13 +105,11 @@ class PersonaCardSubstate extends MusicBeatSubstate
 	var exiting:Bool = false;
 	override function update(elapsed:Float)
 	{
-		if (!exiting && (controls.ACCEPT #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG) #end))
+		if (!exiting && (controls.ACCEPT || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG)) #if android || FlxG.android.justReleased.BACK #end)
 		{
 			exiting = true;
-			FlxG.sound.play(Paths.sound('confirmMenu'));
-			#if mobile 
+			FlxG.sound.play(Paths.sound('confirmMenu')); 
 			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
-			#end
 			FlxTween.tween(bg, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(cardBG, {x: 410, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleBG, {x: 460, alpha: 0}, 0.3, {ease: FlxEase.expoOut});

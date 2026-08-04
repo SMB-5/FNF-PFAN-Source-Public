@@ -36,11 +36,9 @@ import backend.Language;
 import backend.ui.*; //Psych-UI
 
 import objects.Alphabet;
+import objects.BackButton;
 import objects.BGSprite;
 import objects.KeyIcon;
-#if mobile
-import objects.BackButton;
-#end
 
 import states.PlayState;
 import states.LoadingState;

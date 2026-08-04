@@ -35,6 +35,11 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		['Autoplay', 'autoplay', MusicPlayerType.BOOL, false, 0, 0, 0, 0, null, null]
 	];
 
+	var playerIcons:FlxSpriteGroup;
+	var settingsIcons:FlxSpriteGroup;
+
+	var curSelected:Int = 0;
+
 	var camUI:FlxCamera;
 	var camSettings:FlxCamera;
 	var inSettings:Bool = false;
@@ -46,6 +51,8 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 	var scrollTween:FlxTween;
 	var holdingBox:Bool = false;
 	#if mobile var prevMouseY:Float = 0; #end
+
+	var grpBackgrounds:FlxTypedGroup<FlxSprite>;
 
 	var songTxt:FlxText;
 	var bar:FlxBar;
@@ -66,9 +73,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 
 	var mask:FlxSpriteGroup;
 
-	#if mobile
 	var backButton:BackButton;
-	#end
 
 	public function new(song:Int) {
 		super();
@@ -188,6 +193,10 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 
 		if (settings.length > 6) allowScrolling = true;
 
+		grpBackgrounds = new FlxTypedGroup<FlxSprite>();
+		grpBackgrounds.cameras = [camSettings];
+		add(grpBackgrounds);
+
 		settingGroup = new FlxTypedSpriteGroup<MusicPlayerOption>();
 		settingGroup.cameras = [camSettings];
 		add(settingGroup);
@@ -200,7 +209,12 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		for (i in 0...settings.length) {
 			if (settings[i][0] == 'Vocals Volume' && vocals == null || settings[i][0] == 'Opponent Vocals Volume' && opponentVocals == null) continue;
 
-			var setting:MusicPlayerOption = new MusicPlayerOption(this, 10, 20 + (50 * i), settings[i][0], settings[i][1], settings[i][2], camSettings.width - 50, settings[i][3], settings[i][4], settings[i][5], settings[i][6], settings[i][7], settings[i][8]);
+			var optionBG:FlxSprite = new FlxSprite(0, 10 + (50 * i)).makeGraphic(Std.int(camSettings.width), 40, 0xFF333333);
+			optionBG.alpha = 0.3;
+			optionBG.ID = i;
+			grpBackgrounds.add(optionBG);
+
+			var setting:MusicPlayerOption = new MusicPlayerOption(this, optionBG.x + 20, optionBG.y + 10, settings[i][0], settings[i][1], settings[i][2], camSettings.width - 50, settings[i][3], settings[i][4], settings[i][5], settings[i][6], settings[i][7], settings[i][8]);
 			if (settings[i][9] != null) setting.onChange = settings[i][9];
 			setting.valueText.fieldWidth = camSettings.width - setting.valueText.x - setting.rightArrow.width;
 			settingGroup.add(setting);
@@ -214,26 +228,47 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		scrollBar.scrollFactor.set();
 		add(scrollBar);
 
+		playerIcons = new FlxSpriteGroup();
+		add(playerIcons);
+
+		settingsIcons = new FlxSpriteGroup();
+		settingsIcons.visible = false;
+		add(settingsIcons);
+
 		#if !mobile
-		var tipString:String = Language.getPhrase('musicplayer_tip', 'Press SPACE to Play or Pause the Song / Press LEFT or RIGHT to Switch Songs\nPress BACK to Exit / Press RESET to Restart the Song');
-		var tipText:FlxText = new FlxText(0, 0, FlxG.width, tipString, 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
-		tipText.y = FlxG.height - 22 - tipText.textField.textHeight;
-		add(tipText);
+		var switchIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad_left_right', 1, 'ui_switch_song', 0.15, 24);
+		playerIcons.add(switchIcon);
+
+		var playIcon:KeyIcon = new KeyIcon(switchIcon.x + switchIcon.width + 20, FlxG.height - 44, controls.controllerMode ? 'Y' : 'SPACE', 0, 'ui_play_song', 0.15, 24);
+		playerIcons.add(playIcon);
+
+		var restartIcon:KeyIcon = new KeyIcon(playIcon.x + playIcon.width + 15, FlxG.height - 44, 'reset', 0, 'ui_restart_song', 0.15, 24);
+		playerIcons.add(restartIcon);
+
+		var settingsIcon:KeyIcon = new KeyIcon(restartIcon.x + restartIcon.width + 15, FlxG.height - 44, controls.controllerMode ? 'START' : 'TAB', 0, 'ui_open_settings', 0.15, 24);
+		playerIcons.add(settingsIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(settingsIcon.x + settingsIcon.width + 15, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		playerIcons.add(backIcon);
+
+		var selectIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
+		settingsIcons.add(selectIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(selectIcon.x + selectIcon.width + 20, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		settingsIcons.add(backIcon);
 		#end
 
-		#if mobile
 		backButton = new BackButton();
 		add(backButton);
-		#end
 
 		FlxG.autoPause = false;
 
 		playMusic();
+		changeSelection(0);
 	}
 
 	override function update(elapsed:Float) {
-		if (controls.BACK #if android || FlxG.android.justReleased.BACK #end #if mobile || backButton.justPressed #end) {
+		if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end) {
 			if ((controls.BACK #if android || FlxG.android.justReleased.BACK #end) && inSettings) {
 				goToSettings(false);
 			}
@@ -258,6 +293,25 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 					holdingBox = false;
 				}
 			}
+
+			#if !mobile
+			if (FlxG.mouse.justMoved) {
+				for (bg in grpBackgrounds) {
+					if (FlxG.mouse.overlaps(bg, camSettings) && curSelected != bg.ID) {
+						changeSelection(bg.ID);
+					}
+				}
+			}
+
+			// i'm too lazy to make this scroll the camera screw you
+			if (controls.UI_UP_P || controls.UI_DOWN_P) {
+				changeSelection(curSelected + (controls.UI_DOWN_P ? 1 : -1));
+			}
+
+			if (controls.UI_LEFT_P || controls.UI_RIGHT_P) {
+				controls.UI_LEFT_P ? settingGroup.members[curSelected].decrement() : settingGroup.members[curSelected].increment();
+			}
+			#end
 
 			if (allowScrolling) {
 				if (scrollTimer >= 1 && scrollTween == null) {
@@ -305,7 +359,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 			}
 		}
 		else {
-			if (TouchUtil.justPressed && TouchUtil.overlaps(settingButton)) {
+			if (TouchUtil.justPressed && TouchUtil.overlaps(settingButton) || FlxG.keys.justPressed.TAB || FlxG.gamepads.anyJustPressed(START)) {
 				goToSettings();
 			}
 
@@ -334,7 +388,7 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if (TouchUtil.overlaps(playButton) && TouchUtil.justPressed || FlxG.keys.justPressed.SPACE) {
+			if (TouchUtil.overlaps(playButton) && TouchUtil.justPressed || FlxG.keys.justPressed.SPACE || FlxG.gamepads.anyJustPressed(Y)) {
 				if (playing) pauseMusic();
 				else playMusic();
 			}
@@ -504,7 +558,16 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 	}
 
 	public function goToSettings(value:Bool = true) {
-		inSettings = settingBox.visible = camSettings.visible = value;
+		inSettings = settingsIcons.visible = settingBox.visible = camSettings.visible = value;
+		playerIcons.visible = !value;
+	}
+
+	function changeSelection(option:Int = 0) {
+		if (option < 0 || option > settings.length - 1) return;
+		// can't use null-safe field access?
+		if (grpBackgrounds.members[curSelected] != null) grpBackgrounds.members[curSelected].alpha = 0.3;
+		curSelected = option;
+		if (grpBackgrounds.members[curSelected] != null) grpBackgrounds.members[curSelected].alpha = 0.6;
 	}
 
 	function getVocalFromCharacter(char:String) {

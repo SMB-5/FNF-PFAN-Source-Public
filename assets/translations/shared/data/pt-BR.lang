@@ -29,9 +29,6 @@ category_all: "Todos"
 category_story: "História Principal"
 category_freeplay: "Histórias Paralelas"
 
-// Music Player
-musicplayer_tip: "Pressione ESPAÇO para Tocar ou Parar a Música / Pressione ESQUERDA ou DIREITA para Alterar Músicas\nPressione BACKSPACE para Sair / Pressione RESET para Recomeçar a Música"
-
 // Music Player Settings
 musicplayer_setting_playback_rate: "Playback Rate"
 musicplayer_setting_instrumental_volume: "Volume do Instrumental"
@@ -71,11 +68,17 @@ ui_select: "Selecionar"
 ui_confirm: "Confirmar"
 ui_close: "Fechar"
 ui_back: "Voltar"
-ui_gmodifiers: "Modificadores"
 ui_reset: "Reset"
+ui_preview: "Prévia"
+ui_gmodifiers: "Modificadores"
 ui_change_character: "Personagem"
-ui_music_player: "Prévia"
+ui_play_song: "Play/Pause Song"
+ui_switch_song: "Switch Song"
+ui_restart_song: "Restart Song"
+ui_open_settings: "Open Settings"
 ui_open_link: "Abrir Link"
+ui_view_description: "View Description"
+ui_customize_option: "Customize Option"
 
 // Credits
 credits_tip: "Pressione CIMA ou BAIXO para selecionar um membro\nPressione ACEITAR para ver o status de um membro"
@@ -166,7 +169,7 @@ switch_on_accept: "(Pressione Accept para Trocar)"
 switch_on_start: "(Pressione Start para Trocar)"
 
 // Gameplay Modifiers
-setting_locked: "This option cannot be changed on"
+setting_locked: "This option cannot be changed on {1}."
 setting_locked_default: "{1} will be defaulted to {2}."
 
 setting_scroll_type: "Tipo de Scroll"
