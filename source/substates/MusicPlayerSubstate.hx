@@ -7,7 +7,6 @@ import flixel.util.FlxStringUtil;
 import flixel.addons.display.shapes.FlxShapeCircle;
 
 import backend.Song;
-import objects.AttachedSprite;
 import states.FreeplayState.SongMetadata;
 
 class MusicPlayerSubstate extends MusicBeatSubstate
@@ -202,11 +201,9 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		settingGroup.cameras = [camSettings];
 		add(settingGroup);
 
-		var settingOutline:AttachedSprite = new AttachedSprite();
+		var settingOutline:FlxSprite = new FlxSprite();
 		settingOutline.makeGraphic(Std.int(settingBox.width), Std.int(settingBox.height), 0);
 		settingOutline.drawRect(0, 0, settingOutline.width, settingOutline.height, 0, {thickness: 5, color: 0xFFFFFFFF});
-		settingOutline.sprTracker = settingBox;
-		settingOutline.copyVisible = true;
 		settingOutline.cameras = [camSettings];
 		add(settingOutline);
 

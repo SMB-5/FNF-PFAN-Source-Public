@@ -45,7 +45,6 @@ class GameplayChangersSubstate extends BaseOptionsMenu
 		#end
 
 		var option:Option = createOption('Health Gain Multiplier', 'How much health should you gain when hitting notes?', 'healthgain', FLOAT, 1);
-		option.disallowedSongs = ['Tartarus'];
 		option.scrollSpeed = 2.5;
 		option.minValue = 0;
 		option.maxValue = 5;
@@ -54,7 +53,6 @@ class GameplayChangersSubstate extends BaseOptionsMenu
 		modArray.push(option);
 
 		var option:Option = createOption('Health Loss Multiplier', 'How much health should you lose when hitting notes?', 'healthloss', FLOAT, 1);
-		option.disallowFreeplay = true;
 		option.scrollSpeed = 2.5;
 		option.minValue = 0.5;
 		option.maxValue = 5;
@@ -68,8 +66,7 @@ class GameplayChangersSubstate extends BaseOptionsMenu
 		modArray.push(createOption('Botplay', 'Watch a perfect bot play through the song.', 'botplay', BOOL, false));
 
 		var option:Option = createOption('Play As Opponent', 'Play as the opponent.', 'opponentmode', BOOL, false);
-		option.disallowedSongs = ['Mass Destruction', 'Specialist', 'Acceptance', 'Shadow', 'Confrontation', 'Awakening', 'Smashin', 'Desire'];
-		option.disallowStoryMode = true;
+		option.disallowedSongs = ['Mass Destruction', 'Specialist', 'Acceptance', 'Shadow', 'Confrontation', 'Awakening', 'Smashin'];
 		modArray.push(option);
 		return modArray;
 	}

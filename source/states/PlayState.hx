@@ -3705,7 +3705,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function makeGhostNote(note:Note) {
-		var ghost = new Note(note.strumTime, note.noteData, null, note.isSustainNote);
+		var ghost = new Note(note.strumTime - ClientPrefs.data.noteOffset, note.noteData, null, note.isSustainNote);
 		ghost.noteType = 'MISSED_NOTE';
 		ghost.multAlpha = note.multAlpha * .5;
 		ghost.mustPress = note.mustPress;
