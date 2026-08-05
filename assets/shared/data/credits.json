@@ -10,6 +10,7 @@
 		"Chromatic Makers",
 		"Translation",
 		"Contributors",
+		"Promotors",
 		"Special Thanks"
 	],
 	"members": {
@@ -31,6 +32,15 @@
 			"link": "https://cremiesilver.newgrounds.com/",
 			"color": "11E92B"
 		},
+		"Juul": {
+			"icon": "juul",
+			"flipIcon": false,
+			"section": ["Art/Animation"],
+			"role": "Artist, Animator",
+			"description": "Play Sinnoh Showdown.",
+			"link": "https://x.com/PaddyLegend16",
+			"color": "01584F"
+		},
 		"TaraForm": {
 			"icon": "sara",
 			"flipIcon": false,
@@ -40,14 +50,14 @@
 			"link": "https://vgen.co/TaraForm",
 			"color": "BD54FF"
 		},
-		"dog": {
-			"icon": "doggo",
+		"Azalio": {
+			"icon": "chosozazu",
 			"flipIcon": true,
 			"section": ["Music", "Charting"],
 			"role": "Musician, Charter",
-			"description": "Howdy. I made a few songs for this demo, and I also made the menu and game over themes. Also I charted like part of one song? So yeah hope you enjoy the mod!",
+			"description": "Hi, I made a lot of music for this mod. Hope you enjoyed playing the songs, even if I wasnt thinking much about charting when composing a few of them...",
 			"link": "https://www.youtube.com/@whogavethedogalaptop",
-			"color": "F5D79D"
+			"color": "008282"
 		},
 		"MrEights": {
 			"icon": "",
@@ -93,6 +103,15 @@
 			"description": "Say Gex.",
 			"link": "https://x.com/noah_gani1",
 			"color": "203A53"
+		},
+		"Mina Takeover": {
+			"icon": "mina",
+			"flipIcon": false,
+			"section": ["Promotors"],
+			"role": "Thumbnail Artist",
+			"description": "fan fact: my whole aesthetic is purple but not sure if it's totally true myself.",
+			"link": "https://www.instagram.com/fnf_qt_artz?igsh=MWp0OXJ5Z2Q0cmRzaw==",
+			"color": "800080"
 		},
 		"Cobalt": {
 			"icon": "cobalt",

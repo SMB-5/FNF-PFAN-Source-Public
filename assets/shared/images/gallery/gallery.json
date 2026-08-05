@@ -1,5 +1,12 @@
 [
     {
+        "path": "thumbnail",
+        "description": "Thumbnail for the Mod made in 2026.\nArt By Mina Takeover",
+        "title": "Thumbnail",
+        "link": "https://www.instagram.com/fnf_qt_artz?igsh=MWp0OXJ5Z2Q0cmRzaw==",
+        "color": "FF0000"
+    },
+    {
         "path": "p3results",
         "description": "One of the first things made for the Mod back in 2024.\nArt By FearmongerWade",
         "title": "Old P3 Results",
@@ -64,9 +71,16 @@
     },
     {
         "path": "sussus-waifus-sprites",
-        "description": "Sprites for the Scrapped Song: Sussus Waifus. The Song was Scrapped due to not fitting with the Mod properly. You can Press Accept to Watch the Video the song was based on.\nArt By JonWasHere",
+        "description": "Sprites for the Scrapped Song: Sussus Waifus. You can Press Accept to Watch the Video the song was based on.\nArt By JonWasHere",
         "title": "Scrapped Sussus Waifus Song Sprites",
         "link": "https://web.archive.org/web/20201029000138oe_/https://r1---sn-n4v7snee.googlevideo.com/videoplayback?expire=1603951294&ei=XgaaX5_jHMSrkgbM5bmwCw&ip=207.241.231.174&id=o-AByr__dDucWAgtFPe7aTphwO6pPOp-4FlvA1V4JOZGwp&itag=22&source=youtube&requiressl=yes&mh=Sx&mm=31%2C29&mn=sn-n4v7snee%2Csn-n4v7knlk&ms=au%2Crdu&mv=m&mvi=1&pl=20&initcwndbps=2536250&vprv=1&mime=video%2Fmp4&ratebypass=yes&dur=552.843&lmt=1603925321110483&mt=1603929642&fvip=1&c=WEB&txp=5516222&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRAIgSGwTm-2JDKhhh8UhGeO8-KZXs0do991QldX7vncLcfgCIE7HjbHpmFuimBsp8-GzOisUpD-yNTukuQFHroG9mH3c&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIgca30nr7XHD0XKQUCd39v-rv0O8tpIisJh3crotTLohICIQCHWvXc0-Z5eN6RLjGxI0ra5ah5JpgagkFRtVVFK__EBw%3D%3D&video_id=BnEPtjZlKPA",
+        "color": "CD7CEB"
+    },
+    {
+        "path": "old-yu",
+        "description": "Old Sprite of Yu from 2024.\nArt By CrysOtter",
+        "title": "Old Yu Sprite",
+        "link": "https://x.com/CrysOtter08",
         "color": "CD7CEB"
     },
     {
@@ -88,6 +102,13 @@
         "description": "A Draft of the Mementos Stage from 2026.\nArt By Taraform",
         "title": "Mementos Stage Draft",
         "link": "https://vgen.co/TaraForm",
+        "color": "CD7CEB"
+    },
+    {
+        "path": "yuv2-sketch",
+        "description": "A Sketch for Yu's New Sprites from 2026.\nArt By Juul",
+        "title": "Yu V2 Sketch",
+        "link": "https://x.com/PaddyLegend16",
         "color": "CD7CEB"
     }
 ]
