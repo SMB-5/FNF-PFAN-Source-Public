@@ -120,11 +120,11 @@
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Yu-Narukami",
-	"position": [-420, -260],
+	"position": [-420, -280],
 	"healthicon": "yu-narukami-tv",
 	"flip_x": false,
 	"healthbar_colors": [255, 234, 56],
-	"camera_position": [150, 200],
+	"camera_position": [100, 200],
 	"sing_duration": 4,
 	"scale": 0.9,
 	"_editor_isPlayer": true
