@@ -55,7 +55,7 @@
 		{
 			"loop": false,
 			"offsets": [-1, 1],
-			"anim": "singLEFT",
+			"anim": "singRIGHT",
 			"fps": 12,
 			"name": "yu left0",
 			"indices": []
@@ -79,7 +79,7 @@
 		{
 			"loop": false,
 			"offsets": [-80, 30],
-			"anim": "singRIGHT",
+			"anim": "singLEFT",
 			"fps": 12,
 			"name": "yu right0",
 			"indices": []
@@ -87,7 +87,7 @@
 		{
 			"loop": false,
 			"offsets": [-1, 1],
-			"anim": "singLEFTmiss",
+			"anim": "singRIGHTmiss",
 			"fps": 12,
 			"name": "yu leftMiss",
 			"indices": []
@@ -111,7 +111,7 @@
 		{
 			"loop": false,
 			"offsets": [-80, 30],
-			"anim": "singRIGHTmiss",
+			"anim": "singLEFTmiss",
 			"fps": 12,
 			"name": "yu rightMiss",
 			"indices": []
