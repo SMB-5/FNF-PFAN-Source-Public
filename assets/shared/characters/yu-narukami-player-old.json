@@ -1,0 +1,168 @@
+{
+	"strum_colors": [
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		],
+		[
+			[238, 219, 58],
+			[255, 255, 255],
+			[0, 0, 0]
+		]
+	],
+	"note_colors": [
+		[
+			[255, 234, 56],
+			[255, 255, 255],
+			[81, 50, 14]
+		],
+		[
+			[201, 203, 214],
+			[255, 255, 255],
+			[43, 45, 55]
+		],
+		[
+			[215, 179, 0],
+			[255, 255, 255],
+			[72, 50, 4]
+		],
+		[
+			[118, 127, 140],
+			[255, 255, 255],
+			[27, 29, 43]
+		]
+	],
+	"animations": [
+		{
+			"offsets": [
+				-4,
+				31
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "idle"
+		},
+		{
+			"offsets": [
+				-18,
+				31
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "left0"
+		},
+		{
+			"offsets": [
+				78,
+				-79
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "down0"
+		},
+		{
+			"offsets": [
+				-7,
+				119
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "up0"
+		},
+		{
+			"offsets": [
+				123,
+				14
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "right0"
+		},
+		{
+			"offsets": [
+				-16,
+				151
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHTmiss",
+			"indices": [],
+			"name": "left note miss0"
+		},
+		{
+			"offsets": [
+				79,
+				47
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWNmiss",
+			"indices": [],
+			"name": "down note miss0"
+		},
+		{
+			"offsets": [
+				-9,
+				254
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUPmiss",
+			"indices": [],
+			"name": "up note miss0"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				123,
+				98
+			],
+			"anim": "singLEFTmiss",
+			"fps": 24,
+			"name": "right note miss0",
+			"indices": []
+		}
+	],
+	"vocals_file": "",
+	"no_antialiasing": false,
+	"image": "characters/Yu-Narukami-Old",
+	"position": [
+		20,
+		220
+	],
+	"healthicon": "yu-narukami-tv",
+	"flip_x": false,
+	"healthbar_colors": [
+		255,
+		234,
+		56
+	],
+	"camera_position": [
+		10,
+		50
+	],
+	"sing_duration": 4,
+	"scale": 1.1,
+	"_editor_isPlayer": true
+}

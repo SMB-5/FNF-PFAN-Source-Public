@@ -45,87 +45,87 @@
 	],
 	"animations": [
 		{
-			"offsets": [-4, 31],
-			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
+			"indices": [],
+			"fps": 18,
 			"anim": "idle",
-			"indices": [],
-			"name": "idle"
+			"loop": false,
+			"name": "yu idle"
 		},
 		{
-			"offsets": [27, 31],
-			"loop": false,
-			"fps": 24,
+			"offsets": [1, 1],
+			"indices": [],
+			"fps": 12,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "left0"
+			"loop": false,
+			"name": "yu left0"
 		},
 		{
-			"offsets": [-127, -79],
-			"loop": false,
-			"fps": 24,
+			"offsets": [-3, 12],
+			"indices": [],
+			"fps": 12,
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "down0"
+			"loop": false,
+			"name": "yu down0"
 		},
 		{
-			"offsets": [-62, 119],
-			"loop": false,
-			"fps": 24,
+			"offsets": [2, 0],
+			"indices": [],
+			"fps": 12,
 			"anim": "singUP",
-			"indices": [],
-			"name": "up0"
+			"loop": false,
+			"name": "yu up0"
 		},
 		{
-			"offsets": [-177, 14],
-			"loop": false,
-			"fps": 24,
+			"offsets": [80, 30],
+			"indices": [],
+			"fps": 12,
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "right0"
+			"loop": false,
+			"name": "yu right0"
 		},
 		{
-			"offsets": [29, 151],
-			"loop": false,
-			"fps": 24,
+			"offsets": [1, 1],
+			"indices": [],
+			"fps": 12,
 			"anim": "singLEFTmiss",
-			"indices": [],
-			"name": "left note miss0"
+			"loop": false,
+			"name": "yu leftMiss"
 		},
 		{
-			"offsets": [-126, 47],
-			"loop": false,
-			"fps": 24,
+			"offsets": [-3, 12],
+			"indices": [],
+			"fps": 12,
 			"anim": "singDOWNmiss",
-			"indices": [],
-			"name": "down note miss0"
+			"loop": false,
+			"name": "yu downMiss"
 		},
 		{
-			"offsets": [-64, 254],
-			"loop": false,
-			"fps": 24,
+			"offsets": [2, 0],
+			"indices": [],
+			"fps": 12,
 			"anim": "singUPmiss",
-			"indices": [],
-			"name": "up note miss0"
+			"loop": false,
+			"name": "yu upMiss"
 		},
 		{
-			"loop": false,
-			"offsets": [-177, 98],
+			"offsets": [80, 30],
+			"indices": [],
+			"fps": 12,
 			"anim": "singRIGHTmiss",
-			"fps": 24,
-			"name": "right note miss0",
-			"indices": []
+			"loop": false,
+			"name": "yu rightMiss"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Yu-Narukami",
-	"position": [-40, 220],
+	"position": [-420, -260],
 	"healthicon": "yu-narukami-tv",
 	"flip_x": false,
 	"healthbar_colors": [255, 234, 56],
-	"camera_position": [10, 50],
+	"camera_position": [100, 200],
 	"sing_duration": 4,
-	"scale": 1.1,
+	"scale": 0.9,
 	"_editor_isPlayer": false
 }
