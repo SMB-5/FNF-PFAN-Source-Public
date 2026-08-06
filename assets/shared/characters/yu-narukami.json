@@ -69,7 +69,7 @@
 			"name": "yu down0"
 		},
 		{
-			"offsets": [2, 0],
+			"offsets": [20, -20],
 			"indices": [],
 			"fps": 12,
 			"anim": "singUP",
@@ -101,7 +101,7 @@
 			"name": "yu downMiss"
 		},
 		{
-			"offsets": [2, 0],
+			"offsets": [20, -20],
 			"indices": [],
 			"fps": 12,
 			"anim": "singUPmiss",

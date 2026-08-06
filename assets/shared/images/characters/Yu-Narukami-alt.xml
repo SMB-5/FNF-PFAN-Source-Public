@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="yu.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="yu idle0000" x="416" y="1459" width="381" height="772" frameX="-437" frameY="-353" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu idle0001" x="380" y="2235" width="379" height="774" frameX="-437" frameY="-350" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu idle0002" x="0" y="2235" width="380" height="780" frameX="-434" frameY="-344" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu idle0003" x="3231" y="0" width="376" height="786" frameX="-438" frameY="-338" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu idle0004" x="2855" y="790" width="376" height="788" frameX="-438" frameY="-336" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu idle0005" x="2855" y="790" width="376" height="788" frameX="-438" frameY="-336" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu idle0006" x="2855" y="0" width="376" height="790" frameX="-438" frameY="-334" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu left0000" x="0" y="1459" width="416" height="776" frameX="-398" frameY="-350" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu left0001" x="2456" y="779" width="396" height="784" frameX="-419" frameY="-341" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu leftMiss0000" x="2456" y="0" width="399" height="779" frameX="-415" frameY="-347" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu down0000" x="516" y="729" width="414" height="726" frameX="-410" frameY="-409" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu down0001" x="1181" y="1459" width="382" height="741" frameX="-435" frameY="-396" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu downMiss0000" x="797" y="1459" width="384" height="747" frameX="-434" frameY="-393" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu right0000" x="0" y="0" width="550" height="729" frameX="-514" frameY="-403" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu right0001" x="0" y="729" width="516" height="730" frameX="-515" frameY="-401" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu rightMiss0000" x="550" y="0" width="528" height="727" frameX="-516" frameY="-405" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu up0000" x="2011" y="0" width="445" height="819" frameX="-387" frameY="-306" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu up0001" x="1078" y="0" width="464" height="805" frameX="-384" frameY="-319" frameWidth="1280" frameHeight="1280"/>
+	<SubTexture name="yu upMiss0000" x="1542" y="0" width="469" height="792" frameX="-372" frameY="-333" frameWidth="1280" frameHeight="1280"/>
+</TextureAtlas>
