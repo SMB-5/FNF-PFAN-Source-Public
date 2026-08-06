@@ -70,7 +70,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [-10, -20],
+			"offsets": [-20, -20],
 			"anim": "singUP",
 			"fps": 12,
 			"name": "yu up0",
@@ -102,7 +102,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [-10, -20],
+			"offsets": [-20, -20],
 			"anim": "singUPmiss",
 			"fps": 12,
 			"name": "yu upMiss",
