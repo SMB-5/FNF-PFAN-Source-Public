@@ -288,6 +288,7 @@ class MainMenuOptions extends MusicBeatState
 					StageData.loadDirectory(PlayState.SONG);
 					LoadingState.loadAndSwitchState(new PlayState());
 					FlxG.sound.music.fadeOut(0.35, 0);
+					curChar = null;
 				}
 				else {
 					FlxTween.tween(textBG, { alpha: 0 }, 0.15);
