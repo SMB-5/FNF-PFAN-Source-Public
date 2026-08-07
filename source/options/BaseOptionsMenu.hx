@@ -44,7 +44,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var grpSettings:FlxTypedGroup<FlxSprite>;
 	private var grpValues:FlxTypedGroup<FlxText>;
 	private var grpArrows:FlxTypedGroup<FlxText>;
-	private var grpEdits:FlxTypedGroup<FlxSprite>;
+	private var grpButtons:FlxTypedGroup<FlxSprite>;
 	private var grpPreview:FlxTypedGroup<FlxSprite>;
 	private var grpLocked:FlxTypedGroup<FlxSprite>;
 	private var grpLockedDesc:FlxTypedGroup<FlxSprite>;
@@ -157,8 +157,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		grpArrows = new FlxTypedGroup<FlxText>();
 		add(grpArrows);
 
-		grpEdits = new FlxTypedGroup<FlxSprite>();
-		add(grpEdits);
+		grpButtons = new FlxTypedGroup<FlxSprite>();
+		add(grpButtons);
 
 		grpPreview = new FlxTypedGroup<FlxSprite>();
 		add(grpPreview);
@@ -306,18 +306,21 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					curOption.ID = i;
 					grpValues.add(curOption);
 					optionsArray[i].child = curOption;
-				case SUBSTATE(cl):
-					var editBG:FlxSprite = new FlxSprite(optionBG.x + optionBG.width - 255, optionBG.y + 13).makeGraphic(175, 40, 0xFFFFFFFF);
-					editBG.drawRect(0, 0, editBG.width, editBG.height, 0, {thickness: 5, color: 0xFF000000});
-					editBG.ID = i;
-					grpEdits.add(editBG);
+				case BUTTON:
+					var buttonBG:FlxSprite = new FlxSprite(optionBG.x + optionBG.width - 255, optionBG.y + 13).makeGraphic(175, 40, 0xFFFFFFFF);
+					buttonBG.drawRect(0, 0, buttonBG.width, buttonBG.height, 0, {thickness: 5, color: 0xFF000000});
+					buttonBG.ID = i;
+					grpButtons.add(buttonBG);
 
-					var edit:FlxText = new FlxText(0, editBG.y + 3, editBG.width, Language.getPhrase('Edit'), 28);
-					edit.alignment = CENTER;
-					edit.font = Paths.font('Fontsona5Royal.ttf');
-					edit.x = editBG.getMidpoint().x - edit.width / 2;
-					edit.color = 0xFF000000;
-					grpEdits.add(edit);
+					var buttonTxt:FlxText = new FlxText(0, buttonBG.y + 3, 0, Language.getPhrase(optionsArray[i].buttonText), 28);
+					buttonTxt.font = Paths.font('Fontsona5Royal.ttf');
+					if (buttonTxt.width > 150) {
+						buttonTxt.scale.x = buttonTxt.scale.y = 150 / buttonTxt.width;
+						buttonTxt.updateHitbox();
+					}
+					buttonTxt.x = buttonBG.getMidpoint().x - buttonTxt.width / 2;
+					buttonTxt.color = 0xFF000000;
+					grpButtons.add(buttonTxt);
 				case _:
 			}
 
@@ -503,8 +506,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (controls.UI_LEFT || controls.UI_RIGHT) {
 			var go = true;
 			switch(curOption.type) {
-				case KEYBIND: go = false;
-				case SUBSTATE(cl): go = false;
+				case KEYBIND, BUTTON: go = false;
 				default:
 			}
 			if (!curOption.disallowed && go) {
@@ -628,8 +630,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (controls.ACCEPT) {
 			if (!curOption.disallowed) {
 				switch(curOption.type) {
-					case SUBSTATE(cl):
-						openSubState(Type.createInstance(cl, []));
+					case BUTTON:
+						curOption.open();
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 					default:
 				}
@@ -861,13 +863,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 		}
 
-		for (edit in grpEdits) {
-			if (edit is FlxText) continue;
-			var selectedOption:Option = optionsArray[edit.ID];
+		for (button in grpButtons) {
+			if (button is FlxText) continue;
+			var selectedOption:Option = optionsArray[button.ID];
 			if (selectedOption.disallowed) continue;
 			switch(selectedOption.type) {
-				case SUBSTATE(cl) if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(edit, camOptions)):
-					openSubState(Type.createInstance(cl, []));
+				case BUTTON if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(button, camOptions)):
+					selectedOption.open();
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 				default:
 			}
@@ -966,8 +968,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 	function updateTextFrom(option:Option) {
 		switch(option.type) {
-			case SUBSTATE(cl):
-			case KEYBIND:
+			case KEYBIND, BUTTON:
 			case BOOL:
 				var leftArrow:FlxSprite = grpArrows.members[option.child.ID];
 				var rightArrow:FlxSprite = grpArrows.members[option.child.ID + 1];
@@ -1067,7 +1068,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					switch(curOption.type) {
 						case KEYBIND:
 							icon.visible = true;
-						case SUBSTATE(cl):
+						case BUTTON:
 							icon.visible = true;
 						default:
 							icon.visible = curOption.disallowed;

@@ -103,9 +103,9 @@ class Main extends Sprite
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 		Highscore.load();
 
-		// For mobile, recopy all assets if updating to a new version of the mod
+		// For mobile, update all assets if updating to a new version of the mod
 		if (FlxG.save.data.pfanVersion == null || FlxG.save.data.pfanVersion != FlxG.stage.application.meta.get('version')) {
-			#if COPY_FILES CopyState.recopyAssets = true; #end
+			#if COPY_FILES CopyState.updateAssets = true; #end
 			FlxG.save.data.pfanVersion = FlxG.stage.application.meta.get('version');
 			FlxG.save.flush();
 		}

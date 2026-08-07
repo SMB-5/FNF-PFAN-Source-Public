@@ -231,6 +231,7 @@ class CreditsState extends MusicBeatState
 
 		if (!scrollCredits && pressedAccept) {
 			openSubState(new substates.MemberCardSubstate(creditsGroup.members[curSelected]));
+			FlxG.inputs.reset();
 			timeSinceLastInput = 0;
 		}
 

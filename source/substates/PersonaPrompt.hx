@@ -27,7 +27,7 @@ class PersonaPrompt extends MusicBeatSubstate
 	var curSelected:Int = 0;
 	var curButton:FlxSprite;
 
-	public function new(prompt:String, yesFunc:Void->Void, noFunc:Void->Void, yesTimer:Null<Float> = null, noTimer:Null<Float> = null) {
+	public function new(prompt:String, yesFunc:Void->Void = null, noFunc:Void->Void = null, yesTimer:Null<Float> = null, noTimer:Null<Float> = null) {
 		super();
 		this.prompt = prompt;
 		this.yesFunc = yesFunc;
@@ -176,13 +176,13 @@ class PersonaPrompt extends MusicBeatSubstate
 
 	public function pressYes() {
 		FlxG.sound.play(Paths.sound('scrollMenu'));
-		yesFunc();
+		if (yesFunc != null) yesFunc();
 		close();
 	}
 
 	public function pressNo() {
 		FlxG.sound.play(Paths.sound('cancelMenu'));
-		noFunc();
+		if (noFunc != null) noFunc();
 		close();
 	}
 

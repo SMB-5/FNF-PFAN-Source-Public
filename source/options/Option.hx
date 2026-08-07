@@ -12,7 +12,7 @@ enum OptionType {
 	PERCENT;
 	STRING;
 	KEYBIND;
-	SUBSTATE(cl:Class<Dynamic>);
+	BUTTON;
 }
 
 class Option
@@ -21,14 +21,17 @@ class Option
 	public var text(get, set):String;
 	public var onChange:Void->Void = null; //Pressed enter (on Bool type options) or pressed/held left/right (on other types)
 	public var onPreview:Void->Void = null; //Adds a preview button that calls this function
+	public var onOpen:Void->Void = null; //Only works on BUTTON type, calls this function when the button is pressed
 	public var type:OptionType = BOOL;
 	public var gameplayOption:Bool = false; //Checks ClientPrefs.data.gameplaySettings instead of ClientPrefs.data
+
+	public var buttonText:String = 'Open'; //Only used on BUTTON type, the text to show on the button. This can be a translation phrase or just a regular string
 
 	public var customizable:Bool = false; //Adds a setting button and allows a substate to be opened to be used as extra customization for an option (Different from SUBSTATE which only opens a substate AS the option)
 	public var customizationClass:Class<Dynamic>; //Class used for customizable
 
 	public var scrollSpeed:Float = 50; //Only works on int/float/percent, defines how fast it scrolls per second while holding left/right
-	public var variable(default, null):String = null; //Variable from ClientPrefs.hx
+	public var variable(default, null):String = null; //Variable from ClientPrefs.hx. Can be NULL if you simply want an option without a variable attached to it
 	public var defaultValue:Dynamic = null;
 
 	public var curOption:Int = 0; //Don't change this
@@ -61,7 +64,7 @@ class Option
 		this.options = options;
 		this.gameplayOption = gameplayOption;
 
-		if (this.type != KEYBIND && this.defaultValue == null) {
+		if (this.type != KEYBIND && this.defaultValue == null && variable != null) {
 			if (gameplayOption)
 				this.defaultValue = ClientPrefs.defaultData.gameplaySettings.get(variable);
 			else
@@ -92,8 +95,7 @@ class Option
 				defaultKeys = {gamepad: 'NONE', keyboard: 'NONE'};
 				keys = {gamepad: 'NONE', keyboard: 'NONE'};
 
-			case SUBSTATE(cl):
-				this.customizationClass = cl;
+			default:
 		}
 
 		try
@@ -115,7 +117,6 @@ class Option
 
 	public function change()
 	{
-		//nothing lol
 		if(onChange != null)
 			onChange();
 	}
@@ -126,8 +127,15 @@ class Option
 			onPreview();
 	}
 
+	public function open()
+	{
+		if(onOpen != null)
+			onOpen();
+	}
+
 	dynamic public function getValue():Dynamic
 	{
+		if (variable == null) return null;
 		var value:Dynamic;
 		if (gameplayOption)
 			value = ClientPrefs.data.gameplaySettings.get(variable);
@@ -140,6 +148,7 @@ class Option
 
 	dynamic public function setValue(value:Dynamic)
 	{
+		if (variable == null) return null;
 		if (type == KEYBIND)
 		{
 			var keys;

@@ -105,6 +105,7 @@ demolock_text: "This Menu will be Available in the First Release of the Full Mod
 
 // Persona Prompts
 prompt_erase_save_data: "You are about to erase your save data.\nWould you like to proceed?"
+prompt_recopy_assets: "Are you sure you want to recopy all assets?\nThis may take a while."
 
 // PlayState
 botplay: "Botplay"
@@ -217,6 +218,9 @@ description_control_alpha: "How transparent should the controls be?"
 
 setting_enable_pause_button: "Enable Pause Button"
 description_enable_pause_button: "Enables the pause button.\nPressing the back button on Android will still pause the game."
+
+setting_recopy_assets: "Recopy Assets"
+description_recopy_assets: "Deletes the assets folder and recopies everything again.\nUseful if some files aren't properly updated or if there are missing files."
 
 // Mobile Hitbox Settings
 setting_hitbox_style: "Hitbox Style"

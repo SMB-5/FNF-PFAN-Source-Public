@@ -18,6 +18,7 @@ class CopyState extends MusicBeatState
 	public static var ignoreFolders:Array<String> = ['embed']; // Don't include a slash at the end when putting folders in here
 	public static var filesToAdd:Array<String> = [];
 	public static var recopyAssets:Bool = false; // Recopy all assets when the mod is updated, does not recopy mods folder for obvious reasons
+	public static var updateAssets:Bool = false; // Ditto, but with a different notice message
 
 	public var bg:FlxSprite;
 	public var progressBar:FlxBar;
@@ -28,9 +29,9 @@ class CopyState extends MusicBeatState
 	public var failedStack:Array<String> = [];
 
 	override function create() {
-		if (recopyAssets) {
+		if (recopyAssets || updateAssets) {
 			if (FileSystem.exists('assets') && FileSystem.isDirectory('assets')) CoolUtil.deleteDirectory('assets');
-			else recopyAssets = false;
+			else recopyAssets = updateAssets = false;
 		}
 
 		if (!findNewFiles()) {
@@ -39,7 +40,8 @@ class CopyState extends MusicBeatState
 		}
 
 		var msg:String = 'Found new files that are necessary to start the game.';
-		if (recopyAssets) msg = 'Mod was updated, recopying all files to ensure the game\'s condition.';
+		if (recopyAssets) msg = 'Recopying all files...';
+		if (updateAssets) msg = 'Mod was updated, recopying all files to ensure the game\'s condition.';
 
 		FlxG.stage.window.alert('$msg Press OK to start the copying process.', 'Notice!');
 
