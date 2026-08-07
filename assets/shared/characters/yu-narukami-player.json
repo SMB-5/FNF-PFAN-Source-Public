@@ -78,7 +78,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [-90, 30],
+			"offsets": [-10, 30],
 			"anim": "singLEFT",
 			"fps": 12,
 			"name": "yu right0",
@@ -110,7 +110,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [-90, 30],
+			"offsets": [-10, 30],
 			"anim": "singLEFTmiss",
 			"fps": 12,
 			"name": "yu rightMiss",
