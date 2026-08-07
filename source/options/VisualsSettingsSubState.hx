@@ -235,21 +235,10 @@ class NotePreviewSubstate extends MusicBeatSubstate
 		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad_left_right', 1, 'ui_select', 0.15, 24);
 		add(movementIcon);
 
-		var acceptIcon:KeyIcon;
-		var backIcon:KeyIcon;
-
-		if (Controls.instance.controllerMode)
-		{
-			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_play_animation', 0.15, 24);
-			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
-		}
-		else
-		{
-			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 1, 'ui_play_animation', 0.15, 24);
-			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 1, 'ui_back', 0.15, 24);
-		}
-
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_play_animation', 0.15, 24);
 		add(acceptIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
 		add(backIcon);
 		#end
 
@@ -410,21 +399,10 @@ class SplashPreviewSubstate extends MusicBeatSubstate
 		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
 		add(movementIcon);
 
-		var acceptIcon:KeyIcon;
-		var backIcon:KeyIcon;
-
-		if (Controls.instance.controllerMode)
-		{
-			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_play_animation', 0.15, 24);
-			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
-		}
-		else
-		{
-			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 1, 'ui_play_animation', 0.15, 24);
-			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 1, 'ui_back', 0.15, 24);
-		}
-
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_play_animation', 0.15, 24);
 		add(acceptIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
 		add(backIcon);
 		#end
 

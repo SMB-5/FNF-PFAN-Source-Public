@@ -188,21 +188,10 @@ class FreeplayState extends MusicBeatState
 		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 24, 'dpad', 1, 'ui_select', 0.1, 24);
 		keyIcons.add(movementIcon);
 
-		var acceptIcon:KeyIcon;
-		var backIcon:KeyIcon;
-
-		if (Controls.instance.controllerMode)
-		{
-			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 5, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 24);
-			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 24);
-		}
-		else
-		{
-			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 5, FlxG.height - 24, 'accept', 1, 'ui_confirm', 0.1, 24);
-			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 1, 'ui_back', 0.1, 24);
-		}
-
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 5, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 24);
 		keyIcons.add(acceptIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 24);
 		keyIcons.add(backIcon);
 
 		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'START' : 'CONTROL', 0, 'ui_gmodifiers', 0.1, 24, true);

@@ -59,11 +59,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(cardText);
 
 		#if !mobile
-		if (Controls.instance.controllerMode)
-			acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 0, 'ui_close');
-		else
-			acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 1, 'ui_close');
-
+		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 0, 'ui_close');
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
 		acceptIcon.iconText.y += 3.5;
 		acceptIcon.alpha = 0;

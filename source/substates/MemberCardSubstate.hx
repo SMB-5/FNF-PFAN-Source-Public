@@ -195,21 +195,12 @@ class MemberCardSubstate extends MusicBeatSubstate
 		add(descOutline);
 
 		#if !mobile
-		if (Controls.instance.controllerMode)
-		{
-			backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 0, 'ui_close');
-			acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 0, 'ui_open_link');
-		}
-		else
-		{
-			backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 1, 'ui_close');
-			acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 1, 'ui_open_link');
-		}
-
+		backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 0, 'ui_close');
 		backIcon.iconText.font = Paths.font('p5hatty-1.ttf');
 		backIcon.iconText.y += 3.5;
 		add(backIcon);
 
+		acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 0, 'ui_open_link');
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
 		acceptIcon.iconText.y += 3.5;
 		add(acceptIcon);

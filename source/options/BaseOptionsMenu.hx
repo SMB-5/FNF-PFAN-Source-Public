@@ -390,22 +390,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'dpad', 1, 'ui_select', 0.1, 24);
 		keyIcons.add(movementIcon);
 
-		var acceptIcon:KeyIcon;
-		var backIcon:KeyIcon;
-
-		if (Controls.instance.controllerMode)
-		{
-			backIcon = new KeyIcon(0, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 24);
-			acceptIcon = new KeyIcon(0, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 24);
-		}
-		else
-		{
-			backIcon = new KeyIcon(0, FlxG.height - 24, 'back', 1, 'ui_back', 0.1, 24);
-			acceptIcon = new KeyIcon(0, FlxG.height - 24, 'accept', 1, 'ui_confirm', 0.1, 24);
-		}
-
-		keyIcons.add(acceptIcon);
+		var backIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 24);
 		keyIcons.add(backIcon);
+
+		var acceptIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 24);
+		keyIcons.add(acceptIcon);
 
 		var infoIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, controls.controllerMode ? 'X' : 'F1', 0, 'ui_view_description', 0.1, 24);
 		keyIcons.add(infoIcon);
