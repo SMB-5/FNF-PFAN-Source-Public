@@ -118,7 +118,7 @@ function goodNoteHit(note){
 	if(FlxG.random.bool(10)){
 		switch(game.combo){
 			case 50, 100:
-				var animToPlay:String = 'combo${game.combo}';
+				var animToPlay:String = 'combo' + game.combo;
 				if(gf.animation.exists(animToPlay)){
 					gf.playAnim(animToPlay);
 					gf.specialAnim = true;
