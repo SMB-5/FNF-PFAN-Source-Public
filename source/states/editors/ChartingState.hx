@@ -262,6 +262,10 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 		createGrids();
 
+		prevGridBg.antialiasing = false;
+		gridBg.antialiasing = false;
+		nextGridBg.antialiasing = false;
+
 		waveformSprite = new FlxSprite(gridBg.x + (SHOW_EVENT_COLUMN ? GRID_SIZE : 0), 0).makeGraphic(1, 1, 0x00FFFFFF);
 		waveformSprite.scrollFactor.x = 0;
 		waveformSprite.visible = false;
