@@ -148,7 +148,6 @@ class GameOverSubstate extends MusicBeatSubstate
 				neneKnife.animation.onFinish.add(function(_)
 				{
 					remove(neneKnife);
-					//neneKnife.destroy();
 				});
 				insert(0, neneKnife);
 				neneKnife.animation.play('anim', true);
