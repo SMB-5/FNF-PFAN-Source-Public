@@ -65,6 +65,12 @@ class CopyState extends MusicBeatState
 		super.create();
 	}
 
+	override function update(elapsed:Float) {
+		if (progressText.text != 'Completed!') progressText.text = filesCopied == filesTotal ? 'Completed!' : '$filesCopied/$filesTotal';
+		progressBar.percent = (filesCopied / filesTotal) * 100;
+		super.update(elapsed);
+	}
+
 	public static function findNewFiles():Bool {
 		filesToAdd = Assets.list().filter(file->{
 			var startsWith:Bool = false;
@@ -108,8 +114,6 @@ class CopyState extends MusicBeatState
 				trace('failed to copy file $file\n$e');
 			}
 			filesCopied++;
-			progressText.text = filesCopied == filesTotal ? 'Completed!' : '$filesCopied/$filesTotal';
-			progressBar.percent = (filesCopied / filesTotal) * 100;
 		}
 		if (failedFiles.length > 0) {
 			FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed to copy ${failedFiles.length} files');
