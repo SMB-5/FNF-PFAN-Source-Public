@@ -51,7 +51,7 @@ class KeyIcon extends FlxSpriteGroup
 	public static var DEFAULT_SCALE(default, never):Float = 0.15;
 
 	public static function getIconPath(controller:Bool = false):String {
-		if (controller || FlxG.gamepads.getFirstActiveGamepad()?.name.toLowerCase().contains('steam')) {
+		if (controller) {
 			var model:FlxGamepadModel = FlxG.gamepads.firstActive?.detectedModel;
 			if (model == PS4 || model == PS5) return 'persona/ui/button-icons/controller/ps4/';
 			else if (model == SWITCH_PRO || model == SWITCH_JOYCON_LEFT || model == SWITCH_JOYCON_RIGHT) return 'persona/ui/button-icons/controller/switch/';

@@ -85,7 +85,7 @@ class CopyState extends MusicBeatState
 
 			// reminder: ONLY USED IN DEVELOPMENT, REMOVE WHEN RELEASING MOD
 			// this loads too slow to be used in release builds and is unnecessary - melodiekit
-			else if (!compareAssetBytes(file, saveExtensions.contains(Path.extension(file).toLowerCase()))) return true;
+			//else if (!compareAssetBytes(file, saveExtensions.contains(Path.extension(file).toLowerCase()))) return true;
 			return false;
 		});
 		trace('files found: $filesToAdd');
