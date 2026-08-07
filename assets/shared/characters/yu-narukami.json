@@ -77,7 +77,7 @@
 			"name": "yu up0"
 		},
 		{
-			"offsets": [80, 30],
+			"offsets": [90, 30],
 			"indices": [],
 			"fps": 12,
 			"anim": "singRIGHT",
@@ -109,7 +109,7 @@
 			"name": "yu upMiss"
 		},
 		{
-			"offsets": [80, 30],
+			"offsets": [90, 30],
 			"indices": [],
 			"fps": 12,
 			"anim": "singRIGHTmiss",
