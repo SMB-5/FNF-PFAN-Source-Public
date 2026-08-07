@@ -158,6 +158,15 @@
 			"link": "https://zescrew2.art/",
 			"color": "FFBA6B"
 		},
+		"SquidBowl": {
+			"icon": "ruby",
+			"flipIcon": false,
+			"section": ["Special Thanks"],
+			"role": "Made the Gallery used in the Mod.",
+			"description": "flick yo roobeans! yo roobenas! flick yo roobeans!",
+			"link": "https://gamebanana.com/members/2041479",
+			"color": "743F39"
+		},
 		"Mikolka9144": {
 			"icon": "mikolka",
 			"flipIcon": false,
