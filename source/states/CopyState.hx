@@ -66,8 +66,8 @@ class CopyState extends MusicBeatState
 	}
 
 	override function update(elapsed:Float) {
-		if (progressText.text != 'Completed!') progressText.text = filesCopied == filesTotal ? 'Completed!' : '$filesCopied/$filesTotal';
-		progressBar.percent = (filesCopied / filesTotal) * 100;
+		if (progressText != null && progressText.text != 'Completed!') progressText.text = filesCopied == filesTotal ? 'Completed!' : '$filesCopied/$filesTotal';
+		if (progressBar != null) progressBar.percent = (filesCopied / filesTotal) * 100;
 		super.update(elapsed);
 	}
 
