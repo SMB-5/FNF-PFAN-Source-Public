@@ -224,7 +224,9 @@ class ClientPrefs {
 		for (key in Reflect.fields(data))
 			if (key != 'gameplaySettings' && Reflect.hasField(FlxG.save.data, key))
 				Reflect.setField(data, key, Reflect.field(FlxG.save.data, key));
-		
+
+		FlxSprite.defaultAntialiasing = data.antialiasing;
+
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = data.showFPS;
 

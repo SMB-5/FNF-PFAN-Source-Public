@@ -18,7 +18,7 @@ class HitboxSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Show Hints',
-			'Whether to show the hitbox hints while idling or not.',
+			'Shows the hitbox borders at all times.',
 			'hitboxHints',
 			BOOL);
 		addOption(option);
@@ -29,6 +29,7 @@ class HitboxSettingsSubState extends BaseOptionsMenu
 		bg.setGraphicSize(FlxG.width, FlxG.height);
 		bg.updateHitbox();
 		bg.alpha = 0.8;
+		bg.cameras = [camBG];
 		insert(0, bg);
 	}
 }

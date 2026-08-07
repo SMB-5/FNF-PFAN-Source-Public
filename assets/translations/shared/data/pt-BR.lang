@@ -55,6 +55,7 @@ off: "Desligado"
 edit: "Editar"
 reset: "Reset"
 back: "Voltar"
+locked: "Locked"
 story_mode: "Story Mode"
 freeplay: "Freeplay"
 
@@ -69,24 +70,31 @@ ui_confirm: "Confirmar"
 ui_close: "Fechar"
 ui_back: "Voltar"
 ui_reset: "Reset"
+ui_reset_all: "Reset All"
 ui_preview: "Prévia"
 ui_gmodifiers: "Modificadores"
 ui_change_character: "Personagem"
 ui_play_song: "Play/Pause Song"
 ui_switch_song: "Switch Song"
 ui_restart_song: "Restart Song"
+ui_skip_time: "Skip Time"
+ui_skip_percentage: "Skip To Percentage"
 ui_open_settings: "Open Settings"
 ui_open_link: "Abrir Link"
 ui_view_description: "View Description"
 ui_customize_option: "Customize Option"
+ui_change_offset: "Change Offset"
+ui_multiply_offset: "Multiply Offset (Hold)"
+ui_play_animation: "Play Animation"
 
 // Credits
 credits_tip: "Pressione CIMA ou BAIXO para selecionar um membro\nPressione ACEITAR para ver o status de um membro"
 credits_tip_mobile: "Deslize para selecionar um membro\nToque para ver o status de um membro"
 
 // Persona PopUp Cards
-prompt_info: "INFORMAÇÃO"
-prompt_system: "SISTEMA"
+popup_info: "INFORMAÇÃO"
+popup_system: "SISTEMA"
+
 error_title: "Erro"
 
 demo_title: "Antes De Começar a Demo"
@@ -94,6 +102,9 @@ demo_text: "Este mod ainda está em desenvolvimento, então muitas coisas presen
 
 demolock_title: "Indisponível na Demo"
 demolock_text: "Este menu estará disponível no primeiro lançamento do mod completo."
+
+// Persona Prompts
+prompt_erase_save_data: "You are about to erase your save data.\nWould you like to proceed?"
 
 // PlayState
 botplay: "Automático"
@@ -152,21 +163,14 @@ gameplay_menu: "JOGABILIDADE"
 graphics_menu: "GRÁFICOS"
 visuals_menu: "VISUAIS"
 
-// Note Colors Menu
-note_colors_tip: "Aperte RESET para resetar a parte selecionada da Nota."
-note_colors_hold_tip: "Segure {1} e Aperte RESET para resetar por completo a Nota selecionada."
-note_colors_shift: "Shift"
-note_colors_lb: "Botão de Ombro Esquerdo"
+erase_save_data: "Hold RESET to erase save data."
+erase_save_data_mobile: "Press this text to erase save data."
 
 // Adjust Delay and Combo Menu
 delay_beat_hit: "Batida!"
 delay_current_offset: "Atraso: {1} ms";
 combo_rating_offset: "Offset de Classificação:"
 combo_numbers_offset: "Offset de Números:"
-combo_offset: "Offset do Combo";
-note_delay: "Atraso das Notas";
-switch_on_accept: "(Pressione Accept para Trocar)"
-switch_on_start: "(Pressione Start para Trocar)"
 
 // Gameplay Modifiers
 setting_locked: "This option cannot be changed on {1}."
@@ -190,10 +194,10 @@ setting_health_loss_multiplier: "Mult. de Vida Perdida"
 description_health_loss_multiplier: "How much health should you lose when hitting notes?"
 
 setting_merciless: "Impiedoso"
-description_merciless: "Instakills upon a Bad/Shit rating being hit or upon receiving a miss."
+description_merciless: "Instantly results in a game over upon the player receiving a Bad/Shit rating or a miss."
 
 setting_instakill_on_miss: "Morrer ao Errar"
-description_instakill_on_miss: "Instakills upon receiving a miss."
+description_instakill_on_miss: "Instantly results in a game over upon the player receiving a miss."
 
 setting_practice_mode: "Modo Prática"
 description_practice_mode: "Disables the game over."
@@ -209,10 +213,10 @@ setting_edit_mobile_controls: "Editar controles do Celular"
 description_edit_mobile_controls: "Altere o modo de controle atual ou personalize seus controles."
 
 setting_control_alpha: "Controle Alfa"
-description_control_alpha: "Quão opacos você quer que os controles sejam?"
+description_control_alpha: "How transparent should the controls be?"
 
 setting_enable_pause_button: "Ativar botão de pausar"
-description_enable_pause_button: "Se o botão de pausa deve ou não ser habilitado.\nVocê ainda pode pressionar o botão de voltar para pausar."
+description_enable_pause_button: "Enables the pause button.\nPressing the back button on Android will still pause the game."
 
 // Mobile Hitbox Settings
 setting_hitbox_style: "Estilo da Hitbox"
@@ -221,7 +225,7 @@ setting_hitbox_style-gradient: "Gradient"
 description_hitbox_style: "Qual estilo da Hitbox deve ser usado?"
 
 setting_show_hints: "Mostrar Dicas"
-description_show_hints: "Se deve exibir ou não as indicações de hitbox enquanto o personagem está parado."
+description_show_hints: "Shows the hitbox borders at all times."
 
 // Mobile Controls Menu
 mobile_controls_save_and_exit: "Salvar e Sair"
@@ -231,19 +235,19 @@ mobile_controls_reset_positions: "Resetar Posições"
 
 // Graphics Settings
 setting_low_quality: "Baixa Qualidade"
-description_low_quality: "Se marcado, desativa alguns elementos do fundo,\ndiminui tempo de carregamento e melhora a performance."
+description_low_quality: "Disables some background details, but improves performance and loading times."
 
 setting_anti-aliasing: "Anti-Aliasing"
-description_anti-aliasing: "Se desmarcado, o anti-aliasing é desativado, aumenta a performance ao custo dos gráficos ficarem menos suaves."
+description_anti-aliasing: "Smooths out the edges of sprites, removing jagged edges and sharpening them.\nThis will increase performance if enabled."
 
 setting_shaders: "Shaders"
-description_shaders: "Se desmarcado, desativa as shaders.\nElas são usadas para alguns efeitos especiais, e também são intensas para CPUs fracas."
+description_shaders: "Enables shaders which enhance the visuals.\nNot recommended to be enabled if you have a low-end device as this heavily uses up your CPU."
 
 setting_gpu_caching: "Caching na GPU"
-description_gpu_caching: "Se marcado, permite que a GPU seja usada para armazenar texturas, reduzindo uso da memória RAM.\nNão ligue isso se sua Placa de Vídeo é ruim."
+description_gpu_caching: "Uses the GPU for caching purposes which will decrease RAM usage.\nNot recommended to be enabled if you have a bad graphics card."
 
 setting_framerate: "Taxa de Atualização"
-description_framerate: "Também chamado de "Framerate", preciso explicar?"
+description_framerate: "The FPS at which the game will run on."
 
 // Visuals Settings
 setting_note_skin: "Estilo de Notas"
@@ -262,25 +266,25 @@ setting_note_splash-psych-old: "Psych-Old"
 description_note_splash: "Escolha o seu estilo de Impacto das Notas favorito."
 
 setting_note_splash_opacity: "Opacidade do Impacto"
-description_note_splash_opacity: "O quão transparente os Impactos das Notas devem ser."
+description_note_splash_opacity: "How transparent should the note splashes be?"
 
 setting_hold_note_splashes: "Impacto das Notas Sustentadas"
-description_hold_note_splashes: "Se desmarcado, Impactos não aparecerão nas notas ao manter uma nota sustentada."
+description_hold_note_splashes: "Enables splashes when holding down a sustain note."
 
 setting_note_quantization: "Quantização de Notas"
-description_note_quantization: "Se marcado, colore as notas com base no seu ajuste à grade (snap)."
+description_note_quantization: "Colors the notes based on their snap."
 
 setting_character_note_colors: "Cores de Notas do Personagem"
-description_character_note_colors: "Se desmarcado, os personagens não usarão suas cores de nota personalizadas"
+description_character_note_colors: "Enables custom note colors for characters."
 
 setting_strum_background_opacity: "Opacidade do Fundo do Strum"
-description_strum_background_opacity: "Qual deve ser o nível de transparência do fundo da Strumline?"
+description_strum_background_opacity: "How transparent should the Strumline Background be?"
 
 setting_hide_hud: "Esconder HUD"
-description_hide_hud: "Se marcado, a maioria dos elementos da UI ficarão ocultos."
+description_hide_hud: "Hides most HUD elements."
 
 setting_show_misses_and_accuracy: "Mostrar Erros e Avaliação"
-description_show_misses_and_accuracy: "Se desmarcado, oculta os Erros e a Avaliação no HUD, e a pontuação é exibida como no jogo base."
+description_show_misses_and_accuracy: "Shows the misses and accuracy in the score text.\nDisabling this returns the HUD to the Base Game HUD."
 
 setting_time_bar_display: "Time Bar Display"
 setting_time_bar_display-time_left: "Tempo Restante"
@@ -290,59 +294,62 @@ setting_time_bar_display-disabled: "Desativada"
 description_time_bar_display: "O que a Barra de Tempo deve mostrar?"
 
 setting_subtitles: "Legendas"
-description_subtitles: "Se marcado, as legendas aparecerão quando um personagem falar ou cantar."
+description_subtitles: "Shows subtitles if a character speaks."
 
 setting_flashing_lights: "Luzes Piscantes"
-description_flashing_lights: "Desmarque isso se você é sensível a luzes que piscam!"
+description_flashing_lights: "Enables flashing lights.\nNot recommended to be enabled if you're photosensitive!"
 
 setting_camera_zooms: "Zoom da Câmera"
-description_camera_zooms: "Se desmarcado, a câmera não dará zoom nas batidas da música."
+description_camera_zooms: "Zooms the camera on beat hits."
 
 setting_score_text_grow_on_hit: "Pontuação Pula ao Acertar"
-description_score_text_grow_on_hit: "Se desmarcado, desativa o texto da pontuação pulando\nquando você acerta uma nota."
+description_score_text_grow_on_hit: "Grows the score text each time you hit a note."
 
 setting_health_bar_colors: "Cores da Barra de Vida"
-description_health_bar_colors: "Se desmarcado, a barra de vida usará as cores padrão vermelho e verde."
+description_health_bar_colors: "Uses the respective character's icon color for the health bar instead of the usual red and green."
 
 setting_health_bar_opacity: "Opacidade da Barra de Vida"
-description_health_bar_opacity: "O quão transparente a Barra de Vida e os ícones devem ser."
+description_health_bar_opacity: "How transparent should the health bar and icons be?"
 
 setting_fps_counter: "Contador de FPS"
-description_fps_counter: "Se desmarcado, esconde o contador no canto superior esquerdo da tela."
+description_fps_counter: "Shows the FPS and RAM usage at the top left."
 
 setting_check_for_updates: "Procurar por Atualizações"
-description_check_for_updates: "Em builds oficiais da Psych Engine, marque esta caixa para\navisar sobre atualizações ao iniciar o jogo."
+description_check_for_updates: "Checks for any new updates to the mod upon launching the game."
 
 setting_discord_rich_presence: "Discord Rich Presence"
-description_discord_rich_presence: "Desmarque esta caixa para evitar leaks acidentais do seu Mod,\nIsso irá esconder o que você está jogando para os outros."
+description_discord_rich_presence: "Shows Discord RPC on your profile while playing the mod."
 
 setting_combo_stacking: "Acúmulo de Combo"
-description_combo_stacking: "Se desmarcado, números de combo não irão empilhar\nao acertar uma nota, isso torna o jogo mais legível."
+description_combo_stacking: "Stacks the ratings.\nCan increase performance if enabled."
 
 // Gameplay Settings
 setting_downscroll: "Downscroll"
-description_downscroll: "Se marcado, as notas irão de cima pra baixo, contrário do padrão."
+description_downscroll: "Notes go down instead of up."
 
 setting_middlescroll: "Middlescroll"
-description_middlescroll: "Se marcado, as suas notas e as do oponente ficarão centralizadas."
+description_middlescroll: "Centers the notes."
 
 setting_opponent_notes: "Notas do Oponente"
-description_opponent_notes: "Se desmarcado, as notas do oponente serão ocultadas."
+description_opponent_notes: "Hides the opponent notes."
 
 setting_ghost_tapping: "Ghost Tapping"
-description_ghost_tapping: "Se marcado, você não irá receber penalidades por apertar botões enquanto não há notas para apertar."
+description_ghost_tapping: "Allows tapping while there are no notes present."
 
 setting_combo_break_on_bad_or_shit: "Perder Combo na Avaliação Merda/Que Horrível!"
-description_combo_break_on_bad_or_shit: "Se marcado, seu combo será interrompido caso você receba uma avaliação Merda ou Que Horrível!, e as Ghost Notes aparecerão."
+description_combo_break_on_bad_or_shit: "Bad and Shit ratings will result in a Combo Break."
 
 setting_auto_pause: "Pausa Automática"
-description_auto_pause: "Se marcado, a janela é automaticamente pausada se não estiver em foco."
+description_auto_pause: "Pauses the game while unfocused."
 
 setting_disable_reset_button: "Desativar Botão de Reset"
-description_disable_reset_button: "Se marcado, apertar Reset não irá matar o jogador."
+description_disable_reset_button: "Disables the RESET key in a song."
+
+setting_sustains_as_one_note: "Notas Longas Fundidas"
+description_sustains_as_one_note: "Long notes will act as a singular note.\nDisable this if you prefer the old input system."
 
 setting_hitsound_volume: "Volume do Som de Acerto"
-description_hitsound_volume: "As notas fazem um som de "Tick!" quando você as apertam"
+description_hitsound_volume: "Funny note goes "Tick!" when hit."
 
 setting_rating_offset: "Offset de Acerto"
 description_rating_offset: "Adianta/atrasa o tempo de acertar, valores altos farão com que você acerte mais cedo/tarde."
@@ -358,9 +365,6 @@ description_bad_hit_window: "Muda o tempo máximo para acertar uma classificaç�
 
 setting_safe_frames: "Safe Frames"
 description_safe_frames: "Ajusta quanto tempo a mais ou a menos você terá\npara acertar uma nota mais cedo ou mais tarde."
-
-setting_sustains_as_one_note: "Notas Longas Fundidas"
-description_sustains_as_one_note: "Se marcado, notas longas não poderão ser acertadas se a principal não for acertada,\nalém de contar como um único erro."
 
 // Control Rebinding
 controls_rebinding: "Trocando {1}"

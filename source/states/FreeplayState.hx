@@ -70,7 +70,7 @@ class FreeplayState extends MusicBeatState
 	var bottomText:FlxText;
 	var bottomBG:FlxSprite;
 
-	var keyIcons:FlxSpriteGroup;
+	var keyIcons:FlxTypedGroup<KeyIcon>;
 
 	var backButton:BackButton;
 	var modsButton:FlxSprite;
@@ -112,7 +112,6 @@ class FreeplayState extends MusicBeatState
 		add(bg);
 
 		grid = new FlxBackdrop(FlxGridOverlay.createGrid(80, 80, 160, 160, true, 0x33FFFFFF, 0x0));
-		grid.velocity.set(40, 40);
 		grid.alpha = 0;
 		FlxTween.tween(grid, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
 		add(grid);
@@ -182,54 +181,26 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length) curSelected = 0;
 		lerpSelected = curSelected;
 
-		keyIcons = new FlxSpriteGroup();
+		keyIcons = new FlxTypedGroup<KeyIcon>();
 		add(keyIcons);
 
 		#if !mobile
-		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'dpad', 1, 'ui_select', 0.1, 18);
-		if (!controls.controllerMode) {
-			movementIcon.icons[2].y = movementIcon.y - 25;
-			for (i in 0...movementIcon.icons.length) {
-				if (i == 0) continue;
-				movementIcon.icons[i].x -= i == 3 ? 10 : 5;
-			}
-			movementIcon.iconText.x -= 15;
-		}
-		else {
-			movementIcon.icons[0].y -= 5;
-			movementIcon.iconText.x -= 5;
-		}
-		movementIcon.iconText.y -= 5;
+		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 24, 'dpad', 1, 'ui_select', 0.1, 24);
 		keyIcons.add(movementIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 18);
-		acceptIcon.iconText.x -= 5;
-		acceptIcon.iconText.y -= 5;
-		if (controls.controllerMode) acceptIcon.icons[0].y -= 5;
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 5, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 24);
 		keyIcons.add(acceptIcon);
 
-		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 18);
-		backIcon.iconText.x -= 5;
-		backIcon.iconText.y -= 5;
-		if (controls.controllerMode) backIcon.icons[0].y -= 5;
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 5, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 24);
 		keyIcons.add(backIcon);
 
-		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'START' : 'CONTROL', 0, 'ui_gmodifiers', 0.1, 18, true);
-		controlIcon.iconText.x -= 5;
-		controlIcon.iconText.y -= 5;
-		if (controls.controllerMode) controlIcon.icons[0].y -= 5;
+		var controlIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'START' : 'CONTROL', 0, 'ui_gmodifiers', 0.1, 24, true);
 		keyIcons.add(controlIcon);
 
-		var resetIcon:KeyIcon = new KeyIcon(controlIcon.x + controlIcon.width + 5, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1, 18);
-		resetIcon.iconText.x -= 5;
-		resetIcon.iconText.y -= 5;
-		if (controls.controllerMode) resetIcon.icons[0].y -= 5;
+		var resetIcon:KeyIcon = new KeyIcon(controlIcon.x + controlIcon.width + 5, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1, 24);
 		keyIcons.add(resetIcon);
 
-		var previewIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'Y' : 'SPACE', 0, 'ui_preview', 0.1, 18);
-		previewIcon.iconText.x -= 5;
-		previewIcon.iconText.y -= 5;
-		if (controls.controllerMode) previewIcon.icons[0].y -= 5;
+		var previewIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 5, FlxG.height - 24, controls.controllerMode ? 'Y' : 'SPACE', 0, 'ui_preview', 0.1, 24);
 		keyIcons.add(previewIcon);
 		#end
 
@@ -460,6 +431,13 @@ class FreeplayState extends MusicBeatState
 	var swiping:Bool = false;
 	var prevSelected:Int = curSelected;
 	#if mobile var justChanged:Bool = false; #end
+	override function tryUpdate(elapsed:Float)
+	{
+		grid.x += 40 * elapsed;
+		grid.y += 40 * elapsed;
+		super.tryUpdate(elapsed);
+	}
+
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.7)
@@ -596,6 +574,7 @@ class FreeplayState extends MusicBeatState
 			}
 			else if ((controls.RESET || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed) && songs[curSelected].songName.toLowerCase() != 'random')
 			{
+				keyIcons.visible = false;
 				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter, opponentMode));
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 			}

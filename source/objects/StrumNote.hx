@@ -29,7 +29,7 @@ class StrumNote extends FlxSprite
 	public var strumRGB(default, set):Array<FlxColor> = ClientPrefs.data.strumRGB;
 
 	function set_defaultRGB(newRGB:Array<Array<FlxColor>>) {
-		if (animation.name == "pressed")
+		if (animation.name == "pressed" || animation.name == "confirm")
 			updateRgb(newRGB[noteData]);
 		
 		return defaultRGB = newRGB;
@@ -212,7 +212,7 @@ class StrumNote extends FlxSprite
 			centerOrigin();
 		}
 		if (useRGBShader) {
-			if (animation.name == "pressed") {
+			if (animation.name == "pressed" || animation.name == "confirm") {
 				if (resetRGB) updateRgb(defaultRGB[noteData]);
 				else resetRGB = true;
 			} else if (animation.name == "static") {

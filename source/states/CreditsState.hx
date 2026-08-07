@@ -27,6 +27,7 @@ typedef CreditFile =
 class CreditsState extends MusicBeatState
 {
 	var credit:CreditFile;
+	static var creditError:Dynamic;
 	var memberList:Array<Array<Dynamic>> = [];
 
 	var curSelected:Int = 0;
@@ -56,7 +57,11 @@ class CreditsState extends MusicBeatState
 		credit = getCreditData();
 		if (credit == null) {
 			trace('No credits found... returning back to menu');
-			FlxG.switchState(new MainMenuState());
+			var errorTxt:FlxText = new FlxText(0, 0, 0, 'Credit data file is faulty or missing.\n\nError:\n    $creditError\n\nReturning back to menu...', 36);
+			errorTxt.font = Paths.font('Fontsona3FES.ttf');
+			errorTxt.screenCenter();
+			add(errorTxt);
+			new FlxTimer().start(3, (_)->FlxG.switchState(new MainMenuState(true)));
 			return;
 		}
 		var arr = Reflect.fields(credit.members);
@@ -153,6 +158,8 @@ class CreditsState extends MusicBeatState
 	override function update(elapsed:Float) {
 		timeSinceLastInput += elapsed;
 
+		if (credit == null) return;
+
 		if (scrollCredits) {
 			camFollow.y += 70 * elapsed;
 			for (i => credit in creditsGroup.group.keyValueIterator()) {
@@ -244,6 +251,7 @@ class CreditsState extends MusicBeatState
 		}
 		catch(e:Dynamic) {
 			trace('errored: $e');
+			creditError = e;
 			return null;
 		}
 	}

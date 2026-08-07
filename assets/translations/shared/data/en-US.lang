@@ -55,6 +55,7 @@ off: "Off"
 edit: "Edit"
 reset: "Reset"
 back: "Back"
+locked: "Locked"
 story_mode: "Story Mode"
 freeplay: "Freeplay"
 
@@ -69,24 +70,31 @@ ui_confirm: "Confirm"
 ui_close: "Close"
 ui_back: "Back"
 ui_reset: "Reset"
+ui_reset_all: "Reset All"
 ui_preview: "Preview"
 ui_gmodifiers: "Modifiers"
 ui_change_character: "Character"
 ui_play_song: "Play/Pause Song"
 ui_switch_song: "Switch Song"
 ui_restart_song: "Restart Song"
+ui_skip_time: "Skip Time"
+ui_skip_percentage: "Skip To Percentage"
 ui_open_settings: "Open Settings"
 ui_open_link: "Open Link"
 ui_view_description: "View Description"
 ui_customize_option: "Customize Option"
+ui_change_offset: "Change Offset"
+ui_multiply_offset: "Multiply Offset (Hold)"
+ui_play_animation: "Play Animation"
 
 // Credits
 credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
 credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
 
 // Persona PopUp Cards
-prompt_info: "INFORMATION"
-prompt_system: "SYSTEM"
+popup_info: "INFORMATION"
+popup_system: "SYSTEM"
+
 error_title: "Error"
 
 demo_title: "Before You Start The Demo"
@@ -94,6 +102,9 @@ demo_text: "This Mod is still in active development so a lot of things present m
 
 demolock_title: "Not Available in the Demo"
 demolock_text: "This Menu will be Available in the First Release of the Full Mod."
+
+// Persona Prompts
+prompt_erase_save_data: "You are about to erase your save data.\nWould you like to proceed?"
 
 // PlayState
 botplay: "Botplay"
@@ -152,21 +163,14 @@ gameplay_menu: "GAMEPLAY"
 graphics_menu: "GRAPHICS"
 visuals_menu: "VISUALS"
 
-// Note Colors Menu
-note_colors_tip: "Press RESET to Reset the selected Note Part."
-note_colors_shift: "Shift"
-note_colors_lb: "Left Shoulder Button"
-note_colors_hold_tip: "Hold {1} + Press RESET key to fully reset the selected Note."
+erase_save_data: "Hold RESET to erase save data."
+erase_save_data_mobile: "Press this text to erase save data."
 
 // Adjust Delay and Combo Menu
 delay_beat_hit: "Beat Hit!"
+delay_current_offset: "Current offset: {1} ms"
 combo_rating_offset: "Rating Offset:"
 combo_numbers_offset: "Numbers Offset:"
-delay_curren"t_offset: "Current offset: {1} ms"
-combo_offset: "Combo Offset"
-note_delay: "Note/Beat Delay"
-switch_on_accept: "(Press Accept to Switch)"
-switch_on_start: "(Press Start to Switch)"
 
 // Gameplay Modifiers
 setting_locked: "This option cannot be changed on {1}."
@@ -190,10 +194,10 @@ setting_health_loss_multiplier: "Health Loss Multiplier"
 description_health_loss_multiplier: "How much health should you lose when hitting notes?"
 
 setting_merciless: "Merciless"
-description_merciless: "Instakills upon a Bad/Shit rating being hit or upon receiving a miss."
+description_merciless: "Instantly results in a game over upon the player receiving a Bad/Shit rating or a miss."
 
 setting_instakill_on_miss: "Instakill on Miss"
-description_instakill_on_miss: "Instakills upon receiving a miss."
+description_instakill_on_miss: "Instantly results in a game over upon the player receiving a miss."
 
 setting_practice_mode: "Practice Mode"
 description_practice_mode: "Disables the game over."
@@ -209,10 +213,10 @@ setting_edit_mobile_controls: "Edit Mobile Controls"
 description_edit_mobile_controls: "Change the current control mode or customize your controls."
 
 setting_control_alpha: "Control Alpha"
-description_control_alpha: "How opaque do you want the controls to be?"
+description_control_alpha: "How transparent should the controls be?"
 
 setting_enable_pause_button: "Enable Pause Button"
-description_enable_pause_button: "Whether or not the pause button should be enabled.\nYou can still press the back button to pause."
+description_enable_pause_button: "Enables the pause button.\nPressing the back button on Android will still pause the game."
 
 // Mobile Hitbox Settings
 setting_hitbox_style: "Hitbox Style"
@@ -221,7 +225,7 @@ setting_hitbox_style-gradient: "Gradient"
 description_hitbox_style: "Which hitbox style should be used?"
 
 setting_show_hints: "Show Hints"
-description_show_hints: "Whether to show the hitbox hints while idling or not."
+description_show_hints: "Shows the hitbox borders at all times."
 
 // Mobile Controls Menu
 mobile_controls_save_and_exit: "Save and Exit"
@@ -231,19 +235,19 @@ mobile_controls_reset_positions: "Reset Positions"
 
 // Graphics Settings
 setting_low_quality: "Low Quality"
-description_low_quality: "If checked, disables some background details,\ndecreases loading times and improves performance."
+description_low_quality: "Disables some background details, but improves performance and loading times."
 
 setting_anti-aliasing: "Anti-Aliasing"
-description_anti-aliasing: "If unchecked, disables anti-aliasing, increases performance\nat the cost of sharper visuals."
+description_anti-aliasing: "Smooths out the edges of sprites, removing jagged edges and sharpening them.\nThis will increase performance if enabled."
 
 setting_shaders: "Shaders"
-description_shaders: "If unchecked, disables shaders.\nIt's used for some visual effects, and also CPU intensive for weaker PCs."
+description_shaders: "Enables shaders which enhance the visuals.\nNot recommended to be enabled if you have a low-end device as this heavily uses up your CPU."
 
 setting_gpu_caching: "GPU Caching"
-description_gpu_caching: "If checked, allows the GPU to be used for caching textures, decreasing RAM usage.\nDon't turn this on if you have a shitty Graphics Card."
+description_gpu_caching: "Uses the GPU for caching purposes which will decrease RAM usage.\nNot recommended to be enabled if you have a bad graphics card."
 
 setting_framerate: "Framerate"
-description_framerate: "Pretty self explanatory, isn't it?"
+description_framerate: "The FPS at which the game will run on."
 
 // Visuals Settings
 setting_note_skin: "Note Skin"
@@ -262,25 +266,25 @@ setting_note_splash-psych-old: "Psych-Old"
 description_note_splash: "Select your preferred note splash variation."
 
 setting_note_splash_opacity: "Note Splash Opacity"
-description_note_splash_opacity: "How transparent the Note Splashes should be."
+description_note_splash_opacity: "How transparent should the note splashes be?"
 
 setting_hold_note_splashes: "Hold Note Splashes"
-description_hold_note_splashes: "If unchecked, Splashes won't appear on the notes when holding a sustain."
+description_hold_note_splashes: "Enables splashes when holding down a sustain note."
 
 setting_note_quantization: "Note Quantization"
-description_note_quantization: "If checked, colors the notes based on their snap."
+description_note_quantization: "Colors the notes based on their snap."
 
 setting_character_note_colors: "Character Note Colors"
-description_character_note_colors: "If unchecked, Character's won't have their custom note colors."
+description_character_note_colors: "Enables custom note colors for characters."
 
 setting_strum_background_opacity: "Strum Background Opacity"
-description_strum_background_opacity: "How much transparent should the Strumline Background be?"
+description_strum_background_opacity: "How transparent should the Strumline Background be?"
 
 setting_hide_hud: "Hide HUD"
-description_hide_hud: "If checked, hides most HUD elements."
+description_hide_hud: "Hides most HUD elements."
 
 setting_show_misses_and_accuracy: "Show Misses and Accuracy"
-description_show_misses_and_accuracy: "If unchecked, hides Misses and Accuracy on the HUD and the Score is displayed like Base Game."
+description_show_misses_and_accuracy: "Shows the misses and accuracy in the score text.\nDisabling this returns the HUD to the Base Game HUD."
 
 setting_time_bar_display: "Time Bar Display"
 setting_time_bar_display-time_left: "Time Left"
@@ -290,59 +294,62 @@ setting_time_bar_display-disabled: "Disabled"
 description_time_bar_display: "What should the Time Bar display?"
 
 setting_subtitles: "Subtitles"
-description_subtitles: "If checked, subtitles will appear if a character speaks or sings lyrics."
+description_subtitles: "Shows subtitles if a character speaks."
 
 setting_flashing_lights: "Flashing Lights"
-description_flashing_lights: "Uncheck this if you're sensitive to flashing lights!"
+description_flashing_lights: "Enables flashing lights.\nNot recommended to be enabled if you're photosensitive!"
 
 setting_camera_zooms: "Camera Zooms"
-description_camera_zooms: "If unchecked, the camera won't zoom in on a beat hit."
+description_camera_zooms: "Zooms the camera on beat hits."
 
 setting_score_text_grow_on_hit: "Score Text Grow on Hit"
-description_score_text_grow_on_hit: "If unchecked, disables the Score text growing\nevery time you hit a note."
+description_score_text_grow_on_hit: "Grows the score text each time you hit a note."
 
 setting_health_bar_colors: "Health Bar Colors"
-description_health_bar_colors: "If unchecked, the Health Bar will use the default red and green colors."
+description_health_bar_colors: "Uses the respective character's icon color for the health bar instead of the usual red and green."
 
 setting_health_bar_opacity: "Health Bar Opacity"
-description_health_bar_opacity: "How transparent the health bar and icons should be."
+description_health_bar_opacity: "How transparent should the health bar and icons be?"
 
 setting_fps_counter: "FPS Counter"
-description_fps_counter: "If unchecked, hides FPS Counter."
+description_fps_counter: "Shows the FPS and RAM usage at the top left."
 
 setting_check_for_updates: "Check for Updates"
-description_check_for_updates: "On Release Builds, turn this on to check for updates when you start the game."
+description_check_for_updates: "Checks for any new updates to the mod upon launching the game."
 
 setting_discord_rich_presence: "Discord Rich Presence"
-description_discord_rich_presence: "Uncheck this to prevent accidental leaks, it will hide the Application from your "Playing" box on Discord"
+description_discord_rich_presence: "Shows Discord RPC on your profile while playing the mod."
 
 setting_combo_stacking: "Combo Stacking"
-description_combo_stacking: "If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read"
+description_combo_stacking: "Stacks the ratings.\nCan increase performance if enabled."
 
 // Gameplay Settings
 setting_downscroll: "Downscroll"
-description_downscroll: "If checked, notes go Down instead of Up, simple enough."
+description_downscroll: "Notes go down instead of up."
 
 setting_middlescroll: "Middlescroll"
-description_middlescroll: "If checked, your notes get centered."
+description_middlescroll: "Centers the notes."
 
 setting_opponent_notes: "Opponent Notes"
-description_opponent_notes: "If unchecked, opponent notes get hidden."
+description_opponent_notes: "Hides the opponent notes."
 
 setting_ghost_tapping: "Ghost Tapping"
-description_ghost_tapping: "If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit."
+description_ghost_tapping: "Allows tapping while there are no notes present."
 
 setting_combo_break_on_bad_or_shit: "Combo Break on Bad or Shit"
-description_combo_break_on_bad_or_shit: "If checked, your Combo will break if you get a Bad or Shit Rating and Ghost Notes will appear."
+description_combo_break_on_bad_or_shit: "Bad and Shit ratings will result in a Combo Break."
 
 setting_auto_pause: "Auto Pause"
-description_auto_pause: "If checked, the game automatically pauses if the screen isn't on focus."
+description_auto_pause: "Pauses the game while unfocused."
 
 setting_disable_reset_button: "Disable Reset Button"
-description_disable_reset_button: "If checked, pressing Reset won't do anything."
+description_disable_reset_button: "Disables the RESET key in a song."
+
+setting_sustains_as_one_note: "Sustains as One Note"
+description_sustains_as_one_note: "Long notes will act as a singular note.\nDisable this if you prefer the old input system.",
 
 setting_hitsound_volume: "Hitsound Volume"
-description_hitsound_volume: "Funny notes go "Tick!" when you hit them."
+description_hitsound_volume: "Funny note goes "Tick!" when hit."
 
 setting_rating_offset: "Rating Offset"
 description_rating_offset: "Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later."
@@ -358,13 +365,6 @@ description_bad_hit_window: "Changes the amount of time you have\nfor hitting a 
 
 setting_safe_frames: "Safe Frames"
 description_safe_frames: "Changes how many frames you have for\nhitting a note earlier or late."
-
-setting_sustains_as_one_note: "Sustains as One Note"
-description_sustains_as_one_note: "If checked, Hold Notes can't be pressed if you miss,\nand count as a single Hit/Miss.\nUncheck this if you prefer the old Input System."
-
-// Credits
-credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
-credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
 
 // Control Rebinding
 controls_rebinding: "Rebinding {1}"

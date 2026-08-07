@@ -43,10 +43,7 @@ class NoteOffsetState extends MusicBeatState
 	var _lastControllerMode:Bool = false;
 
 	var backButton:BackButton;
-
-	#if mobile
 	var resetButton:FlxSprite;
-	#end
 
 	override public function create()
 	{
@@ -187,7 +184,7 @@ class NoteOffsetState extends MusicBeatState
 		add(leftSelector);
 
 		curModeTxt = new Alphabet(leftSelector.x + 60, leftSelector.y + 5, '');
-		curModeTxt.cameras= [camHUD];
+		curModeTxt.cameras = [camHUD];
 		add(curModeTxt);
 
 		rightSelector = new FlxSprite(leftSelector.x + 345, leftSelector.y);
@@ -198,26 +195,50 @@ class NoteOffsetState extends MusicBeatState
 		rightSelector.animation.play('idle');
 		rightSelector.cameras = [camHUD];
 		add(rightSelector);
-		
-		controllerPointer = new FlxShapeCircle(0, 0, 20, {thickness: 0}, FlxColor.WHITE);
-		controllerPointer.offset.set(20, 20);
-		controllerPointer.screenCenter();
-		controllerPointer.alpha = 0.6;
-		controllerPointer.cameras = [camHUD];
-		add(controllerPointer);
+
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 34);
+		movementIcon.createCombinationIcon([
+			controls.controllerMode ? 'LEFT_SHOULDER' : 'Q',
+			controls.controllerMode ? 'RIGHT_SHOULDER' : 'E',
+		], 0, 'ui_select', 0.125, 24, true, '');
+		movementIcon.cameras = [camOther];
+		add(movementIcon);
+
+		var offsetIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 34, 'dpad_left_right', 1, 'ui_change_offset', 0.125, 24);
+		offsetIcon.cameras = [camOther];
+		add(offsetIcon);
+
+		var multIcon:KeyIcon = new KeyIcon(offsetIcon.x + offsetIcon.width + 10, FlxG.height - 34, controls.controllerMode ? 'LEFT_TRIGGER' : 'SHIFT', 0, 'ui_multiply_offset', 0.125, 24, true);
+		multIcon.cameras = [camOther];
+		add(multIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(multIcon.x + multIcon.width + 10, FlxG.height - 34, 'back', 0, 'ui_back', 0.125, 24);
+		backIcon.cameras = [camOther];
+		add(backIcon);
+
+		var resetIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 10, FlxG.height - 34, 'reset', 0, 'ui_reset', 0.125, 24);
+		resetIcon.cameras = [camOther];
+		add(resetIcon);
+		#end
 
 		backButton = new BackButton();
 		backButton.camera = camOther;
 		add(backButton);
 
-		#if mobile
 		resetButton = new FlxSprite(backButton.x - 150, backButton.y + 5, Paths.image('resetButton'));
 		resetButton.camera = camOther;
 		resetButton.scale.set(0.85, 0.85);
 		resetButton.updateHitbox();
 		resetButton.alpha = 0.7;
 		add(resetButton);
-		#end
+
+		controllerPointer = new FlxShapeCircle(0, 0, 20, {thickness: 0}, FlxColor.WHITE);
+		controllerPointer.offset.set(20, 20);
+		controllerPointer.screenCenter();
+		controllerPointer.alpha = 0.6;
+		controllerPointer.cameras = [camHUD];
+		add(controllerPointer);
 
 		createTexts();
 		repositionCombo();
@@ -240,7 +261,7 @@ class NoteOffsetState extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 		var addNum:Int = 1;
-		if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyPressed(LEFT_SHOULDER))
+		if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyPressed(LEFT_TRIGGER))
 		{
 			if(onComboMenu)
 				addNum = 10;
@@ -405,7 +426,7 @@ class NoteOffsetState extends MusicBeatState
 				}
 			}
 
-			if(controls.RESET #if mobile || TouchUtil.overlaps(resetButton, camOther) && TouchUtil.justPressed #end)
+			if(controls.RESET || TouchUtil.overlaps(resetButton, camOther) && TouchUtil.justPressed)
 			{
 				for (i in 0...ClientPrefs.data.comboOffset.length)
 				{
@@ -452,7 +473,7 @@ class NoteOffsetState extends MusicBeatState
 				updateNoteDelay();
 			}
 
-			if(controls.RESET #if mobile || TouchUtil.overlaps(resetButton, camOther) && TouchUtil.justPressed #end)
+			if(controls.RESET || TouchUtil.overlaps(resetButton, camOther) && TouchUtil.justPressed)
 			{
 				holdTime = 0;
 				barPercent = 0;
@@ -460,9 +481,9 @@ class NoteOffsetState extends MusicBeatState
 			}
 		}
 
-		if((TouchUtil.overlaps(leftSelector) || TouchUtil.overlaps(rightSelector)) && TouchUtil.justPressed)
+		if(FlxG.keys.justPressed.Q || FlxG.keys.justPressed.E || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER) || FlxG.gamepads.anyJustPressed(RIGHT_SHOULDER) || (TouchUtil.overlaps(leftSelector) || TouchUtil.overlaps(rightSelector)) && TouchUtil.justPressed)
 		{
-			var xPos:Float = (controls.UI_LEFT_P || TouchUtil.overlaps(leftSelector)) ? -40 : 40;
+			var xPos:Float = (FlxG.keys.justPressed.Q || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER) || TouchUtil.overlaps(leftSelector)) ? -40 : 40;
 			FlxTween.completeTweensOf(curModeTxt);
 			curModeTxt.x += xPos;
 			curModeTxt.alpha = 0.4;

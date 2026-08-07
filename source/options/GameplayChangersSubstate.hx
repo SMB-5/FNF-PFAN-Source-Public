@@ -60,8 +60,8 @@ class GameplayChangersSubstate extends BaseOptionsMenu
 		option.displayFormat = '%vx';
 		modArray.push(option);
 
-		modArray.push(createOption('Merciless', 'Instakills upon a Bad/Shit rating being hit or upon receiving a miss.', 'merciless', BOOL, false));
-		modArray.push(createOption('Instakill on Miss', 'Instakills upon receiving a miss.', 'instakill', BOOL, false));
+		modArray.push(createOption('Merciless', 'Instantly results in a game over upon the player receiving a Bad/Shit rating or a miss.', 'merciless', BOOL, false));
+		modArray.push(createOption('Instakill on Miss', 'Instantly results in a game over upon the player receiving a miss.', 'instakill', BOOL, false));
 		modArray.push(createOption('Practice Mode', 'Disables the game over.', 'practice', BOOL, false));
 		modArray.push(createOption('Botplay', 'Watch a perfect bot play through the song.', 'botplay', BOOL, false));
 
@@ -92,9 +92,6 @@ class GameplayChangersSubstate extends BaseOptionsMenu
 	public function new(songOrWeek:String = '', storyMode:Bool = false) {
 		useRPC = false;
 		title = '';
-		#if !mobile
-		x = (FlxG.width - width) / 2;
-		#end
 
 		optionsArray = getOptions();
 

@@ -20,11 +20,12 @@ class Option
 	public var child:FlxText;
 	public var text(get, set):String;
 	public var onChange:Void->Void = null; //Pressed enter (on Bool type options) or pressed/held left/right (on other types)
+	public var onPreview:Void->Void = null; //Adds a preview button that calls this function
 	public var type:OptionType = BOOL;
 	public var gameplayOption:Bool = false; //Checks ClientPrefs.data.gameplaySettings instead of ClientPrefs.data
 
-	public var customizable:Bool = false;
-	public var customizationClass:Class<Dynamic>;
+	public var customizable:Bool = false; //Adds a setting button and allows a substate to be opened to be used as extra customization for an option (Different from SUBSTATE which only opens a substate AS the option)
+	public var customizationClass:Class<Dynamic>; //Class used for customizable
 
 	public var scrollSpeed:Float = 50; //Only works on int/float/percent, defines how fast it scrolls per second while holding left/right
 	public var variable(default, null):String = null; //Variable from ClientPrefs.hx
@@ -117,6 +118,12 @@ class Option
 		//nothing lol
 		if(onChange != null)
 			onChange();
+	}
+
+	public function preview()
+	{
+		if(onPreview != null)
+			onPreview();
 	}
 
 	dynamic public function getValue():Dynamic

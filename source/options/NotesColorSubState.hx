@@ -140,49 +140,40 @@ class NotesColorSubState extends MusicBeatSubstate
 		spawnNotes();
 		updateNotes(true);
 
-		var tipX = 20;
-		var tipY = 660;
-		var tip:FlxText = new FlxText(tipX, tipY, 0, Language.getPhrase('note_colors_tip', 'Press RESET to Reset the selected Note Part.'), 16);
-		tip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tip.borderSize = 2;
-		add(tip);
-
 		#if !mobile
-		tipTxt = new FlxText(tipX, tipY + 24, 0, '', 16);
-		tipTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tipTxt.borderSize = 2;
-		add(tipTxt);
-		updateTip();
+		var resetIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'reset', 0, 'ui_reset', 0.15, 24);
+		add(resetIcon);
+
+		var resetAllIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 15, FlxG.height - 44);
+		resetAllIcon.createCombinationIcon([controls.controllerMode ? 'LEFT_SHOULDER' : 'SHIFT', 'reset'], 0, 'ui_reset_all', 0.15, 24);
+		add(resetAllIcon);
+		
+		var backIcon:KeyIcon = new KeyIcon(resetAllIcon.x + resetAllIcon.width + 15, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		add(backIcon);
 		#end
+
+		backButton = new BackButton(20, FlxG.height - 220);
+		backButton.flipX = true;
+		add(backButton);
+
+		resetButton = new FlxSprite(0, 0, Paths.image('resetButton'));
+		resetButton.scale.set(0.825, 0.825);
+		resetButton.updateHitbox();
+		resetButton.x = 570;
+		resetButton.y = backButton.y + 5;
+		resetButton.alpha = 0.7;
+		add(resetButton);
 
 		controllerPointer = new FlxShapeCircle(0, 0, 20, {thickness: 0}, FlxColor.WHITE);
 		controllerPointer.offset.set(20, 20);
 		controllerPointer.screenCenter();
 		controllerPointer.alpha = 0.6;
 		add(controllerPointer);
-
-		backButton = new BackButton(20, FlxG.height - 360);
-		backButton.flipX = true;
-		add(backButton);
-
-		resetButton = new FlxSprite(backButton.x + 7, backButton.y + 150, Paths.image('resetButton'));
-		resetButton.scale.set(0.85, 0.85);
-		resetButton.updateHitbox();
-		resetButton.alpha = 0.7;
-		add(resetButton);
 		
 		FlxG.mouse.visible = !controls.controllerMode;
 		controllerPointer.visible = controls.controllerMode;
 		_lastControllerMode = controls.controllerMode;
 	}
-
-	#if !mobile
-	function updateTip()
-	{
-		var key:String = !controls.controllerMode ? Language.getPhrase('note_colors_shift', 'Shift') : Language.getPhrase('note_colors_lb', 'Left Shoulder Button');
-		tipTxt.text = Language.getPhrase('note_colors_hold_tip', 'Hold {1} + Press RESET key to fully reset the selected Note.', [key]);
-	}
-	#end
 
 	var _storedColor:FlxColor;
 	var changingNote:Bool = false;

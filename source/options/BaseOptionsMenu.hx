@@ -1,23 +1,10 @@
-// FlxText is ragebait
-// I hate this class
-
 package options;
 
+import flixel.math.FlxRect;
 import flixel.ui.FlxBar;
-
 import flixel.addons.display.shapes.FlxShapeCircle;
-
-import flixel.input.keyboard.FlxKey;
-import flixel.input.gamepad.FlxGamepad;
-import flixel.input.gamepad.FlxGamepadInputID;
-import flixel.input.gamepad.FlxGamepadManager;
-
-import objects.CheckboxThingie;
-import objects.AttachedSprite;
-import objects.AttachedText;
-import options.Option;
-
 import backend.WeekData;
+import options.Option;
 
 class BaseOptionsMenu extends MusicBeatSubstate
 {
@@ -25,11 +12,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var y:Null<Float> = null;
 	private var width:Null<Int> = null;
 	private var height:Null<Int> = null;
+	private var offset:FlxRect = FlxRect.get(FlxMath.MIN_VALUE_INT, FlxMath.MIN_VALUE_INT, FlxMath.MIN_VALUE_INT, FlxMath.MIN_VALUE_INT);
 
+	private var camBG:FlxCamera;
 	private var camOptions:FlxCamera;
 	private var camUI:FlxCamera;
 
-	private var keyIcons:FlxSpriteGroup;
+	private var keyIcons:FlxTypedGroup<KeyIcon>;
 
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
@@ -56,6 +45,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var grpValues:FlxTypedGroup<FlxText>;
 	private var grpArrows:FlxTypedGroup<FlxText>;
 	private var grpEdits:FlxTypedGroup<FlxSprite>;
+	private var grpPreview:FlxTypedGroup<FlxSprite>;
 	private var grpLocked:FlxTypedGroup<FlxSprite>;
 	private var grpLockedDesc:FlxTypedGroup<FlxSprite>;
 	private var grpDesc:FlxTypedGroup<FlxSprite>;
@@ -85,14 +75,31 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		this.songOrWeek = songOrWeek;
 		this.storyMode = storyMode;
 
-		if (width == null) width = FlxG.width - 200;
-		if (height == null) height = FlxG.height - #if !mobile 90 #else 70 #end;
-		camOptions = new FlxCamera(0, 0, width, height);
+		camBG = new FlxCamera();
+		camBG.bgColor.alpha = 0;
+		FlxG.cameras.add(camBG, false);
+
+		if (offset.x == FlxMath.MIN_VALUE_INT) {
+			offset.x = -80;
+		}
+		if (offset.y == FlxMath.MIN_VALUE_INT) {
+			offset.y = #if !mobile -20 #else 0 #end;
+		}
+		if (offset.width == FlxMath.MIN_VALUE_INT) {
+			offset.width = -200;
+		}
+		if (offset.height == FlxMath.MIN_VALUE_INT) {
+			offset.height = #if !mobile -90 #else -70 #end;
+		}
+
+		if (width == null) width = FlxG.width;
+		if (height == null) height = FlxG.height;
+		camOptions = new FlxCamera(0, 0, Std.int(width + offset.width), Std.int(height + offset.height));
 		camOptions.bgColor.alpha = 0;
-		if (x == null) x = camOptions.x = (FlxG.width - width) / 2 - 80;
-		else camOptions.x = x;
-		if (y == null) y = camOptions.y = (FlxG.height - height) / 2 #if !mobile - 20 #end;
-		else camOptions.y = y;
+		if (x == null) x = (FlxG.width - camOptions.width) / 2;
+		if (y == null) y = (FlxG.height - camOptions.height) / 2;
+		camOptions.x = x + offset.x;
+		camOptions.y = y + offset.y;
 		camOptions.visible = false;
 		FlxG.cameras.add(camOptions, false);
 
@@ -153,6 +160,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		grpEdits = new FlxTypedGroup<FlxSprite>();
 		add(grpEdits);
 
+		grpPreview = new FlxTypedGroup<FlxSprite>();
+		add(grpPreview);
+
 		grpLocked = new FlxTypedGroup<FlxSprite>();
 		add(grpLocked);
 
@@ -162,7 +172,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		grpDesc = new FlxTypedGroup<FlxSprite>();
 		add(grpDesc);
 
-		keyIcons = new FlxSpriteGroup();
+		keyIcons = new FlxTypedGroup<KeyIcon>();
 		keyIcons.cameras = [camUI];
 		add(keyIcons);
 
@@ -178,46 +188,59 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			optionBG.ID = i;
 			grpBackgrounds.add(optionBG);
 
-			var info:FlxShapeCircle = new FlxShapeCircle(30, optionBG.y + 15, 17, {thickness: 5, color: 0xAF000000}, FlxColor.GRAY);
+			var info:FlxShapeCircle = new FlxShapeCircle(30, 0, 17, {thickness: 5, color: 0xAF000000}, FlxColor.GRAY);
+			info.y = optionBG.getMidpoint().y - info.height / 2;
 			info.ID = i;
 			grpInfos.add(info);
 
-			var infoTxt:FlxText = new FlxText(info.x + 12, info.y + 2, 100, 'i', 28);
+			var infoTxt:FlxText = new FlxText(info.x + 12, 0, 0, 'i', 28);
 			infoTxt.font = Paths.font('Fontsona3FES.ttf');
+			infoTxt.y = info.getMidpoint().y - infoTxt.height / 2;
 			infoTxt.color = 0xFF000000;
 			infoTxt.alpha = 0.6;
 			grpInfos.add(infoTxt);
 
-			var option:FlxText = new FlxText(optionBG.x + 55, optionBG.y + 15, optionBG.width, Language.getPhrase('setting_' + optionsArray[i].name, optionsArray[i].name), 32);
+			var option:FlxText = new FlxText(optionBG.x + 55, 0, 0, Language.getPhrase('setting_' + optionsArray[i].name, optionsArray[i].name), 32);
 			option.font = Paths.font('Fontsona3FES.ttf');
 			option.ID = i;
-			if (option.textField.textWidth > 500) {
-				option.scale.x = option.scale.y = 500 / option.textField.textWidth;
-				option.origin.y = option.textField.textHeight / 2;
-				// i have to use a timer for some reason
-				new FlxTimer().start(0.000001, (_)->{
-					option.origin.x = 0;
-				});
+			if (option.width > 500) {
+				option.scale.x = option.scale.y = 500 / option.width;
+				option.updateHitbox();
 			}
+			option.y = optionBG.getMidpoint().y - option.height / 2;
 			grpOptions.add(option);
 
-			var optionWidth:Float = option.textField.textWidth * option.scale.x;
+			var offset:Float = 0;
 
-			var reset = new FlxSprite(option.x + optionWidth + 13, option.y, Paths.image('resetButton'));
+			var reset:FlxSprite = new FlxSprite(option.x + option.width + 10, 0, Paths.image('resetButton'));
 			reset.setGraphicSize(40, 40);
 			reset.updateHitbox();
+			reset.y = option.getMidpoint().y - reset.height / 2;
 			reset.color = FlxColor.GRAY;
 			reset.ID = i;
 			grpReset.add(reset);
+			offset = reset.x + reset.width + 10;
 
 			if (optionsArray[i].customizable) {
-				var setting:FlxSprite = new FlxSprite(reset.x + reset.width + 7, option.y - 1, Paths.image('settingButton'));
+				var setting:FlxSprite = new FlxSprite(reset.x + reset.width + 7, 0, Paths.image('settingButton'));
 				setting.scale.set(0.8, 0.8);
 				setting.updateHitbox();
+				setting.y = option.getMidpoint().y - setting.height / 2;
 				setting.alpha = 0.8;
 				setting.color = FlxColor.GRAY;
 				setting.ID = i;
 				grpSettings.add(setting);
+				offset = setting.x + setting.width + 10;
+			}
+
+			if (optionsArray[i].onPreview != null) {
+				var preview:FlxSprite = new FlxSprite(offset, 0, Paths.image('previewButton'));
+				preview.setGraphicSize(50, 50);
+				preview.updateHitbox();
+				preview.y = option.getMidpoint().y - preview.height / 2;
+				preview.color = FlxColor.GRAY;
+				preview.ID = i;
+				grpPreview.add(preview);
 			}
 
 			switch(optionsArray[i].type) {
@@ -233,21 +256,23 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					grpArrows.add(rightArrow);
 
 					var curValue:String = optionsArray[i].type != BOOL ? Std.string(optionsArray[i].getValue()) : optionsArray[i].getValue() == true ? 'ON' : 'OFF';
-					var curOption:FlxText = new FlxText(0, optionBG.y + 15, 0, curValue, 28);
+					var curOption:FlxText = new FlxText(0, 0, 0, curValue, 28);
 					curOption.font = Paths.font('Fontsona3FES.ttf');
-					curOption.x = (leftArrow.x + rightArrow.x - curOption.textField.textWidth) / 2 + 15;
-					if (curOption.textField.textWidth >= 200) {
-						curOption.scale.x = curOption.scale.y = 200 / curOption.textField.textWidth;
-						curOption.origin.y = curOption.textField.textHeight / 2;
+					if (curOption.width > 200) {
+						curOption.scale.x = curOption.scale.y = 200 / curOption.width;
+						curOption.updateHitbox();
 					}
+					curOption.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - curOption.width) / 2;
+					curOption.y = optionBG.getMidpoint().y - curOption.height / 2;
 					curOption.ID = i;
 					grpValues.add(curOption);
 					optionsArray[i].child = curOption;
 
 					if (optionsArray[i].type == STRING) {
 						lineArray[i] = [];
+						var offsetX:Float = 0;
 						for (k in 0...optionsArray[i].options.length) {
-							var line = new FlxSprite(0, curOption.y + 40).makeGraphic(20, 5, 0xFFFFFFFF);
+							var line:FlxSprite = new FlxSprite(0, curOption.y + 40).makeGraphic(20, 5, 0xFFFFFFFF);
 							line.color = 0xFF676767; // 67 67 67 67 67 67
 							line.x = (curOption.x + curOption.textField.textWidth / 2) - (5 * (optionsArray[i].options.length - 1)) + (30 * k) - line.width / 2 * optionsArray[i].options.length;
 							add(line);
@@ -263,7 +288,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 					var bar:FlxBar = new FlxBar(0, optionBG.y + 48, LEFT_TO_RIGHT, 170, 10, null, '', optionsArray[i].minValue, optionsArray[i].maxValue * 100);
 					bar.createFilledBar(0xFF000000, 0xFFFFFFFF);
-					bar.x = optionBG.x + optionBG.width - bar.width - 87;
+					bar.x = optionBG.x + optionBG.width - bar.width - 84;
 					bar.drawRect(0, 0, bar.width, bar.height, 0, {thickness: 1, color: 0xFFFFFFFF});
 					bar.percent = optionsArray[i].getValue() * 100;
 					bar.ID = i;
@@ -275,22 +300,22 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					add(barCircle);
 					barArray[i].push(barCircle);
 
-					var curOption:FlxText = new FlxText(0, bar.y - 35, 300, Std.string(optionsArray[i].getValue()), 28);
+					var curOption:FlxText = new FlxText(0, bar.y - 35, 0, Std.string(optionsArray[i].getValue()), 28);
 					curOption.font = Paths.font('Fontsona3FES.ttf');
-					curOption.x = bar.getMidpoint().x - curOption.textField.textWidth / 2;
+					curOption.x = bar.getMidpoint().x - curOption.width / 2;
 					curOption.ID = i;
 					grpValues.add(curOption);
 					optionsArray[i].child = curOption;
 				case SUBSTATE(cl):
-					var editBG:FlxSprite = new FlxSprite(optionBG.x + optionBG.width - 260, optionBG.y + 13).makeGraphic(175, 40, 0xFFFFFFFF);
+					var editBG:FlxSprite = new FlxSprite(optionBG.x + optionBG.width - 255, optionBG.y + 13).makeGraphic(175, 40, 0xFFFFFFFF);
 					editBG.drawRect(0, 0, editBG.width, editBG.height, 0, {thickness: 5, color: 0xFF000000});
 					editBG.ID = i;
 					grpEdits.add(editBG);
 
-					// this isn't translated for now because i literally can't figure out how to center it properly
-					var edit:FlxText = new FlxText(0, editBG.y + 3, editBG.width, 'Edit', 28);
-					edit.x = editBG.x + edit.textField.textWidth - 7;
+					var edit:FlxText = new FlxText(0, editBG.y + 3, editBG.width, Language.getPhrase('Edit'), 28);
+					edit.alignment = CENTER;
 					edit.font = Paths.font('Fontsona5Royal.ttf');
+					edit.x = editBG.getMidpoint().x - edit.width / 2;
 					edit.color = 0xFF000000;
 					grpEdits.add(edit);
 				case _:
@@ -301,9 +326,14 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				lockedBG.ID = i;
 				grpLocked.add(lockedBG);
 
-				var locked:FlxText = new FlxText(0, lockedBG.y + 13, lockedBG.width, 'LOCKED', 36);
-				locked.x = lockedBG.getMidpoint().x - 90;
+				var locked:FlxText = new FlxText(0, 0, 0, Language.getPhrase('Locked').toUpperCase(), 36);
 				locked.font = Paths.font('Fontsona3FES.ttf');
+				if (locked.width > 300) {
+					locked.scale.x = locked.scale.y = 300 / locked.width;
+					locked.updateHitbox();
+				}
+				locked.x = lockedBG.getMidpoint().x - locked.width / 2;
+				locked.y = lockedBG.getMidpoint().y - locked.height / 2;
 				grpLocked.add(locked);
 
 				var lockedDesc:FlxSprite = new FlxSprite(lockedBG.x - 320, lockedBG.y + 70).makeGraphic(500, 210, 0xFF000000);
@@ -355,23 +385,28 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		add(outlineBG);
 
 		#if !mobile
-		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
+		// The X positions are updated in the updateKeyIcons function, these won't affect the X position
+		// This reminder is for me. Thanks past me!
+		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'dpad', 1, 'ui_select', 0.1, 24);
 		keyIcons.add(movementIcon);
 
-		var backIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 20, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		var backIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'back', 0, 'ui_back', 0.1, 24);
 		keyIcons.add(backIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 15, FlxG.height - 44, 'accept', 0, 'ui_confirm', 0.15, 24);
+		var acceptIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'accept', 0, 'ui_confirm', 0.1, 24);
 		keyIcons.add(acceptIcon);
 
-		var infoIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 15, FlxG.height - 44, controls.controllerMode ? 'X' : 'F1', 0, 'ui_view_description', 0.15, 24);
+		var infoIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, controls.controllerMode ? 'X' : 'F1', 0, 'ui_view_description', 0.1, 24);
 		keyIcons.add(infoIcon);
 
-		var resetIcon:KeyIcon = new KeyIcon(infoIcon.x + infoIcon.width + 15, FlxG.height - 44, 'reset', 0, 'ui_reset', 0.15, 24);
+		var resetIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, 'reset', 0, 'ui_reset', 0.1, 24);
 		keyIcons.add(resetIcon);
 
-		var customizableIcon:KeyIcon = new KeyIcon(resetIcon.x + resetIcon.width + 15, FlxG.height - 44, controls.controllerMode ? 'START' : 'TAB', 0, 'ui_customize_option', 0.15, 24);
+		var customizableIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, controls.controllerMode ? 'START' : 'TAB', 0, 'ui_customize_option', 0.1, 24);
 		keyIcons.add(customizableIcon);
+
+		var previewIcon:KeyIcon = new KeyIcon(0, FlxG.height - 24, controls.controllerMode ? 'Y' : 'P', 0, 'ui_preview', 0.1, 24);
+		keyIcons.add(previewIcon);
 		#end
 
 		backButton = new BackButton();
@@ -379,7 +414,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		backButton.camera = camUI;
 		add(backButton);
 
-		FlxTween.tween(camOptions, { height: height }, 0.15, { startDelay: 0.25, onComplete: _->{
+		FlxTween.tween(camOptions, { height: height + offset.height }, 0.15, { startDelay: 0.25, onComplete: _->{
 			updateCam(_);
 			enableInputs = true;
 		}, onUpdate: updateCam, onStart: _->{
@@ -396,7 +431,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	}
 
 	function updateCam(_) {
-		camOptions.y = (FlxG.height - camOptions.height) / 2 #if !mobile - 20 #end;
+		camOptions.y = (FlxG.height - camOptions.height) / 2 + offset.y;
 		outlineBG.setGraphicSize(outlineBG.width, camOptions.height);
 		outlineBG.updateHitbox();
 		outlineBG.y = camOptions.y;
@@ -423,17 +458,20 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var holdingDesc:Int = -1;
 	var holdingLockedDesc:Int = -1;
 	var prevMouseY:Float = 0;
+	override function tryUpdate(elapsed:Float) {
+		optionHeader.y -= 140 * elapsed;
+		optionHeader2.y -= 140 * elapsed;
+		if (optionHeader.y <= -optionHeader.height) optionHeader.y = optionHeader.height + 400;
+		if (optionHeader2.y <= -optionHeader2.height) optionHeader2.y = optionHeader.height + 400;
+		super.tryUpdate(elapsed);
+	}
+
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
 		if (!enableInputs) return;
 
 		scrollTimer += elapsed;
-
-		optionHeader.y -= 140 * elapsed;
-		optionHeader2.y -= 140 * elapsed;
-		if (optionHeader.y <= -optionHeader.height) optionHeader.y = optionHeader.height + 400;
-		if (optionHeader2.y <= -optionHeader2.height) optionHeader2.y = optionHeader.height + 400;
 
 		#if !mobile
 		if (FlxG.mouse.justMoved) {
@@ -544,7 +582,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							switch(curOption.type) {
 								case INT:
 									curOption.setValue(Math.round(holdValueKey));
-								case FLOAT, PERCENT:
+								case FLOAT:
+									curOption.setValue(FlxMath.roundDecimal(Math.round(holdValueKey / curOption.changeValue) * curOption.changeValue, curOption.decimals));
+								case PERCENT:
 									curOption.setValue(FlxMath.roundDecimal(holdValueKey, curOption.decimals));
 								default:
 							}
@@ -577,6 +617,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		if ((FlxG.keys.justPressed.TAB || FlxG.gamepads.anyJustPressed(START)) && curOption.customizable) {
 			openSubState(Type.createInstance(curOption.customizationClass, []));
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+		}
+
+		if ((FlxG.keys.justPressed.P || FlxG.gamepads.anyJustPressed(Y)) && curOption.onPreview != null) {
+			curOption.preview();
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 
@@ -722,6 +767,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 								case INT:
 									selectedOption.setValue(Math.round(holdValue));
 								case FLOAT:
+									selectedOption.setValue(FlxMath.roundDecimal(Math.round(holdValue / selectedOption.changeValue) * selectedOption.changeValue, selectedOption.decimals));
+								case PERCENT:
 									selectedOption.setValue(FlxMath.roundDecimal(holdValue, selectedOption.decimals));
 								default:
 							}
@@ -826,6 +873,15 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 		}
 
+		for (preview in grpPreview) {
+			if (preview is FlxText) continue;
+			var selectedOption:Option = optionsArray[preview.ID];
+			if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(preview, camOptions)) {
+				selectedOption.preview();
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+			}
+		}
+
 		for (num => locked in grpLocked) {
 			if (locked is FlxText) continue;
 			var descBG:FlxSprite = grpLockedDesc.members[num];
@@ -872,7 +928,20 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 	}
 
+	override function destroy() {
+		FlxG.cameras.remove(camBG);
+		FlxG.cameras.remove(camOptions);
+		FlxG.cameras.remove(camUI);
+		super.destroy();
+	}
+
+	override function openSubState(sub:flixel.FlxSubState) {
+		keyIcons.visible = backButton.visible = false;
+		super.openSubState(sub);
+	}
+
 	override function closeSubState() {
+		keyIcons.visible = backButton.visible = true;
 		FlxG.inputs.reset();
 		super.closeSubState();
 	}
@@ -900,26 +969,37 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			case SUBSTATE(cl):
 			case KEYBIND:
 			case BOOL:
+				var leftArrow:FlxSprite = grpArrows.members[option.child.ID];
+				var rightArrow:FlxSprite = grpArrows.members[option.child.ID + 1];
 				option.text = option.getValue() == true ? 'ON' : 'OFF';
-				option.child.x = (grpArrows.members[option.child.ID].x + grpArrows.members[option.child.ID + 1].x - option.child.textField.textWidth) / 2 + 15;
+				option.child.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - option.child.width) / 2;
 			default:
 				var text:String = option.displayFormat;
 				var val:Dynamic = option.getValue();
 				if (option.type == PERCENT) val = Math.floor(val * 100);
 				var def:Dynamic = option.defaultValue;
+				option.child.scale.set(1, 1);
+				option.child.updateHitbox();
 				option.text = text.replace('%v', val).replace('%d', def);
+
 				if (option.type == PERCENT) {
 					cast(barArray[option.child.ID][0], FlxBar).percent = val;
-					option.child.x = barArray[option.child.ID][0].getMidpoint().x - option.child.textField.textWidth / 2;
+					option.child.x = barArray[option.child.ID][0].getMidpoint().x - option.child.width / 2;
 				}
 				else {
 					if (grpArrows.members[option.child.ID] == null || grpArrows.members[option.child.ID + 1] == null) return; // ?????????????
-					option.child.x = (grpArrows.members[option.child.ID].x + grpArrows.members[option.child.ID + 1].x - option.child.textField.textWidth) / 2 + 15;
+
+					var leftArrow:FlxSprite = grpArrows.members[option.child.ID];
+					var rightArrow:FlxSprite = grpArrows.members[option.child.ID + 1];
+					option.child.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - option.child.width) / 2;
+
 					if (option.type == STRING) {
-						if (option.child.textField.textWidth >= 200) {
-							option.child.scale.x = option.child.scale.y = 200 / option.child.textField.textWidth;
-							option.child.origin.y = option.child.textField.textHeight / 2;
+						if (option.child.width > 200) {
+							option.child.scale.x = option.child.scale.y = 200 / option.child.width;
+							option.child.updateHitbox();
 						}
+						option.child.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - option.child.width) / 2;
+						option.child.y = grpBackgrounds.members[option.child.ID].getMidpoint().y - option.child.height / 2;
 						for (i => arr in lineArray) {
 							if (arr == null) continue;
 							if (i == option.child.ID) {
@@ -980,29 +1060,26 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	}
 
 	function updateKeyIcons() {
-		var removeOffset:Float = 0;
-		for (num => icon in keyIcons.group.keyValueIterator()) {
-			if (num < 2) continue; // Ignore Select and Back
-			if (num == 2) { // Confirm
-				switch(curOption.type) {
-					case KEYBIND:
-						icon.visible = true;
-					case SUBSTATE(cl):
-						icon.visible = true;
-					default:
-						if (!curOption.disallowed) {
-							icon.visible = false;
-							removeOffset = icon.width + 15;
-						}
-						else icon.visible = true;
-				}
-			}
-			else {
-				if (num == 5) { // Customize Option
+		var offset:Float = 20;
+		for (num => icon in keyIcons) {
+			switch(num) {
+				case 2: // Confirm
+					switch(curOption.type) {
+						case KEYBIND:
+							icon.visible = true;
+						case SUBSTATE(cl):
+							icon.visible = true;
+						default:
+							icon.visible = curOption.disallowed;
+					}
+				case 5: // Customize Option
 					icon.visible = curOption.customizable;
-				}
-				icon.x = Std.int(keyIcons.members[num - 1].x + keyIcons.members[num - 1].width + 15);
-				if (num == 3) icon.x -= removeOffset;
+				case 6: // Preview
+					icon.visible = curOption.onPreview != null;
+			}
+			if (icon.visible) {
+				icon.x = offset;
+				offset = icon.x + icon.width + 10;
 			}
 		}
 	}

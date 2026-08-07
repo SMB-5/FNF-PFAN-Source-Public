@@ -5,10 +5,11 @@ import openfl.utils.Assets;
 class LanguageSubState extends MusicBeatSubstate
 {
 	#if TRANSLATIONS_ALLOWED
-	var grpLanguages:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
+	var grpLanguages:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
 	var languages:Array<String> = [];
 	var displayLanguages:Map<String, String> = [];
 	var curSelected:Int = 0;
+	var maxPerRow:Int = 4;
 	var backButton:BackButton;
 	public function new()
 	{
@@ -16,8 +17,6 @@ class LanguageSubState extends MusicBeatSubstate
 
 		add(grpLanguages);
 
-		//languages.push(ClientPrefs.defaultData.language); //English (US)
-		displayLanguages.set(ClientPrefs.defaultData.language, Language.defaultLangName);
 		var directories:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'data/');
 		for (directory in directories)
 		{
@@ -68,55 +67,51 @@ class LanguageSubState extends MusicBeatSubstate
 			curSelected = Std.int(Math.max(0, languages.indexOf(ClientPrefs.data.language)));
 		}
 
-		for (num => lang in languages)
+		var rows:Int = Std.int(Math.min(Math.ceil(languages.length / maxPerRow), 3));
+		for (i => lang in languages)
 		{
-			var name:String = displayLanguages.get(lang);
-			if(name == null) name = lang;
-
-			var text:Alphabet = new Alphabet(0, 300, name, true);
-			text.isMenuItem = true;
-			text.targetY = num;
-			text.changeX = false;
-			text.distancePerItem.y = 100;
-			if(languages.length < 7)
-			{
-				text.changeY = false;
-				text.screenCenter(Y);
-				text.y += (100 * (num - (languages.length / 2))) + 45;
+			var flag = new FlxSprite(0, 0, Paths.image('languages/$lang'));
+			flag.setGraphicSize(250, 125);
+			flag.updateHitbox();
+			flag.screenCenter();
+			flag.ID = i;
+			flag.color = 0xFF878787;
+			var curRow = Math.floor(i / maxPerRow);
+			var offset = i % maxPerRow - (Math.min(3, languages.length - 1)) / 2;
+			flag.x = (FlxG.width - flag.width) / 2 + (offset * 300);
+			flag.y = (FlxG.height - flag.height) / 2 + ((curRow - (rows - 1) / 2) * 200);
+			if (curRow > 3) {
+				flag.y += 200 * (curRow - 3);
 			}
-			text.screenCenter(X);
-			text.ID = num;
-			grpLanguages.add(text);
+			grpLanguages.add(flag);
 		}
 
 		backButton = new BackButton();
 		add(backButton);
 
-		changeSelected(0, false);
+		changeSelection(0);
 	}
 
-	var changedLanguage:Bool = false;
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		var mult:Int = (FlxG.keys.pressed.SHIFT) ? 4 : 1;
-		if(controls.UI_UP_P)
-			changeSelected(-1 * mult);
-		if(controls.UI_DOWN_P)
-			changeSelected(1 * mult);
-		if(FlxG.mouse.wheel != 0)
-			changeSelected(FlxG.mouse.wheel * mult);
+		if (controls.UI_LEFT_P) {
+			if (curSelected != 0) changeSelection(-1);
+		}
+		if (controls.UI_RIGHT_P) {
+			if (curSelected > 0 && curSelected - 1 % maxPerRow != 0) changeSelection(1);
+		}
+		if (controls.UI_DOWN_P) {
+			if (curSelected + 4 < grpLanguages.length - 1) changeSelection(4);
+		}
+		if (controls.UI_UP_P) {
+			if (curSelected > 3) changeSelection(-4);
+		}
 
 		if(controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)
 		{
-			if(changedLanguage)
-			{
-				FlxTransitionableState.skipNextTransIn = true;
-				FlxTransitionableState.skipNextTransOut = true;
-				MusicBeatState.switchState(new MainMenuOptions(true));
-			}
-			else close();
+			close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 
@@ -127,7 +122,7 @@ class LanguageSubState extends MusicBeatSubstate
 				{
 					if (curSelected != option.ID) {
 						curSelected = option.ID;
-						changeSelected();
+						changeSelection();
 					}
 					else #if !mobile if (TouchUtil.justPressed) #end
 						pressedAccept = true;
@@ -136,25 +131,24 @@ class LanguageSubState extends MusicBeatSubstate
 		}
 		if(pressedAccept)
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.6);
+			FlxG.sound.play(Paths.sound('confirmMenu')).persist = true;
 			ClientPrefs.data.language = languages[curSelected];
-			//trace(ClientPrefs.data.language);
 			ClientPrefs.saveSettings();
 			Language.reloadPhrases();
-			changedLanguage = true;
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+			MusicBeatState.switchState(new MainMenuOptions(true));
 		}
 	}
 
-	function changeSelected(change:Int = 0, playSound:Bool = true)
+	function changeSelection(change:Int = 0)
 	{
-		curSelected = FlxMath.wrap(curSelected + change, 0, languages.length-1);
+		curSelected = Std.int(FlxMath.bound(curSelected + change, 0, languages.length - 1));
 		for (num => lang in grpLanguages)
 		{
-			lang.targetY = num - curSelected;
-			lang.alpha = 0.6;
-			if(num == curSelected) lang.alpha = 1;
+			lang.color = 0xFF878787;
+			if (num == curSelected) lang.color = 0xFFFFFFFF;
 		}
-		if (playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
 	}
 	#end
 }

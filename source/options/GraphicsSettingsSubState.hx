@@ -11,33 +11,33 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 
 		//I'd suggest using "Low Quality" as an example for making your own option since it is the simplest here
 		var option:Option = new Option('Low Quality', //Name
-			'If checked, disables some background details,\ndecreases loading times and improves performance.', //Description
+			'Disables some background details, but improves performance and loading times.', //Description
 			'lowQuality', //Save data variable name
 			BOOL); //Variable type
 		addOption(option);
 
 		var option:Option = new Option('Anti-Aliasing',
-			'If unchecked, disables anti-aliasing, increases performance\nat the cost of sharper visuals.',
+			'Smooths out the edges of sprites, removing jagged edges and sharpening them.\nThis will increase performance if enabled.',
 			'antialiasing',
 			BOOL);
 		option.onChange = onChangeAntiAliasing; //Changing onChange is only needed if you want to make a special interaction after it changes the value
 		addOption(option);
 
 		var option:Option = new Option('Shaders', //Name
-			"If unchecked, disables shaders.\nIt's used for some visual effects, and also CPU intensive for weaker PCs.", //Description
+			"Enables shaders which enhance the visuals.\nNot recommended to be enabled if you have a low-end device as this heavily uses up your CPU.", //Description
 			'shaders',
 			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('GPU Caching', //Name
-			"If checked, allows the GPU to be used for caching textures, decreasing RAM usage.\nDon't turn this on if you have a shitty Graphics Card.", //Description
+			"Uses the GPU for caching purposes which will decrease RAM usage.\nNot recommended to be enabled if you have a bad graphics card.", //Description
 			'cacheOnGPU',
 			BOOL);
 		addOption(option);
 
 		#if !html5 //Apparently other framerates isn't correctly supported on Browser? Probably it has some V-Sync shit enabled by default, idk
 		var option:Option = new Option('Framerate',
-			"Pretty self explanatory, isn't it?",
+			"The FPS at which the game will run on.",
 			'framerate',
 			INT);
 		addOption(option);

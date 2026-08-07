@@ -59,8 +59,9 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(cardText);
 
 		#if !mobile
-		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 1, 'ui_close');
+		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 0, 'ui_close');
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
+		acceptIcon.iconText.y += 3.5;
 		acceptIcon.alpha = 0;
 		add(acceptIcon);
 		#end
@@ -84,20 +85,20 @@ class PersonaCardSubstate extends MusicBeatSubstate
 
 		if (prompt == "WarningDemo")
 		{
-			promptText.text = Language.getPhrase("prompt_info");
-			titleText.text = Language.getPhrase("demo_title");
-			cardText.text = Language.getPhrase("demo_text");
+			promptText.text = Language.getPhrase("popup_info", "INFORMATION");
+			titleText.text = Language.getPhrase("demo_title", "Before You Start The Demo");
+			cardText.text = Language.getPhrase("demo_text", "This Mod is still in active development so a lot of things present might be changed, removed or unfinished.\n\nThis Demo serves as a tiny glimpse into what we want to do for the Mod and does not represent the Final Mod.\n\nPlease also note that this Mod contains Flashing Lights which can be disabled at Anytime in the Config Menu.");
 		}
 		else if (prompt == "LockedDemo")
 		{
-			promptText.text = Language.getPhrase("prompt_info");
-			titleText.text = Language.getPhrase("demolock_title");
-			cardText.text = Language.getPhrase("demolock_text");
+			promptText.text = Language.getPhrase("popup_info", "INFORMATION");
+			titleText.text = Language.getPhrase("demolock_title", "Not Available in the Demo");
+			cardText.text = Language.getPhrase("demolock_text", "This Menu will be Available in the First Release of the Full Mod.");
 		}
 		else
 		{
-			promptText.text = Language.getPhrase("prompt_system");
-			titleText.text = Language.getPhrase("error_title");
+			promptText.text = Language.getPhrase("popup_system", "SYSTEM");
+			titleText.text = Language.getPhrase("error_title", "Error");
 			cardText.text = "The Prompt you're looking for wasn't found.";
 		}
 	}

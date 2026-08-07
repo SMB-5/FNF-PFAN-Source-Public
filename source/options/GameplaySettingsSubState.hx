@@ -9,56 +9,56 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		//I'd suggest using "Downscroll" as an example for making your own option since it is the simplest here
 		var option:Option = new Option('Downscroll', //Name
-			'If checked, notes go Down instead of Up, simple enough.', //Description
+			'Notes go down instead of up.', //Description
 			'downScroll', //Save data variable name
 			BOOL); //Variable type
 		addOption(option);
 
 		var option:Option = new Option('Middlescroll',
-			'If checked, your notes get centered.',
+			'Centers the notes.',
 			'middleScroll',
 			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Opponent Notes',
-			'If unchecked, opponent notes get hidden.',
+			'Hides the opponent notes.',
 			'opponentStrums',
 			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Ghost Tapping',
-			"If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit.",
+			"Allows tapping while there are no notes present.",
 			'ghostTapping',
 			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Combo Break on Bad or Shit',
-			"If checked, your Combo will break if you get a Bad or Shit Rating and Ghost Notes will appear.",
+			"Bad and Shit ratings will result in a Combo Break.",
 			'comboBreak',
 			BOOL);
 		addOption(option);
 		
 		var option:Option = new Option('Auto Pause',
-			"If checked, the game automatically pauses if the screen isn't on focus.",
+			"Pauses the game while unfocused.",
 			'autoPause',
 			BOOL);
 		addOption(option);
 		option.onChange = onChangeAutoPause;
 
 		var option:Option = new Option('Disable Reset Button',
-			"If checked, pressing Reset won't do anything.",
+			"Disables the RESET key in a song.",
 			'noReset',
 			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Sustains as One Note',
-			"If checked, Hold Notes can't be pressed if you miss,\nand count as a single Hit/Miss.\nUncheck this if you prefer the old Input System.",
+			"Long notes will act as a singular note.\nDisable this if you prefer the old input system.",
 			'guitarHeroSustains',
 			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Hitsound Volume',
-			'Funny notes does \"Tick!\" when you hit them.',
+			'Funny note goes \"Tick!\" when hit.',
 			'hitsoundVolume',
 			PERCENT);
 		addOption(option);

@@ -1293,7 +1293,7 @@ class PlayState extends MusicBeatState
 	// `updateScore = function(miss:Bool = false) { ... }
 	// its like if it was a variable but its just a function!
 	// cool right? -Crow
-	public dynamic function updateScore(miss:Bool = false, scoreBop:Bool = true)
+	public dynamic function updateScore(miss:Bool = false, scoreBop:Bool = true, isSustainNote:Bool = false)
 	{
 		var ret:Dynamic = callOnScripts('preUpdateScore', [miss], true);
 		if (ret == LuaUtils.Function_Stop)
@@ -1301,7 +1301,7 @@ class PlayState extends MusicBeatState
 
 		updateScoreText();
 		if (!miss && !cpuControlled && scoreBop)
-			doScoreBop();
+			doScoreBop(isSustainNote);
 
 		callOnScripts('onUpdateScore', [miss]);
 	}
@@ -1344,7 +1344,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function doScoreBop():Void {
+	public function doScoreBop(isSustainNote:Bool = false):Void {
 		if(!ClientPrefs.data.scoreZoom)
 			return;
 
@@ -1356,7 +1356,8 @@ class PlayState extends MusicBeatState
 		scoreTxtTween = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2, {
 			onComplete: function(twn:FlxTween) {
 				scoreTxtTween = null;
-			}
+			},
+			startDelay: isSustainNote ? (Conductor.stepCrochet / 1000) : 0
 		});
 	}
 
@@ -3523,7 +3524,7 @@ class PlayState extends MusicBeatState
 			{
 				lerpedScore = true;
 				songScore += 30;
-				RecalculateRating(false);
+				RecalculateRating(false, true, true);
 			}
 			var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
 			if (guitarHeroSustains && note.isSustainNote) gainHealth = false;
@@ -3651,7 +3652,7 @@ class PlayState extends MusicBeatState
 				{
 					lerpedScore = true;
 					songScore += 30;
-					RecalculateRating(false);
+					RecalculateRating(false, true, true);
 				}
 
 				var gainHealth:Bool = true; // prevent health gain, *if* sustains are treated as a singular note
@@ -4115,7 +4116,7 @@ class PlayState extends MusicBeatState
 	public var ratingName:String = '?';
 	public var ratingPercent:Float;
 	public var ratingFC:String;
-	public function RecalculateRating(badHit:Bool = false, scoreBop:Bool = true) {
+	public function RecalculateRating(badHit:Bool = false, scoreBop:Bool = true, isSustainNote:Bool = false) {
 		setOnScripts('score', songScore);
 		setOnScripts('misses', songMisses);
 		setOnScripts('hits', songHits);
@@ -4148,7 +4149,7 @@ class PlayState extends MusicBeatState
 		setOnScripts('ratingFC', ratingFC);
 		setOnScripts('totalPlayed', totalPlayed);
 		setOnScripts('totalNotesHit', totalNotesHit);
-		updateScore(badHit, scoreBop); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
+		updateScore(badHit, scoreBop, isSustainNote); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce
 	}
 
 	#if ACHIEVEMENTS_ALLOWED

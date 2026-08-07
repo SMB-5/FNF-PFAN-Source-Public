@@ -91,9 +91,17 @@ class TouchUtil
 
 	public static function initiallyOverlapped(object:FlxObject, ?camera:FlxCamera, ?offset:FlxPoint):Bool {
 		if (TouchUtil.input == null) return false;
+		return TouchUtil.overlapsPoint(object, TouchUtil.getJustPressedPosition(camera), offset, true, camera ?? object.camera);
+	}
+
+	public static function getJustPressedPosition(?camera:FlxCamera):FlxPoint {
+		if (TouchUtil.input == null) return null;
 		@:privateAccess
 		var justPressedPosition:FlxPoint = #if mobile TouchUtil.input.justPressedPosition #else TouchUtil.input._leftButton.justPressedPosition #end;
-		return TouchUtil.overlapsPoint(object, justPressedPosition, offset, true, camera ?? object.camera);
+		if (TouchUtil.justPressed) {
+			justPressedPosition.copyFrom(TouchUtil.input.getViewPosition(camera));
+		}
+		return justPressedPosition;
 	}
 
 	static function get_justPressed():Bool {

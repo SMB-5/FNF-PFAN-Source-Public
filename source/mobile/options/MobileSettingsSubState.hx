@@ -16,7 +16,7 @@ class MobileSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Control Alpha',
-			'How opaque do you want the controls to be?',
+			'How transparent should the controls be?',
 			'controlAlpha',
 			FLOAT);
 		option.defaultValue = 0.6;
@@ -27,7 +27,7 @@ class MobileSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Enable Pause Button',
-			'Whether or not the pause button should be enabled.\nYou can still press the back button to pause.',
+			'Enables the pause button.\nPressing the back button on Android will still pause the game.',
 			'pauseButton',
 			BOOL);
 		addOption(option);

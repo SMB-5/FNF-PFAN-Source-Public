@@ -10,7 +10,7 @@
 		"Chromatic Makers",
 		"Translation",
 		"Contributors",
-		"Promotors",
+		"Promoters",
 		"Special Thanks"
 	],
 	"members": {
@@ -82,7 +82,7 @@
 			"flipIcon": false,
 			"section": ["Programming", "Charting"],
 			"role": "Programmer, Android Porter, Charter",
-			"description": "Hiya!\n\nI am one of the programmers for this mod!\nI coded some of the UI like the Credits Menu, Options Menu, Music Player, and some other stuff.\nI did the menu transitions in the main menu and pause menu. I liked how Persona has clean transitions in its UI so I wanted to at least try and do that a little bit.\n\nI mainly recoded the backend of the engine for cool stuff, added some features like the Play as Opponent modifier, and ported the mod to android cause I'm a fat mobile chud.\n\nI'm also a charter and charted Tartarus and Foggy Night. Apparently Atlus is such a big GD fan that they named the tower after a GD level.\n\nAnyways, I hope you enjoyed the mod as much as I had fun coding it!\n\n\nBeware of &Baldiplier&...",
+			"description": "Hiya!\n\nI am one of the programmers for this mod!\nI coded some of the UI like the Credits Menu, Options Menu, Music Player, and some other stuff.\nI did the menu transitions in the main menu and pause menu. I liked how Persona has clean transitions in its UI so I wanted to at least try and do that a little bit.\n\nI mainly recoded the backend of the engine for cool stuff, added some features like the Play as Opponent modifier, and ported the mod to android cause I'm a fat mobile chud.\nI also charted Tartarus and Foggy Night.\n\nAnyways, I hope you enjoyed the mod\nand go listen to Flavor Foley. This is an advertisement for Flavor Foley listen to them NOW\n\n\n\nBeware of &Baldiplier&...",
 			"link": "https://youtube.com/@melodiekit",
 			"color": "C0EBFF"
 		},
@@ -107,7 +107,7 @@
 		"Mina Takeover": {
 			"icon": "mina",
 			"flipIcon": false,
-			"section": ["Promotors"],
+			"section": ["Promoters"],
 			"role": "Thumbnail Artist",
 			"description": "fan fact: my whole aesthetic is purple but not sure if it's totally true myself.",
 			"link": "https://www.instagram.com/fnf_qt_artz?igsh=MWp0OXJ5Z2Q0cmRzaw==",

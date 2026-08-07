@@ -112,15 +112,15 @@ class MemberCardSubstate extends MusicBeatSubstate
 		iconSprite.animation.play('idle');
 		iconSprite.setGraphicSize(247, 247);
 		iconSprite.updateHitbox();
-		iconSprite.setPosition(camCard.width - iconSprite.width + 10, camCard.height - iconSprite.height - 192);
+		iconSprite.setPosition(camCard.width - iconSprite.width - 30, camCard.height - iconSprite.height - 192);
 		iconSprite.antialiasing = ClientPrefs.data.antialiasing;
-		add(iconSprite);
+		insert(members.indexOf(descBox), iconSprite);
 
 		iconSilhouette = new FlxBackdrop(null, Y, 0, 70);
 		iconSilhouette.loadGraphicFromSprite(iconSprite);
 		iconSilhouette.setGraphicSize(450, 450);
 		iconSilhouette.updateHitbox();
-		iconSilhouette.setPosition(iconSprite.x - 200, iconSprite.y + 30);
+		iconSilhouette.setPosition(iconSprite.x - 170, iconSprite.y + 30);
 		iconSilhouette.antialiasing = ClientPrefs.data.antialiasing;
 		iconSilhouette.setColorTransform(0, 0, 0, 1, color.red, color.green, color.blue);
 		iconSilhouette.velocity.y = -50;
@@ -194,15 +194,15 @@ class MemberCardSubstate extends MusicBeatSubstate
 		descOutline.scrollFactor.set();
 		add(descOutline);
 
-		#if !mobile
-		backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 1, 'ui_close');
+		#if m!obile
+		backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 0, 'ui_close');
 		backIcon.iconText.font = Paths.font('p5hatty-1.ttf');
-		if (controls.controllerMode) backIcon.icons[0].y -= 7;
+		backIcon.iconText.y += 3.5;
 		add(backIcon);
 
-		acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 1, 'ui_open_link');
+		acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 0, 'ui_open_link');
 		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
-		if (controls.controllerMode) acceptIcon.icons[0].y -= 7;
+		acceptIcon.iconText.y += 3.5;
 		add(acceptIcon);
 		#end
 
@@ -258,7 +258,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 			FlxTween.tween(camDesc, { x: camDesc.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut, onComplete:t->close() });
 		}
 
-		if (controls.ACCEPT || TouchUtil.overlaps(acceptTxt, camCard) && TouchUtil.justPressed) {
+		if (controls.ACCEPT || TouchUtil.overlaps(acceptTxt, camCard) && TouchUtil.initiallyOverlapped(acceptTxt, camCard) && TouchUtil.justReleased) {
 			CoolUtil.browserLoad(link);
 		}
 
@@ -277,7 +277,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 				scrollBar.y += val * (camDesc.height / (descTxt.textField.textHeight + 16));
 				scrollTimer = 0;
 			}
-			if (TouchUtil.pressed && (TouchUtil.initiallyOverlapped(descBox, camCard, FlxPoint.get(camCard.x, camCard.y)) && TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
+			if (TouchUtil.pressed && (TouchUtil.initiallyOverlapped(descBox, camCard) && TouchUtil.overlaps(descBox, camCard) || holdingBox)) {
 				if (TouchUtil.justPressed) {
 					holdingBox = true;
 					#if mobile prevMouseY += TouchUtil.input.viewY; #end

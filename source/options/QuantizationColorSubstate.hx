@@ -55,6 +55,13 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 	var controllerPointer:FlxSprite;
 	var _lastControllerMode:Bool = false;
 
+	var selector:FlxSprite;
+	var usingSelector:Bool = false;
+	var curSelected:Int = 0;
+
+	var selectionIcons:FlxTypedGroup<KeyIcon>;
+	var editingIcons:FlxTypedGroup<KeyIcon>;
+
 	var backButton:BackButton;
 
 	var tipTxt:FlxText;
@@ -81,22 +88,53 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		editingGroup = new FlxTypedGroup<Dynamic>();
 		add(editingGroup);
 
+		selector = new FlxSprite();
+		selector.visible = false;
+		add(selector);
+
+		selectionIcons = new FlxTypedGroup<KeyIcon>();
+		add(selectionIcons);
+
+		editingIcons = new FlxTypedGroup<KeyIcon>();
+		editingIcons.visible = false;
+		add(editingIcons);
+
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
+		selectionIcons.add(movementIcon);
+
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'Edit', 0.15, 24);
+		selectionIcons.add(acceptIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		selectionIcons.add(backIcon);
+
+		var resetIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 10, FlxG.height - 44, 'reset', 0, 'ui_reset', 0.15, 24);
+		selectionIcons.add(resetIcon);
+		#end
+
 		FlxTween.tween(bg, { alpha: 0.4 }, 0.5, { ease: FlxEase.quadOut });
 
 		controllerPointer = new FlxShapeCircle(0, 0, 20, {thickness: 0}, FlxColor.WHITE);
 		controllerPointer.offset.set(20, 20);
 		controllerPointer.screenCenter();
 		controllerPointer.alpha = 0.6;
+		controllerPointer.visible = false;
 		add(controllerPointer);
 
 		backButton = new BackButton();
+		backButton.x += 50;
 		add(backButton);
-		
-		#if !mobile FlxG.mouse.visible = !controls.controllerMode; #end
-		controllerPointer.visible = controls.controllerMode;
+
 		_lastControllerMode = controls.controllerMode;
 
 		reloadTab();
+
+		#if !mobile
+		if (controls.controllerMode) {
+			changeSelection(0);
+		}
+		#end
 
 		super.create();
 	}
@@ -112,51 +150,14 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 		// Early controller checking
 		if (FlxG.gamepads.anyJustPressed(ANY)) controls.controllerMode = true;
-		else if (FlxG.mouse.justPressed || FlxG.mouse.deltaScreenX != 0 || FlxG.mouse.deltaScreenY != 0) controls.controllerMode = false;
-		
-		var changedToController:Bool = false;
-		if(controls.controllerMode != _lastControllerMode)
-		{
-			#if !mobile FlxG.mouse.visible = !controls.controllerMode; #end
-			controllerPointer.visible = controls.controllerMode;
-
-			// changed to controller mid state
-			if(controls.controllerMode)
-			{
-				controllerPointer.x = FlxG.mouse.x;
-				controllerPointer.y = FlxG.mouse.y;
-				changedToController = true;
-			}
-
-			_lastControllerMode = controls.controllerMode;
-		}
-
-		// controller things
-		var analogX:Float = 0;
-		var analogY:Float = 0;
-		var analogMoved:Bool = false;
-		if (controls.controllerMode && (changedToController || FlxG.gamepads.anyInput())) {
-			for (gamepad in FlxG.gamepads.getActiveGamepads())
-			{
-				analogX = gamepad.getXAxis(LEFT_ANALOG_STICK);
-				analogY = gamepad.getYAxis(LEFT_ANALOG_STICK);
-				analogMoved = (analogX != 0 || analogY != 0);
-				if (analogMoved) break;
-			}
-			controllerPointer.x = Math.max(0, Math.min(FlxG.width, controllerPointer.x + analogX * 1000 * elapsed));
-			controllerPointer.y = Math.max(0, Math.min(FlxG.height, controllerPointer.y + analogY * 1000 * elapsed));
-		}
-		var controllerPressed:Bool = (controls.controllerMode && controls.ACCEPT);
-
-		var generalMoved:Bool = (FlxG.mouse.justMoved || analogMoved);
-		var generalPressed:Bool = (FlxG.mouse.justPressed || controllerPressed);
+		else if (TouchUtil.justPressed || FlxG.mouse.deltaScreenX != 0 || FlxG.mouse.deltaScreenY != 0) controls.controllerMode = false;
 
 		var pressedBack:Bool = false;
 		for (spr in btnGroup) {
 			if (!(spr is Alphabet)) continue;
 			var btn:Alphabet = cast(spr, Alphabet);
 			if (!btn.bold) continue;
-			if (pointerOverlaps(btn) && generalPressed) {
+			if (TouchUtil.overlaps(btn) && TouchUtil.justPressed) {
 				if (btn.text == 'EDIT') {
 					editingNote = btn.ID;
 					reloadTab(NOTE_EDITING);
@@ -164,10 +165,16 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 					return;
 				}
 				else if (btn.text == 'RESET') {
-					var note:Note = notesGroup.members[btn.ID];
-					note.rgbShader.r = ClientPrefs.data.arrowRGBQuantization[btn.ID][0] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][0];
-					note.rgbShader.g = ClientPrefs.data.arrowRGBQuantization[btn.ID][1] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][1];
-					note.rgbShader.b = ClientPrefs.data.arrowRGBQuantization[btn.ID][2] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][2];
+					if (currentTab == NOTE_SELECTION) {
+						var note:Note = notesGroup.members[btn.ID];
+						note.rgbShader.r = ClientPrefs.data.arrowRGBQuantization[btn.ID][0] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][0];
+						note.rgbShader.g = ClientPrefs.data.arrowRGBQuantization[btn.ID][1] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][1];
+						note.rgbShader.b = ClientPrefs.data.arrowRGBQuantization[btn.ID][2] = ClientPrefs.defaultData.arrowRGBQuantization[btn.ID][2];
+					}
+					else {
+						setShaderColor(ClientPrefs.defaultData.arrowRGBQuantization[editingNote][curSelectedMode]);
+						updateColors();
+					}
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 				}
 				else if (btn.text == 'BACK') {
@@ -183,12 +190,94 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 					close();
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 				}
+
+				#if !mobile
+				if (FlxG.mouse.justMoved && usingSelector) {
+					usingSelector = selector.visible = false;
+				}
+
+				if (controls.UI_UP_P || controls.UI_DOWN_P) {
+					if (controls.UI_DOWN_P) {
+						if (curSelected != 3) changeSelection(curSelected + 1);
+						else changeSelection(curSelected);
+					}
+					else if (controls.UI_UP_P) {
+						if (curSelected != 4) changeSelection(curSelected - 1);
+						else changeSelection(curSelected);
+					}
+				}
+
+				if (controls.UI_LEFT_P || controls.UI_RIGHT_P) {
+					if (controls.UI_RIGHT_P) {
+						if (curSelected < 4) changeSelection(curSelected + 4);
+						else changeSelection(curSelected);
+					}
+					else if (controls.UI_LEFT_P) {
+						if (curSelected >= 4) changeSelection(curSelected - 4);
+						else changeSelection(curSelected);
+					}
+				}
+
+				if (controls.ACCEPT) {
+					if (!usingSelector) changeSelection(0);
+					else {
+						editingNote = curSelected;
+						reloadTab(NOTE_EDITING);
+						FlxG.sound.play(Paths.sound('scrollMenu'));
+					}
+				}
+
+				if (controls.RESET) {
+					var note:Note = notesGroup.members[curSelected];
+					note.rgbShader.r = ClientPrefs.data.arrowRGBQuantization[curSelected][0] = ClientPrefs.defaultData.arrowRGBQuantization[curSelected][0];
+					note.rgbShader.g = ClientPrefs.data.arrowRGBQuantization[curSelected][1] = ClientPrefs.defaultData.arrowRGBQuantization[curSelected][1];
+					note.rgbShader.b = ClientPrefs.data.arrowRGBQuantization[curSelected][2] = ClientPrefs.defaultData.arrowRGBQuantization[curSelected][2];
+					FlxG.sound.play(Paths.sound('cancelMenu'));
+				}
+				#end
 			case NOTE_EDITING:
 				if (controls.BACK || pressedBack #if android || FlxG.android.justReleased.BACK #end) {
 					reloadTab(NOTE_SELECTION);
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					return;
 				}
+		
+				var changedToController:Bool = false;
+				if(controls.controllerMode != _lastControllerMode)
+				{
+					#if !mobile FlxG.mouse.visible = !controls.controllerMode; #end
+					controllerPointer.visible = controls.controllerMode;
+
+					// changed to controller mid state
+					if(controls.controllerMode)
+					{
+						controllerPointer.x = TouchUtil.input.x;
+						controllerPointer.y = TouchUtil.input.y;
+						changedToController = true;
+					}
+
+					_lastControllerMode = controls.controllerMode;
+				}
+
+				// controller things
+				var analogX:Float = 0;
+				var analogY:Float = 0;
+				var analogMoved:Bool = false;
+				if (controls.controllerMode && (changedToController || FlxG.gamepads.anyInput())) {
+					for (gamepad in FlxG.gamepads.getActiveGamepads())
+					{
+						analogX = gamepad.getXAxis(LEFT_ANALOG_STICK);
+						analogY = gamepad.getYAxis(LEFT_ANALOG_STICK);
+						analogMoved = (analogX != 0 || analogY != 0);
+						if (analogMoved) break;
+					}
+					controllerPointer.x = Math.max(0, Math.min(FlxG.width, controllerPointer.x + analogX * 1000 * elapsed));
+					controllerPointer.y = Math.max(0, Math.min(FlxG.height, controllerPointer.y + analogY * 1000 * elapsed));
+				}
+				var controllerPressed:Bool = (controls.controllerMode && controls.ACCEPT);
+
+				var generalMoved:Bool = (FlxG.mouse.justMoved || analogMoved);
+				var generalPressed:Bool = (TouchUtil.justPressed || controllerPressed);
 
 				if (hexTypeNum > -1) {
 					var keyPressed:FlxKey = cast (FlxG.keys.firstJustPressed(), FlxKey);
@@ -319,7 +408,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				}
 				// holding
 				if (holdingOnObj != null) {
-					if (FlxG.mouse.justReleased || (controls.controllerMode && controls.justReleased('accept'))) {
+					if (TouchUtil.justReleased || (controls.controllerMode && controls.justReleased('accept'))) {
 						holdingOnObj = null;
 						_storedColor = getShaderColor();
 						updateColors();
@@ -348,7 +437,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				}
 				else if (controls.RESET && hexTypeNum < 0) {
 					setShaderColor(ClientPrefs.defaultData.arrowRGBQuantization[editingNote][curSelectedMode]);
-					FlxG.sound.play(Paths.sound('cancelMenu'), 0.6);
+					FlxG.sound.play(Paths.sound('cancelMenu'));
 					updateColors();
 				}
 		}
@@ -366,6 +455,8 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 		switch(tab) {
 			case NOTE_SELECTION:
+				selectionIcons.visible = true;
+				editingIcons.visible = false;
 				backButton.revive();
 
 				box = new FlxSprite().makeGraphic(850, 500, 0xC9000000);
@@ -387,7 +478,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 					var snapTxt = new Alphabet(note.x + 160, note.y - 15, Note.quantizations[i] + 'th Note', false);
 					snapTxt.setScale(0.5, 0.5);
-					for (letter in snapTxt.letters) letter.setColorTransform(1, 1, 1, 1, 255, 255, 255, 0);
+					snapTxt.letterColor = FlxColor.WHITE;
 					btnGroup.add(snapTxt);
 
 					var editTxt = new Alphabet(note.x + 140, note.y + 60, 'EDIT');
@@ -402,13 +493,19 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 					var bg = new FlxSprite(editTxt.x - 20, editTxt.y - 5).makeGraphic(Math.round(editTxt.width * 1.5), Math.round(editTxt.height * 1.5), 0xFF1A1A1A);
 					bg.drawRect(0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+					bg.ID = i;
 					btnGroup.insert(btnGroup.members.indexOf(editTxt), bg);
 
 					var bg = new FlxSprite(resetTxt.x - 20, resetTxt.y - 5).makeGraphic(Math.round(resetTxt.width * 1.5), Math.round(resetTxt.height * 1.5), 0xFF1A1A1A);
 					bg.drawRect(0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+					bg.ID = i;
 					btnGroup.insert(btnGroup.members.indexOf(resetTxt), bg);
 				}
 			case NOTE_EDITING:
+				selectionIcons.visible = false;
+				editingIcons.visible = true;
+				usingSelector = selector.visible = false;
+				controllerPointer.visible = controls.controllerMode;
 				backButton.kill();
 
 				box = new FlxSprite().makeGraphic(950, 670, 0xC9000000);
@@ -426,7 +523,7 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 
 				var snap = new Alphabet(250, 10, Note.quantizations[editingNote] + 'th Note', false);
 				snap.setScale(0.9, 0.9);
-				for (letter in snap.letters) letter.setColorTransform(1, 1, 1, 1, 255, 255, 255, 0);
+				snap.letterColor = FlxColor.WHITE;
 				editingGroup.add(snap);
 
 				copyButton = new FlxSprite(640, 50).loadGraphic(Paths.image('noteColorMenu/copy'));
@@ -478,10 +575,25 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 				spawnNotes();
 				updateNotes();
 
-				var tip:FlxText = new FlxText(400, 630, 300, Language.getPhrase('note_colors_tip', 'Press RESET to Reset the selected Note Part.'), 16);
-				tip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-				tip.borderSize = 2;
-				editingGroup.add(tip);
+				#if !mobile
+				if (editingIcons.length <= 0) {
+					var backIcon:KeyIcon = new KeyIcon(bg.x, 0, 'back', 0, 'ui_back', 0.2, 24);
+					backIcon.y = bg.y - backIcon.height - 10;
+					editingIcons.add(backIcon);
+
+					var resetIcon:KeyIcon = new KeyIcon(bg.x + bg.width + 20, 0, 'reset', 0, 'ui_reset', 0.2, 24);
+					resetIcon.y = bg.y + (bg.height - resetIcon.height) / 2;
+					editingIcons.add(resetIcon);
+				}
+				#else
+				var resetTxt = new Alphabet(bg.x + bg.width + 50, backTxt.y, 'RESET');
+				resetTxt.setScale(0.6, 0.6);
+				btnGroup.add(resetTxt);
+
+				var bg = new FlxSprite(resetTxt.x - 30, resetTxt.y - 10).makeGraphic(Math.round(resetTxt.width * 1.5), Std.int(bg.height), 0xFF1A1A1A);
+				bg.drawRect(0, 0, bg.width, bg.height, 0, {thickness: 5, color: 0xFFFFFFFF});
+				btnGroup.insert(btnGroup.members.indexOf(resetTxt), bg);
+				#end
 		}
 
 		ignoreCheckForThisFrame = true;
@@ -489,20 +601,20 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 	}
 
 	function pointerOverlaps(obj:Dynamic) {
-		if (!controls.controllerMode) return FlxG.mouse.overlaps(obj);
+		if (!controls.controllerMode) return TouchUtil.overlaps(obj);
 		return FlxG.overlap(controllerPointer, obj);
 	}
 
 	function pointerX():Float {
-		if (!controls.controllerMode) return FlxG.mouse.x;
+		if (!controls.controllerMode) return TouchUtil.input.x;
 		return controllerPointer.x;
 	}
 	function pointerY():Float {
-		if (!controls.controllerMode) return FlxG.mouse.y;
+		if (!controls.controllerMode) return TouchUtil.input.y;
 		return controllerPointer.y;
 	}
 	function pointerFlxPoint():FlxPoint {
-		if (!controls.controllerMode) return FlxG.mouse.getScreenPosition();
+		if (!controls.controllerMode) return TouchUtil.input.getScreenPosition();
 		return controllerPointer.getScreenPosition();
 	}
 
@@ -517,6 +629,17 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		}
 		hexTypeLine.x += hexTypeLine.width;
 		hexTypeVisibleTimer = 0;
+	}
+
+	function changeSelection(option:Int) {
+		if (currentTab != NOTE_SELECTION) return;
+		curSelected = Std.int(FlxMath.bound(!usingSelector ? curSelected : option, 0, 7));
+		usingSelector = true;
+		selector.visible = true;
+		var bg = btnGroup.getLast(s->s.ID == curSelected);
+		selector.makeGraphic(Std.int(bg.x + bg.width - notesGroup.members[curSelected].x + 50), Std.int(notesGroup.members[curSelected].height + 20), 0);
+		selector.drawRect(0, 0, selector.width, selector.height, 0, {thickness: 10, color: 0xFFFFFF00});
+		selector.setPosition(notesGroup.members[curSelected].x - 10, notesGroup.members[curSelected].y - 10);
 	}
 
 	function changeSelectionMode(change:Int = 0) {

@@ -33,7 +33,13 @@ class MainMenuOptions extends MusicBeatState
 	var topGradient:FlxSprite;
 	var textBG:FlxSprite;
 	var menuChar:FlxSprite;
+
 	var backButton:FlxText;
+
+	var eraseTxt:FlxText;
+	var eraseTimer:Float = 0;
+
+	var keyIcons:FlxTypedGroup<KeyIcon>;
 
 	public function new(transIn:Bool = false) {
 		super();
@@ -111,11 +117,6 @@ class MainMenuOptions extends MusicBeatState
 		textBG.antialiasing = ClientPrefs.data.antialiasing;
 		add(textBG);
 
-		backButton = new FlxText(30, 58, 0, Language.getPhrase('Back').toUpperCase(), 48);
-		backButton.antialiasing = ClientPrefs.data.antialiasing;
-		backButton.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, FlxColor.WHITE, LEFT);
-		add(backButton);
-
 		grpOptions = new FlxTypedGroup<FlxText>();
 		add(grpOptions);
 
@@ -142,12 +143,32 @@ class MainMenuOptions extends MusicBeatState
 		menuChar.animation.addByPrefix('idle', 'menu_idle', 24, false);
 		add(menuChar);
 
-		#if !mobile
-		var movementIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad_up_down', 1, 'ui_select', 0.15, 24);
-		add(movementIcon);
+		backButton = new FlxText(30, 58, 0, Language.getPhrase('Back').toUpperCase(), 48);
+		backButton.antialiasing = ClientPrefs.data.antialiasing;
+		backButton.setFormat(Paths.font("FOT-Rodin Pro EB.otf"), 48, FlxColor.WHITE, LEFT);
+		add(backButton);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.width + 30, FlxG.height - 44, 'accept', 1, 'ui_confirm', 0.15, 24);
-		add(acceptIcon);
+		var eraseString:String = Language.getPhrase('erase_save_data', 'Hold RESET to erase save data.');
+		#if mobile
+		eraseString = Language.getPhrase('erase_save_data_mobile', 'Press this text to erase save data.');
+		#end
+		eraseTxt = new FlxText(0, 30, 0, eraseString);
+		eraseTxt.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		eraseTxt.screenCenter(X);
+		add(eraseTxt);
+
+		keyIcons = new FlxTypedGroup<KeyIcon>();
+		add(keyIcons);
+
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad_up_down', 1, 'ui_select', 0.15, 24);
+		keyIcons.add(movementIcon);
+
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_confirm', 0.15, 24);
+		keyIcons.add(acceptIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_close', 0.15, 24);
+		keyIcons.add(backIcon);
 
 		FlxG.mouse.visible = true;
 		#end
@@ -181,6 +202,7 @@ class MainMenuOptions extends MusicBeatState
 
 	override function closeSubState() {
 		super.closeSubState();
+		keyIcons.visible = true;
 		ClientPrefs.saveSettings();
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Options Menu", null);
@@ -191,6 +213,38 @@ class MainMenuOptions extends MusicBeatState
 	var hoveringBack:Bool = false;
 	override function update(elapsed:Float) {
 		if (!selected) {
+			if (controls.pressed('reset') #if mobile || TouchUtil.overlaps(eraseTxt, camOptions) && TouchUtil.justPressed #end) {
+				if (eraseTimer < 1) {
+					eraseTimer += elapsed;
+					if (eraseTimer >= 1 || #if mobile TouchUtil.overlaps(eraseTxt, camOptions) && TouchUtil.justPressed #end) {
+						eraseTimer = 1;
+						// have to do this manually because some necessary data is bunched in with FlxG.save.data
+						// Like literally every single ClientPrefs option Lol
+						keyIcons.visible = false;
+						openSubState(new substates.PersonaPrompt('prompt_erase_save_data', ()->{
+							#if ACHIEVEMENTS_ALLOWED
+							FlxG.save.data.achievementsUnlocked = [];
+							FlxG.save.data.achievementsVariables = [];
+							Achievements.achievementsUnlocked = [];
+							Achievements.variables = [];
+							#end
+							FlxG.save.data.songScores = new Map<String, Int>();
+							FlxG.save.data.songScoresOpponent = new Map<String, Int>();
+							FlxG.save.data.weekScores = new Map<String, Int>();
+							FlxG.save.data.songRating = new Map<String, Float>();
+							FlxG.save.data.songRatingOpponent = new Map<String, Float>();
+							FlxG.save.data.weekCompleted = new Map<String, Bool>();
+							backend.Highscore.load();
+							states.StoryMenuState.weekCompleted = new Map<String, Bool>();
+							FlxG.save.flush();
+						}, ()->{}, 3));
+					}
+				}
+			}
+			else {
+				eraseTimer = 0;
+			}
+
 			var pressedAccept:Bool = controls.ACCEPT;
 			for (option in optionHitboxes) {
 				if (TouchUtil.overlaps(option, camOptions)) {

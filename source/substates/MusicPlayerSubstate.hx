@@ -242,25 +242,39 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 		add(settingsIcons);
 
 		#if !mobile
-		var switchIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad_left_right', 1, 'ui_switch_song', 0.15, 24);
+		var switchIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad_left_right', 1, 'ui_switch_song', 0.1, 24);
 		playerIcons.add(switchIcon);
 
-		var playIcon:KeyIcon = new KeyIcon(switchIcon.x + switchIcon.width + 20, FlxG.height - 44, controls.controllerMode ? 'Y' : 'SPACE', 0, 'ui_play_song', 0.15, 24);
+		var playIcon:KeyIcon = new KeyIcon(switchIcon.x + switchIcon.width + 10, FlxG.height - 44, controls.controllerMode ? 'Y' : 'SPACE', 0, 'ui_play_song', 0.1, 24);
 		playerIcons.add(playIcon);
 
-		var restartIcon:KeyIcon = new KeyIcon(playIcon.x + playIcon.width + 15, FlxG.height - 44, 'reset', 0, 'ui_restart_song', 0.15, 24);
+		var restartIcon:KeyIcon = new KeyIcon(playIcon.x + playIcon.width + 10, FlxG.height - 44, 'reset', 0, 'ui_restart_song', 0.1, 24);
 		playerIcons.add(restartIcon);
 
-		var settingsIcon:KeyIcon = new KeyIcon(restartIcon.x + restartIcon.width + 15, FlxG.height - 44, controls.controllerMode ? 'START' : 'TAB', 0, 'ui_open_settings', 0.15, 24);
+		var skipIcon:KeyIcon = new KeyIcon(restartIcon.x + restartIcon.width + 10, FlxG.height - 44);
+		skipIcon.createCombinationIcon([
+			controls.controllerMode ? 'LEFT_SHOULDER' : 'Q',
+			controls.controllerMode ? 'RIGHT_SHOULDER' : 'E',
+		], 0, 'ui_skip_time', 0.1, 24, true, '');
+		playerIcons.add(skipIcon);
+
+		var skipPercentageIcon:KeyIcon = new KeyIcon(skipIcon.x + skipIcon.width + 10, FlxG.height - 44);
+		if (!controls.controllerMode) {
+			skipPercentageIcon.createCombinationIcon(['ONE', 'NINE'], 0, 'ui_skip_percentage', 0.1, 24, true, '-');
+			playerIcons.add(skipPercentageIcon);
+		}
+		var offsetSpr:FlxSprite = !controls.controllerMode ? skipPercentageIcon : skipIcon;
+
+		var settingsIcon:KeyIcon = new KeyIcon(offsetSpr.x + offsetSpr.width + 10, FlxG.height - 44, controls.controllerMode ? 'START' : 'TAB', 0, 'ui_open_settings', 0.1, 24);
 		playerIcons.add(settingsIcon);
 
-		var backIcon:KeyIcon = new KeyIcon(settingsIcon.x + settingsIcon.width + 15, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		var backIcon:KeyIcon = new KeyIcon(settingsIcon.x + settingsIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.1, 24);
 		playerIcons.add(backIcon);
 
-		var selectIcon:KeyIcon = new KeyIcon(0, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
+		var selectIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.1, 24);
 		settingsIcons.add(selectIcon);
 
-		var backIcon:KeyIcon = new KeyIcon(selectIcon.x + selectIcon.width + 20, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		var backIcon:KeyIcon = new KeyIcon(selectIcon.x + selectIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.1, 24);
 		settingsIcons.add(backIcon);
 		#end
 
@@ -394,6 +408,34 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 						else if (inst.onComplete != null) inst.onComplete();
 					}
 				}
+			}
+
+			if (FlxG.keys.justPressed.Q || FlxG.keys.justPressed.E || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER) || FlxG.gamepads.anyJustPressed(RIGHT_SHOULDER)) {
+				var wentBackwards:Bool = FlxG.keys.justPressed.Q || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER);
+				if (inst != null) {
+					var time:Float = inst.time + (wentBackwards ? -10000 : inst.time < inst.length ? 10000 : 0);
+					setMusicTime(time);
+					if (inst.time >= inst.length) {
+						stopMusic();
+						inst.onComplete();
+					}
+					else if (!inst.playing) {
+						playMusic();
+						setMusicTime(time);
+					}
+				}
+			}
+
+			if (!controls.controllerMode && inst != null) {
+				if (FlxG.keys.justPressed.ONE) setMusicTime(0.1 * inst.length);
+				if (FlxG.keys.justPressed.TWO) setMusicTime(0.2 * inst.length);
+				if (FlxG.keys.justPressed.THREE) setMusicTime(0.3 * inst.length);
+				if (FlxG.keys.justPressed.FOUR) setMusicTime(0.4 * inst.length);
+				if (FlxG.keys.justPressed.FIVE) setMusicTime(0.5 * inst.length);
+				if (FlxG.keys.justPressed.SIX) setMusicTime(0.6 * inst.length);
+				if (FlxG.keys.justPressed.SEVEN) setMusicTime(0.7 * inst.length);
+				if (FlxG.keys.justPressed.EIGHT) setMusicTime(0.8 * inst.length);
+				if (FlxG.keys.justPressed.NINE) setMusicTime(0.9 * inst.length);
 			}
 
 			if (TouchUtil.overlaps(playButton) && TouchUtil.justPressed || FlxG.keys.justPressed.SPACE || FlxG.gamepads.anyJustPressed(Y)) {
