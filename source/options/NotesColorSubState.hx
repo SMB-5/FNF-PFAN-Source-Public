@@ -221,7 +221,6 @@ class NotesColorSubState extends MusicBeatSubstate
 			// apparently theres no easy way to change mouse position that i know, oh well
 			*/
 			_lastControllerMode = controls.controllerMode;
-			#if !mobile updateTip(); #end
 		}
 
 		// controller things

@@ -216,7 +216,7 @@ class MainMenuOptions extends MusicBeatState
 			if (controls.pressed('reset') #if mobile || TouchUtil.overlaps(eraseTxt, camOptions) && TouchUtil.justPressed #end) {
 				if (eraseTimer < 1) {
 					eraseTimer += elapsed;
-					if (eraseTimer >= 1 || #if mobile TouchUtil.overlaps(eraseTxt, camOptions) && TouchUtil.justPressed #end) {
+					if (eraseTimer >= 1 #if mobile || TouchUtil.overlaps(eraseTxt, camOptions) && TouchUtil.justPressed #end) {
 						eraseTimer = 1;
 						// have to do this manually because some necessary data is bunched in with FlxG.save.data
 						// Like literally every single ClientPrefs option Lol
