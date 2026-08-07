@@ -86,6 +86,17 @@ class LanguageSubState extends MusicBeatSubstate
 			grpLanguages.add(flag);
 		}
 
+		#if !mobile
+		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
+		add(movementIcon);
+
+		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_confirm', 0.15, 24);
+		add(acceptIcon);
+
+		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_close', 0.15, 24);
+		add(backIcon);
+		#end
+
 		backButton = new BackButton();
 		add(backButton);
 
@@ -100,7 +111,7 @@ class LanguageSubState extends MusicBeatSubstate
 			if (curSelected != 0) changeSelection(-1);
 		}
 		if (controls.UI_RIGHT_P) {
-			if (curSelected > 0 && curSelected - 1 % maxPerRow != 0) changeSelection(1);
+			if (curSelected == 0 || ((curSelected + 1) * maxPerRow) % maxPerRow != 0) changeSelection(1);
 		}
 		if (controls.UI_DOWN_P) {
 			if (curSelected + 4 < grpLanguages.length - 1) changeSelection(4);
