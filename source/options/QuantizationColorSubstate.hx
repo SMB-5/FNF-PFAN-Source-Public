@@ -103,10 +103,21 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad', 1, 'ui_select', 0.15, 24);
 		selectionIcons.add(movementIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'Edit', 0.15, 24);
-		selectionIcons.add(acceptIcon);
+		var acceptIcon:KeyIcon;
+		var backIcon:KeyIcon;
 
-		var backIcon:KeyIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		if (Controls.instance.controllerMode)
+		{
+			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'Edit', 0.15, 24);
+			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 0, 'ui_back', 0.15, 24);
+		}
+		else
+		{
+			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 1, 'Edit', 0.15, 24);
+			backIcon = new KeyIcon(acceptIcon.x + acceptIcon.width + 10, FlxG.height - 44, 'back', 1, 'ui_back', 0.15, 24);
+		}
+
+		selectionIcons.add(acceptIcon);
 		selectionIcons.add(backIcon);
 
 		var resetIcon:KeyIcon = new KeyIcon(backIcon.x + backIcon.width + 10, FlxG.height - 44, 'reset', 0, 'ui_reset', 0.15, 24);

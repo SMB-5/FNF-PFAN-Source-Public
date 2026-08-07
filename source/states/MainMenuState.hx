@@ -135,7 +135,13 @@ class MainMenuState extends MusicBeatState
 		var movementIcon:KeyIcon = new KeyIcon(12, FlxG.height - 44, 'dpad_up_down', 1, 'ui_select', 0.15, 24);
 		add(movementIcon);
 
-		var acceptIcon:KeyIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_confirm', 0.15, 24);
+		var acceptIcon:KeyIcon;
+
+		if (Controls.instance.controllerMode)
+			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 0, 'ui_confirm', 0.15, 24);
+		else
+			acceptIcon = new KeyIcon(movementIcon.x + movementIcon.width + 10, FlxG.height - 44, 'accept', 1, 'ui_confirm', 0.15, 24);
+		
 		add(acceptIcon);
 
 		FlxG.mouse.visible = true;
