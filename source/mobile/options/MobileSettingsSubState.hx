@@ -50,7 +50,7 @@ class MobileSettingsSubState extends BaseOptionsMenu
 			recopyBG.cameras = [camUI];
 			add(recopyBG);
 
-			var recopyTxt:FlxText = new FlxText(0, 0, 0, 'Deleting assets folder in preparation, please wait...', 36);
+			var recopyTxt:FlxText = new FlxText(0, 0, 0, Language.getPhrase('recopy_assets_preparation', 'Deleting assets folder in preparation, please wait...'), 36);
 			recopyTxt.font = Paths.font('Fontsona3FES.ttf');
 			recopyTxt.screenCenter();
 			recopyTxt.cameras = [camUI];

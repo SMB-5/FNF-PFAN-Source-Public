@@ -381,7 +381,7 @@ class SplashPreviewSubstate extends MusicBeatSubstate
 		rightArrow.font = Paths.font('Fontsona3FES.ttf');
 		add(rightArrow);
 
-		setTxt = new FlxText(0, leftArrow.y - 40, 0, 'Animation Set', 28);
+		setTxt = new FlxText(0, leftArrow.y - 40, 0, Language.getPhrase('note_splash_preview_animation_set', 'Animation Set'), 28);
 		setTxt.font = Paths.font('Fontsona3FES.ttf');
 		setTxt.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - setTxt.width) / 2;
 		add(setTxt);

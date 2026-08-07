@@ -57,7 +57,7 @@ class CreditsState extends MusicBeatState
 		credit = getCreditData();
 		if (credit == null) {
 			trace('No credits found... returning back to menu');
-			var errorTxt:FlxText = new FlxText(0, 0, 0, 'Credit data file is faulty or missing.\n\nError:\n    $creditError\n\nReturning back to menu...', 36);
+			var errorTxt:FlxText = new FlxText(0, 0, 0, Language.getPhrase('credits_error', 'Credit data file is faulty or missing.\n\nError:\n{1}\n\nReturning back to menu...', [creditError]), 36);
 			errorTxt.font = Paths.font('Fontsona3FES.ttf');
 			errorTxt.screenCenter();
 			add(errorTxt);
@@ -115,7 +115,7 @@ class CreditsState extends MusicBeatState
 
 		var offset:Float = 0;
 		for (i => section in credit.sections) {
-			var sectionTxt:FlxText = new FlxText(50, 156 + (60 * i) + offset, FlxG.width, section, 38);
+			var sectionTxt:FlxText = new FlxText(50, 156 + (60 * i) + offset, FlxG.width, Language.getPhrase('credit_section_$section', section), 38);
 			sectionTxt.font = Paths.font('p5hatty-1.ttf');
 			sectionTxt.borderStyle = OUTLINE;
 			titleGroup.add(sectionTxt);

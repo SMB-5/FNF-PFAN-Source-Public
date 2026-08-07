@@ -88,8 +88,21 @@ ui_multiply_offset: "Multiply Offset (Hold)"
 ui_play_animation: "Play Animation"
 
 // Credits
+credit_section_direction: "Direction"
+credit_section_artanimation: "Art/Animation"
+credit_section_music: "Music"
+credit_section_programming: "Programming"
+credit_section_charting: "Charting"
+credit_section_chromatic_makers: "Chromatic Makers"
+credit_section_translation: "Translation"
+credit_section_contributors: "Contributors"
+credit_section_promoters: "Promoters"
+credit_section_special_thanks: "Special Thanks"
+
 credits_tip: "Press UP or DOWN to select a member\nPress ACCEPT to view a member's status"
 credits_tip_mobile: "Swipe to select a member\nTap to view a member's status"
+
+credits_error: "Credit data file is faulty or missing.\n\nError:\n{1}\n\nReturning back to menu..."
 
 // Persona PopUp Cards
 popup_info: "INFORMATION"
@@ -221,6 +234,7 @@ description_enable_pause_button: "Enables the pause button.\nPressing the back b
 
 setting_recopy_assets: "Recopy Assets"
 description_recopy_assets: "Deletes the assets folder and recopies everything again.\nUseful if some files aren't properly updated or if there are missing files."
+recopy_assets_preparation: "Deleting assets folder in preparation, please wait..."
 
 // Mobile Hitbox Settings
 setting_hitbox_style: "Hitbox Style"
@@ -268,6 +282,7 @@ setting_note_splash-sparkles: "Sparkles"
 setting_note_splash-vanilla: "Vanilla"
 setting_note_splash-psych-old: "Psych-Old"
 description_note_splash: "Select your preferred note splash variation."
+note_splash_preview_animation_set: "Animation Set"
 
 setting_note_splash_opacity: "Note Splash Opacity"
 description_note_splash_opacity: "How transparent should the note splashes be?"
