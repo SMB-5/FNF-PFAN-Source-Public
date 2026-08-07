@@ -89,7 +89,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		FlxG.sound.music.stop();
 
-		camEditor = new PsychCamera();
+		camEditor = initPsychCamera();
 
 		cameras = [camEditor];
 
