@@ -13,12 +13,14 @@
     {
       "name": "flixel",
       "type": "haxelib",
-      "version": "5.9.0"
+      "version": "5.9.0",
+      "skip_dependencies": true
     },
     {
       "name": "flixel-addons",
       "type": "haxelib",
-      "version": "3.3.2"
+      "version": "3.3.2",
+      "skip_dependencies": true
     },
     {
       "name": "flixel-tools",
@@ -26,16 +28,10 @@
       "version": "1.5.1"
     },
     {
-      "name": "hxcpp",
-      "type": "git",
-      "dir": null,
-      "ref": "master",
-      "url": "https://github.com/haxefoundation/hxcpp"
-    },
-    {
       "name": "hxvlc",
       "type": "haxelib",
-      "version": "2.0.1"
+      "version": "2.0.1",
+      "skip_dependencies": true
     },
     {
       "name": "hscript-iris",
@@ -59,6 +55,29 @@
       "skip_dependencies": true
     },
     {
+      "name": "extension-androidtools",
+      "type": "haxelib",
+      "version": "2.2.2",
+      "skip_dependencies": true
+    },
+    {
+      "name": "hxp",
+      "type": "haxelib",
+      "version": null,
+    },
+    {
+      "name": "format",
+      "type": "haxelib",
+      "version": null,
+    },
+    {
+      "name": "hxcpp",
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/haxefoundation/hxcpp"
+    },
+    {
       "name": "flxanimate",
       "type": "git",
       "dir": null,
@@ -69,8 +88,8 @@
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "1906c4a96f6bb6df66562b3f24c62f4c5bba14a7",
-      "url": "https://github.com/superpowers04/linc_luajit"
+      "ref": null,
+      "url": "https://github.com/kittycathy233/linc_luajit"
     },
     {
       "name": "funkin.vis",

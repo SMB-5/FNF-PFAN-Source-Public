@@ -24,7 +24,8 @@ A "Full Ass" Mod based on the Persona Series by [Atlus](https://atlus.com/), bui
 ## Windows & Mac:
 
 First, get Haxe 4.3 from the [Haxe website](https://haxe.org/download/) and download the respective executable.
-Then, get [Git-scm](https://git-scm.com/downloads).
+
+Then, get [Git-scm](https://git-scm.com/downloads) and download the respective executable.
 
 ## Visual Studio Community Installation (Windows only):
 
@@ -75,24 +76,17 @@ sudo emerge --ask dev-vcs/git-sh dev-lang/haxe media-video/vlc
 Open up a command prompt window **in the same directory as the place where you have saved the source code**.
 You can also type `cd <path>` to go to where your folder is. For example: `cd D:\Stuff\Work\FNF\FNF-Persona-Mod`
 
-## First Time Haxe Installation
-
-If this is your first time using Haxe, run `haxelib setup`. If you are asked to enter the name of the haxelib repository, type `.haxelib`.
-
-For Mac and Linux, create a folder by running `mkdir ~/haxelib`, this will create the haxelib folder in your home directory, then run `haxelib setup ~/haxelib`.
-
 ## Library Installation
 
-In the source code folder, go into the setup folder and run the setup file.
-For Windows, run `windows.bat`.
-For anything else, run `unix.sh`
+P:FAN uses a local .haxelib folder for the repository. This means that **you do not have to install anything as all of the libraries should already be installed and ready for you to use.**
+However, if you do happen to be missing a library or so, you can go to the setup folder where all of the correct libraries are listed in the .bat/.sh file. You can also use the .hmm file if you prefer.
 
-After running the file, run `haxelib run lime setup` to get access to the `lime` command.
+If you get an error trying to run the "lime" command, be sure to do `haxelib run lime setup` to get access to the command.
 
 # Building
 
-Finally, after all of that, run `lime test cpp` and your game should now be compiling.
+After all of that, run `lime test cpp` and your game should now be compiling.
 
-Be aware that if you're compiling a HaxeFlixel game for the first time, it will always take about 5-10+ minutes as it has to build all files from scratch. The time will vary depending on your hardware. However, it will get faster for subsequent compiles.
+Be aware that if you're compiling a HaxeFlixel game for the first time, it will always take about 5-10+ minutes as it has to build all files from scratch. The time will vary depending on your hardware, but it will get faster on subsequent compiles.
 
 If you get any errors, please create an issue and we will try and help you as soon as possible. But yeah that should be it, I hope you enjoy the mod and have fun.

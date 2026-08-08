@@ -1564,7 +1564,7 @@ class PlayState extends MusicBeatState
 				swagNote.scrollFactor.set();
 
 				if (ClientPrefs.data.noteQuantization) {
-					swagNote.setNoteQuantization(Math.round(daBpm * (spawnTime - bpmPos - (ClientPrefs.data.noteOffset * 1000)) / 1000 / 60 * 48), true);
+					swagNote.setNoteQuantization(Math.round(daBpm * (spawnTime - bpmPos) / 1000 / 60 * 48), true);
 				}
 				else if (ClientPrefs.data.charRGB && !["Hurt Note"].contains(swagNote.noteType)) {
 					var char:Character = swagNote.gfNote ? gf : swagNote.mustPress ? boyfriend : dad;
