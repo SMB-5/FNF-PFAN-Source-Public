@@ -3,8 +3,7 @@
 # REMINDER THAT YOU NEED HAXE INSTALLED PRIOR TO USING THIS
 # https://haxe.org/download
 cd ..
-echo Making the main haxelib and setuping folder in same time..
-mkdir ~/haxelib && haxelib setup ~/haxelib
+haxelib newrepo
 echo Installing dependencies...
 echo This might take a few moments depending on your internet speed.
 haxelib install flixel 5.9.0 --skip-dependencies && haxelib set flixel 5.9.0

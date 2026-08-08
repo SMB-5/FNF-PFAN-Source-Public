@@ -2,6 +2,7 @@
 color 0a
 cd ..
 @echo on
+haxelib newrepo
 echo Installing dependencies...
 echo This might take a few moments depending on your internet speed.
 haxelib install flixel 5.9.0 --skip-dependencies && haxelib set flixel 5.9.0

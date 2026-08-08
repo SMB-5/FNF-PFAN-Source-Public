@@ -78,10 +78,10 @@ You can also type `cd <path>` to go to where your folder is. For example: `cd D:
 
 ## Library Installation
 
-P:FAN uses a local .haxelib folder for the repository. This means that **you do not have to install anything as all of the libraries should already be installed and ready for you to use.**
-However, if you do happen to be missing a library or so, you can go to the setup folder where all of the correct libraries are listed in the .bat/.sh file. You can also use the .hmm file if you prefer.
+Go on over to the setup folder and run the windows.bat or unix.sh file depending if you're on Windows or Mac/Linux.
+Running these files will create a local .haxelib folder in the repository, which means that these library versions will ONLY apply to this repository. Your global haxelib versions will not be affected.
 
-If you get an error trying to run the "lime" command, be sure to do `haxelib run lime setup` to get access to the command.
+After running the file, do `haxelib run lime setup` to get access to the lime command.
 
 # Building
 
