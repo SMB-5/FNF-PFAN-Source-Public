@@ -18,7 +18,7 @@ haxelib install openfl 9.5.2 && haxelib set openfl 9.5.2
 haxelib install extension-androidtools 2.2.2 --skip-dependencies && haxelib set extension-androidtools 2.2.2
 haxelib install hxp
 haxelib install format
-haxelib git hxcpp https://github.com/haxefoundation/hxcpp
+haxelib git hxcpp https://github.com/kittycathy233/hxcpp
 haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate 768740a56b26aa0c072720e0d1236b94afe68e3e
 haxelib git linc_luajit https://github.com/kittycathy233/linc_luajit
 haxelib git funkin.vis https://github.com/FunkinCrew/funkVis 22b1ce089dd924f15cdc4632397ef3504d464e90
