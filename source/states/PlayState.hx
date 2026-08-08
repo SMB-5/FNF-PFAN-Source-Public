@@ -3706,19 +3706,41 @@ class PlayState extends MusicBeatState
 	}
 
 	public function makeGhostNote(note:Note) {
-		var ghost = new Note(note.strumTime - ClientPrefs.data.noteOffset, note.noteData, null, note.isSustainNote);
+		var ghost:Note = new Note(note.strumTime - ClientPrefs.data.noteOffset, note.noteData, null, false);
 		ghost.noteType = 'MISSED_NOTE';
 		ghost.multAlpha = note.multAlpha * .5;
 		ghost.mustPress = note.mustPress;
 		ghost.ignoreNote = true;
 		ghost.blockHit = true;
-		notes.add(ghost);
 		ghost.rgbShader.r.saturation = .2;
 		ghost.rgbShader.g.saturation = .2;
 		ghost.rgbShader.b.saturation = .2;
 		ghost.rgbShader.r = ghost.rgbShader.r;
 		ghost.rgbShader.g = ghost.rgbShader.g;
 		ghost.rgbShader.b = ghost.rgbShader.b;
+		notes.add(ghost);
+		if (guitarHeroSustains && note.parent == null && note.tail.length > 0) {
+			for (sus in note.tail) {
+				var ghostSus:Note = new Note(sus.strumTime - ClientPrefs.data.noteOffset, sus.noteData, null, true);
+				ghostSus.noteType = ghost.noteType;
+				ghostSus.multAlpha = ghostSus.alpha = ghost.multAlpha;
+				ghostSus.mustPress = ghost.mustPress;
+				ghostSus.ignoreNote = true;
+				ghostSus.blockHit = true;
+				ghostSus.animation.play(sus.animation.name);
+				ghostSus.scale.copyFrom(sus.scale);
+				ghostSus.updateHitbox();
+				ghostSus.rgbShader.r.saturation = .2;
+				ghostSus.rgbShader.g.saturation = .2;
+				ghostSus.rgbShader.b.saturation = .2;
+				ghostSus.rgbShader.r = ghost.rgbShader.r;
+				ghostSus.rgbShader.g = ghost.rgbShader.g;
+				ghostSus.rgbShader.b = ghost.rgbShader.b;
+				notes.insert(notes.members.indexOf(ghost), ghostSus);
+				invalidateNote(sus);
+			}
+			note.tail = [];
+		}
 	}
 
 	public function spawnHoldSplashOnNote(note:Note) {
