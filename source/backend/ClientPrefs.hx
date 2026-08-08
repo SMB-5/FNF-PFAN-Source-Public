@@ -202,19 +202,24 @@ class ClientPrefs {
 		defaultButtons = gamepadBinds.copy();
 	}
 
-	public static function saveSettings() {
-		for (key in Reflect.fields(data))
-			Reflect.setField(FlxG.save.data, key, Reflect.field(data, key));
+	public static function saveSettings(?variable:String) {
+		if (variable != null && Reflect.fields(data).contains(variable)) {
+			Reflect.setField(FlxG.save.data, variable, Reflect.field(data, variable));
+		}
+		else {
+			for (key in Reflect.fields(data))
+				Reflect.setField(FlxG.save.data, key, Reflect.field(data, key));
 
-		#if ACHIEVEMENTS_ALLOWED Achievements.save(); #end
+			#if ACHIEVEMENTS_ALLOWED Achievements.save(); #end
+
+			//Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
+			var save:FlxSave = new FlxSave();
+			save.bind('controls_v3', CoolUtil.getSavePath());
+			save.data.keyboard = keyBinds;
+			save.data.gamepad = gamepadBinds;
+			save.flush();
+		}
 		FlxG.save.flush();
-
-		//Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
-		var save:FlxSave = new FlxSave();
-		save.bind('controls_v3', CoolUtil.getSavePath());
-		save.data.keyboard = keyBinds;
-		save.data.gamepad = gamepadBinds;
-		save.flush();
 		FlxG.log.add("Settings saved!");
 	}
 

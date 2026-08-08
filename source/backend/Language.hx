@@ -54,6 +54,25 @@ class Language
 		#end
 	}
 
+	public static function getLanguages():Array<String>
+	{
+		var languages:Array<String> = [ClientPrefs.defaultData.language];
+		var directories:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'data/');
+		for (directory in directories)
+		{
+			for (file in FileSystem.readDirectory(directory))
+			{
+				if(file.toLowerCase().endsWith('.lang'))
+				{
+					var langFile:String = file.substring(0, file.length - '.lang'.length).trim();
+					if(!languages.contains(langFile))
+						languages.push(langFile);
+				}
+			}
+		}
+		return languages;
+	}
+
 	inline public static function getPhrase(key:String, ?defaultPhrase:String, values:Array<Dynamic> = null):String
 	{
 		#if TRANSLATIONS_ALLOWED
