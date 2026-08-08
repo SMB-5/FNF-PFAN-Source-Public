@@ -6,7 +6,7 @@ import substates.PersonaCardSubstate;
 class InitialState extends MusicBeatState
 {
 	public static function checkInitialization():Bool {
-		return #if TRANSLATION_ALLOWED FlxG.save.data.language != null && #end FlxG.save.data.flashing != null;
+		return #if TRANSLATIONS_ALLOWED FlxG.save.data.language != null && #end FlxG.save.data.flashing != null;
 	}
 
 	override function create() {
