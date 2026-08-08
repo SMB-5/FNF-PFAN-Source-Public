@@ -63,12 +63,12 @@
     {
       "name": "hxp",
       "type": "haxelib",
-      "version": null,
+      "version": null
     },
     {
       "name": "format",
       "type": "haxelib",
-      "version": null,
+      "version": null
     },
     {
       "name": "hxcpp",
