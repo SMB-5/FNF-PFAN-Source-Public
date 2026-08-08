@@ -18,9 +18,9 @@ haxelib install openfl 9.5.2 && haxelib set openfl 9.5.2
 haxelib install extension-androidtools 2.2.2 --skip-dependencies && haxelib set extension-androidtools 2.2.2
 haxelib install hxp
 haxelib install format
-haxelib git hxcpp https://github.com/kittycathy233/hxcpp
-haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate 768740a56b26aa0c072720e0d1236b94afe68e3e
-haxelib git linc_luajit https://github.com/kittycathy233/linc_luajit
-haxelib git funkin.vis https://github.com/FunkinCrew/funkVis 22b1ce089dd924f15cdc4632397ef3504d464e90
-haxelib git grig.audio https://gitlab.com/haxe-grig/grig.audio.git cbf91e2180fd2e374924fe74844086aab7891666
+haxelib remove hxcpp && haxelib git hxcpp https://github.com/kittycathy233/hxcpp
+haxelib remove flxanimate && haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate 768740a56b26aa0c072720e0d1236b94afe68e3e
+haxelib remove linc_luajit && haxelib git linc_luajit https://github.com/kittycathy233/linc_luajit
+haxelib remove funkin.vis && haxelib git funkin.vis https://github.com/FunkinCrew/funkVis 22b1ce089dd924f15cdc4632397ef3504d464e90
+haxelib remove grig.audio && haxelib git grig.audio https://gitlab.com/haxe-grig/grig.audio.git cbf91e2180fd2e374924fe74844086aab7891666
 echo Finished!
