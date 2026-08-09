@@ -41,11 +41,18 @@ class InitialState extends MusicBeatState
 			showUpdatePrompt = false;
 		}
 		#end
+		else {
+			finishInitialization();
+		}
 	}
 
 	override function closeSubState() {
+		finishInitialization();
+		super.closeSubState();
+	}
+
+	function finishInitialization() {
 		if (checkInitialization()) MusicBeatState.switchState(new TitleState());
 		else new FlxTimer().start(1.5, _->FlxG.resetState());
-		super.closeSubState();
 	}
 }

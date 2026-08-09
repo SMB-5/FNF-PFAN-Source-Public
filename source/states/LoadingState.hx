@@ -78,6 +78,8 @@ class LoadingState extends MusicBeatState
 	var codeNum:Int = 0;
 	var spawnedPessy:Bool = false;
 	var isSpinning:Bool = false;
+	var shakeFl:Float = 0;
+	var shakeMult:Float = 0;
 
 	#if HSCRIPT_ALLOWED
 	var hscript:HScript;
@@ -154,6 +156,8 @@ class LoadingState extends MusicBeatState
 		logo.scale.set(0.75, 0.75);
 		logo.updateHitbox();
 		logo.screenCenter();
+		logo.x -= 50;
+		logo.y -= 40;
 		addBehindBar(logo);
 
 		super.create();
@@ -220,16 +224,24 @@ class LoadingState extends MusicBeatState
 				dots = '...';
 		}
 		loadingText.text = Language.getPhrase('now_loading', 'Now Loading{1}', [dots]);
+		shakeFl += elapsed * 3000;
 
 		if(!spawnedPessy)
 		{
 			if(!transitioning)
 			{
 				if(Reflect.getProperty(FlxG.keys.justPressed, secretCode[codeNum]))
+				{
 					codeNum++;
+					shakeMult = 1;
+				}
 				else if(FlxG.keys.justPressed.ANY)
+				{
 					codeNum = 0;
+				}
 			}
+			shakeMult = Math.max(0, shakeMult - elapsed * 5);
+			logo.offset.x = Math.sin(shakeFl * Math.PI / 100) * shakeMult * 100;
 
 			if(codeNum >= secretCode.length)
 			{
