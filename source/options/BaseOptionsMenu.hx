@@ -726,7 +726,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 										holdValue = FlxMath.roundDecimal(Math.round(holdValue / selectedOption.changeValue) * selectedOption.changeValue, selectedOption.decimals);
 									}
 									else {
-										holdValueKey = FlxMath.roundDecimal(holdValueKey, selectedOption.decimals);
+										holdValue = FlxMath.roundDecimal(holdValue, selectedOption.decimals);
 									}
 									selectedOption.setValue(holdValue);
 		
