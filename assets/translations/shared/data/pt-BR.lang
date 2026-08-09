@@ -117,7 +117,7 @@ demolock_title: "Indisponível na Demo"
 demolock_text: "Este menu estará disponível no primeiro lançamento do mod completo."
 
 // Persona Prompts
-prompt_outdated_warning: "This version of the mod is outdated ({1}). Would you like to update to the latest version? ({2})\nThis warning can be disabled by turning off Check for Updates in the options."
+prompt_outdated_warning: "Esta versão do mod está desatualizada. ({1}). Você gostaria de atualizar para a versão mais recente? ({2})\nEste aviso pode ser desativado desabilitando a opção Procurar por Atualizações."
 prompt_erase_save_data: "Você está prestes a apagar seus save.\nVocê gostaria de prosseguir?"
 prompt_recopy_assets: "Tem certeza de que deseja copiar novamente todos os assets?\nIsso pode levar algum tempo."
 
