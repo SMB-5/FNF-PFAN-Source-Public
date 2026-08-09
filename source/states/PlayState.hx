@@ -547,6 +547,16 @@ class PlayState extends MusicBeatState
 		add(uiGroup);
 		add(noteGroup);
 
+		laneUnderlay = new FlxSprite(0, 0).makeGraphic(110 * 4 + 50, FlxG.height * 2);
+		laneUnderlay.alpha = ClientPrefs.data.strumlineBGAlpha;
+		laneUnderlay.color = FlxColor.BLACK;
+		laneUnderlay.scrollFactor.set();
+
+		if (ClientPrefs.data.strumlineBGHUD)
+			noteGroup.add(laneUnderlay);
+		else
+			comboGroup.add(laneUnderlay);
+
 		Conductor.songPosition = -Conductor.crochet * 5 + Conductor.offset;
 		var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
 		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
@@ -565,12 +575,6 @@ class PlayState extends MusicBeatState
 		timeBar.visible = showTime;
 		uiGroup.add(timeBar);
 		uiGroup.add(timeTxt);
-
-		laneUnderlay = new FlxSprite(0, 0).makeGraphic(110 * 4 + 50, FlxG.height * 2);
-		laneUnderlay.alpha = ClientPrefs.data.strumlineBGAlpha;
-		laneUnderlay.color = FlxColor.BLACK;
-		laneUnderlay.scrollFactor.set();
-		noteGroup.add(laneUnderlay);
 
 		noteGroup.add(strumLineNotes);
 

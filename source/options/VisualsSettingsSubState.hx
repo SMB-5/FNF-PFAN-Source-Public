@@ -69,6 +69,12 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			PERCENT);
 		addOption(option);
 
+		var option:Option = new Option('Strum Background Over HUD',
+			'Should the Strumline Background be over the HUD?',
+			'strumlineBGHUD',
+			BOOL);
+		addOption(option);
+
 		var option:Option = new Option('Hide HUD',
 			'Hides most HUD elements.',
 			'hideHud',

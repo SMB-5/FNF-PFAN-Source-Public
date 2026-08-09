@@ -299,6 +299,9 @@ description_character_note_colors: "Enables custom note colors for characters."
 setting_strum_background_opacity: "Opacidade do Fundo do Strum"
 description_strum_background_opacity: "How transparent should the Strumline Background be?"
 
+setting_strum_background_over_hud: "Strum Background Over HUD"
+description_strum_background_over_hud: "Should the Strumline Background be over the HUD?"
+
 setting_hide_hud: "Esconder HUD"
 description_hide_hud: "Hides most HUD elements."
 

@@ -70,6 +70,7 @@ import states.TitleState;
 	public var healthBarColors:Bool = true;
 	public var healthBarAlpha:Float = 1;
 	public var strumlineBGAlpha:Float = 0;
+	public var strumlineBGHUD:Bool = true;
 	public var subtitles:Bool = true;
 	public var hitsoundVolume:Float = 0;
 	public var pauseMusic:String = 'Tea Time';
