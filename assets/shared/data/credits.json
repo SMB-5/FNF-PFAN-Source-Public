@@ -113,6 +113,24 @@
 			"link": "https://www.instagram.com/fnf_qt_artz?igsh=MWp0OXJ5Z2Q0cmRzaw==",
 			"color": "800080"
 		},
+		"Linob": {
+			"icon": "linob",
+			"flipIcon": true,
+			"section": ["Promoters"],
+			"role": "Made the Demo Sampler",
+			"description": "SMB asked me to make a sampler last year and that's the only thing I did for the mod lol. Oh yeah here's one of my favorite scenes from better call saul.",
+			"link": "https://www.youtube.com/watch?v=esxdTuc7Op8",
+			"color": "04032B"
+		},
+		"BubblezXP": {
+			"icon": "",
+			"flipIcon": false,
+			"section": ["Contributors"],
+			"role": "Artist",
+			"description": "",
+			"link": "https://www.instagram.com/bubblez_xp",
+			"color": "ffffff"
+		},
 		"Cobalt": {
 			"icon": "cobalt",
 			"flipIcon": false,
