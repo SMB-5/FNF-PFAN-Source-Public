@@ -11,7 +11,10 @@
 	<!-- Keystore from MobilePorting port of Psych Engine -->
 	<certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" />
 
-	<!-- Permissions for the mod's external directory -->
+	<!-- Permissions -->
+	<!-- To check for updates -->
+	<config:android permission="android.permission.INTERNET" />
+	<!-- External directory access -->
 	<!-- Android 10 and below -->
 	<config:android permission="android.permission.READ_EXTERNAL_STORAGE" />
 	<config:android permission="android.permission.WRITE_EXTERNAL_STORAGE" />

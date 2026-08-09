@@ -194,28 +194,32 @@ class MemberCardSubstate extends MusicBeatSubstate
 		descOutline.scrollFactor.set();
 		add(descOutline);
 
-		#if !mobile
-		backIcon = new KeyIcon(cardBG.width - 140, cardBG.height - 40, 'back', 0, 'ui_close');
-		backIcon.iconText.font = Paths.font('p5hatty-1.ttf');
-		backIcon.iconText.y += 3.5;
+		#if mobile
+		backIcon = new KeyIcon(12, cardBG.height - 40, 'back', 0, 'ui_close', 0.15, 20);
+		backIcon.iconText.font = Paths.font('Fontsona3FES.ttf');
 		add(backIcon);
 
-		acceptIcon = new KeyIcon(backIcon.x - 180, backIcon.y, 'accept', 0, 'ui_open_link');
-		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
-		acceptIcon.iconText.y += 3.5;
+		acceptIcon = new KeyIcon(backIcon.x + backIcon.width + 10, backIcon.y, 'accept', 0, 'ui_open_link', 0.15, 20);
+		acceptIcon.iconText.font = Paths.font('Fontsona3FES.ttf');
 		add(acceptIcon);
 		#end
 
-		acceptTxt = new FlxText(0, cardBG.height - 65, cardBG.width, Language.getPhrase('ui_open_link', 'Open Link'), 32);
-		acceptTxt.setFormat(Paths.font('Fontsona5Royal.ttf'), 32, FlxColor.BLACK, LEFT);
-		acceptTxt.x = cardBG.width - acceptTxt.textField.textWidth - 30;
-		#if !mobile acceptTxt.y -= 45; #end
-		add(acceptTxt);
-
 		// i'm so fucking annoyed at having to do Std.int for EVERY SINGLE TIME THAT I REFERENCE THE WIDTH AND HEIGHT IN MAKEGRAPHIC somebody please kill me - melodiekit
-		var acceptBG:FlxSprite = new FlxSprite(acceptTxt.x - 8, acceptTxt.y - 7).makeGraphic(Std.int(acceptTxt.textField.textWidth + 20), Std.int(acceptTxt.textField.textHeight + 20), 0xFFFFFFFF);
-		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 8, color: 0xFF000000});
-		insert(members.indexOf(acceptTxt), acceptBG);
+		var acceptBG:FlxSprite = new FlxSprite(0, 0).makeGraphic(175, 60, FlxColor.BLACK);
+		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 5, color: FlxColor.WHITE});
+		acceptBG.x = cardBG.width - acceptBG.width - 20;
+		acceptBG.y = cardBG.height - acceptBG.height - 10;
+		add(acceptBG);
+
+		acceptTxt = new FlxText(0, 0, 0, Language.getPhrase('ui_open_link', 'Open Link'), 32);
+		acceptTxt.setFormat(Paths.font('Fontsona5Royal.ttf'), 32, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		if (acceptTxt.width > 150) {
+			acceptTxt.scale.x = acceptTxt.scale.y = 150 / acceptTxt.width;
+			acceptTxt.updateHitbox();
+		}
+		acceptTxt.x = acceptBG.getMidpoint().x - acceptTxt.width / 2;
+		acceptTxt.y = acceptBG.getMidpoint().y - acceptTxt.height / 2;
+		add(acceptTxt);
 
 		var camUI:FlxCamera = new FlxCamera();
 		camUI.bgColor.alpha = 0;
@@ -249,9 +253,10 @@ class MemberCardSubstate extends MusicBeatSubstate
 		if (statusHeader.x < -970) statusHeader.x = 970;
 		if (statusHeader2.x < -970) statusHeader2.x = 970;
 
-		if (!exiting && (controls.BACK || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard, FlxPoint.get(camCard.x, camCard.y)) #if android || FlxG.android.justReleased.BACK #end)) {
+		if (!exiting && (controls.BACK || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard) #if android || FlxG.android.justReleased.BACK #end)) {
 			exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu')); 
+			backButton.canTween = false;
 			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(bg, { alpha: 0 }, 0.3, { ease: FlxEase.expoOut });
 			FlxTween.tween(camCard, { x: camCard.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut });

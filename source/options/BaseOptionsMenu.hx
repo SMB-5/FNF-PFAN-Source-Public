@@ -120,7 +120,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		patternBG.alpha = 0.4;
 		add(patternBG);
 
-		optionHeader = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height, 150, title, 120);
+		optionHeader = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height, 120, title, 120);
 		optionHeader.alignment = CENTER;
 		@:privateAccess
 		optionHeader._defaultFormat.leading = -30;
@@ -128,7 +128,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		optionHeader.camera = camUI;
 		add(optionHeader);
 
-		optionHeader2 = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height + optionHeader.height + 200, 150, title, 120);
+		optionHeader2 = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height + optionHeader.height + 200, 120, title, 120);
 		optionHeader2.alignment = CENTER;
 		@:privateAccess
 		optionHeader2._defaultFormat.leading = -30;
@@ -409,7 +409,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		#end
 
 		backButton = new BackButton();
-		backButton.x += 50;
 		backButton.camera = camUI;
 		add(backButton);
 
@@ -507,17 +506,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 			if (!curOption.disallowed && go) {
 				var justPressed:Bool = controls.UI_LEFT_P || controls.UI_RIGHT_P;
-				if (holdTimeKey > 0.5 || justPressed) {
-					if (curOption.type == INT || curOption.type == FLOAT || curOption.type == PERCENT) {
-						if (controls.UI_LEFT_P && curOption.getValue() > curOption.minValue || controls.UI_RIGHT_P && curOption.getValue() < curOption.maxValue) {
-							FlxG.sound.play(Paths.sound('scrollMenu'));
-						}
-						else if (holdTimeKey <= 0.5) {
-							FlxG.sound.play(Paths.sound('cancelMenu'));
-						}
-					}
-					else if (holdTimeKey <= 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
-				}
+				var playSound:Bool = false;
 				var add:Dynamic = null;
 				if (justPressed) {
 					if (curOption.type != STRING) {
@@ -576,6 +565,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						}
 						else if (holdTimeKey > 0.5 && curOption.type != STRING) {
 							holdValueKey = FlxMath.bound(holdValueKey + curOption.scrollSpeed * elapsed * (controls.UI_LEFT ? -1 : 1), curOption.minValue, curOption.maxValue);
+							var oldValue = curOption.getValue();
 		
 							switch(curOption.type) {
 								case INT:
@@ -588,11 +578,25 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							}
 							updateTextFrom(curOption);
 							curOption.change();
+							if (oldValue != curOption.getValue()) playSound = true;
 						}
 
 						if (curOption.type != STRING) {
 							holdTimeKey += elapsed;
 						}
+				}
+				if (holdTimeKey > 0.5 || justPressed) {
+					if (curOption.type == INT || curOption.type == FLOAT || curOption.type == PERCENT) {
+						if (justPressed || playSound) {
+							if (controls.UI_LEFT_P && curOption.getValue() > curOption.minValue || controls.UI_RIGHT_P && curOption.getValue() < curOption.maxValue) {
+								FlxG.sound.play(Paths.sound('scrollMenu'));
+							}
+							else {
+								FlxG.sound.play(Paths.sound('cancelMenu'));
+							}
+						}
+					}
+					else if (justPressed) FlxG.sound.play(Paths.sound('scrollMenu'));
 				}
 			}
 		}
@@ -690,17 +694,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			if (!swiping && !hoveringBar && (TouchUtil.pressed && hoveringArrow || TouchUtil.justPressed) && TouchUtil.overlaps(arrow, camOptions, FlxPoint.get(-12, 4))) {
 				holdingArrow = num;
 				var pressedLeft:Bool = arrow.text == '<';
-				if (holdTime > 0.5 || TouchUtil.justPressed) {
-					if (selectedOption.type == INT || selectedOption.type == FLOAT || selectedOption.type == PERCENT) {
-						if (pressedLeft && selectedOption.getValue() > selectedOption.minValue || !pressedLeft && selectedOption.getValue() < selectedOption.maxValue) {
-							FlxG.sound.play(Paths.sound('scrollMenu'));
-						}
-						else if (holdTime <= 0.5) {
-							FlxG.sound.play(Paths.sound('cancelMenu'));
-						}
-					}
-					else if (holdTime <= 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
-				}
+				var playSound:Bool = false;
 				var add:Dynamic = null;
 				if (TouchUtil.justPressed) {
 					if (selectedOption.type != STRING) {
@@ -759,6 +753,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						}
 						else if (holdTime > 0.5 && selectedOption.type != STRING) {
 							holdValue = FlxMath.bound(holdValue + selectedOption.scrollSpeed * elapsed * (pressedLeft ? -1 : 1), selectedOption.minValue, selectedOption.maxValue);
+							var oldValue = selectedOption.getValue();
 		
 							switch(selectedOption.type) {
 								case INT:
@@ -771,12 +766,26 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							}
 							updateTextFrom(selectedOption);
 							selectedOption.change();
+							if (oldValue != selectedOption.getValue()) playSound = true;
 						}
 						hoveringArrow = true;
 
 						if (selectedOption.type != STRING) {
 							holdTime += elapsed;
 						}
+				}
+				if (holdTime > 0.5 || TouchUtil.justPressed) {
+					if (selectedOption.type == INT || selectedOption.type == FLOAT || selectedOption.type == PERCENT) {
+						if (TouchUtil.justPressed || playSound) {
+							if (pressedLeft && selectedOption.getValue() > selectedOption.minValue || !pressedLeft && selectedOption.getValue() < selectedOption.maxValue) {
+								FlxG.sound.play(Paths.sound('scrollMenu'));
+							}
+							else {
+								FlxG.sound.play(Paths.sound('cancelMenu'));
+							}
+						}
+					}
+					else if (TouchUtil.justPressed) FlxG.sound.play(Paths.sound('scrollMenu'));
 				}
 			}
 			else if (holdingArrow == num && (!TouchUtil.overlaps(arrow, camOptions, FlxPoint.get(-12, 4)) || TouchUtil.released)) {
@@ -923,6 +932,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	}
 
 	override function destroy() {
+		ClientPrefs.saveSettings();
 		FlxG.cameras.remove(camBG);
 		FlxG.cameras.remove(camOptions);
 		FlxG.cameras.remove(camUI);

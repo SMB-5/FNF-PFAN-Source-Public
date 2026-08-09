@@ -68,21 +68,16 @@ class LoadingState extends MusicBeatState
 	var curPercent:Float = 0;
 	var stateChangeDelay:Float = 0;
 
-	#if PSYCH_WATERMARKS
 	var logo:FlxSprite;
 	var pessy:FlxSprite;
 	var loadingText:FlxText;
 
 	var timePassed:Float;
-	var shakeFl:Float;
-	var shakeMult:Float = 0;
-	
-	var isSpinning:Bool = false;
+
+	var secretCode:Array<String> = ['P', 'E', 'S', 'S', 'Y'];
+	var codeNum:Int = 0;
 	var spawnedPessy:Bool = false;
-	var pressedTimes:Int = 0;
-	#else
-	var funkay:FlxSprite;
-	#end
+	var isSpinning:Bool = false;
 
 	#if HSCRIPT_ALLOWED
 	var hscript:HScript;
@@ -142,8 +137,7 @@ class LoadingState extends MusicBeatState
 		}
 		#end
 
-		#if PSYCH_WATERMARKS // PSYCH LOADING SCREEN
-		var bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg = new FlxSprite().loadGraphic(Paths.image('title-bg'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.setGraphicSize(Std.int(FlxG.width));
 		bg.color = 0xFFD16FFF;
@@ -155,28 +149,13 @@ class LoadingState extends MusicBeatState
 		loadingText.borderSize = 2;
 		addBehindBar(loadingText);
 	
-		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('loading_screen/icon'));
+		logo = new FlxSprite(0, 0).loadGraphic(Paths.image('pfan-logo'));
 		logo.antialiasing = ClientPrefs.data.antialiasing;
 		logo.scale.set(0.75, 0.75);
 		logo.updateHitbox();
 		logo.screenCenter();
-		logo.x -= 50;
-		logo.y -= 40;
 		addBehindBar(logo);
 
-		#else // BASE GAME LOADING SCREEN
-		var bg = new FlxSprite().makeGraphic(1, 1, 0xFFCAFF4D);
-		bg.scale.set(FlxG.width, FlxG.height);
-		bg.updateHitbox();
-		bg.screenCenter();
-		addBehindBar(bg);
-
-		funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('funkay'));
-		funkay.antialiasing = ClientPrefs.data.antialiasing;
-		funkay.setGraphicSize(0, FlxG.height);
-		funkay.updateHitbox();
-		addBehindBar(funkay);
-		#end
 		super.create();
 
 		if (stateChangeDelay <= 0 && checkLoaded())
@@ -229,9 +208,7 @@ class LoadingState extends MusicBeatState
 		}
 		#end
 
-		#if PSYCH_WATERMARKS // PSYCH LOADING SCREEN
 		timePassed += elapsed;
-		shakeFl += elapsed * 3000;
 		var dots:String = '';
 		switch(Math.floor(timePassed % 1 * 3))
 		{
@@ -246,16 +223,15 @@ class LoadingState extends MusicBeatState
 
 		if(!spawnedPessy)
 		{
-			if(!transitioning && (controls.ACCEPT || TouchUtil.justPressed))
+			if(!transitioning)
 			{
-				shakeMult = 1;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				pressedTimes++;
+				if(Reflect.getProperty(FlxG.keys.justPressed, secretCode[codeNum]))
+					codeNum++;
+				else if(FlxG.keys.justPressed.ANY)
+					codeNum = 0;
 			}
-			shakeMult = Math.max(0, shakeMult - elapsed * 5);
-			logo.offset.x = Math.sin(shakeFl * Math.PI / 180) * shakeMult * 100;
 
-			if(pressedTimes >= 5)
+			if(codeNum >= secretCode.length)
 			{
 				FlxG.camera.fade(0xAAFFFFFF, 0.5, true);
 				logo.visible = false;
@@ -264,7 +240,7 @@ class LoadingState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('secret'));
 
 				pessy = new FlxSprite(700, 140);
-				pessy.frames = Paths.getSparrowAtlas('loading_screen/pessy');
+				pessy.frames = Paths.getSparrowAtlas('loading_screen/pessy', 'embed'); // This file is embedded ;)
 				pessy.animation.addByPrefix('run', 'run', 24, true);
 				pessy.animation.addByPrefix('spin', 'spin', 24, true);
 				pessy.antialiasing = ClientPrefs.data.antialiasing;
@@ -298,7 +274,6 @@ class LoadingState extends MusicBeatState
 			pessy.velocity.x = 0;
 			FlxTween.tween(pessy, {y: 10}, 0.65, {ease: FlxEase.quadOut});
 		}
-		#end
 	}
 
 	#if HSCRIPT_ALLOWED

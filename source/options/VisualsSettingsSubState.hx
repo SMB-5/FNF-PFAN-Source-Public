@@ -248,7 +248,6 @@ class NotePreviewSubstate extends MusicBeatSubstate
 		#end
 
 		backButton = new BackButton();
-		backButton.x += 50;
 		add(backButton);
 
 		#if !mobile
@@ -412,7 +411,6 @@ class SplashPreviewSubstate extends MusicBeatSubstate
 		#end
 
 		backButton = new BackButton();
-		backButton.x += 50;
 		add(backButton);
 
 		#if !mobile

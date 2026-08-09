@@ -5,6 +5,7 @@ class PersonaPrompt extends MusicBeatSubstate
 	var camUI:FlxCamera;
 
 	var prompt:String;
+	var translationValues:Array<Dynamic>;
 	var promptBG:FlxSprite;
 	var promptTxt:FlxText;
 	var yesButton:FlxSprite;
@@ -27,9 +28,10 @@ class PersonaPrompt extends MusicBeatSubstate
 	var curSelected:Int = 0;
 	var curButton:FlxSprite;
 
-	public function new(prompt:String, yesFunc:Void->Void = null, noFunc:Void->Void = null, yesTimer:Null<Float> = null, noTimer:Null<Float> = null) {
+	public function new(prompt:String, yesFunc:Void->Void = null, noFunc:Void->Void = null, yesTimer:Null<Float> = null, noTimer:Null<Float> = null, translationValues:Array<Dynamic> = null) {
 		super();
 		this.prompt = prompt;
+		this.translationValues = translationValues;
 		this.yesFunc = yesFunc;
 		this.noFunc = noFunc;
 		if (yesTimer != null) {
@@ -55,16 +57,17 @@ class PersonaPrompt extends MusicBeatSubstate
 		bg.alpha = 0.3;
 		add(bg);
 
-		promptTxt = new FlxText(0, 0, 0, Language.getPhrase(prompt, 'No Prompt Found'), 24);
+		promptTxt = new FlxText(0, 0, FlxG.width - 150, Language.getPhrase(prompt, 'No Prompt Found', translationValues), 24);
 		@:privateAccess
 		promptTxt._defaultFormat.leading = 6;
 		promptTxt.font = Paths.font('Fontsona3FES.ttf');
 		promptTxt.screenCenter();
+		promptTxt.x = (FlxG.width - promptTxt.textField.textWidth) / 2;
 		promptTxt.y += textOffset;
 		add(promptTxt);
 
-		promptBG = new FlxSprite().makeGraphic(Std.int(Math.max(400, promptTxt.width + 100)), Std.int(Math.max(128, promptTxt.height + 100)), 0xFF454545);
-		promptBG.setPosition(promptTxt.x - (promptBG.width - promptTxt.width) / 2, promptTxt.y - textOffset / 1.5 - (promptBG.height - promptTxt.height) / 2);
+		promptBG = new FlxSprite().makeGraphic(Std.int(Math.max(400, promptTxt.textField.textWidth + 100)), Std.int(Math.max(128, promptTxt.height + 100)), 0xFF454545);
+		promptBG.setPosition(promptTxt.x - (promptBG.width - promptTxt.textField.textWidth) / 2, promptTxt.y - textOffset / 1.5 - (promptBG.height - promptTxt.height) / 2);
 		promptBG.drawRect(0, 0, promptBG.width, promptBG.height, 0, {thickness: 5, color: 0xFFFFFFFF});
 		insert(members.indexOf(promptTxt), promptBG);
 

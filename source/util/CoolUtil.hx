@@ -11,10 +11,11 @@ import lime.utils.Assets as LimeAssets;
 class CoolUtil
 {
 	public static function checkForUpdates(url:String = null):String {
-		// REMINDER REPLACE WITH PUBLIC REPO LINK BEFORE RELEASE
+		// PLACEHOLDER UNTIL PUBLIC REPO IS MADE
+		return "0.1.0";
 		if (url == null || url.length == 0)
 			url = "https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt";
-		var version:String = states.MainMenuState.psychEngineVersion.trim();
+		var version:String = FlxG.stage.application.meta.get('version');
 		if(ClientPrefs.data.checkForUpdates) {
 			trace('checking for updates...');
 			var http = new haxe.Http(url);
@@ -22,7 +23,7 @@ class CoolUtil
 			{
 				var newVersion:String = data.split('\n')[0].trim();
 				trace('version online: $newVersion, your version: $version');
-				if(newVersion != version) {
+				if(newVersion > version) {
 					trace('versions arent matching! please update');
 					version = newVersion;
 					http.onData = null;

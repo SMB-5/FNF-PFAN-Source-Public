@@ -58,7 +58,7 @@ class CreditsState extends MusicBeatState
 		if (credit == null) {
 			trace('No credits found... returning back to menu');
 			var errorTxt:FlxText = new FlxText(0, 0, 0, Language.getPhrase('credits_error', 'Credit data file is faulty or missing.\n\nError:\n{1}\n\nReturning back to menu...', [creditError]), 36);
-			errorTxt.font = Paths.font('Fontsona3FES.ttf');
+			errorTxt.font = Paths.font('FOT-Skip Std B.otf');
 			errorTxt.screenCenter();
 			add(errorTxt);
 			new FlxTimer().start(3, (_)->FlxG.switchState(new MainMenuState(true)));
@@ -92,21 +92,21 @@ class CreditsState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
 
-		arrow = new FlxText(65, 0, 100, '>', 30);
-		arrow.font = Paths.font('p5hatty-1.ttf');
+		arrow = new FlxText(65, 0, 0, '>', 20);
+		arrow.font = Paths.font('FOT-Skip Std B.otf');
 		arrow.visible = false;
 		add(arrow);
 
 		titleGroup = new FlxTypedSpriteGroup<FlxText>();
 		add(titleGroup);
 
-		var title:FlxText = new FlxText(50, 0, FlxG.width, credit.title, 46);
-		title.font = Paths.font('p5hatty-1.ttf');
+		var title:FlxText = new FlxText(50, 0, FlxG.width, credit.title, 38);
+		title.font = Paths.font('FOT-Skip Std B.otf');
 		title.borderStyle = OUTLINE;
 		titleGroup.add(title);
 
-		var subtitle:FlxText = new FlxText(50, 62, FlxG.width, credit.subtitle, 38);
-		subtitle.font = Paths.font('p5hatty-1.ttf');
+		var subtitle:FlxText = new FlxText(50, 62, FlxG.width, credit.subtitle, 26);
+		subtitle.font = Paths.font('FOT-Skip Std B.otf');
 		subtitle.borderStyle = OUTLINE;
 		titleGroup.add(subtitle);
 
@@ -115,8 +115,8 @@ class CreditsState extends MusicBeatState
 
 		var offset:Float = 0;
 		for (i => section in credit.sections) {
-			var sectionTxt:FlxText = new FlxText(50, 156 + (60 * i) + offset, FlxG.width, Language.getPhrase('credit_section_$section', section), 38);
-			sectionTxt.font = Paths.font('p5hatty-1.ttf');
+			var sectionTxt:FlxText = new FlxText(50, 156 + (60 * i) + offset, 0, Language.getPhrase('credit_section_$section', section), 26);
+			sectionTxt.font = Paths.font('FOT-Skip Std B.otf');
 			sectionTxt.borderStyle = OUTLINE;
 			titleGroup.add(sectionTxt);
 
@@ -124,10 +124,10 @@ class CreditsState extends MusicBeatState
 			for (member in memberList) {
 				if (member == null || !member[1].section.contains(section)) continue;
 				var memberText:Member = new Member(member[0], member[1].icon, member[1].flipIcon, member[1].role, member[1].description, member[1].link, member[1].color);
-				offsetText += memberText.textField.textHeight + 3;
+				offsetText += memberText.textField.textHeight + 10;
 				memberText.y = sectionTxt.y + offsetText;
 				creditsGroup.add(memberText);
-				offset += memberText.textField.textHeight + 3;
+				offset += memberText.textField.textHeight + 10;
 			}
 		}
 		
@@ -244,6 +244,11 @@ class CreditsState extends MusicBeatState
 		super.update(elapsed);
 	}
 
+	override function closeSubState() {
+		FlxG.inputs.reset();
+		super.closeSubState();
+	}
+
 	public static function getCreditData():CreditFile {
 		if (!FileSystem.exists(Paths.getSharedPath('data/credits.json'))) return null;
 		try {
@@ -265,7 +270,7 @@ class CreditsState extends MusicBeatState
 			credit.x = i == curSelected ? 85 : 65;
 		}
 		arrow.visible = true;
-		arrow.y = creditsGroup.members[curSelected].y + 3;
+		arrow.y = creditsGroup.members[curSelected].getMidpoint().y - arrow.height / 2;
 		#if mobile if (!swiping) #end camFollow.y = FlxG.height / 2 + creditsGroup.members[curSelected].y - 225;
 	}
 
@@ -302,8 +307,8 @@ class Member extends FlxText
 		this.description = description;
 		this.link = link;
 		this.cardColor = cardColor;
-		super(65, 0, FlxG.width, name, 34);
-		font = Paths.font('p5hatty-1.ttf');
+		super(65, 0, 0, name, 22);
+		font = Paths.font('FOT-Skip Std B.otf');
 		borderStyle = OUTLINE;
 
 		iconSprite = new AttachedSprite();
@@ -318,7 +323,7 @@ class Member extends FlxText
 		iconSprite.updateHitbox();
 		iconSprite.sprTracker = this;
 		iconSprite.xAdd += this.textField.textWidth + 5;
-		iconSprite.yAdd -= this.textField.textHeight / 3 - 5;
+		iconSprite.yAdd += (this.textField.textHeight - iconSprite.height) / 2;
 	}
 
 	override function draw() {

@@ -117,6 +117,7 @@ demolock_title: "Not Available in the Demo"
 demolock_text: "This Menu will be Available in the First Release of the Full Mod."
 
 // Persona Prompts
+prompt_outdated_warning: "This version of the mod is outdated ({1}). Would you like to update to the latest version? ({2})\nThis warning can be disabled by turning off Check for Updates in the options."
 prompt_erase_save_data: "You are about to erase your save data.\nWould you like to proceed?"
 prompt_recopy_assets: "Are you sure you want to recopy all assets?\nThis may take a while."
 

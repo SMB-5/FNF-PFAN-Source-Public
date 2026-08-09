@@ -123,7 +123,6 @@ class QuantizationColorSubstate extends MusicBeatSubstate
 		add(controllerPointer);
 
 		backButton = new BackButton();
-		backButton.x += 50;
 		add(backButton);
 
 		_lastControllerMode = controls.controllerMode;

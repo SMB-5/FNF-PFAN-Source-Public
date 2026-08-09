@@ -2,15 +2,26 @@ package states;
 
 import options.LanguageSubState;
 import substates.PersonaCardSubstate;
+import substates.PersonaPrompt;
 
 class InitialState extends MusicBeatState
 {
+	static var showUpdatePrompt:Bool = true;
 	public static function checkInitialization():Bool {
-		return #if TRANSLATIONS_ALLOWED FlxG.save.data.language != null && #end FlxG.save.data.flashing != null;
+		return #if TRANSLATIONS_ALLOWED FlxG.save.data.language != null && #end FlxG.save.data.flashing != null && !showUpdatePrompt;
 	}
 
 	override function create() {
 		super.create();
+
+		showUpdatePrompt = false;
+		#if CHECK_FOR_UPDATES
+		var latestVersion:String = CoolUtil.checkForUpdates();
+		var currentVersion:String = FlxG.stage.application.meta.get('version');
+		if (ClientPrefs.data.checkForUpdates) {
+			showUpdatePrompt = latestVersion > currentVersion;
+		}
+		#end
 
 		#if TRANSLATIONS_ALLOWED
 		if (FlxG.save.data.language == null) {
@@ -20,13 +31,21 @@ class InitialState extends MusicBeatState
 		else #end if (FlxG.save.data.flashing == null) {
 			ClientPrefs.data.flashing = true;
 			ClientPrefs.saveSettings('flashing');
-			new FlxTimer().start(1.5, _->openSubState(new PersonaCardSubstate("WarningDemo")));
+			 openSubState(new PersonaCardSubstate('WarningDemo'));
 		}
+		#if CHECK_FOR_UPDATES
+		else if (showUpdatePrompt) {
+			openSubState(new PersonaPrompt('prompt_outdated_warning', ()->{
+				CoolUtil.browserLoad('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+			}, null, null, null, [currentVersion, latestVersion]));
+			showUpdatePrompt = false;
+		}
+		#end
 	}
 
 	override function closeSubState() {
 		if (checkInitialization()) MusicBeatState.switchState(new TitleState());
-		else FlxG.resetState();
+		else new FlxTimer().start(1.5, _->FlxG.resetState());
 		super.closeSubState();
 	}
 }

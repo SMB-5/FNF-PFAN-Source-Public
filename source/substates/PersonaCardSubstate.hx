@@ -68,7 +68,8 @@ class PersonaCardSubstate extends MusicBeatSubstate
 
 		backButton = new BackButton();
 		backButton.alpha = 0;
-		FlxTween.tween(backButton, {alpha: 0.7}, 0.3, {ease: FlxEase.quartInOut});
+		backButton.canTween = false;
+		FlxTween.tween(backButton, {alpha: 0.7}, 0.3, {ease: FlxEase.quartInOut, onComplete: _->backButton.canTween = true});
 		add(backButton);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.3, {ease: FlxEase.quartInOut});
@@ -110,6 +111,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		{
 			exiting = true;
 			FlxG.sound.play(Paths.sound('confirmMenu')); 
+			backButton.canTween = false;
 			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(bg, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(cardBG, {x: 410, alpha: 0}, 0.3, {ease: FlxEase.expoOut});

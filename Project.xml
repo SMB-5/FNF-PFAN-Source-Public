@@ -30,7 +30,6 @@
 
 	<define name="MULTITHREADED_LOADING" /> <!-- UNCOMMENTING THIS LINE WILL ENABLE MULTITHREADED LOADING, WHICH IMPROVES LOADING TIMES, BUT APPARENTLY CAN FREEZE THE GAME ON SONG LOAD IN OLDER PCs? -->
 	<define name="SHOW_LOADING_SCREEN" />
-	<define name="PSYCH_WATERMARKS" />
 	<define name="VIDEOS_ALLOWED" if="desktop || mobile" unless="32bits" />
 	<define name="COPY_FILES" if="mobile" />
 
