@@ -42,26 +42,26 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(titleBG);
 
 		promptText = new FlxText(20, 130, FlxG.width,"",32);
-		promptText.setFormat("p5hatty-1.ttf", 48, FlxColor.WHITE, LEFT);
+		promptText.setFormat("barmeno-bold.ttf", 42, FlxColor.WHITE, LEFT);
 		promptText.alpha = 0;
 		add(promptText);
 
-		titleText = new FlxText(-200, 200, FlxG.width,"",32);
-		titleText.setFormat("p5hatty-1.ttf", 32, FlxColor.BLACK, CENTER);
+		titleText = new FlxText(-200, 195, FlxG.width,"",32);
+		titleText.setFormat("barmeno-bold.ttf", 26, FlxColor.BLACK, CENTER);
 		titleText.alpha = 0;
 		add(titleText);
 
-		titleBG.y = titleText.y - 10;
+		titleBG.y = titleText.y - 5;
 
-		cardText = new FlxText(0, 270, cardBG.width - 50,"",32);
-		cardText.setFormat("p5hatty-1.ttf", 32, FlxColor.WHITE, LEFT);
+		cardText = new FlxText(0, 250, cardBG.width - 50,"",32);
+		cardText.setFormat("Barmeno Regular.ttf", 26, FlxColor.WHITE, LEFT);
 		cardText.alpha = 0;
 		add(cardText);
 
 		#if !mobile
 		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 0, 'ui_close');
-		acceptIcon.iconText.font = Paths.font('p5hatty-1.ttf');
-		acceptIcon.iconText.y += 3.5;
+		acceptIcon.iconText.font = Paths.font('barmeno-bold.ttf');
+		acceptIcon.iconText.y -= 2.5;
 		acceptIcon.alpha = 0;
 		add(acceptIcon);
 		#end
