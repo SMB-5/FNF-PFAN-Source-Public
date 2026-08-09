@@ -98,3 +98,7 @@ function restart()
 		startedMoving = false
 	end
 end
+
+function onDestroy()
+	stopSound('trainSound')
+end
