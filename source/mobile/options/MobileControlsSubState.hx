@@ -73,41 +73,57 @@ class MobileControlsSubState extends MusicBeatSubstate
 
 		exitButton = new PsychUIButton(FlxG.width - 300, 50, Language.getPhrase('mobile_controls_save_and_exit', 'Save and Exit'), null, 250, 80);
 		exitButton.normalStyle.bgColor = 0xFF00F24E;
-		exitButton.text.size = 24;
-		exitButton.text.y = exitButton.bg.y + exitButton.bg.height/2 - exitButton.text.height/2;
-		if (exitButton.text.textField.textHeight > exitButton.bg.height) {
-			exitButton.text.scale.x = exitButton.text.scale.y = exitButton.bg.height / exitButton.text.textField.textHeight;
+		exitButton.text.font = Paths.font('Fontsona3FES.ttf');
+		exitButton.text.fieldWidth = 0;
+		exitButton.text.size = 26;
+		if (exitButton.text.width > exitButton.bg.width - 20) {
+			exitButton.text.scale.x = exitButton.text.scale.y = exitButton.bg.width / exitButton.width;
+			exitButton.text.updateHitbox();
 		}
+		exitButton.text.x = exitButton.bg.x + (exitButton.bg.width - exitButton.text.width) / 2;
+		exitButton.text.y = exitButton.bg.y + (exitButton.bg.height - exitButton.text.height) / 2;
 		add(exitButton);
 
 		optionsButton = new PsychUIButton(exitButton.x - 280, 50, Language.getPhrase('mobile_controls_control_options', 'Control Options'), null, 250, 80);
 		optionsButton.normalStyle.bgColor = 0xFF757171;
-		optionsButton.text.size = 24;
-		optionsButton.kill();
-		optionsButton.text.y = optionsButton.bg.y + optionsButton.bg.height/2 - optionsButton.text.height/2;
-		if (optionsButton.text.textField.textHeight > optionsButton.bg.height) {
-			optionsButton.text.scale.x = optionsButton.text.scale.y = optionsButton.bg.height / optionsButton.text.textField.textHeight;
+		optionsButton.text.font = Paths.font('Fontsona3FES.ttf');
+		optionsButton.text.fieldWidth = 0;
+		optionsButton.text.size = 26;
+		if (optionsButton.text.width > optionsButton.bg.width - 20) {
+			optionsButton.text.scale.x = optionsButton.text.scale.y = optionsButton.bg.width / optionsButton.width;
+			optionsButton.text.updateHitbox();
 		}
+		optionsButton.text.x = optionsButton.bg.x + (optionsButton.bg.width - optionsButton.text.width) / 2;
+		optionsButton.text.y = optionsButton.bg.y + (optionsButton.bg.height - optionsButton.text.height) / 2;
+		optionsButton.kill();
 		add(optionsButton);
 
 		hideButton = new PsychUIButton(20, optionsButton.y + 110, Language.getPhrase('mobile_controls_hide_ui', 'Hide UI'), null, 250, 80);
 		hideButton.normalStyle.bgColor = 0xFF4AA3F0;
-		hideButton.text.size = 24;
-		hideButton.text.y = hideButton.bg.y + hideButton.bg.height/2 - hideButton.text.height/2;
-		if (hideButton.text.textField.textHeight > hideButton.bg.height) {
-			hideButton.text.scale.x = hideButton.text.scale.y = hideButton.bg.height / hideButton.text.textField.textHeight;
+		hideButton.text.font = Paths.font('Fontsona3FES.ttf');
+		hideButton.text.fieldWidth = 0;
+		hideButton.text.size = 26;
+		if (hideButton.text.width > hideButton.bg.width - 20) {
+			hideButton.text.scale.x = hideButton.text.scale.y = hideButton.bg.width / hideButton.width;
+			hideButton.text.updateHitbox();
 		}
+		hideButton.text.x = hideButton.bg.x + (hideButton.bg.width - hideButton.text.width) / 2;
+		hideButton.text.y = hideButton.bg.y + (hideButton.bg.height - hideButton.text.height) / 2;
 		add(hideButton);
 
 		resetButton = new PsychUIButton(exitButton.x, exitButton.y + 110, Language.getPhrase('mobile_controls_reset_positions', 'Reset Positions'), null, 250, 80);
 		resetButton.normalStyle.bgColor = 0xFFFF0000;
-		resetButton.text.size = 24;
+		resetButton.text.font = Paths.font('Fontsona3FES.ttf');
+		resetButton.text.fieldWidth = 0;
+		resetButton.text.size = 26;
+		if (resetButton.text.width > resetButton.bg.width - 20) {
+			resetButton.text.scale.x = resetButton.text.scale.y = resetButton.bg.width / resetButton.width;
+			resetButton.text.updateHitbox();
+		}
+		resetButton.text.x = resetButton.bg.x + (resetButton.bg.width - resetButton.text.width) / 2;
+		resetButton.text.y = resetButton.bg.y + (resetButton.bg.height - resetButton.text.height) / 2;
 		resetButton.update(FlxG.elapsed);
 		resetButton.kill();
-		resetButton.text.y = resetButton.bg.y + resetButton.bg.height/2 - resetButton.text.height/2;
-		if (resetButton.text.textField.textHeight > resetButton.bg.height) {
-			resetButton.text.scale.x = resetButton.text.scale.y = resetButton.bg.height / resetButton.text.textField.textHeight;
-		}
 		add(resetButton);
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();

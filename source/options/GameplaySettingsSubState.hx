@@ -62,7 +62,8 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'hitsoundVolume',
 			PERCENT);
 		addOption(option);
-		option.onChange = onChangeHitsoundVolume;
+		option.onPreview = onPreviewHitsoundVolume;
+		option.playPreviewSound = false;
 
 		var option:Option = new Option('Rating Offset',
 			'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.',
@@ -120,7 +121,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		super();
 	}
 
-	function onChangeHitsoundVolume()
+	function onPreviewHitsoundVolume()
 		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
 
 	function onChangeAutoPause()

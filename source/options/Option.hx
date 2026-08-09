@@ -27,6 +27,8 @@ class Option
 
 	public var buttonText:String = 'Open'; //Only used on BUTTON type, the text to show on the button. This can be a translation phrase or just a regular string
 
+	public var playPreviewSound:Bool = true; //Used when pressing the preview button, decides if the confirmMenu sound should be played when pressing the button. This only exists because of hitsound volume lol
+
 	public var customizable:Bool = false; //Adds a setting button and allows a substate to be opened to be used as extra customization for an option (Different from SUBSTATE which only opens a substate AS the option)
 	public var customizationClass:Class<Dynamic>; //Class used for customizable
 

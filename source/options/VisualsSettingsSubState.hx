@@ -122,7 +122,6 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			'How transparent should the health bar and icons be?',
 			'healthBarAlpha',
 			PERCENT);
-		option.decimals = 1;
 		addOption(option);
 		
 		var option:Option = new Option('FPS Counter',

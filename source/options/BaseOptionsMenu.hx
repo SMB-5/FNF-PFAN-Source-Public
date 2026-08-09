@@ -244,7 +244,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			}
 
 			switch(optionsArray[i].type) {
-				case STRING, INT, FLOAT, BOOL:
+				case STRING, INT, FLOAT, BOOL, PERCENT:
 					var leftArrow:FlxText = new FlxText(optionBG.x + optionBG.width - 325, optionBG.y + 5, 40, '<', 40);
 					leftArrow.font = Paths.font('Fontsona3FES.ttf');
 					leftArrow.ID = i;
@@ -263,7 +263,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						curOption.updateHitbox();
 					}
 					curOption.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - curOption.width) / 2;
-					curOption.y = optionBG.getMidpoint().y - curOption.height / 2;
+					curOption.y = optionBG.getMidpoint().y - curOption.textField.textHeight / 2;
 					curOption.ID = i;
 					grpValues.add(curOption);
 					optionsArray[i].child = curOption;
@@ -282,30 +282,26 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							}
 						}
 					}
-				// Percent uses bar cuz it's cool!!! :D
-				case PERCENT:
-					barArray[i] = [];
+					// Percent uses bar cuz it's cool!!! :D
+					else if (optionsArray[i].type == PERCENT) {
+						barArray[i] = [];
+						curOption.y -= 7;
 
-					var bar:FlxBar = new FlxBar(0, optionBG.y + 48, LEFT_TO_RIGHT, 170, 10, null, '', optionsArray[i].minValue, optionsArray[i].maxValue * 100);
-					bar.createFilledBar(0xFF000000, 0xFFFFFFFF);
-					bar.x = optionBG.x + optionBG.width - bar.width - 84;
-					bar.drawRect(0, 0, bar.width, bar.height, 0, {thickness: 1, color: 0xFFFFFFFF});
-					bar.percent = optionsArray[i].getValue() * 100;
-					bar.ID = i;
-					add(bar);
-					barArray[i].push(bar);
+						var bar:FlxBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 170, 10, null, '', optionsArray[i].minValue, optionsArray[i].maxValue * 100);
+						bar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+						bar.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - bar.width) / 2;
+						bar.y = optionBG.getMidpoint().y - bar.height / 2 + 20;
+						bar.drawRect(0, 0, bar.width, bar.height, 0, {thickness: 1, color: 0xFFFFFFFF});
+						bar.percent = optionsArray[i].getValue() * 100;
+						bar.ID = i;
+						add(bar);
+						barArray[i].push(bar);
 
-					var barCircle:FlxShapeCircle = new FlxShapeCircle(bar.x - 5, bar.y - 2, 7, {thickness: 1}, 0xFFFFFFFF);
-					barCircle.ID = i;
-					add(barCircle);
-					barArray[i].push(barCircle);
-
-					var curOption:FlxText = new FlxText(0, bar.y - 35, 0, Std.string(optionsArray[i].getValue()), 28);
-					curOption.font = Paths.font('Fontsona3FES.ttf');
-					curOption.x = bar.getMidpoint().x - curOption.width / 2;
-					curOption.ID = i;
-					grpValues.add(curOption);
-					optionsArray[i].child = curOption;
+						var barCircle:FlxShapeCircle = new FlxShapeCircle(bar.x - 5, bar.y - 2, 7, {thickness: 1}, 0xFFFFFFFF);
+						barCircle.ID = i;
+						add(barCircle);
+						barArray[i].push(barCircle);
+					}
 				case BUTTON:
 					var buttonBG:FlxSprite = new FlxSprite(optionBG.x + optionBG.width - 255, optionBG.y + 13).makeGraphic(175, 40, 0xFFFFFFFF);
 					buttonBG.drawRect(0, 0, buttonBG.width, buttonBG.height, 0, {thickness: 5, color: 0xFF000000});
@@ -618,21 +614,18 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 
 		if ((FlxG.keys.justPressed.TAB || FlxG.gamepads.anyJustPressed(START)) && curOption.customizable) {
-			openSubState(Type.createInstance(curOption.customizationClass, []));
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			customizeOption(curOption);
 		}
 
 		if ((FlxG.keys.justPressed.P || FlxG.gamepads.anyJustPressed(Y)) && curOption.onPreview != null) {
-			curOption.preview();
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			previewOption(curOption);
 		}
 
 		if (controls.ACCEPT) {
 			if (!curOption.disallowed) {
 				switch(curOption.type) {
 					case BUTTON:
-						curOption.open();
-						FlxG.sound.play(Paths.sound('scrollMenu'));
+						openOption(curOption);
 					default:
 				}
 			}
@@ -698,7 +691,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				holdingArrow = num;
 				var pressedLeft:Bool = arrow.text == '<';
 				if (holdTime > 0.5 || TouchUtil.justPressed) {
-					if (selectedOption.type == INT || selectedOption.type == FLOAT) {
+					if (selectedOption.type == INT || selectedOption.type == FLOAT || selectedOption.type == PERCENT) {
 						if (pressedLeft && selectedOption.getValue() > selectedOption.minValue || !pressedLeft && selectedOption.getValue() < selectedOption.maxValue) {
 							FlxG.sound.play(Paths.sound('scrollMenu'));
 						}
@@ -713,7 +706,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					if (selectedOption.type != STRING) {
 						add = pressedLeft ? -selectedOption.changeValue : selectedOption.changeValue;
 					}
-					if (selectedOption.type == INT || selectedOption.type == FLOAT) {
+					if (selectedOption.type == INT || selectedOption.type == FLOAT || selectedOption.type == PERCENT) {
 						holdValue = FlxMath.bound(selectedOption.getValue() + add, selectedOption.minValue, selectedOption.maxValue);
 					}
 				}
@@ -725,15 +718,17 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					default:
 						if (TouchUtil.justPressed) {
 							switch(selectedOption.type) {
-								case INT, FLOAT:		
+								case INT, FLOAT, PERCENT:
 									if (selectedOption.type == INT) {
 										holdValue = Math.round(holdValue);
-										selectedOption.setValue(holdValue);
+									}
+									else if (selectedOption.type == FLOAT) {
+										holdValue = FlxMath.roundDecimal(Math.round(holdValue / selectedOption.changeValue) * selectedOption.changeValue, selectedOption.decimals);
 									}
 									else {
-										holdValue = FlxMath.roundDecimal(Math.round(holdValue / selectedOption.changeValue) * selectedOption.changeValue, selectedOption.decimals);
-										selectedOption.setValue(holdValue);
+										holdValueKey = FlxMath.roundDecimal(holdValueKey, selectedOption.decimals);
 									}
+									selectedOption.setValue(holdValue);
 		
 								case STRING:
 									var num:Int = selectedOption.curOption;
@@ -858,8 +853,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		for (setting in grpSettings) {
 			var selectedOption:Option = optionsArray[setting.ID];
 			if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(setting, camOptions)) {
-				openSubState(Type.createInstance(selectedOption.customizationClass, []));
-				FlxG.sound.play(Paths.sound('scrollMenu'));
+				customizeOption(selectedOption);
 			}
 		}
 
@@ -869,8 +863,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			if (selectedOption.disallowed) continue;
 			switch(selectedOption.type) {
 				case BUTTON if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(button, camOptions)):
-					selectedOption.open();
-					FlxG.sound.play(Paths.sound('scrollMenu'));
+					openOption(selectedOption);
 				default:
 			}
 		}
@@ -879,8 +872,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			if (preview is FlxText) continue;
 			var selectedOption:Option = optionsArray[preview.ID];
 			if (!swiping && TouchUtil.justReleased && TouchUtil.overlaps(preview, camOptions)) {
-				selectedOption.preview();
-				FlxG.sound.play(Paths.sound('scrollMenu'));
+				previewOption(selectedOption);
 			}
 		}
 
@@ -985,33 +977,40 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 				if (option.type == PERCENT) {
 					cast(barArray[option.child.ID][0], FlxBar).percent = val;
-					option.child.x = barArray[option.child.ID][0].getMidpoint().x - option.child.width / 2;
 				}
-				else {
-					if (grpArrows.members[option.child.ID] == null || grpArrows.members[option.child.ID + 1] == null) return; // ?????????????
+				if (grpArrows.members[option.child.ID] == null || grpArrows.members[option.child.ID + 1] == null) return; // ?????????????
 
-					var leftArrow:FlxSprite = grpArrows.members[option.child.ID];
-					var rightArrow:FlxSprite = grpArrows.members[option.child.ID + 1];
+				var leftArrow:FlxSprite = grpArrows.members[option.child.ID];
+				var rightArrow:FlxSprite = grpArrows.members[option.child.ID + 1];
+				option.child.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - option.child.width) / 2;
+
+				if (option.type == STRING) {
+					if (option.child.width > 200) {
+						option.child.scale.x = option.child.scale.y = 200 / option.child.width;
+						option.child.updateHitbox();
+					}
 					option.child.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - option.child.width) / 2;
-
-					if (option.type == STRING) {
-						if (option.child.width > 200) {
-							option.child.scale.x = option.child.scale.y = 200 / option.child.width;
-							option.child.updateHitbox();
-						}
-						option.child.x = leftArrow.x + leftArrow.width + (rightArrow.x - rightArrow.width - leftArrow.x - option.child.width) / 2;
-						option.child.y = grpBackgrounds.members[option.child.ID].getMidpoint().y - option.child.height / 2;
-						for (i => arr in lineArray) {
-							if (arr == null) continue;
-							if (i == option.child.ID) {
-								for (k => line in arr) {
-									line.color = k == option.curOption ? 0xFFFFFF00 : 0xFF676767;
-								}
+					option.child.y = grpBackgrounds.members[option.child.ID].getMidpoint().y - option.child.height / 2;
+					for (i => arr in lineArray) {
+						if (arr == null) continue;
+						if (i == option.child.ID) {
+							for (k => line in arr) {
+								line.color = k == option.curOption ? 0xFFFFFF00 : 0xFF676767;
 							}
 						}
 					}
 				}
 		}
+	}
+
+	function customizeOption(option:Option) {
+		openSubState(Type.createInstance(option.customizationClass, []));
+		FlxG.sound.play(Paths.sound('scrollMenu'));
+	}
+
+	function openOption(option:Option) {
+		option.open();
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 
 	function resetOption(option:Option) {
@@ -1037,7 +1036,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		updateTextFrom(option);
 		FlxG.sound.play(Paths.sound('cancelMenu'));
 	}
-	
+
+	function previewOption(option:Option) {
+		option.preview();
+		if (option.playPreviewSound) FlxG.sound.play(Paths.sound('scrollMenu'));
+	}
+
 	function changeSelection(option:Int = 0, playSound:Bool = true, moveCamera:Bool = false) {
 		if (option < 0 || option > optionsArray.length - 1) return;
 		// can't use null-safe field access?
