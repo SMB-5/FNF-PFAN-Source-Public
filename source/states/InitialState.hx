@@ -35,7 +35,7 @@ class InitialState extends MusicBeatState
 		}
 		#if CHECK_FOR_UPDATES
 		else if (showUpdatePrompt) {
-			openSubState(new PersonaPrompt('prompt_outdated_warning', ()->{
+			openSubState(new PersonaPrompt('prompt_outdated_warning', '', ()->{
 				CoolUtil.browserLoad('https://github.com/SMB-5/FNF-PFAN-Source-Public/releases');
 			}, null, null, null, [currentVersion, latestVersion]));
 			showUpdatePrompt = false;

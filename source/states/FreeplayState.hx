@@ -13,6 +13,7 @@ import flixel.addons.display.FlxGridOverlay;
 import options.GameplayChangersSubstate as Changers;
 import substates.MusicPlayerSubstate;
 import substates.ResetScoreSubState;
+import substates.PersonaPrompt;
 import substates.StickerSubState;
 
 import flixel.FlxObject;
@@ -575,8 +576,11 @@ class FreeplayState extends MusicBeatState
 			else if ((controls.RESET || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed) && songs[curSelected].songName.toLowerCase() != 'random')
 			{
 				keyIcons.visible = false;
-				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter, opponentMode));
-				FlxG.sound.play(Paths.sound('scrollMenu'));
+				//openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter, opponentMode));
+				//FlxG.sound.play(Paths.sound('scrollMenu'));
+				openSubState(new substates.PersonaPrompt('reset_score', ' ' + songs[curSelected].songName + (opponentMode ? ' (' + Language.getPhrase('Opponent') + ')?' : '?'),()->{
+					Highscore.resetSong(songs[curSelected].songName, curDifficulty,  opponentMode);
+				}, ()->{}, 1.5));
 			}
 			else if (controls.BACK || backButton.justPressed #if android || FlxG.android.justReleased.BACK #end)
 			{
