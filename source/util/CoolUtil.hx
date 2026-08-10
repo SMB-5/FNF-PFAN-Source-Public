@@ -11,10 +11,8 @@ import lime.utils.Assets as LimeAssets;
 class CoolUtil
 {
 	public static function checkForUpdates(url:String = null):String {
-		// PLACEHOLDER UNTIL PUBLIC REPO IS MADE
-		return "0.1.0";
 		if (url == null || url.length == 0)
-			url = "https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt";
+			url = "https://raw.githubusercontent.com/SMB-5/FNF-PFAN-Source-Public/main/gitVersion.txt";
 		var version:String = FlxG.stage.application.meta.get('version');
 		if(ClientPrefs.data.checkForUpdates) {
 			trace('checking for updates...');
