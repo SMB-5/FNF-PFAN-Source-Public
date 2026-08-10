@@ -23,11 +23,10 @@ body:
       label: "What is your build target?"
       options:
         - "Windows"
-        - "Linux"
         - "Mac"
-        - "HTML5"
-        - "Flash/Air-based target"
-        - "Neko, HashLink, or other build system"
+        - "Linux"
+        - "Android"
+        - "Other (Please include in your summary)"
     validations:
       required: true
 
