@@ -59,9 +59,9 @@ locked: "Locked"
 story_mode: "Story Mode"
 freeplay: "Freeplay"
 
-opponent: "OPPONENT"
+opponent: "Opponent"
 
-reset_score: "Reset the score of"
+reset_score: "Reset the score of {1}"
 
 now_loading: "Now Loading{1}"
 

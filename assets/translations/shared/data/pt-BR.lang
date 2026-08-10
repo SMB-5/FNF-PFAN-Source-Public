@@ -59,9 +59,9 @@ locked: "Trancado"
 story_mode: "Modo História"
 freeplay: "Modo Livre"
 
-opponent: "OPONENTE"
+opponent: "Oponente"
 
-reset_score: "Resetar Pontuação de"
+reset_score: "Resetar Pontuação de {1}"
 
 now_loading: "Carregando{1}"
 

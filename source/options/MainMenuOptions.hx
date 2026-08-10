@@ -221,7 +221,7 @@ class MainMenuOptions extends MusicBeatState
 						// have to do this manually because some necessary data is bunched in with FlxG.save.data
 						// Like literally every single ClientPrefs option Lol
 						keyIcons.visible = false;
-						openSubState(new substates.PersonaPrompt('prompt_erase_save_data', '', ()->{
+						openSubState(new substates.PersonaPrompt('prompt_erase_save_data', ()->{
 							#if ACHIEVEMENTS_ALLOWED
 							FlxG.save.data.achievementsUnlocked = [];
 							FlxG.save.data.achievementsVariables = [];
