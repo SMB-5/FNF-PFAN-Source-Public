@@ -330,6 +330,7 @@ class FreeplayState extends MusicBeatState
 		updateAllRanks();
 		FlxG.inputs.reset();
 		keyIcons.visible = true;
+		backButton.visible = true;
 		if (!FlxG.sound.music.playing) FlxG.sound.music.play();
 		super.closeSubState();
 	}
@@ -570,11 +571,13 @@ class FreeplayState extends MusicBeatState
 			if (FlxG.keys.justPressed.CONTROL || FlxG.gamepads.anyJustPressed(START) || TouchUtil.overlaps(modsButton) && TouchUtil.justPressed)
 			{
 				keyIcons.visible = false;
+				backButton.visible = false;
 				openSubState(new Changers(songs[curSelected].songName));
 			}
 			else if ((controls.RESET || TouchUtil.overlaps(resetButton) && TouchUtil.justPressed) && songs[curSelected].songName.toLowerCase() != 'random')
 			{
 				keyIcons.visible = false;
+				backButton.visible = false;
 				openSubState(new substates.PersonaPrompt('reset_score', ()->{
 					Highscore.resetSong(songs[curSelected].songName, curDifficulty,  opponentMode);
 				}, ()->{}, 1.5, null, [songs[curSelected].songName + '?' + (opponentMode ? '\n(' + Language.getPhrase('Opponent') + ')' : '')]));
@@ -587,6 +590,7 @@ class FreeplayState extends MusicBeatState
 			else if ((FlxG.keys.justPressed.SPACE || FlxG.gamepads.anyJustPressed(Y) || TouchUtil.overlaps(musicButton) && TouchUtil.justPressed) && songs[curSelected].songName.toLowerCase() != 'random')
 			{
 				keyIcons.visible = false;
+				backButton.visible = false;
 				openSubState(new MusicPlayerSubstate(curSelected - 1));
 				FlxG.sound.music.pause();
 			}

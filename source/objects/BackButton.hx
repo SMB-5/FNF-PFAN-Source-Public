@@ -40,7 +40,7 @@ class BackButton extends FlxSprite
 				animation.play('back');
 			}
 		}
-		else if (canTween && (!TouchUtil.overlaps(this) || !animation.finished)) {
+		else if (canTween && !TouchUtil.overlaps(this) && animation.finished) {
 			if (buttonTween != null) buttonTween.cancel();
 			buttonTween = FlxTween.tween(this, { 'scale.x': 0.5, 'scale.y': 0.5, alpha: 0.7 }, 0.25, { ease: FlxEase.quintOut, onComplete: _->buttonTween = null });
 		}
