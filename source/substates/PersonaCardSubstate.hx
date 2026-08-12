@@ -94,7 +94,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		FlxTween.tween(titleText, {x: 0, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(cardText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		#if !mobile
-		FlxTween.tween(acceptIcon, {x: 20, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+		FlxTween.tween(acceptIcon, {x: 222, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		#end
 		FlxTween.tween(acceptBG, {x: acceptBG.x + 900, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(acceptTxt, {x: acceptTxt.x + 900, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
@@ -134,7 +134,7 @@ class PersonaCardSubstate extends MusicBeatSubstate
 			FlxTween.tween(promptText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleText, {x: 400, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			#if !mobile
-			FlxTween.tween(acceptIcon, {x: 320, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+			FlxTween.tween(acceptIcon, {x: acceptIcon.x + 300, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			#end
 			FlxTween.tween(acceptBG, {x: acceptBG.x + 300, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(acceptTxt, {x: acceptTxt.x + 300, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
