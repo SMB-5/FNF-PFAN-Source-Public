@@ -82,7 +82,7 @@ class CreditsState extends MusicBeatState
 			if (curBaldiplier != null) {
 				bigStinkyLoser.icon = curBaldiplier[0];
 				bigStinkyLoser.flipIcon = true;
-				bigStinkyLoser.description = bigStinkyLoser.description.replace('Watch out for &Baldiplier&...', 'Make sure to keep your pliers &' + curBaldiplier[1] + '&.');
+				bigStinkyLoser.description = bigStinkyLoser.description.replace('Beware of &Baldiplier&...', 'Make sure to keep your pliers &' + curBaldiplier[1] + '&.');
 				bigStinkyLoser.color = curBaldiplier[2];
 			}
 		}
