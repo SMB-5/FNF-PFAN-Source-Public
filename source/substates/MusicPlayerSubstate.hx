@@ -462,6 +462,8 @@ class MusicPlayerSubstate extends MusicBeatSubstate
 
 	override function destroy() {
 		FlxG.autoPause = ClientPrefs.data.autoPause;
+		FlxG.cameras.remove(camUI);
+		FlxG.cameras.remove(camSettings);
 		super.destroy();
 	}
 

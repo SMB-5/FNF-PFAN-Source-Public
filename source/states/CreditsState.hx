@@ -167,7 +167,7 @@ class CreditsState extends MusicBeatState
 			}
 		}
 		else {
-			if (timeSinceLastInput >= 5) scroll();
+			if (timeSinceLastInput >= 3) scroll();
 		}
 
 		var pressedAccept:Bool = controls.ACCEPT;
@@ -231,6 +231,7 @@ class CreditsState extends MusicBeatState
 
 		if (!scrollCredits && pressedAccept) {
 			openSubState(new substates.MemberCardSubstate(creditsGroup.members[curSelected]));
+			backButton.visible = false;
 			FlxG.inputs.reset();
 			timeSinceLastInput = 0;
 		}
@@ -245,6 +246,7 @@ class CreditsState extends MusicBeatState
 	}
 
 	override function closeSubState() {
+		backButton.visible = true;
 		FlxG.inputs.reset();
 		super.closeSubState();
 	}

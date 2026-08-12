@@ -35,9 +35,10 @@ class MemberCardSubstate extends MusicBeatSubstate
 	var descTxt:FlxText;
 	var backIcon:KeyIcon;
 	var acceptIcon:KeyIcon;
+	var acceptBG:FlxSprite;
 	var acceptTxt:FlxText;
-
-	var backButton:BackButton;
+	var backBG:FlxSprite;
+	var backTxt:FlxText;
 
 	var allowScrolling:Bool = false;
 	var scrollTimer:Float = 0;
@@ -204,8 +205,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 		add(acceptIcon);
 		#end
 
-		// i'm so fucking annoyed at having to do Std.int for EVERY SINGLE TIME THAT I REFERENCE THE WIDTH AND HEIGHT IN MAKEGRAPHIC somebody please kill me - melodiekit
-		var acceptBG:FlxSprite = new FlxSprite(0, 0).makeGraphic(175, 60, FlxColor.BLACK);
+		acceptBG = new FlxSprite(0, 0).makeGraphic(175, 60, FlxColor.BLACK);
 		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 5, color: FlxColor.WHITE});
 		acceptBG.x = cardBG.width - acceptBG.width - 20;
 		acceptBG.y = cardBG.height - acceptBG.height - 10;
@@ -221,13 +221,25 @@ class MemberCardSubstate extends MusicBeatSubstate
 		acceptTxt.y = acceptBG.getMidpoint().y - acceptTxt.height / 2;
 		add(acceptTxt);
 
+		backBG = new FlxSprite(0, 0).makeGraphic(125, 60, FlxColor.BLACK);
+		backBG.drawRect(0, 0, backBG.width, backBG.height, 0, {thickness: 5, color: FlxColor.WHITE});
+		backBG.x = acceptBG.x - backBG.width - 20;
+		backBG.y = acceptBG.y;
+		add(backBG);
+
+		backTxt = new FlxText(0, 0, 0, Language.getPhrase('ui_close', 'Close'), 32);
+		backTxt.setFormat(Paths.font('Fontsona5Royal.ttf'), 32, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		if (backTxt.width > 75) {
+			backTxt.scale.x = backTxt.scale.y = 75 / backTxt.width;
+			backTxt.updateHitbox();
+		}
+		backTxt.x = backBG.getMidpoint().x - backTxt.width / 2;
+		backTxt.y = backBG.getMidpoint().y - backTxt.height / 2;
+		add(backTxt);
+
 		var camUI:FlxCamera = new FlxCamera();
 		camUI.bgColor.alpha = 0;
 		FlxG.cameras.add(camUI, false);
-
-		backButton = new BackButton();
-		backButton.camera = camUI;
-		add(backButton);
 
 		camCard.x -= 310;
 		camCard.alpha = 0;
@@ -253,17 +265,15 @@ class MemberCardSubstate extends MusicBeatSubstate
 		if (statusHeader.x < -970) statusHeader.x = 970;
 		if (statusHeader2.x < -970) statusHeader2.x = 970;
 
-		if (!exiting && (controls.BACK || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard) #if android || FlxG.android.justReleased.BACK #end)) {
+		if (!exiting && (controls.BACK || TouchUtil.justReleased && TouchUtil.overlaps(backBG, camCard) || TouchUtil.justReleased && !TouchUtil.overlaps(cardBG, camCard) && !TouchUtil.initiallyOverlapped(cardBG, camCard) #if android || FlxG.android.justReleased.BACK #end)) {
 			exiting = true;
 			FlxG.sound.play(Paths.sound('cancelMenu')); 
-			backButton.canTween = false;
-			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(bg, { alpha: 0 }, 0.3, { ease: FlxEase.expoOut });
 			FlxTween.tween(camCard, { x: camCard.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut });
 			FlxTween.tween(camDesc, { x: camDesc.x + 310, alpha: 0 }, 0.3, { ease: FlxEase.expoOut, onComplete:t->close() });
 		}
 
-		if (controls.ACCEPT || TouchUtil.overlaps(acceptTxt, camCard) && TouchUtil.initiallyOverlapped(acceptTxt, camCard) && TouchUtil.justReleased) {
+		if (controls.ACCEPT || TouchUtil.overlaps(acceptBG, camCard) && TouchUtil.initiallyOverlapped(acceptBG, camCard) && TouchUtil.justReleased) {
 			CoolUtil.browserLoad(link);
 		}
 

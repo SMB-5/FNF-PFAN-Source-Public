@@ -31,7 +31,7 @@ class InitialState extends MusicBeatState
 		else #end if (FlxG.save.data.flashing == null) {
 			ClientPrefs.data.flashing = true;
 			ClientPrefs.saveSettings('flashing');
-			 openSubState(new PersonaCardSubstate('WarningDemo'));
+			openSubState(new PersonaCardSubstate('WarningDemo'));
 		}
 		#if CHECK_FOR_UPDATES
 		else if (showUpdatePrompt) {

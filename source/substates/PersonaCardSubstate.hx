@@ -13,7 +13,8 @@ class PersonaCardSubstate extends MusicBeatSubstate
 	var titleText:FlxText;
 	var cardText:FlxText;
 	var acceptIcon:KeyIcon;
-	var backButton:BackButton;
+	var acceptBG:FlxSprite;
+	var acceptTxt:FlxText;
 
 	public function new(prompt:String)
 	{
@@ -59,18 +60,32 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		add(cardText);
 
 		#if !mobile
-		acceptIcon = new KeyIcon(20, cardBG.y + 440, 'accept', 0, 'ui_close');
+		acceptIcon = new KeyIcon(-900, cardBG.y + 440, 'accept', 0, 'ui_close');
 		acceptIcon.iconText.font = Paths.font('barmeno-bold.ttf');
 		acceptIcon.iconText.y -= 2.5;
 		acceptIcon.alpha = 0;
 		add(acceptIcon);
 		#end
 
-		backButton = new BackButton();
-		backButton.alpha = 0;
-		backButton.canTween = false;
-		FlxTween.tween(backButton, {alpha: 0.7}, 0.3, {ease: FlxEase.quartInOut, onComplete: _->backButton.canTween = true});
-		add(backButton);
+		acceptBG = new FlxSprite(0, 0).makeGraphic(125, 60, FlxColor.BLACK);
+		acceptBG.drawRect(0, 0, acceptBG.width, acceptBG.height, 0, {thickness: 5, color: FlxColor.WHITE});
+		acceptBG.x = 210 + cardBG.width - acceptBG.width - 20;
+		acceptBG.y = cardBG.y + cardBG.height - acceptBG.height - 10;
+		acceptBG.alpha = 0;
+		add(acceptBG);
+
+		acceptTxt = new FlxText(0, 0, 0, Language.getPhrase('ui_close', 'Close'), 32);
+		acceptTxt.setFormat(Paths.font('Fontsona5Royal.ttf'), 32, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		if (acceptTxt.width > 75) {
+			acceptTxt.scale.x = acceptTxt.scale.y = 75 / acceptTxt.width;
+			acceptTxt.updateHitbox();
+		}
+		acceptTxt.x = acceptBG.getMidpoint().x - acceptTxt.width / 2;
+		acceptTxt.y = acceptBG.getMidpoint().y - acceptTxt.height / 2;
+		acceptTxt.alpha = 0;
+		acceptTxt.x -= 900;
+		acceptBG.x -= 900;
+		add(acceptTxt);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.3, {ease: FlxEase.quartInOut});
 		FlxTween.tween(cardBG, {x: 210, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
@@ -79,8 +94,10 @@ class PersonaCardSubstate extends MusicBeatSubstate
 		FlxTween.tween(titleText, {x: 0, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		FlxTween.tween(cardText, {x: 220, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		#if !mobile
-		FlxTween.tween(acceptIcon, {x: 920, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+		FlxTween.tween(acceptIcon, {x: 20, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 		#end
+		FlxTween.tween(acceptBG, {x: acceptBG.x + 900, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
+		FlxTween.tween(acceptTxt, {x: acceptTxt.x + 900, alpha: 1}, 0.3, {ease: FlxEase.expoOut});
 
 		super.create();
 
@@ -107,20 +124,20 @@ class PersonaCardSubstate extends MusicBeatSubstate
 	var exiting:Bool = false;
 	override function update(elapsed:Float)
 	{
-		if (!exiting && (controls.ACCEPT || backButton.initiallyPressed || TouchUtil.justReleased && !TouchUtil.overlaps(backButton) && !TouchUtil.overlaps(cardBG)) #if android || FlxG.android.justReleased.BACK #end)
+		if (!exiting && (controls.ACCEPT || TouchUtil.justReleased && TouchUtil.overlaps(acceptBG) || TouchUtil.justReleased && !TouchUtil.overlaps(cardBG)) #if android || FlxG.android.justReleased.BACK #end)
 		{
 			exiting = true;
 			FlxG.sound.play(Paths.sound('confirmMenu')); 
-			backButton.canTween = false;
-			FlxTween.tween(backButton, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(bg, {alpha: 0}, 0.3, {ease: FlxEase.quartInOut});
 			FlxTween.tween(cardBG, {x: 410, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleBG, {x: 460, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(promptText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(titleText, {x: 400, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			#if !mobile
-			FlxTween.tween(acceptIcon, {x: 1220, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+			FlxTween.tween(acceptIcon, {x: 320, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			#end
+			FlxTween.tween(acceptBG, {x: acceptBG.x + 300, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
+			FlxTween.tween(acceptTxt, {x: acceptTxt.x + 300, alpha: 0}, 0.3, {ease: FlxEase.expoOut});
 			FlxTween.tween(cardText, {x: 420, alpha: 0}, 0.3, {ease: FlxEase.expoOut,
 			onComplete: function(twn:FlxTween)
 			{
