@@ -80,6 +80,9 @@ class LoadingState extends MusicBeatState
 	var isSpinning:Bool = false;
 	var shakeFl:Float = 0;
 	var shakeMult:Float = 0;
+	#if mobile
+	var timesPressed:Int = 0;
+	#end
 
 	#if HSCRIPT_ALLOWED
 	var hscript:HScript;
@@ -230,6 +233,13 @@ class LoadingState extends MusicBeatState
 		{
 			if(!transitioning)
 			{
+				#if mobile
+				if(TouchUtil.justPressed)
+				{
+					timesPressed++;
+					shakeMult = 1;
+				}
+				#end
 				if(Reflect.getProperty(FlxG.keys.justPressed, secretCode[codeNum]))
 				{
 					codeNum++;
@@ -243,7 +253,7 @@ class LoadingState extends MusicBeatState
 			shakeMult = Math.max(0, shakeMult - elapsed * 5);
 			logo.offset.x = Math.sin(shakeFl * Math.PI / 100) * shakeMult * 100;
 
-			if(codeNum >= secretCode.length)
+			if(codeNum >= secretCode.length #if mobile || timesPressed >= 5 #end)
 			{
 				FlxG.camera.fade(0xAAFFFFFF, 0.5, true);
 				logo.visible = false;

@@ -3535,7 +3535,7 @@ class PlayState extends MusicBeatState
 			if (gainHealth) health += note.hitHealth * healthGain;
 		}
 
-		if ((ClientPrefs.data.opponentStrums || opponentMode) && ClientPrefs.data.holdSplash)
+		if ((ClientPrefs.data.opponentStrums || opponentMode) && ClientPrefs.data.holdSplash && (!guitarHeroSustains || !ClientPrefs.data.comboBreak || note.rating != 'bad' && note.rating != 'shit'))
 			spawnHoldSplashOnNote(note);
 
 		stagesFunc(function(stage:BaseStage) stage.opponentNoteHit(note));
@@ -3641,9 +3641,6 @@ class PlayState extends MusicBeatState
 
 			vocals.volume = 1;
 
-			if ((ClientPrefs.data.opponentStrums || !opponentMode) && ClientPrefs.data.holdSplash)
-				spawnHoldSplashOnNote(note);
-
 			if (!opponentMode)
 			{
 				if (!note.isSustainNote)
@@ -3696,6 +3693,9 @@ class PlayState extends MusicBeatState
 			noteMiss(note);
 			if(!note.noteSplashData.disabled && !note.isSustainNote) spawnNoteSplashOnNote(note);
 		}
+
+		if ((ClientPrefs.data.opponentStrums || !opponentMode) && ClientPrefs.data.holdSplash && (!guitarHeroSustains || !ClientPrefs.data.comboBreak || note.rating != 'bad' && note.rating != 'shit'))
+			spawnHoldSplashOnNote(note);
 
 		stagesFunc(function(stage:BaseStage) stage.goodNoteHit(note));
 		var result:Dynamic = callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);

@@ -120,7 +120,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		patternBG.alpha = 0.4;
 		add(patternBG);
 
-		optionHeader = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height, 120, title, 120);
+		optionHeader = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height, 130, title, 120);
 		optionHeader.alignment = CENTER;
 		@:privateAccess
 		optionHeader._defaultFormat.leading = -30;
@@ -128,7 +128,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		optionHeader.camera = camUI;
 		add(optionHeader);
 
-		optionHeader2 = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height + optionHeader.height + 200, 120, title, 120);
+		optionHeader2 = new FlxText(camOptions.x + camOptions.width + 23, FlxG.height + optionHeader.height + 200, 130, title, 120);
 		optionHeader2.alignment = CENTER;
 		@:privateAccess
 		optionHeader2._defaultFormat.leading = -30;
