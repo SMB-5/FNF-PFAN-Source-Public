@@ -195,7 +195,7 @@ class MemberCardSubstate extends MusicBeatSubstate
 		descOutline.scrollFactor.set();
 		add(descOutline);
 
-		#if mobile
+		#if !mobile
 		backIcon = new KeyIcon(12, cardBG.height - 40, 'back', 0, 'ui_close', 0.15, 20);
 		backIcon.iconText.font = Paths.font('Fontsona3FES.ttf');
 		add(backIcon);
