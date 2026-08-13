@@ -1166,7 +1166,7 @@ class PlayState extends MusicBeatState
 
 			startTimer = new FlxTimer().start(Conductor.crochet / 1000 / playbackRate, function(tmr:FlxTimer)
 			{
-				characterBopper(tmr.loopsLeft);
+				characterBopper(5 - tmr.loopsLeft);
 
 				var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 				var introImagesArray:Array<String> = switch(stageUI) {
@@ -1199,6 +1199,12 @@ class PlayState extends MusicBeatState
 						tick = GO;
 					case 4:
 						tick = START;
+						if (gf != null)
+							gf.lastDanceBeat = 0;
+						if (boyfriend != null)
+							boyfriend.lastDanceBeat = 0;
+						if (dad != null)
+							dad.lastDanceBeat = 0;
 				}
 
 				if(!skipArrowStartTween)
@@ -3894,12 +3900,19 @@ class PlayState extends MusicBeatState
 
 	public function characterBopper(beat:Int):Void
 	{
-		if (gf != null && beat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && !gf.getAnimationName().startsWith('sing') && !gf.stunned)
+		if (gf != null && (beat == 0 || beat - gf.lastDanceBeat >= Math.round(gfSpeed * gf.danceEveryNumBeats)) && !gf.getAnimationName().startsWith('sing') && !gf.stunned)
 			gf.dance();
-		if (boyfriend != null && beat % boyfriend.danceEveryNumBeats == 0 && !boyfriend.getAnimationName().startsWith('sing') && !boyfriend.stunned)
+			gf.lastDanceBeat = beat;
+		if (boyfriend != null && beat == 0 || beat - boyfriend.lastDanceBeat >= boyfriend.danceEveryNumBeats && !boyfriend.getAnimationName().startsWith('sing') && !boyfriend.stunned)
+		{
 			boyfriend.dance();
-		if (dad != null && beat % dad.danceEveryNumBeats == 0 && !dad.getAnimationName().startsWith('sing') && !dad.stunned)
+			boyfriend.lastDanceBeat = beat;
+		}
+		if (dad != null && beat == 0 || beat - dad.lastDanceBeat >= dad.danceEveryNumBeats && !dad.getAnimationName().startsWith('sing') && !dad.stunned)
+		{
 			dad.dance();
+			dad.lastDanceBeat = beat;
+		}
 	}
 
 	public function playerDance():Void

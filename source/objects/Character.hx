@@ -115,33 +115,6 @@ class Character extends FlxSprite
 		}
 	}
 
-		/**
-	 * HOW TO NOTE COLOR v1.2 101 by the Super Funkin' Galaxy Team
-	 * 
-	 * multiple note color chars are done like this
-	 * "charname" => [
-	 * 	[left note main color, left note highlight color, left note outline color],
-	 * 	[down note main color, down note highlight color, down note outline color],
-	 * 	[up note main color, up note highlight color, up note outline color],
-	 * 	[right note main color, right note highlight color, right note outline color]
-	 * ],
-	 * 
-	 * singular note color chars are done like this
-	 * "charname" => [note main color, note highlight color, note outline color],
-	 * 
-	 * now for example "char-pixel" has the same note color as "char" you can just do
-	 * "char-pixel" => "char"
-	 * it just does a redirection to the og chars color
-	 */
-	static var arrowColors:Map<String, OneOfThree<String, Array<Array<FlxColor>>, Array<FlxColor>>> = [		
-		"shadow-makoto" => [
-			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
-			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
-			[0xFF606060, 0xFFFFFFFF, 0xFF303030],
-			[0xFF606060, 0xFFFFFFFF, 0xFF303030]
-		],
-	];
-
 	public function changeCharacter(character:String)
 	{
 		animationsArray = [];
@@ -510,6 +483,7 @@ class Character extends FlxSprite
 	}
 
 	public var danceEveryNumBeats:Int = 2;
+	public var lastDanceBeat:Int = -9999;
 	private var settingCharacterUp:Bool = true;
 	public function recalculateDanceIdle() {
 		var lastDanceIdle:Bool = danceIdle;
