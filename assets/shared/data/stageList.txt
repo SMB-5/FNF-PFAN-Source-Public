@@ -2,5 +2,6 @@ stage
 Dorm
 TartarusLobby
 TVWorld
+Mementos
 VelvetRoomP5
 Specialist

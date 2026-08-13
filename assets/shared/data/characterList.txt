@@ -5,7 +5,6 @@ pico
 pico-playable
 nene
 makoto-yuki
-makoto-yuki-player
 yu-narukami
 yu-narukami-player
 joker
