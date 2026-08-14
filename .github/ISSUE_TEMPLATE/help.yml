@@ -1,0 +1,42 @@
+name: Help me!
+description: If you need help with the Mod (Do Not Report any lua or hscript errors here or any errors with modifying the code of the mod).
+labels: [help wanted]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Describe your problem here (Please include any screenshots or videos)."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: btarget
+    attributes:
+      label: "What is your build target?"
+      options:
+        - "Windows"
+        - "Mac"
+        - "Linux"
+        - "Android"
+        - "Other (Please include in your summary)"
+    validations:
+      required: true
+
+  - type: input
+    id: buildsummary
+    attributes:
+      label: "Did you edit anything in this build? If so, mention or summarize your changes."
+      placeholder: "Yes, I edited ClientPrefs.hx and tried to add a new setting"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: buildchecklist
+    attributes:
+      label: "Issue Checklist."
+      placeholder: "Please complete the checklist before submitting your issue."
+    options:
+      - label: I have checked the Issues page to see if my Issue has already been reported.
+      - label: I have properly titled my issue.
+    validations:
+      required: true
