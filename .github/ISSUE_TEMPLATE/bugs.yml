@@ -43,9 +43,9 @@ body:
     attributes:
       label: "Issue Checklist."
       placeholder: "Please complete the checklist before submitting your issue."
-    options:
-      - label: I have checked the issues page to see if my issue has already been reported.
-      - label: I have properly titled my issue.
-      - label: I am confident I am playing a Vanilla copy of the Mod with Zero Modifcations.
+      options:
+        - label: I have checked the issues page to see if my issue has already been reported.
+        - label: I have properly titled my issue.
+        - label: I am confident I am playing a Vanilla copy of the Mod with Zero Modifcations.
     validations:
       required: true

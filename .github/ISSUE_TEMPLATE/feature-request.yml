@@ -25,8 +25,8 @@ body:
     attributes:
       label: "Feature Checklist."
       placeholder: "Please complete the checklist before submitting your request."
-    options:
-      - label: I have checked the issues page to see if my request has already been made.
-      - label: I have properly titled and explained my request.
+      options:
+        - label: I have checked the issues page to see if my request has already been made.
+        - label: I have properly titled and explained my request.
     validations:
       required: true
