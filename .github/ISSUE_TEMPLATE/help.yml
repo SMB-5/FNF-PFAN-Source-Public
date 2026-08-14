@@ -34,7 +34,7 @@ body:
     id: buildchecklist
     attributes:
       label: "Issue Checklist."
-      placeholder: "Please complete the checklist before submitting your issue."
+      description: "Please complete the checklist before submitting your issue."
       options:
         - label: I have checked the Issues page to see if my Issue has already been reported.
         - label: I have properly titled my issue.
