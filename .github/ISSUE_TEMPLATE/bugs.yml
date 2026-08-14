@@ -5,7 +5,7 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: "Describe your bug here."
+      label: "Describe your bug here (Please include any screenshots or videos)."
     validations:
       required: true
 
@@ -35,5 +35,17 @@ body:
     attributes:
       label: "Did you edit anything in this build? If so, mention or summarize your changes."
       placeholder: "Yes, I edited ClientPrefs.hx and tried to add a new setting"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: buildchecklist
+    attributes:
+      label: "Issue Checklist."
+      placeholder: "Please complete the checklist before submitting your issue."
+    options:
+      - label: I have checked the issues page to see if my issue has already been reported.
+      - label: I have properly titled my issue.
+      - label: I am confident I am playing a Vanilla copy of the Mod with Zero Modifcations.
     validations:
       required: true

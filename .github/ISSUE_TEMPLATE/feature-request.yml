@@ -15,9 +15,18 @@ body:
         - Proper credit that was forgotten
         - Thing that would not cause problems
         - Useful feature
-        - Actual feedback
-        - A good idea
         - A full week or song based on a character or game.
-        - Code optimization that would make the game faster. (You should make a PR if this is your request, by the way.)
+        - Code optimization that would make the game better or faster. (You should make a PR if this is your request, by the way.)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: featurechecklist
+    attributes:
+      label: "Feature Checklist."
+      placeholder: "Please complete the checklist before submitting your request."
+    options:
+      - label: I have checked the issues page to see if my request has already been made.
+      - label: I have properly titled and explained my request.
     validations:
       required: true
