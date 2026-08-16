@@ -156,7 +156,6 @@ class ClientPrefs {
 		'accept'		=> [A, START],
 		'back'			=> [B],
 		'pause'			=> [START],
-		'screenshot'    => [NONE],
 		'reset'			=> [BACK]
 	];
 	public static var mobileBinds:Map<String, Array<MobileInputID>> = [
