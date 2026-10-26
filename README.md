@@ -13,7 +13,7 @@ A "Full Ass" Mod based on the Persona Series by [Atlus](https://atlus.com/), bui
 
 ### Windows only:
 
-- Microsoft Visual Studio Community 2022
+- Microsoft Visual Studio Community
 
 ### Linux only:
 
