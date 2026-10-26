@@ -36,8 +36,8 @@ You can also use VSC 2019 if you want, but I'd recommend using 2022.
 
 Once you have ran the exe, go to the components tab and select these options:
 
-* MSVC v142 - VS 2022 C++ x64/x86 build tools
-* Windows SDK (10.0.17763.0)
+* MSVC v143 - VS 2022 C++ x64/x86 build tools
+* Windows 10/11 SDK (Latest)
 
 ## Linux:
 
