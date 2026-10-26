@@ -31,13 +31,17 @@ Then, get [Git-scm](https://git-scm.com/downloads) and download the respective e
 
 **(This step can optionally be skipped by running the *windows-msvc.bat* file in the setup folder.)**
 
-Download [Visual Studio Community 2022](https://aka.ms/vs/17/release/vs_community.exe).
-You can also use VSC 2019 if you want, but I'd recommend using 2022.
+Download [Visual Studio Community](https://visualstudio.microsoft.com/downloads/).
+I use the 2022 version which can be [downloaded here](https://aka.ms/vs/17/release/vs_community.exe), but it shouldn't matter which version you get.
 
 Once you have ran the exe, go to the components tab and select these options:
 
-* MSVC v143 - VS 2022 C++ x64/x86 build tools
-* Windows 10/11 SDK (Latest)
+* MSVC Build Tools for x64/x86 (Latest)
+* Windows 10/11 SDK
+
+If you are using an older version of Visual Studio, then make sure to get the correct MSVC build tools for your version.
+For 2022, it is `MSVC v143 - VS 2022 C++ x64/x86 build tools (v14.44.17.14)`.
+Just make sure to check which year it is corresponding to your VS, then get the latest of that version.
 
 ## Linux:
 
