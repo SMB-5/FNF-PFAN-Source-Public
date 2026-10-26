@@ -40,7 +40,7 @@ Once you have ran the exe, go to the components tab and select these options:
 * Windows 10/11 SDK
 
 If you are using an older version of Visual Studio, then make sure to get the correct MSVC build tools for your version.
-For 2022, it is `MSVC v143 - VS 2022 C++ x64/x86 build tools (v14.44.17.14)`.
+For 2022, it is `MSVC v143 - VS 2022 C++ x64/x86 build tools (v14.44-17.14)`.
 Just make sure to check which year it is corresponding to your VS, then get the latest of that version.
 
 ## Linux:
